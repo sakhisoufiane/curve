@@ -1,0 +1,56 @@
+<div class="row contract-row-layout">
+  <div class="form-group required col-xs-3">
+    <label ng-if="!index">Publisher</label>
+    <publisher-select-field
+      set-controlled="setPublisherId"
+      edit="edit"
+      value="agreement.publisherId"
+      populated="agreement.publisher">
+    </publisher-select-field>
+  </div>
+  <div class="form-group required col-xs-2">
+    <label ng-if="!index">Agreement Type</label>
+    <ui-select ng-model="agreement.agreementType" ng-if="edit">
+      <ui-select-match>
+        <span ng-bind="$select.selected"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="item as item in (agreementTypes | filter: $select.search)">
+        <span ng-bind="item"></span>
+      </ui-select-choices>
+    </ui-select>
+    <read-only-field ng-if="!edit" parent-field="agreement" field="'agreementType'"></read-only-field>
+  </div>
+  <div class="form-group required col-xs-2">
+    <label ng-if="!index">Territory</label>
+    <ui-select ng-model="agreement.territory" ng-if="edit">
+      <ui-select-match allow-clear="true">
+          <span ng-bind="$select.selected.name"></span>
+      </ui-select-match>
+      <ui-select-choices group-by="groupFind" repeat="country.code as country in territories | filter: $select.search track by $index">
+          <span class="country" ng-bind="country.name"></span>
+      </ui-select-choices>
+    </ui-select>
+    <read-only-field ng-if="!edit" parent-field="agreement" field="'territory'"></read-only-field>
+  </div>
+  <div class="form-group required col-xs-2">
+    <label ng-if="!index">Society</label>
+    <ui-select ng-model="agreement.society" ng-if="edit">
+      <ui-select-match>
+        <span ng-bind="$select.selected"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="item as item in (societies | filter: $select.search)">
+        <span ng-bind="item"></span>
+      </ui-select-choices>
+    </ui-select>
+    <read-only-field ng-if="!edit" parent-field="agreement" field="'society'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-2">
+    <label ng-if="!index">Agreement No</label>
+    <input class="form-control sm-p-l-5 sm-p-r-5" ng-model="agreement.agreementNo" ng-if="edit">
+    <read-only-field ng-if="!edit" parent-field="agreement" field="'agreementNo'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-1 action-btn">
+    <button  ng-show="edit == true" class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-click="delete({ agreement: agreement })" ng-if="!index"><i class="fa fa-trash"></i></button>
+    <button  ng-show="edit == true" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="delete({ agreement: agreement })" ng-if="index"><i class="fa fa-trash"></i></button>
+  </div> 
+</div>

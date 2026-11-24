@@ -1,0 +1,94 @@
+name: Deploy Sales Calculator
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Target environment
+        options:
+          - beta2
+          - beta
+          - develop
+          - staging
+          - production
+          - release
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  INFRA_DIR: infra
+  STACK_NAME: SalesCalculatorStack
+  ECR_REPO_NAME: sales-calculator
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve account and region
+        id: env
+        run: |
+          case "${{ inputs.environment }}" in
+            beta2)      echo "account=276833795716" >> $GITHUB_OUTPUT; echo "region=eu-central-1" >> $GITHUB_OUTPUT ;;
+            beta)       echo "account=682397077070" >> $GITHUB_OUTPUT; echo "region=eu-central-1" >> $GITHUB_OUTPUT ;;
+            develop)    echo "account=211769215579" >> $GITHUB_OUTPUT; echo "region=eu-west-1"    >> $GITHUB_OUTPUT ;;
+            staging)    echo "account=818031419194" >> $GITHUB_OUTPUT; echo "region=eu-west-1"    >> $GITHUB_OUTPUT ;;
+            production) echo "account=993822227530" >> $GITHUB_OUTPUT; echo "region=eu-west-1"    >> $GITHUB_OUTPUT ;;
+            release)    echo "account=060209188876" >> $GITHUB_OUTPUT; echo "region=eu-west-1"    >> $GITHUB_OUTPUT ;;
+            *) echo "Unknown environment: ${{ inputs.environment }}"; exit 1 ;;
+          esac
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ steps.env.outputs.account }}:role/CDKDeployRole
+          aws-region: ${{ steps.env.outputs.region }}
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Install CDK dependencies
+        working-directory: ${{ env.INFRA_DIR }}
+        run: npm ci
+
+      - name: Deploy infra
+        working-directory: ${{ env.INFRA_DIR }}
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ steps.env.outputs.account }}
+          CDK_DEFAULT_REGION: ${{ steps.env.outputs.region }}
+        run: npm run deploy
+
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/${{ env.ECR_REPO_NAME }}:$IMAGE_TAG .
+          docker tag $ECR_REGISTRY/${{ env.ECR_REPO_NAME }}:$IMAGE_TAG $ECR_REGISTRY/${{ env.ECR_REPO_NAME }}:latest
+          docker push $ECR_REGISTRY/${{ env.ECR_REPO_NAME }}:$IMAGE_TAG
+          docker push $ECR_REGISTRY/${{ env.ECR_REPO_NAME }}:latest
+
+      - name: Deploy service with new image tag
+        working-directory: ${{ env.INFRA_DIR }}
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ steps.env.outputs.account }}
+          CDK_DEFAULT_REGION: ${{ steps.env.outputs.region }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          npm run build
+          npx cdk deploy --require-approval never -c imageTag=$IMAGE_TAG
+
+      - name: Show LB DNS
+        working-directory: ${{ env.INFRA_DIR }}
+        run: npx cdk output --json | jq -r '.["${{ env.STACK_NAME }}"].LoadBalancerDNS'

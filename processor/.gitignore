@@ -1,0 +1,11 @@
+.env
+.DS_Store
+.nyc_output
+.vscode
+tmp/
+node_modules
+temp.js
+coverage
+
+# IntelliJ IDEA files
+.idea/

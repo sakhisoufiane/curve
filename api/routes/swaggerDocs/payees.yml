@@ -1,0 +1,1861 @@
+openapi: 3.0.3
+info:
+  title: Payees API
+  version: '1.0.0'
+  description: |
+    API for managing payee records in the system.
+    Supports CRUD operations on payees with access control validation.
+    Includes support for payee details, associations, and status management.
+    
+    Access Control:
+    - Read access requires payee read permissions
+    - Write access requires payee write permissions
+    - Client users can only access payees in their organization
+    - Payee users can only access their own records
+
+paths:
+  /payees:
+    get:
+      tags:
+        - "Payees"
+      summary: Retrieve a list of Payees
+      description: |
+        This route retrieves a list of Payees based on the provided filters. Supports both regex text search and exact ObjectId matching.
+
+        **Sensitive Data Handling:**
+        Only client admin users can view or update sensitive fields (contactEmail, address, bankName, bankAddress, accountNo, sortCode, iban, swiftCode, paymentEmail, paymentProviders.wise.paymentFields).
+      parameters:
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Filter on supplied text string. Searches across name, alternateName, foreignId, and projectId fields using regex patterns. If the text is exactly 24 characters (valid ObjectId format), it will also search for exact _id matches.
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Filter by Payee name (exact match)
+        - in: query
+          name: page
+          schema:
+            type: number
+          description: The page number for pagination, defaults to 1.
+        - in: query
+          name: limit
+          schema:
+            type: number
+          description: The number of items to return per page, defaults to 25.
+        - in: query
+          name: orderBy
+          required: false
+          schema:
+            type: string
+            enum: ["name", "payeeCategories", "createdAt"]
+            example: name
+          description: The field by which to sort the results.
+        - in: query
+          name: orderDir
+          required: false
+          schema:
+            type: string
+            enum: ["asc", "desc"]
+            example: asc
+          description: The direction to sort the results.
+        - in: query
+          name: createdAfter
+          schema:
+            type: string
+            format: date
+          description: Filter payees created on or after this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: createdBefore
+          schema:
+            type: string
+            format: date
+          description: Filter payees created on or before this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: updatedAfter
+          schema:
+            type: string
+            format: date
+          description: Filter payees updated on or after this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: updatedBefore
+          schema:
+            type: string
+            format: date
+          description: Filter payees updated on or before this date (inclusive, YYYY-MM-DD format)
+      responses:
+        200:
+          description: Retrieves a list of Payees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payees:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Payee'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: number
+                      totalPages:
+                        type: number
+                      total:
+                        type: number
+              example:
+                payees:
+                  - _id: "string"
+                    clientId: "string"
+                    name: "Example Payee"
+                    alternateName: "EP"
+                    openingBalance: 0
+                    minPayout: 0
+                    selfBilling: false
+                    autoPayment: false
+                    payeeCategories: []
+                    paymentProviders:
+                      curvePay: {}
+                      tipalti:
+                        crossPayeeDetails: false
+                        payeeId: "string"
+                      wise:
+                        feesPaidBy: "client"
+                    createdBy: null
+                    lastModifiedBy: "string"
+                    valid: true
+                    validationErrors: []
+                    createdAt: "2024-01-01T00:00:00.000Z"
+                    updatedAt: "2025-01-01T00:00:00.000Z"
+                    __v: 0
+                    paymentCurrency: "GBP"
+                    payeeBalanceCurrency: "GBP"
+                meta:
+                  currentPage: 1
+                  totalPages: 1
+                  total: 25
+        400:
+          description: Bad request - invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to retrieve the Payee.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    post:
+      tags:
+        - "Payees"
+      summary: Create a new Payee
+      description: |
+        This route allows for the creation of a new Payee.
+
+        **Sensitive Data Handling:**
+        Only client admin users can view or update sensitive fields (contactEmail, address, bankName, bankAddress, accountNo, sortCode, iban, swiftCode, paymentEmail, paymentProviders.wise.paymentFields).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                alternateName:
+                  type: string
+                foreignId:
+                  type: string
+                contactEmail:
+                  type: string
+                country:
+                  type: string
+                address:
+                  type: string
+                vatNo:
+                  type: string
+                notes:
+                  type: string
+                selfBillingTaxText:
+                  type: string
+                selfBillingTaxRate:
+                  type: number
+                feesInvoiceTaxRate:
+                  type: number
+                withholdingTaxRate:
+                  type: number
+                payeeCategories:
+                  type: array
+                  items:
+                    type: string
+                  description: Needs to match categories set up in Settings area
+      responses:
+        200:
+          description: Successfully created the Payee.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payee'
+              example:
+                clientId: "string"
+                name: "test from API"
+                alternateName: "MJ"
+                openingBalance: 0
+                minPayout: 0
+                selfBilling: false
+                autoPayment: false
+                payeeCategories: []
+                paymentProviders:
+                  curvePay: {}
+                  tipalti:
+                    crossPayeeDetails: false
+                    payeeId: "string"
+                  wise:
+                    feesPaidBy: "client"
+                    paymentFields: {}
+                createdBy: "string"
+                lastModifiedBy: "string"
+                valid: false
+                validationErrors:
+                  - "Payee should be linked to at least one Contract"
+                  - "A User needs to be assigned in order for someone to have access to this Payee and view its statements. It is ok to wait with creating Users until you are ready to send statements"
+                _id: "string"
+                updatedAt: "2025-04-15T11:42:03.914Z"
+                createdAt: "2025-04-15T11:42:03.914Z"
+                __v: 0
+        403:
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to save the Payee.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /payees/{id}:
+    get:
+      tags:
+        - "Payees"
+      summary: Retrieve a specific Payee by ID
+      description: |
+        This route retrieves a specific Payee by its ID.
+
+        **Sensitive Data Handling:**
+        Only client admin users can view or update sensitive fields (contactEmail, address, bankName, bankAddress, accountNo, sortCode, iban, swiftCode, paymentEmail, paymentProviders.wise.paymentFields).
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: 5c9fe8d3921a4527b9b43773
+          required: true
+          description: The ID of the Payee to retrieve.
+      responses:
+        200:
+          description: Successfully retrieved the Payee.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Payee'
+              example:
+                _id: "1a2b3c4d5e6f7g8h9i4j1k1l"
+                clientId: "9j8h7g6f5d4s4z1s3c9d9x42"
+                name: "Test Payee"
+                payeeCategories: []
+                foreignId: "789012"
+                projectId: "1a2b3c4d5e6f7g8h9i0j1k2l"
+                country: "WW"
+                vatNo: ""
+                selfBillingTaxRate: 20
+                withholdingTaxRate: 17.5
+                paymentProviders:
+                  tipalti:
+                    payeeId: "1a2b3c4d5e6f7g8h9i0j1k2l"
+                  wise:
+                    paymentFields: {}
+                    recipientDetailsMethod: "manual"
+                createdBy: "4a8s8c7d8e9f0g1h1e3j4k5l"
+                lastModifiedBy: "4a8s8c7d8e9f0g1h1e3j4k5l"
+                valid: false
+                validationErrors:
+                  - "A User needs to be assigned in order for someone to have access to this Payee and view its statements. It is ok to wait with creating Users until you are ready to send statements"
+                  - "Payee should be linked to at least one Contract"
+                createdAt: "2023-02-20T15:13:52.345Z"
+                updatedAt: "2023-03-03T11:02:51.751Z"
+        403:
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        404:
+          description: Payee not found, no Payee exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to retrieve the Payee.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    put:
+      tags:
+        - "Payees"
+      summary: Update single Payee
+      description: |
+        This route finds and updates a specific Payee by its ID.
+
+        **Sensitive Data Handling:**
+        Only client admin users can view or update sensitive fields (contactEmail, address, bankName, bankAddress, accountNo, sortCode, iban, swiftCode, paymentEmail, paymentProviders.wise.paymentFields).
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: 5c9fe8d3921a4527b9b43773
+          required: true
+          description: The ID of the Payee to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                alternateName:
+                  type: string
+                foreignId:
+                  type: string
+                contactEmail:
+                  type: string
+                country:
+                  type: string
+                address:
+                  type: string
+                vatNo:
+                  type: string
+                notes:
+                  type: string
+                selfBillingTaxText:
+                  type: string
+                selfBillingTaxRate:
+                  type: number
+                feesInvoiceTaxRate:
+                  type: number
+                withholdingTaxRate:
+                  type: number
+                payeeCategories:
+                  type: array
+                  items:
+                    type: string
+                  description: Needs to match categories set up in Settings area
+      responses:
+        200:
+          description: Successfully updated the Payee.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payee'
+              example:
+                clientId: "string"
+                name: "string"
+                alternateName: "string"
+                openingBalance: 0
+                minPayout: 0
+                selfBilling: false
+                autoPayment: false
+                payeeCategories: []
+                paymentProviders:
+                  curvePay: {}
+                  tipalti:
+                    crossPayeeDetails: false
+                    payeeId: "string"
+                  wise:
+                    feesPaidBy: "client"
+                    paymentFields: {}
+                createdBy: "string"
+                lastModifiedBy: "string"
+                valid: false
+                validationErrors:
+                  - "Payee should be linked to at least one Contract"
+                  - "A User needs to be assigned in order for someone to have access to this Payee and view its statements. It is ok to wait with creating Users until you are ready to send statements"
+                _id: "string"
+                updatedAt: "2025-04-15T11:42:03.914Z"
+                createdAt: "2025-04-15T11:42:03.914Z"
+                __v: 0
+        403:
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        404:
+          description: Payee not found, no Payee exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to update the Payee.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    delete:
+      tags:
+        - "Payees"
+      summary: Delete single Payee
+      description: This route allows for the deletion of one Payee, specified by ID.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: 5c9fe8d3921a4527b9b43773
+          required: true
+          description: The ID of the Payee to delete.
+      responses:
+        200:
+          description: Successfully deleted the Payee, returns the result of the operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payee'
+              example:
+                clientId: "string"
+                name: "string"
+                alternateName: "string"
+                openingBalance: 0
+                minPayout: 0
+                selfBilling: false
+                autoPayment: false
+                payeeCategories: []
+                paymentProviders:
+                  curvePay: {}
+                  tipalti:
+                    crossPayeeDetails: false
+                    payeeId: "string"
+                  wise:
+                    feesPaidBy: "client"
+                    paymentFields: {}
+                createdBy: "string"
+                lastModifiedBy: "string"
+                valid: false
+                validationErrors:
+                  - "Payee should be linked to at least one Contract"
+                  - "A User needs to be assigned in order for someone to have access to this Payee and view its statements. It is ok to wait with creating Users until you are ready to send statements"
+                _id: "string"
+                updatedAt: "2025-04-15T11:42:03.914Z"
+                createdAt: "2025-04-15T11:42:03.914Z"
+                __v: 0
+        201:
+          description: Indicates an internal error whilst attempting to delete the Payee.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights to perform the deletion.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        404:
+          description: Not found, the specified Payee could not be found, returns a message indicating the issue.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to delete the Payee, returns a message indicating an internal error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /payees/bulk:
+    delete:
+      tags:
+        - "Payees"
+      summary: Delete multiple Payees
+      description: This route allows for the deletion of multiple Payees in a single request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payees:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of Payee IDs to delete
+      responses:
+        200:
+          description: Successfully deleted Payees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "X Payees have been deleted"
+        400:
+          description: Bad request - invalid request body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to delete the Payees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{id}/history:
+    get:
+      tags:
+        - "Payees"
+      summary: Retrieve Payee History
+      description: This route retrieves the history of a specific Payee.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee to retrieve history for
+      responses:
+        200:
+          description: Successfully retrieved Payee history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  history:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        change:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+                        createdBy:
+                          type: string
+                        createdByName:
+                          type: string
+                        action:
+                          type: string
+                        payeeName:
+                          type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to retrieve the Payee history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{id}/summary:
+    get:
+      tags:
+        - "Payees"
+      summary: Retrieve Payee Summary
+      description: This route retrieves the summary information of a specific Payee.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee to retrieve summary for
+      responses:
+        200:
+          description: Successfully retrieved Payee summary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+                  transactions:
+                    type: number
+                  contracts:
+                    type: number
+                  statements:
+                    type: number
+                  lastPayment:
+                    type: string
+                    format: date-time
+                  paymentCount:
+                    type: number
+                  totalPaid:
+                    type: number
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to retrieve the Payee summary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{id}/detail:
+    get:
+      tags:
+        - "Payees"
+      summary: Retrieve detailed Payee information
+      description: This route retrieves detailed information of a specific Payee including contracts, transactions, and summary data.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee to retrieve details for
+      responses:
+        200:
+          description: Successfully retrieved detailed Payee information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payee:
+                    $ref: '#/components/schemas/Payee'
+                  summary:
+                    type: object
+                    properties:
+                      balance:
+                        type: number
+                      transactions:
+                        type: number
+                      contracts:
+                        type: number
+                      statements:
+                        type: number
+                  contracts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        status:
+                          type: string
+                  transactions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        amount:
+                          type: number
+                        date:
+                          type: string
+                          format: date-time
+                        type:
+                          type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to retrieve the Payee details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{id}/users:
+    get:
+      tags:
+        - "Payees"
+      summary: Retrieve Users associated with a Payee
+      description: This route retrieves all Users that are associated with a specific Payee.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee to retrieve Users for
+      responses:
+        200:
+          description: Successfully retrieved Users associated with the Payee
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        role:
+                          type: string
+                        active:
+                          type: boolean
+                        createdAt:
+                          type: string
+                          format: date-time
+                        lastLogin:
+                          type: string
+                          format: date-time
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to retrieve the Users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/import:
+    post:
+      tags:
+        - "Payees"
+      summary: Import Payees from file
+      description: |
+        This route allows for importing Payees from an uploaded file (CSV/Excel).
+
+        **Sensitive Data Handling:**
+        Only client admin users can import or update sensitive fields (contactEmail, address, bankName, bankAddress, accountNo, sortCode, iban, swiftCode, paymentEmail, paymentCurrency, paymentProviders, paymentProviders.wise.paymentFields).
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to import Payees from (CSV or Excel format)
+      responses:
+        200:
+          description: Successfully imported Payees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  imported:
+                    type: number
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        row:
+                          type: number
+                        error:
+                          type: string
+        400:
+          description: Bad request - invalid file or format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to import the Payees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/raw-export:
+    post:
+      tags:
+        - "Payees"
+      summary: Raw Export Payees to CSV
+      description: |
+        This route allows for exporting Payees directly from the database to a CSV file.
+        Only accessible to client users with View or Edit contract permissions.
+        
+        **Sensitive Data Handling:**
+        All sensitive fields are always excluded from the export, including encrypted fields and client admin only fields (contactEmail, address, bankName, bankAddress, accountNo, sortCode, iban, swiftCode, paymentEmail, paymentCurrency, paymentProviders, paymentProviders.wise.paymentFields).
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sync:
+                  type: boolean
+                  default: false
+                  description: When true, returns the CSV download link directly instead of sending via email
+                filter:
+                  type: object
+                  description: Filter criteria for selecting payees
+                  properties:
+                    text:
+                      type: string
+                      description: Filter on supplied text string
+                    name:
+                      type: string
+                      description: Filter by Payee name
+                    createdAfter:
+                      type: string
+                      format: date
+                      description: Filter payees created on or after this date (YYYY-MM-DD)
+                    createdBefore:
+                      type: string
+                      format: date
+                      description: Filter payees created on or before this date (YYYY-MM-DD)
+                    updatedAfter:
+                      type: string
+                      format: date
+                      description: Filter payees updated on or after this date (YYYY-MM-DD)
+                    updatedBefore:
+                      type: string
+                      format: date
+                      description: Filter payees updated on or before this date (YYYY-MM-DD)
+      responses:
+        200:
+          description: Raw export request submitted successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Your report will be sent to you via email shortly"
+                  - type: object
+                    properties:
+                      csvPublicLink:
+                        type: string
+                        example: "https://example.com/export.csv"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to export the Payees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/export:
+    post:
+      tags:
+        - "Payees"
+      summary: Export Payees to file
+      description: |
+        This route allows for exporting Payees to a file format that will be sent via email.
+        Only accessible to client users with View contract permissions.
+
+        **Sensitive Data Handling:**
+        Only client admin users can export sensitive fields (contactEmail, address, bankName, bankAddress, accountNo, sortCode, iban, swiftCode, paymentEmail, paymentCurrency, paymentProviders, paymentProviders.wise.paymentFields).
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of specific Payee IDs to export. If not provided, uses filter criteria.
+                filter:
+                  type: object
+                  description: Filter criteria for selecting payees when specific IDs are not provided
+      responses:
+        200:
+          description: Export request submitted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Your report will be sent to you via email shortly"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to export the Payees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{id}/payee_balance:
+    get:
+      tags:
+        - "Payees"
+      summary: Retrieve Payee Balance
+      description: This route retrieves the current balance of a specific Payee.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee to retrieve balance for
+      responses:
+        200:
+          description: Successfully retrieved Payee balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+                  currency:
+                    type: string
+                  lastUpdated:
+                    type: string
+                    format: date-time
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to retrieve the Payee balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{id}/get_contracts_and_transactions:
+    get:
+      tags:
+        - "Payees"
+      summary: Retrieve Contracts and Transactions for a Payee
+      description: This route retrieves all contracts and transactions associated with a specific Payee.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee to retrieve contracts and transactions for
+      responses:
+        200:
+          description: Successfully retrieved contracts and transactions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contracts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        status:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+                  transactions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        amount:
+                          type: number
+                        date:
+                          type: string
+                          format: date-time
+                        type:
+                          type: string
+                        description:
+                          type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to retrieve contracts and transactions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{id}/transactions:
+    get:
+      tags:
+        - "Payees"
+      summary: Retrieve Transactions for a Payee
+      description: This route retrieves all transactions associated with a specific Payee with pagination support.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee to retrieve transactions for
+        - in: query
+          name: page
+          schema:
+            type: number
+            default: 1
+          description: The page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: number
+            default: 25
+          description: The number of transactions to return per page
+      responses:
+        200:
+          description: Successfully retrieved transactions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        amount:
+                          type: number
+                        date:
+                          type: string
+                          format: date-time
+                        type:
+                          type: string
+                        description:
+                          type: string
+                        status:
+                          type: string
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: number
+                      totalPages:
+                        type: number
+                      total:
+                        type: number
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to retrieve transactions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{id}/statements:
+    get:
+      tags:
+        - "Payees"
+      summary: Retrieve Statements for a Payee
+      description: This route retrieves all statements associated with a specific Payee.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee to retrieve statements for
+      responses:
+        200:
+          description: Successfully retrieved statements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statements:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        periodId:
+                          type: string
+                        startDate:
+                          type: string
+                          format: date-time
+                        endDate:
+                          type: string
+                          format: date-time
+                        amount:
+                          type: number
+                        status:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to retrieve statements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{id}/transaction:
+    post:
+      tags:
+        - "Payees"
+      summary: Create a new Transaction for a Payee
+      description: This route allows for the creation of a new transaction for a specific Payee.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee to create a transaction for
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  description: The transaction amount
+                type:
+                  type: string
+                  enum: ["credit", "debit", "payment", "adjustment"]
+                  description: The type of transaction
+                description:
+                  type: string
+                  description: Description of the transaction
+                date:
+                  type: string
+                  format: date-time
+                  description: The date of the transaction
+                reference:
+                  type: string
+                  description: External reference for the transaction
+      responses:
+        200:
+          description: Successfully created transaction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  payeeId:
+                    type: string
+                  amount:
+                    type: number
+                  type:
+                    type: string
+                  description:
+                    type: string
+                  date:
+                    type: string
+                    format: date-time
+                  reference:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  createdBy:
+                    type: string
+        400:
+          description: Bad request - invalid transaction data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to create the transaction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{payeeId}/transaction/{id}:
+    put:
+      tags:
+        - "Payees"
+      summary: Update a Transaction for a Payee
+      description: This route allows for updating an existing transaction for a specific Payee.
+      parameters:
+        - in: path
+          name: payeeId
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the transaction to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  description: The transaction amount
+                type:
+                  type: string
+                  enum: ["credit", "debit", "payment", "adjustment"]
+                  description: The type of transaction
+                description:
+                  type: string
+                  description: Description of the transaction
+                date:
+                  type: string
+                  format: date-time
+                  description: The date of the transaction
+                reference:
+                  type: string
+                  description: External reference for the transaction
+      responses:
+        200:
+          description: Successfully updated transaction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  payeeId:
+                    type: string
+                  amount:
+                    type: number
+                  type:
+                    type: string
+                  description:
+                    type: string
+                  date:
+                    type: string
+                    format: date-time
+                  reference:
+                    type: string
+                  updatedAt:
+                    type: string
+                    format: date-time
+                  lastModifiedBy:
+                    type: string
+        400:
+          description: Bad request - invalid transaction data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        404:
+          description: Transaction not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to update the transaction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    delete:
+      tags:
+        - "Payees"
+      summary: Delete a Transaction for a Payee
+      description: This route allows for deleting an existing transaction for a specific Payee.
+      parameters:
+        - in: path
+          name: payeeId
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the transaction to delete
+      responses:
+        200:
+          description: Successfully deleted transaction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Transaction deleted successfully"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        404:
+          description: Transaction not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while trying to delete the transaction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{id}/tipalti_iframe_authentication:
+    get:
+      tags:
+        - "Payees"
+      summary: Generate Tipalti iframe authentication token
+      description: This route generates an authentication token for embedding Tipalti iframe for a specific Payee.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee to generate Tipalti authentication for
+      responses:
+        200:
+          description: Successfully generated Tipalti authentication token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: The authentication token for Tipalti iframe
+                  url:
+                    type: string
+                    description: The Tipalti iframe URL with embedded token
+                  expiresAt:
+                    type: string
+                    format: date-time
+                    description: When the token expires
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        404:
+          description: Payee not found or not configured for Tipalti
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while generating Tipalti authentication
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /payees/{id}/create_wise_recipient:
+    post:
+      tags:
+        - "Payees"
+      summary: Create Wise recipient for a Payee
+      description: This route creates a Wise recipient account for a specific Payee to enable Wise payments.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Payee to create Wise recipient for
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accountHolderName:
+                  type: string
+                  description: The name of the account holder
+                currency:
+                  type: string
+                  description: The currency for the recipient account
+                type:
+                  type: string
+                  enum: ["email", "iban", "sort_code"]
+                  description: The type of recipient account
+                details:
+                  type: object
+                  description: Account details specific to the recipient type
+                  properties:
+                    email:
+                      type: string
+                    iban:
+                      type: string
+                    sortCode:
+                      type: string
+                    accountNumber:
+                      type: string
+      responses:
+        200:
+          description: Successfully created Wise recipient
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  recipientId:
+                    type: string
+                    description: The Wise recipient ID
+                  accountHolderName:
+                    type: string
+                  currency:
+                    type: string
+                  type:
+                    type: string
+                  details:
+                    type: object
+                  createdAt:
+                    type: string
+                    format: date-time
+        400:
+          description: Bad request - invalid recipient data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        404:
+          description: Payee not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error occurred while creating Wise recipient
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    Payee:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the Payee
+        clientId:
+          type: string
+          description: The client ID this Payee belongs to
+        name:
+          type: string
+          description: The name of the Payee
+        alternateName:
+          type: string
+          description: An alternate name for the Payee
+        foreignId:
+          type: string
+          description: External system identifier for the Payee
+        projectId:
+          type: string
+          description: Project identifier associated with the Payee
+        contactEmail:
+          type: string
+          format: email
+          description: Contact email address for the Payee
+        country:
+          type: string
+          description: Country code for the Payee
+        address:
+          type: string
+          description: Physical address of the Payee
+        vatNo:
+          type: string
+          description: VAT number for the Payee
+        notes:
+          type: string
+          description: Additional notes about the Payee
+        openingBalance:
+          type: number
+          description: The opening balance for the Payee
+        minPayout:
+          type: number
+          description: Minimum payout amount for the Payee
+        selfBilling:
+          type: boolean
+          description: Whether self-billing is enabled for this Payee
+        autoPayment:
+          type: boolean
+          description: Whether automatic payments are enabled
+        selfBillingTaxText:
+          type: string
+          description: Tax text for self-billing invoices
+        selfBillingTaxRate:
+          type: number
+          description: Tax rate for self-billing invoices
+        feesInvoiceTaxRate:
+          type: number
+          description: Tax rate for fees invoices
+        withholdingTaxRate:
+          type: number
+          description: Withholding tax rate for the Payee
+        payeeCategories:
+          type: array
+          items:
+            type: string
+          description: Categories assigned to the Payee
+        paymentProviders:
+          type: object
+          properties:
+            curvePay:
+              type: object
+              description: CurvePay payment provider configuration
+            tipalti:
+              type: object
+              properties:
+                crossPayeeDetails:
+                  type: boolean
+                payeeId:
+                  type: string
+              description: Tipalti payment provider configuration
+            wise:
+              type: object
+              properties:
+                feesPaidBy:
+                  type: string
+                  enum: ["client", "payee"]
+                paymentFields:
+                  type: object
+              description: Wise payment provider configuration
+        createdBy:
+          type: string
+          description: ID of the user who created the Payee
+        lastModifiedBy:
+          type: string
+          description: ID of the user who last modified the Payee
+        valid:
+          type: boolean
+          description: Whether the Payee data is valid
+        validationErrors:
+          type: array
+          items:
+            type: string
+          description: List of validation errors for the Payee
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the Payee was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date and time when the Payee was last updated
+        __v:
+          type: number
+          description: Version key for the document
+        paymentCurrency:
+          type: string
+          description: Currency used for payments to this Payee
+        payeeBalanceCurrency:
+          type: string
+          description: Currency used for the Payee's balance

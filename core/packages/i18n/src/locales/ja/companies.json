@@ -1,0 +1,37 @@
+{
+  "title": "企業",
+  "searchPlaceholder": "企業を検索",
+  "entityName": "企業",
+  "entityNamePlural": "企業",
+  "entityNameLower": "企業",
+  "entityNameLowerPlural": "企業",
+  "export": "エクスポート",
+  "emptyState": {
+    "title": "企業がまだありません",
+    "description": "最初の企業を作成して始めましょう。"
+  },
+  "noResults": "検索に一致する企業が見つかりません。",
+  "deleteSelected": "選択した項目を削除",
+  "columns": {
+    "name": "名前",
+    "createdAt": "作成日"
+  },
+  "exportToast": {
+    "successTitle": "エクスポートを受け付けました",
+    "successDescription": "エクスポートはまもなくメールで送信されます。",
+    "errorTitle": "エクスポートに失敗しました",
+    "errorDescription": "もう一度お試しください。"
+  },
+  "deleteToast": {
+    "successTitle_other": "{{count}}件の企業を削除しました",
+    "errorTitle": "削除に失敗しました",
+    "errorDescription": "もう一度お試しください。"
+  },
+  "deleteDialog": {
+    "description": "この操作は元に戻せません。"
+  },
+  "importToast": {
+    "successTitle": "企業をインポート中です",
+    "successDescription": "まもなくレポートをお送りします。"
+  }
+}

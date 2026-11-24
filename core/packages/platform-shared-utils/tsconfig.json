@@ -1,0 +1,15 @@
+{
+  "extends": "@curveroyaltysystems/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    // Below required to support legacy JS files in this package
+    // Remove once all JS files are migrated to TS
+    "allowJs": true,
+    "checkJs": false,
+    "skipLibCheck": true,
+    "declaration": false,
+    "declarationMap": false
+  },
+  "include": ["src"]
+}

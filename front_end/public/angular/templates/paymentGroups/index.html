@@ -1,0 +1,106 @@
+<div id="CUR-WFHcKkUy" class="jumbotron" data-pages="parallax">
+  <div id="CUR-wuKiWZaU" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-iIJkgJIw" class="inner">
+      <ul id="CUR-EdjdzPUu" class="breadcrumb">
+        <li><a>Payments</a></li>
+        <li id="CUR-GAdXRpnD"><a id="CUR-tambRlvs" href="/#/paymentGroups" class="active">Groups</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-PZuCGTyn" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-MZcTgOcq" class="row m-b-20">
+    <div id="CUR-rYaNELcA" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-XkvaVScw" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-hjVaDtlc" class="input-group transparent">
+          <input id="CUR-HojkyIsW" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-VHmvrsLF" class="input-group-addon pointer" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-nRUFyjAC" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-LZIeyfmw" class="sm-p-l-15 sm-p-r-15 btn-ctrl-group">
+        <button id="CUR-kXoADWjR" class="btn btn-danger hidden-xs" data-toggle="modal" data-target="#deleteModal">
+          <i class="fa fa-trash"></i>&nbsp;Delete</button>
+        <a id="CUR-WjgsRUeN" href="#/paymentGroups/new" ng-if="!demoMode">
+          <button id="CUR-INWUtDqr" class="btn btn-complete w-xs-100-p m-xs-l-0">
+            <i class="fa fa-plus"></i>&nbsp;Create</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-oOOccEMQ" class="row">
+    <div id="CUR-IqCGCsMZ" class="col-sm-12">
+      <h5 id="CUR-zjSUHJUl" class="pull-right">Total: {{total? total : 0}}</h5>
+    </div>
+  </div>
+  <div id="CUR-oPypuoyG" class="row">
+    <div id="CUR-sNGmfJHN" class="col-xs-12">
+      <div id="CUR-FfLoGvrN" class="panel panel-default">
+        <div id="CUR-BnKdTxyB" class="panel-heading">
+          <div id="CUR-PIIvfFmI" class="panel-title">
+            Payment Groups
+          </div>
+        </div>
+        <div id="CUR-WDxgdqfq" class="panel-body">
+          <table id="CUR-MrcHmUEh" class="table table-hover table-condensed dataTable no-footer">
+            <thead>
+              <tr id="CUR-oTADdvMB">
+                <th class="table-checkbox hidden-xs">
+                  <input id="CUR-bZyQfTpL" type="checkbox" class="select-all" ng-click="selectAllContracts()" ng-checked="selectAllChecked" ng-show="rights.periods == 'Edit'">
+                </th>
+                <th ng-click="getSortedData('name', orderDir)" ng-class="whatClassIsIt('name')">Name</th>
+                <th ng-click="getSortedData('status', orderDir)" ng-class="whatClassIsIt('type')">Status</th>
+                <th ng-click="getSortedData('createdAt', orderDir)" ng-class="whatClassIsIt('createdAt')">Created</th>
+              </tr>
+            </thead>
+            <tbody id="CUR-bzKDOlWr">
+              <tr id="CUR-zkdFzbOQ" payment-group-table-row ng-repeat="group in paymentGroups" group="group" edit="rights.periods == 'Edit'"></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-GjQWuOVr" class="col-sm-12">
+    <div id="CUR-ylvQHVqj" class="pull-right">
+      <span id="CUR-zSKVeoQP" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <span id="CUR-lsVzeaZg" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-xuToVIKs" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-bIALPFSf" class="row">
+    <div id="CUR-NoDHeiSH" class="col-xs-12 text-center">
+      <pagination id="CUR-WOvMLXBd" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-RWgMBycu" class="modal-dialog">
+    <div id="CUR-mxwbUyWP" class="modal-content">
+      <div id="CUR-GiDXNATl" class="modal-header clearfix text-left">
+        <button id="CUR-nmfPMtMe" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-NOLUvPoG">Delete Payment Groups</h5>
+      </div>
+      <div id="CUR-XuQaFHAZ" class="modal-body">
+        <div id="CUR-EcUBBrqY" class="row">
+          <div id="CUR-ZGsAAfnv" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected payment groups? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-QUTGUgpx" class="row">
+          <div id="CUR-ZgUqqRgd" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-KxOiIhjC" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-WTFkrtrD" type="button" class="btn btn-danger m-t-5" ng-click="delete()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

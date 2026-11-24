@@ -1,0 +1,8 @@
+ID  Leave blank if a new Release 
+Cat No  Must be unique 
+Release Date    DD/MM/YYYY 
+Exempt from Mechanicals TRUE 
+Release Alises  Separate multiple alises using a semi-colo 
+ID  Leave blank if a new Track 
+ISRC    Any dashes, spaces or other characters will be stripped out on import 
+Track Aliases   Separate multiple alises using a semi-colon

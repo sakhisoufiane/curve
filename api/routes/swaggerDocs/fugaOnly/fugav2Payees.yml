@@ -1,0 +1,496 @@
+openapi: 3.0.0
+paths:
+  /fuga/v2/payees:
+    get:
+      tags:
+        - "Fuga v2 - Payees"
+      summary: Retrieve payees
+      description: Returns a paginated list of payees. Requires read access to contracts.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: select
+          schema:
+            type: string
+          description: Fields to select
+      responses:
+        '200':
+          description: Successfully retrieved payees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payees:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FugaPayee'
+                  meta:
+                    $ref: '#/components/schemas/FugaPaginationMeta'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+    post:
+      tags:
+        - "Fuga v2 - Payees"
+      summary: Create a payee
+      description: Creates a new payee. Requires write access to contracts.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Name of the payee
+                email:
+                  type: string
+                  description: Email of the payee
+      responses:
+        '200':
+          description: Successfully created payee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FugaPayeeDetail'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/payees/search:
+    get:
+      tags:
+        - "Fuga v2 - Payees"
+      summary: Search payees
+      description: Returns a paginated list of payees matching the search text. Requires read access to contracts.
+      parameters:
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Text to search for in payee name
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: select
+          schema:
+            type: string
+          description: Fields to select
+      responses:
+        '200':
+          description: Successfully retrieved payees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payees:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FugaPayee'
+                  meta:
+                    $ref: '#/components/schemas/FugaPaginationMeta'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/payees/{id}:
+    get:
+      tags:
+        - "Fuga v2 - Payees"
+      summary: Retrieve a specific payee
+      description: Returns details for a specific payee by ID. Requires read access to contracts.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Payee ID
+      responses:
+        '200':
+          description: Successfully retrieved payee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FugaPayeeWithAssociations'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+    put:
+      tags:
+        - "Fuga v2 - Payees"
+      summary: Update a payee
+      description: Updates a payee by ID. Requires write access to contracts.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Payee ID
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the payee
+      responses:
+        '200':
+          description: Successfully updated payee
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FugaPayeeWithAssociations'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '409':
+          $ref: '#/components/responses/FugaConflict'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+    delete:
+      tags:
+        - "Fuga v2 - Payees"
+      summary: Delete a payee
+      description: Deletes a payee by ID. Requires write access to contracts.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Payee ID
+      responses:
+        '200':
+          description: Successfully deleted payee
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/payees/{id}/tracks:
+    get:
+      tags:
+        - "Fuga v2 - Payees"
+      summary: Retrieve tracks associated with a payee
+      description: Returns a paginated list of tracks associated with a specific payee. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Payee ID
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+      responses:
+        '200':
+          description: Successfully retrieved tracks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tracks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FugaTrack'
+                  meta:
+                    $ref: '#/components/schemas/FugaPaginationMeta'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/payees/{id}/releases:
+    get:
+      tags:
+        - "Fuga v2 - Payees"
+      summary: Retrieve releases associated with a payee
+      description: Returns a list of releases associated with a specific payee. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Payee ID
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Number of items to return
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Number of items to skip
+      responses:
+        '200':
+          description: Successfully retrieved releases
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  releases:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FugaRelease'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+components:
+  schemas:
+    FugaPayee:
+      type: object
+      required:
+        - name
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the payee
+        name:
+          type: string
+          description: Name of the payee
+        email:
+          type: string
+          description: Email of the payee
+        status:
+          type: string
+          description: Status of the payee
+        tracks:
+          type: integer
+          description: Number of tracks associated with the payee
+        releases:
+          type: integer
+          description: Number of releases associated with the payee
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the payee was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the payee was last updated
+
+    FugaPayeeDetail:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    FugaPayeeWithAssociations:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        associatedTracks:
+          type: integer
+        associatedReleases:
+          type: integer
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    FugaTrack:
+      type: object
+      properties:
+        id:
+          type: string
+        fugaId:
+          type: string
+          nullable: true
+        isrc:
+          type: string
+        title:
+          type: string
+        artist:
+          type: string
+        version:
+          type: string
+        duration:
+          type: number
+          nullable: true
+        payeeCount:
+          type: integer
+
+    FugaRelease:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the release
+        fugaId:
+          type: string
+          description: Fuga ID of the release
+        title:
+          type: string
+          description: Title of the release
+        version:
+          type: string
+          description: Version of the release
+        artist:
+          type: string
+          description: Artist of the release
+        catNo:
+          type: string
+          description: Catalog number of the release
+        barcode:
+          type: string
+          description: Barcode of the release
+        releaseDate:
+          type: string
+          format: date
+          description: Release date
+        label:
+          type: string
+          description: Label of the release
+        tracks:
+          type: array
+          items:
+            $ref: '#/components/schemas/FugaTrack'
+          description: Tracks associated with the release
+        contracts:
+          type: array
+          items:
+            type: object
+            properties:
+              payeeId:
+                type: string
+                description: ID of the payee
+              payeeName:
+                type: string
+                description: Name of the payee
+              payeeEmail:
+                type: string
+                description: Email of the payee
+              percentage:
+                type: number
+                description: Percentage share of the payee

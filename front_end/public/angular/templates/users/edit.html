@@ -1,0 +1,327 @@
+<div id="CUR-QajKrQEy" class="jumbotron" data-pages="parallax">
+  <div id="CUR-iIeRSdVM" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-uURZmEaR" class="inner">
+      <ul id="CUR-LXiiQRcM" class="breadcrumb">
+        <li id="CUR-fOTEWSPj"><a id="CUR-QxsUimtF" href="/#/users" class="active">Users</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-Wfjwwdep" class="container-fluid container-fixed-lg sm-p-l-5 sm-p-r-5">
+  <div id="CUR-WYLoKVbB" class="row">
+    <div id="CUR-xCoqxFtz" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-RxSOwcRN" class="btn btn-complete" ng-click="save()"><i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-wUjmZGjM" class="row">
+    <div id="CUR-DebWgmFW" class="panel panel-transparent hidden-xs">
+      <!-- Nav tabs -->
+      <ul id="CUR-ysqueKZi" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-wJrmtfjY" class="active" ng-click="setTab('overview')">
+          <a id="CUR-ZXdANYLe" data-toggle="tab" aria-expanded="true"><span id="CUR-EMZDNxkL">Overview</span></a>
+        </li>
+        <li id="CUR-CgOUiaUZ" ng-click="setTab('communication')" ng-if="userRole == 'client'">
+          <a id="CUR-LrQKQkFO" data-toggle="tab" aria-expanded="false"><span id="CUR-AFvCtUxA">Communication</span></a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-CumqVApi" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-apPbKDHJ" class="tab-pane active" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+        <div id="CUR-bMvSmiSp" ng-show="activeTab === 'communication'" ng-include="'communication-tab.html'" ng-if="userRole == 'client'"></div>
+      </div>
+    </div>
+    <div id="CUR-LPJlbgVt" class="col-xs-12 sm-p-l-5 sm-p-r-5 visible-xs" ng-if="showAccordions">
+      <uib-accordion close-others="true" ng-init="status1.open = true; status2.open = false;">
+        <div id="CUR-rXnJoFxn" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>
+            Overview <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-UqJGSAYr" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div id="CUR-vGssLZAD" uib-accordion-group class="panel-default" is-open="status2.open">
+          <uib-accordion-heading>
+            Communication <i class="pull-right glyphicon"
+                             ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-OfYysuMb" ng-include="'communication-tab.html'"></div>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+  <div id="CUR-sWrlCVCE" class="row">
+    <div id="CUR-ThWVwBhO" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-WHHZTPYk" ng-show="user.updatedAt">Last Updated on {{ user.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-htmOAHMs" href="javascript:;" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+
+<!--<div id="CUR-hPjUAljb" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-nYCakChY" class="row">
+    <div id="CUR-CcKEanTa" class="col-sm-12 text-right">
+      <h6>Created By: {{user.createdBy.email}}</h6>
+      <h6>Last Modified By: {{user.lastModifiedBy.email}}</h6>
+    </div>
+  </div>
+</div>-->
+
+<div class="modal fade stick-up" id="createAlertModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-tDOqgnVe" class="modal-dialog">
+    <div id="CUR-qfTZCerP" class="modal-content">
+      <div id="CUR-KMAMcUWX" class="modal-header clearfix text-left">
+        <button id="CUR-NqEYlrmD" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-QOjDhQrE">Are You Sure?</h5>
+      </div>
+      <div id="CUR-siktdqkI" class="modal-body">
+        <div id="CUR-YaUpebLy" class="row">
+          <div id="CUR-mfChnhlX" class="col-xs-12 m-t-20">
+            <p>This user will have access to all your data. Are you sure that you want to create?</p>
+          </div>
+        </div>
+        <div id="CUR-NJBJestD" class="row">
+          <div id="CUR-JbcoKvle" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-SZujYwor" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-xQRKRMjR" type="button" class="btn btn-complete m-t-5" ng-click="confirmSave = true; save()" data-dismiss="modal"><i class="fa fa-check"></i> Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade stick-up" id="createInternalAlertModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-GopGRxFr" class="modal-dialog">
+    <div id="CUR-WtdWHXaB" class="modal-content">
+      <div id="CUR-MOIIxCdT" class="modal-header clearfix text-left">
+        <button id="CUR-JZSTOtPD" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-XrlStKrR">Do you want to add this user as an internal user?</h5>
+      </div>
+      <div id="CUR-eAAoLSVR" class="modal-body">
+        <div id="CUR-BYZpILTV" class="row">
+          <div id="CUR-JInwuVPK" class="col-xs-12 m-t-20">
+            <p>This user will be set up as an internal user and have access to all data. Are you sure that you want to create?</p>
+          </div>
+        </div>
+        <div id="CUR-hvpHszoq" class="row">
+          <div id="CUR-HYYGNPns" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-pfsrYzZJ" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-QlXZJAAU" type="button" class="btn btn-complete m-t-5" ng-click="confirmSave = true; save()" data-dismiss="modal"><i class="fa fa-check"></i> Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="overview-tab.html">
+  <div id="CUR-biqQobZc" class="row">
+    <div id="CUR-xatofhwM" ng-if="userRole === 'internal'" ng-show="user.internal" class="alert alert-danger">You are setting this user as an Internal User, giving them access to everything in the system.</div>
+    <div id="CUR-NMNuRBVb" class="col-xs-12 col-sm-6">
+      <div id="CUR-vwWBvdaJ" class="panel panel-default">
+        <div id="CUR-VQexPrEj" class="panel-heading">
+          <div id="CUR-praHLZoN" class="panel-title">
+            User configuration <documentation link="http://guide.curveroyaltysystems.com/article/users-granting-3rd-party-access/#newusers"></documentation>
+          </div>
+        </div>
+        <div id="CUR-cNVBapDL" class="panel-body p-t-15">
+          <form id="CUR-RskBLbsf" role="form">
+            <div id="CUR-XGEVbkZJ" class="form-group" ng-if="userRole === 'internal'">
+              <div id="CUR-LJaJMIar" class="form-group">
+                <input id="CUR-aobppbXD" type="checkbox" value="1" ng-model="user.internal">
+                <label id="CUR-IlPpfLtg">Set user as an internal user</label>
+              </div>
+            </div>
+            <div id="CUR-NfuxyaRV" class="form-group" ng-show="adminType === 'Admin' || internalUser || parentUser">
+              <label id="CUR-rCWHNKVr">User Type</label>
+              <ui-select ng-model="user.adminType" ng-change="resetAssociations()" ng-disabled="user._id">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-PjyeUEFb" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item as item in (userAdminTypes | filter: $select.search)">
+                  <span id="CUR-MBuNXZhI" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-VyqvXGQq" class="form-group required">
+              <label id="CUR-smVvWHkp">Email</label>
+              <input id="CUR-uDjOsHCe" type="text" class="form-control selected-user" placeholder="Email" ng-model="user.email"
+                     ng-disabled="disableEdit">
+            </div>
+            <div id="CUR-VyqvXR53" class="form-group required" ng-if="features.userSso || userRole === 'internal'">
+              <label id="CUR-VyqvXR52">Authentication Type</label>
+              <ui-select id="CUR-VyqvXR54" ng-disabled="disableEdit" ng-model="user.authenticationType">
+                <ui-select-match allow-clear="true">
+                  <span ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item as item in (userAuthenticationTypes | filter: $select.search)">
+                  <span ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-JCtkkDBb" class="form-group required">
+              <label id="CUR-TnXGabHK">Last Login</label>
+              <input id="CUR-ZBnpdkeU" type="text" class="form-control selected-user" placeholder="Last Login" ng-value="user.lastLogin | date : 'dd/MM/yyyy HH:mm:ss' : 'UTC'"
+                     ng-disabled="disableEdit">
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="CUR-gNnRAmIb" class="panel panel-default" ng-show="userRole != 'internal' && userRole != 'parent' && (adminType == 'Admin' || internalUser || parentUser) && (!userPayees || userPayees.length == 0)">
+        <div id="CUR-sMSDRYEC" class="panel-heading">
+          <div id="CUR-YWVyrWCP" class="panel-title">
+            Rights
+          </div>
+        </div>
+        <div id="CUR-NwNAHnsW" class="panel-body p-t-15">
+          <p>You can set what a user can see and edit using the four areas below. Edit will allow the user to create,
+            update and delete the objects, whilst View will only allow them to view and not edit or delete. Selecting
+            None will not display the area to the user at all.</p>
+          <form id="CUR-VfRewiKh" role="form">
+            <div id="CUR-wyvhRaSU" class="form-group">
+              <label id="CUR-zGivrhFj">Catalogue</label>
+              <ui-select ng-model="user.rights[clientId].catalogue">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-DqLsDZTL" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item as item in (rights | filter: $select.search)">
+                  <span id="CUR-vxAFeeiK" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-qPJzYher" class="form-group">
+              <label id="CUR-RKnPImgk">Contracts</label>
+              <ui-select ng-model="user.rights[clientId].contracts">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-DUqHislX" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item as item in (rights | filter: $select.search)">
+                  <span id="CUR-nGZDjUNh" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-IgrdOyGG" class="form-group">
+              <label id="CUR-MDmfYjwN">Sales and costs</label>
+              <ui-select ng-model="user.rights[clientId].sales">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-ABkmUOwd" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item as item in (rights | filter: $select.search)">
+                  <span id="CUR-GQjAHHrl" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-TxiWHZbJ" class="form-group">
+              <label id="CUR-vVuYfQUk">Periods and statements</label>
+              <ui-select ng-model="user.rights[clientId].periods">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-fxulojOo" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item as item in (periodRights | filter: $select.search)">
+                  <span id="CUR-rpakoOlH" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-KjqSbtGi" class="col-xs-12 col-sm-6" ng-if="user.adminType !== 'Admin' && userRole !== 'parent' && !hidePayeesPanel">
+      <div id="CUR-zCcQnlgs" class="panel panel-default">
+        <div id="CUR-IwrXMkam" class="panel-heading">
+          <div id="CUR-NbsQHJHV" class="panel-title">
+            Association
+          </div>
+        </div>
+        <div id="CUR-leMrLprj" class="panel-body p-t-15">
+          <div id="CUR-xUSmSNMZ" class="form-group" ng-if="userRole === 'internal'">
+            <label id="CUR-oNnoLyfQ">Parent</label>
+            <ui-select ng-model="user.parentId">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-BObNWnCA" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item._id as item in (parents | filter: $select.search)">
+                <span id="CUR-zwhzkPuS" ng-bind="item.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-rezOcqtS" class="form-group" ng-if="userRole === 'parent' || userRole == 'internal'">
+            <label id="CUR-xRTuTAYM">Clients</label>
+            <div id="CUR-UUBfwnhi" ng-if="!userClients || userClients.length == 0">No clients</div>
+            <div id="CUR-ZBfDbhAa" class="row" ng-repeat="client in userClients track by $index">
+              <div id="CUR-iqgeciOg" class="col-xs-12">{{client.name}}</div>
+            </div>
+          </div>
+          <div id="CUR-EWYRrqBi" class="form-group" ng-show="(userRole == 'internal' || userRole == 'parent')">
+            <label id="CUR-ttaDiDpj">Payees</label>
+            <div id="CUR-envYVaiF" ng-if="!userPayees || userPayees.length == 0">No payees</div>
+            <div id="CUR-xoYYidBR" class="row" ng-repeat="payee in userPayees track by $index">
+              <div id="CUR-QBNFvnzy" class="col-xs-12">{{payee.clientId.name}} - {{payee.name}}</div>
+            </div>
+          </div>
+          <div id="CUR-zBrMYhqE" class="form-group" ng-if="userRole === 'client'">
+            <label id="CUR-RwZUttck">Payees</label>
+            <div id="CUR-MiHJDYjt" class="row" ng-repeat="payeeId in user.payeeIds track by $index" ng-if="clientPayeeIds.includes(payeeId.id) || (!payeeId.id && payeeId.id != '')">
+              <div id="CUR-QPYRpkpS" class="col-xs-10">
+                <ui-select ng-model="payeeId.id" on-select="onSelectPayee($select)">
+                  <ui-select-match allow-clear="true" placeholder="Search for a Payee">
+                    <span id="CUR-bqTCsDYE" ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item._id as item in (payees | filter: $select.search)" refresh="searchPayees($select)" refresh-delay="500">
+                    <span id="CUR-RLMdRFeG" ng-bind="item.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-WYWEUoxk" class="col-xs-2">
+                <button id="CUR-IjiyRBeE" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="deletePayeeId(payeeId)"><i
+                        class="fa fa-trash"></i></button>
+              </div>
+            </div>
+            <div id="CUR-oibvnGyB" class="row">
+              <div id="CUR-yzLOfKqC" class="col-xs-12">
+                <button id="CUR-aZYIjHVs" class="btn btn-complete" ng-click="addPayeeId()">+ Payee</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="communication-tab.html">
+  <div id="CUR-HAaCOyZN" class="row">
+    <div id="CUR-CBcDuUuY" class="col-xs-12">
+      <div id="CUR-CEwIUdyH" class="panel panel-default">
+        <div id="CUR-iQFQZted" class="panel-heading">
+          <div id="CUR-XNHnIYiP" class="panel-title">
+            Communication
+          </div>
+        </div>
+        <div id="CUR-kUiHLUGo" class="panel-body">
+          <div id="CUR-ANpahvCF" class="table-responsive">
+            <table id="CUR-BjOlyhum" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+              <tr id="CUR-BtkrtHGh">
+                <th>Date</th>
+                <th>Email</th>
+              </tr>
+              </thead>
+              <tbody id="CUR-MqQaAeth">
+              <tr id="CUR-FjJZAgcr" ng-repeat="com in user.sendings track by $index">
+                <td id="CUR-AxmoYDvX">
+                  {{com.date}}
+                </td>
+                <td id="CUR-CiJGfaEB">
+                  {{com.email}}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<model-history data="user.modelHistory"></model-history>

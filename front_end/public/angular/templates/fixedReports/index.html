@@ -1,0 +1,55 @@
+<div id="CUR-XUGFDfAX" class="jumbotron" data-pages="parallax">
+  <div id="CUR-ymsmIwux" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-sAdbNgCR" class="inner">
+      <ul id="CUR-mfIHrzlP" class="breadcrumb">
+        <li id="CUR-WfxeLsFS"><a id="CUR-WyHWKrGI" href="/#/libraryTemplates" class="active">Fixed Reports</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-UVKunqgN" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-OgcEgeaB" class="row m-b-20">
+    <div id="CUR-RevOLhgJ" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-LrTeqaCJ" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-xMmEneeZ" class="input-group transparent">
+          <input id="CUR-CpZXDyZM" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-XjZbChWG" class="input-group-addon pointer search-button" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="CUR-KglfiGKY" class="col-sm-12">
+    <h5 id="CUR-VMKwLoUK" class="pull-right">Total: {{total? total : 0}}</h5>
+  </div>
+  <div id="CUR-wJVwNBLP" class="row">
+    <div id="CUR-yIWcmRTx" class="col-xs-12">
+      <div id="CUR-RoteJBWN" class="panel panel-default">
+        <div id="CUR-BoMhGeTf" class="panel-heading">
+          <div id="CUR-UhOfCbIJ" class="panel-title">
+            Fixed Reports
+          </div>
+        </div>
+        <div id="CUR-HQRcghal" class="panel-body">
+          <responsive-table headers="headers" data="fixedReports" order-by="filter.orderBy" selectable="true"
+            sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-SjSHfzDl" class="col-sm-12">
+    <div id="CUR-eKROgCFf" class="pull-right">
+      <span id="CUR-UHgMwAlB" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <a id="CUR-qfNOPjVh" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show All</a>
+    </div>
+  </div>
+  <div id="CUR-LakkfjvI" ng-if="!isShowingAll" class="row">
+    <div id="CUR-dnjUTJNM" class="col-xs-12 text-center">
+      <pagination id="CUR-CCcgLiCU" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>

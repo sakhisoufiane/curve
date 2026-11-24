@@ -1,0 +1,91 @@
+name: Build and Deploy to ECR
+
+on:
+  push:
+    branches: [ main, develop, beta, beta2, release ]
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set AWS Region and ECR Repository based on branch
+      id: set-config
+      run: |
+        case "${{ github.ref_name }}" in
+          beta)    region="${{ vars.BETA_AWS_REGION }}";    repo="${{ vars.BETA_ECR_REPOSITORY }}" ;;
+          beta2)   region="${{ vars.BETA2_AWS_REGION }}";   repo="${{ vars.BETA2_ECR_REPOSITORY }}" ;;
+          release) region="${{ vars.RELEASE_AWS_REGION }}"; repo="${{ vars.RELEASE_ECR_REPOSITORY }}" ;;
+          main)    region="${{ vars.AWS_REGION }}";          repo="${{ vars.ECR_REPOSITORY }}" ;;
+          *)       region="${{ vars.AWS_REGION }}";          repo="${{ vars.DEV_ECR_REPOSITORY }}" ;;
+        esac
+        echo "region=$region" >> $GITHUB_OUTPUT
+        echo "repository=$repo" >> $GITHUB_OUTPUT
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::238239381222:role/GithubEcrPushRole-Processor
+        aws-region: ${{ steps.set-config.outputs.region }}
+
+    - name: Login to Docker Hub to pull Curve Base Image
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Sanitize commit message for Docker tag
+      id: sanitize
+      env:
+        COMMIT_MSG: ${{ github.event.head_commit.message }}
+      run: |
+        # Extract PR number from "Merge pull request #NNNN from ..."
+        PR_NUMBER=$(echo "$COMMIT_MSG" | grep -oP '(?<=#)\d+' | head -1)
+        # PR title is on the third line of a GitHub merge commit
+        PR_TITLE=$(echo "$COMMIT_MSG" | sed -n '3p')
+        # Fall back to the first line if there is no PR title (e.g. direct push)
+        if [ -z "$PR_TITLE" ]; then
+          PR_TITLE=$(echo "$COMMIT_MSG" | head -n 1)
+        fi
+        # Sanitize for Docker tag: lowercase, replace special chars with hyphens, truncate
+        SANITIZED=$(echo "$PR_TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9._-]/-/g' | sed 's/--*/-/g' | cut -c1-60 | sed 's/-$//')
+        SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-8)
+        if [ -n "$PR_NUMBER" ]; then
+          TAG="pr-${PR_NUMBER}-${SANITIZED}-${SHORT_SHA}"
+        else
+          TAG="${SANITIZED}-${SHORT_SHA}"
+        fi
+        echo "tag=$TAG" >> $GITHUB_OUTPUT
+        echo "Image tag: $TAG"
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ steps.sanitize.outputs.tag }}
+        REPOSITORY: ${{ steps.set-config.outputs.repository }}
+        NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+      run: |
+        # Build a docker container and push it to ECR
+        docker build --build-arg NPM_TOKEN=$NPM_TOKEN -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
+        docker build --build-arg NPM_TOKEN=$NPM_TOKEN -t $ECR_REGISTRY/$REPOSITORY:latest .
+        
+        echo "Pushing image to ECR..."
+        docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$REPOSITORY:latest
+        
+        echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Image digest
+      run: echo ${{ steps.build-image.outputs.image }}

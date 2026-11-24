@@ -1,0 +1,144 @@
+<div id="CUR-KFTKLWNV" class="jumbotron" data-pages="parallax">
+  <div id="CUR-TwTOVCZF" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-oeEzBrbj" class="inner">
+      <ul id="CUR-tEJLeQup" class="breadcrumb">
+        <li id="CUR-OoczucrD"><a id="CUR-gMzfbPmh" href="/#/sales">Sales</a></li>
+        <li id="CUR-ckPcCYwi"><a id="CUR-QqKcQkZI" href="/#/sales/new-bulk" class="active">Bulk upload</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-ESFxkWbK" class="container-fluid container-fixed-lg">
+  <div id="CUR-WYlMqsDq" class="row">
+    <div id="CUR-BaLZlbNC" class="col-sm-6 col-sm-offset-3">
+      <div id="CUR-xcMZjGDR" class="panel panel-default">
+        <div id="CUR-QXoobTrO" class="panel-heading">
+          <div id="CUR-rmZTNABG" class="panel-title">
+            Sales File Bulk upload
+          </div>
+        </div>
+        <div id="CUR-sNXhbJYl" class="panel-body p-t-15">
+          <p>Upload multiple sales files here. We will automatically identify which template it matches, and ingest. Any
+            files that don't match a template will be available for you to edit and select a template for in the Sales
+            File area.</p>
+          <p>You can also use the old <a id="CUR-CPcrReHV" href="#/sales/new">Single File Upload</a> here</p>
+          <div id="CUR-QFRnRYEL" class="alert alert-danger" role="alert" ng-if="formErrors.length > 0">
+            <strong>Errors:</strong><br />
+            <ul id="CUR-MyhAfTGE">
+              <li id="CUR-cpAhAUUO" ng-repeat="error in formErrors">{{ error }}</li>
+            </ul>
+          </div>
+          <div id="CUR-rpertEWI" class="alert alert-danger" role="alert" ng-if="fileErrors.length > 0">
+            <strong>The following files are not valid for upload. Valid files types are <em>{{validFileTypes.join(",
+                ")}}</em><br />
+              <ul id="CUR-NpCSiOyQ">
+                <li id="CUR-pLThIBSG" ng-repeat="error in fileErrors">{{ error }}</li>
+              </ul>
+          </div>
+          <div class="form-group m-t-20" id="filedrop-container">
+            <input id="filedrop-file" type="file" class="m-t-10" ng-click="clearErrors()" ng-model="files"
+              multiple="multiple" ngf-select ngf-allow-dir="false"
+              ngf-change="filedropFilesAdded($files, $invalidFiles)" ngf-pattern="'{{validFileTypes.join(',')}}'"
+              accept="{{validFileTypes.join(',')}}" />
+            <label id="CUR-AnXiIAox" for="filedrop-file">
+              <span id="filedrop-icon" class="fa fa-download"></span>
+              <span id="filedrop-text">Choose files or drag and drop them here</span>
+            </label>
+          </div>
+          <div id="CUR-DUvEIana" class="row">
+            <div id="CUR-HwROpuCm" class="col-xs-12 center two-cols-row">
+              <a id="CUR-aEbJeVnL" href="/#/sales" class="btn btn-complete m-t-10"><i class="fa fa-check"></i>&nbsp;Complete</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-ufoEMDCw" class="row">
+    <div id="CUR-NidMpHgk" class="col-sm-6 col-sm-offset-3">
+      <div id="CUR-FNXaCzMd" class="panel panel-default">
+        <div id="CUR-fweFpXKa" class="panel-heading">
+          <div id="CUR-bRAqIOCj" class="panel-title">
+            Uploaded files
+          </div>
+        </div>
+        <div id="CUR-VrLcBqUK" class="panel-body p-t-15">
+          <ul id="CUR-uhfccHBD" class="no-style" style="padding: 0">
+            <li id="CUR-xZKRlDps" style="padding: 0" ng-repeat="file in uploadedFiles">{{file.name}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-zsjjrGof" class="modal-dialog modal-lg" role="document">
+    <div id="CUR-HQhVqrHy" class="modal-content">
+      <div id="CUR-cTKeJkhl" class="modal-header clearfix text-left">
+        <h5 id="CUR-idiVxxVs" class="modal-title">Uploading Sales Files</h5>
+      </div>
+      <div id="CUR-xfGhlIVS" class="modal-body p-t-20">
+        <ul id="CUR-tUpFIRQP" class="bulk-uploads" style="margin: 0; padding: 0; list-style: none;">
+          <li id="CUR-xyZfPxiD" ng-repeat="file in files">
+            <div id="CUR-GguSicSr" ng-if="!file.skipped">
+              <div id="CUR-QuKfZRby" class="row">
+                <div id="CUR-TrcQFtMc" class="col-xs-8">
+                  <span id="CUR-YitupZsp">{{ file.name }}</span>
+                </div>
+                <div id="CUR-SFWZOyjr" class="col-xs-4 text-right">
+                  <span id="CUR-QSAoknSm" ng-if="file.total">{{file.loaded}} / {{file.total}} ({{ file.progress }}%)</span>
+                </div>
+              </div>
+              <div id="CUR-WpunOavU" class="row">
+                <div id="CUR-UspuMelQ" class="col-xs-12">
+                  <div id="CUR-NbaiALYN" class="progress" style="margin-bottom: 10px">
+                    <div id="CUR-zkpfKtpP" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{file.progress}}"
+                      aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress}}%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div id="CUR-NKPvGtRh" class="row" ng-if="importErrors">
+          <div id="CUR-RIYlCeah" class="col-sm-12">
+            <ul id="CUR-zjbKNeZp">
+              <li id="CUR-QstFncqb" ng-repeat="error in importErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-mOrPNDgD" class="row">
+          <div id="CUR-BhQwkcYP" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-iSMwbXlY" type="button" class="btn btn-danger m-t-5" data-dismiss="modal"
+              ng-click="cancelUpload()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade fill-in" id="duplicateModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-JYYavTvU" class="modal-dialog" role="document">
+    <div id="CUR-kndtulPY" class="modal-content">
+      <div id="CUR-zcWZUaTd" class="modal-header clearfix text-left">
+        </button>
+        <h5 id="CUR-VaBReYNF" class="modal-title">Duplicate sales file</h5>
+      </div>
+      <div id="CUR-CgCcHJuh" class="modal-body p-t-20">
+        <p>A sales file with name <em>{{fileToUpload.name}}</em> already exists.</p>
+        <p>Would you like to upload the file anyway or skip it?</p>
+        <div id="CUR-aLMiSnuk" class="row">
+          <div id="CUR-RzHDbmMM" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-dBcXXYSu" type="button" class="btn btn-default m-t-5" ng-click="duplicateModal.action = 'upload'"
+              data-dismiss="modal">Upload File</button>
+            <button id="CUR-OwsTLASa" type="button" class="btn btn-danger m-t-5" ng-click="duplicateModal.action = 'skip'"
+              data-dismiss="modal">Skip File</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

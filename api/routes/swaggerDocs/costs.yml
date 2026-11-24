@@ -1,0 +1,709 @@
+openapi: 3.0.3
+info:
+  title: Costs API
+  version: 1.0.0
+paths:
+  /costs/:
+    get:
+      tags:
+        - Costs
+      summary: Get a list of costs
+      description: Retrieve a paginated list of costs based on user permissions and filters.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: limit
+          schema:
+            type: integer
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to order results by.
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+          description: Direction of sorting (asc or desc).
+        - in: query
+          name: createdAfter
+          schema:
+            type: string
+            format: date
+          description: Filter costs created on or after this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: createdBefore
+          schema:
+            type: string
+            format: date
+          description: Filter costs created on or before this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: updatedAfter
+          schema:
+            type: string
+            format: date
+          description: Filter costs updated on or after this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: updatedBefore
+          schema:
+            type: string
+            format: date
+          description: Filter costs updated on or before this date (inclusive, YYYY-MM-DD format)
+      responses:
+        '200':
+          description: Retrieves a list of costs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  costs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Cost'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden - user does not have read access.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    post:
+      tags:
+        - Costs
+      summary: Create a new cost
+      description: Create a new cost with the provided details.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostInput'
+      responses:
+        '200':
+          description: The created cost.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cost'
+        '403':
+          description: Forbidden - user does not have create access.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /costs/archive_many:
+    post:
+      tags:
+        - Costs
+      summary: Archive multiple costs
+      description: Archive a batch of costs.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  example: ["684c32e14b26e54af24998e8", "6414c4aa26e76d6ed1f78cab"]
+                archived:
+                  type: boolean
+      responses:
+        '200':
+          description: Costs successfully archived.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden - user does not have edit rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /costs/{id}:
+    get:
+      tags:
+        - Costs
+      summary: Get a specific cost
+      description: Retrieve details of a specific cost.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the cost.
+      responses:
+        '200':
+          description: Details of the cost.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cost'
+        '403':
+          description: Forbidden - user does not have access.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Cost not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal error, please try again
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    put:
+      tags:
+        - Costs
+      summary: Update a specific cost
+      description: Update details of a cost.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the cost.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostInput'
+      responses:
+        '200':
+          description: The updated cost.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cost'
+        '403':
+          description: Forbidden - user does not have edit access.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Cost not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal error, please try again
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    delete:
+      tags:
+        - Costs
+      summary: Delete a specific cost
+      description: Delete a cost by its ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the cost.
+      responses:
+        '200':
+          description: The cost was successfully deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cost'
+        '403':
+          description: Forbidden - user does not have delete access.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Cost not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal error, please try again
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /costs/{id}/history:
+    get:
+      tags:
+        - Costs
+      summary: Get cost history
+      description: Retrieve the history of changes made to a specific cost.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the cost.
+      responses:
+        '200':
+          description: History of the cost.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: date-time
+                        clientId:
+                          type: string
+                        author:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            email:
+                              type: string
+                        ops:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              op:
+                                type: string
+                                example: replace
+                              path:
+                                type: string
+                                example: /name
+                              value:
+                                type: string
+                                example: New Cost Name
+                                nullable: true
+                              originalValue:
+                                type: string
+                                example: Old Cost Name
+                                nullable: true
+        '403':
+          description: Forbidden - user does not have access.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Cost not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal error, please try again
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /costs/bulk:
+    delete:
+      tags:
+        - Costs
+      summary: Delete multiple costs
+      description: Delete multiple costs by their IDs.
+      responses:
+        '200':
+          description: Costs were successfully deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  costs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Cost'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden - user does not have delete access.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: No costs found with the provided IDs.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal error, please try again
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /costs/raw-export:
+    post:
+      tags:
+        - Costs
+      summary: Raw CSV Export of Costs
+      description: |
+        Export costs data to a raw CSV file. By default, the export is processed asynchronously
+        and a notification email is sent when complete. When sync=true, the request waits for
+        the export to complete and returns the download URL directly in the response.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sync:
+                  type: boolean
+                  default: false
+                  description: |
+                    If true, waits for export to complete and returns download URL directly.
+                    If false (default), sends notification email when export is ready.
+                filter:
+                  type: object
+                  description: Filter object to select costs for export.
+                  properties:
+                    text:
+                      type: string
+                      description: Text search filter for name, targetPeriod, description, invoiceNo.
+                    costTypes:
+                      type: array
+                      items:
+                        type: string
+                      description: Filter by cost types.
+                    archived:
+                      type: boolean
+                      description: Filter by archived status.
+                    createdAfter:
+                      type: string
+                      format: date
+                      description: Filter for costs created on or after this date. Date-only values use start of day UTC.
+                      example: "2025-01-01"
+                    createdBefore:
+                      type: string
+                      format: date
+                      description: Filter for costs created on or before this date. Date-only values use end of day UTC.
+                      example: "2025-12-31"
+                    updatedAfter:
+                      type: string
+                      format: date
+                      description: Filter for costs updated on or after this date. Date-only values use start of day UTC.
+                      example: "2025-01-01"
+                    updatedBefore:
+                      type: string
+                      format: date
+                      description: Filter for costs updated on or before this date. Date-only values use end of day UTC.
+                      example: "2025-12-31"
+      responses:
+        '200':
+          description: |
+            When sync=false (default): Export process started successfully, email notification will be sent.
+            When sync=true: Export completed, returns download URL (expires in 24 hours).
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Your report will be sent to you via email shortly"
+                    description: Response when sync=false (default)
+                  - type: object
+                    properties:
+                      csvPublicLink:
+                        type: string
+                        format: uri
+                        example: "https://s3.amazonaws.com/bucket/raw_exports/Client-costs%20raw%20export%2020260120133708304.csv"
+                    description: Response when sync=true
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while processing the export.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: string
+                    description: Error details (only returned when sync=true)
+components:
+  schemas:
+    Cost:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the cost.
+        amount:
+          type: number
+        archived:
+          type: boolean
+          default: false
+        calculationContractIds:
+          type: array
+          items:
+            type: string
+        clientId:
+          type: string
+        contractIds:
+          type: array
+          items:
+            type: string
+          description: Array of Contract object IDs.
+        createdBy:
+          type: string
+          description: ID of the user who created the cost.
+        currency:
+          type: string
+          default: Home Currency
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+        file:
+          type: string
+        files:
+          type: array
+          items:
+            type: string
+        invoiceNo:
+          type: string
+        lastModifiedBy:
+          type: string
+          description: ID of the user who last modified the cost.
+        name:
+          type: string
+        periodIds:
+          type: array
+          items:
+            type: string
+        publicLink:
+          type: string
+        releaseIds:
+          type: array
+          items:
+            type: string
+          description: Array of Release object IDs.
+        reportedStatus:
+          type: string
+          default: Unreported
+        targetPeriod:
+          type: string
+        territory:
+          type: string
+        territoryName:
+          type: string
+        trackIds:
+          type: array
+          items:
+            type: string
+          description: Array of Track object IDs.
+        type:
+          type: string
+        workIds:
+          type: array
+          items:
+            type: string
+          description: Array of Work object IDs.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CostInput:
+      type: object
+      properties:
+        amount:
+          type: number
+        archived:
+          type: boolean
+          default: false
+        calculationContractIds:
+          type: array
+          items:
+            type: string
+        contractIds:
+          type: array
+          items:
+            type: string
+          description: Array of Contract object IDs.
+        currency:
+          type: string
+          default: Home Currency
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+        file:
+          type: string
+        files:
+          type: array
+          items:
+            type: string
+        invoiceNo:
+          type: string
+        name:
+          type: string
+        periodIds:
+          type: array
+          items:
+            type: string
+        releaseIds:
+          type: array
+          items:
+            type: string
+          description: Array of Release object IDs.
+        reportedStatus:
+          type: string
+          default: Unreported
+        targetPeriod:
+          type: string
+        territory:
+          type: string
+        territoryName:
+          type: string
+        trackIds:
+          type: array
+          items:
+            type: string
+          description: Array of Track object IDs.
+        type:
+          type: string
+        workIds:
+          type: array
+          items:
+            type: string
+          description: Array of Work object IDs.

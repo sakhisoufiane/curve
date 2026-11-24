@@ -1,0 +1,149 @@
+openapi: 3.0.0
+paths:
+  /fixedReports:
+    get:
+      tags:
+        - "Fixed Reports"
+      summary: Retrieve fixed reports
+      description: Returns a paginated list of fixed reports available to the authenticated user.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number (default is 1)
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Number of results per page (default is 25)
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Text search on name or ID
+      responses:
+        '200':
+          description: Successfully retrieved fixed reports
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fixedReports:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FixedReport'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not load reports"
+
+  /fixedReports/{id}:
+    get:
+      tags:
+        - "Fixed Reports"
+      summary: Retrieve a specific fixed report
+      description: Returns details for a specific fixed report by ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Fixed report ID
+      responses:
+        '200':
+          description: Successfully retrieved fixed report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedReport'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not load report"
+
+components:
+  schemas:
+    FixedReport:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the fixed report
+        name:
+          type: string
+          description: Name of the fixed report
+        key:
+          type: string
+          description: Unique key for the fixed report
+        label:
+          type: boolean
+          description: Whether this report is for labels
+        publisher:
+          type: boolean
+          description: Whether this report is for publishers
+        public:
+          type: boolean
+          description: Whether the report is publicly available
+        clientIds:
+          type: array
+          items:
+            type: string
+          description: Client IDs associated with the report
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    FixedReportInput:
+      type: object
+      properties:
+        name:
+          type: string
+        key:
+          type: string
+        label:
+          type: boolean
+        publisher:
+          type: boolean
+        public:
+          type: boolean
+        clientIds:
+          type: array
+          items:
+            type: string

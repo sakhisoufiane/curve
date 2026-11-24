@@ -1,0 +1,102 @@
+<div class="analytics-results">
+  <div class="row">
+    <div data-ng-if="emptyAnalyticsResponse" data-ng-class="{ 'col-xs-12' : !showingComparison, 'col-xs-6': showingComparison }">
+      <div data-ng-include="'no-response.html'"></div>
+    </div>
+
+    <analytics-totals data-ng-if="!emptyAnalyticsResponse" totals="displayData.totals" currency-symbol="currencySymbol" comparison-data="!!comparisonData" always-show="true"></analytics-totals>
+    <analytics-totals data-ng-if="!emptyComparisonResponse" totals="compareDisplayData.totals" currency-symbol="currencySymbol" comparison-data="!!comparisonData" always-show="false"></analytics-totals>
+
+    <div data-ng-if="showingComparison && emptyComparisonResponse" class="col-xs-6">
+      <div data-ng-include="'no-response.html'"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <analytics-graph-pie position-chart="'L'" heading="'Channels'" column-id="'A'" comparison-data="!!comparisonData" identifier="'distributionChannels'" pie-options="pieOptions" bar-options="barOptions" data="displayData.distributionChannels" always-show="true" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-pie>
+    <analytics-graph-pie position-chart="'L'" heading="'Channels'" column-id="'B'" comparison-data="!!comparisonData" identifier="'distributionChannels'" pie-options="pieOptions" bar-options="barOptions" data="compareDisplayData.distributionChannels" always-show="false" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-pie>
+  </div>
+
+  <div class="row">
+    <analytics-graph-pie position-chart="'R'" heading="'Configurations'" column-id="'A'" comparison-data="!!comparisonData" identifier="'configurations'" pie-options="pieOptions" bar-options="barOptions" data="displayData.configurations" always-show="true" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-pie>
+    <analytics-graph-pie position-chart="'R'" heading="'Configurations'" column-id="'B'" comparison-data="!!comparisonData" identifier="'configurations'" pie-options="pieOptions" bar-options="barOptions" data="compareDisplayData.configurations" always-show="false" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-pie>
+  </div>
+
+  <div class="row">
+    <analytics-graph-bar heading="'Territories'" column-id="'A'" comparison-data="!!comparisonData" identifier="'territories'" pie-options="pieOptions" bar-options="barOptions" data="displayData.territories" always-show="true" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-bar>
+    <analytics-graph-bar heading="'Territories'" column-id="'B'" comparison-data="!!comparisonData" identifier="'territories'" pie-options="pieOptions" bar-options="barOptions" data="compareDisplayData.territories" always-show="false" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-bar>
+  </div>
+
+  <div class="row">
+    <analytics-graph-bar heading="'Sources'" column-id="'A'" comparison-data="!!comparisonData" identifier="'sources'" pie-options="pieOptions" bar-options="barOptions" data="displayData.sources" always-show="true" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-bar>
+    <analytics-graph-bar heading="'Sources'" column-id="'B'" comparison-data="!!comparisonData" identifier="'sources'" pie-options="pieOptions" bar-options="barOptions" data="compareDisplayData.sources" always-show="false" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-bar>
+  </div>
+
+  <div class="row">
+    <analytics-graph-bar heading="'Sub Sources'" column-id="'A'" comparison-data="!!comparisonData" identifier="'subSources'" pie-options="pieOptions" bar-options="barOptions" data="displayData.subSources" always-show="true" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-bar>
+    <analytics-graph-bar heading="'Sub Sources'" column-id="'B'" comparison-data="!!comparisonData" identifier="'subSources'" pie-options="pieOptions" bar-options="barOptions" data="compareDisplayData.subSources" always-show="false" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-bar>
+  </div>
+
+  <div class="row" data-ng-if="!compareDisplayData.revenueOverTimeMerged">
+    <analytics-graph-line heading="'Revenues Over time'" column-id="'A'" comparison-data="!!comparisonData" identifier="'revenueOverTime'" line-options="lineOptions" line-dataset-override="lineDatasetOverride" data="displayData.revenueOverTime" always-show="true"></analytics-graph-line>
+    <analytics-graph-line heading="'Revenues Over time'" column-id="'B'" comparison-data="!!comparisonData" identifier="'revenueOverTime'" line-options="lineOptions" line-dataset-override="lineDatasetOverride" data="compareDisplayData.revenueOverTime" always-show="false"></analytics-graph-line>
+  </div>
+
+  <div class="row" data-ng-if="compareDisplayData.revenueOverTimeMerged">
+    <analytics-graph-line show-merged="true" heading="'Revenues Over time'" comparison-data="!!comparisonData" identifier="'revenueOverTime'" line-options="lineOptions" line-dataset-override="lineDatasetOverride" data="compareDisplayData.revenueOverTimeMerged" always-show="true"></analytics-graph-line>
+  </div>
+
+  <div class="row">
+    <analytics-graph-pie position-chart="'L'" is-row-click-disabled="true" heading="'Costs'" column-id="'A'" comparison-data="!!comparisonData" identifier="'costs'" pie-options="pieOptions" bar-options="barOptions" data="displayData.costs" always-show="true" drill-down-chart="drillDownDummy" drill-down-table="drillDownDummy"></analytics-graph-pie>
+    <analytics-graph-pie position-chart="'L'" is-row-click-disabled="true" heading="'Costs'" column-id="'B'" comparison-data="!!comparisonData" identifier="'costs'" pie-options="pieOptions" bar-options="barOptions" data="compareDisplayData.costs" always-show="false" drill-down-chart="drillDownDummy" drill-down-table="drillDownDummy"></analytics-graph-pie>
+  </div>
+
+  <div class="row">
+    <analytics-graph-catalogue heading="'Top Releases'" column-id="'A'" comparison-data="!!comparisonData" identifier="'releaseIds'" pie-options="pieOptions" bar-options="barOptions" data="displayData.releases" always-show="true" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-catalogue>
+    <analytics-graph-catalogue heading="'Top Releases'" column-id="'B'" comparison-data="!!comparisonData" identifier="'releaseIds'" pie-options="pieOptions" bar-options="barOptions" data="compareDisplayData.releases" always-show="false" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-catalogue>
+  </div>
+
+  <div class="row">
+    <analytics-graph-catalogue heading="'Top Tracks'" column-id="'A'" comparison-data="!!comparisonData" identifier="'trackIds'" pie-options="pieOptions" bar-options="barOptions" data="displayData.tracks" always-show="true" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-catalogue>
+    <analytics-graph-catalogue heading="'Top Tracks'" column-id="'B'" comparison-data="!!comparisonData" identifier="'trackIds'" pie-options="pieOptions" bar-options="barOptions" data="compareDisplayData.tracks" always-show="false" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-catalogue>
+  </div>
+
+  <div class="row">
+    <analytics-graph-catalogue heading="'Top Works'" column-id="'A'" comparison-data="!!comparisonData" identifier="'workIds'" pie-options="pieOptions" bar-options="barOptions" data="displayData.works" always-show="true" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-catalogue>
+    <analytics-graph-catalogue heading="'Top Works'" column-id="'B'" comparison-data="!!comparisonData" identifier="'workIds'" pie-options="pieOptions" bar-options="barOptions" data="compareDisplayData.works" always-show="false" drill-down-chart="drillDownChart" drill-down-table="drillDownTable"></analytics-graph-catalogue>
+  </div>
+
+  <div class="row">
+    <analytics-graph-bar heading="'Top Artists'" column-id="'A'" comparison-data="!!comparisonData" identifier="'topArtists'" pie-options="pieOptions" bar-options="barOptions" data="displayData.topArtists" always-show="true"></analytics-graph-bar>
+    <analytics-graph-bar heading="'Top Artists'" column-id="'B'" comparison-data="!!comparisonData" identifier="'topArtists'" pie-options="pieOptions" bar-options="barOptions" data="compareDisplayData.topArtists" always-show="false"></analytics-graph-bar>
+  </div>
+
+  <div class="row">
+    <analytics-graph-bar heading="'Top Labels'" column-id="'A'" comparison-data="!!comparisonData" identifier="'topLabels'" pie-options="pieOptions" bar-options="barOptions" data="displayData.topLabels" always-show="true"></analytics-graph-bar>
+    <analytics-graph-bar heading="'Top Labels'" column-id="'B'" comparison-data="!!comparisonData" identifier="'topLabels'" pie-options="pieOptions" bar-options="barOptions" data="compareDisplayData.topLabels" always-show="false"></analytics-graph-bar>
+  </div>
+
+  <div class="row">
+    <analytics-graph-average-stream-rates heading="'Average Rates'" column-id="'A'" comparison-data="!!comparisonData" identifier="'averageStreamRates'" pie-options="pieOptions" data="displayData.averageStreamRates" always-show="true"></analytics-graph-average-stream-rates>
+    <analytics-graph-average-stream-rates heading="'Average Rates'" column-id="'B'" comparison-data="!!comparisonData" identifier="'averageStreamRates'" pie-options="pieOptions" data="compareDisplayData.averageStreamRates" always-show="false"></analytics-graph-average-stream-rates>
+  </div>
+
+  <div class="row">
+    <analytics-graph-contract-breakdown heading="'Contract Breakdown'" column-id="'A'" comparison-data="!!comparisonData" identifier="'contractBreakdown'" pie-options="pieOptions" data="displayData.contractBreakdown" always-show="true"></analytics-graph-contract-breakdown>
+    <analytics-graph-contract-breakdown heading="'Contract Breakdown'" column-id="'B'" comparison-data="!!comparisonData" identifier="'contractBreakdown'" pie-options="pieOptions" data="compareDisplayData.contractBreakdown" always-show="false"></analytics-graph-contract-breakdown>
+  </div>
+</div>
+
+<script type="text/ng-template" id="no-response.html">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">
+            No Data was returned for these filters. Please adjust and retry.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

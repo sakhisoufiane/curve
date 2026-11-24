@@ -1,0 +1,19 @@
+{
+  "loggedInAs": "Ingelogd als {{name}}",
+  "notifications": "Meldingen",
+  "noNotifications": "Geen meldingen",
+  "clearAll": "Alles wissen",
+  "markAllAsRead": "Alles als gelezen markeren",
+  "darkMode": "Donkere modus",
+  "signOut": "Afmelden",
+  "language": "Taal",
+  "search": "Zoeken",
+  "launchTour": "Rondleiding starten",
+  "totalRevenue": "Totale omzet",
+  "totalCosts": "Totale kosten",
+  "incompleteLines": "Onvolledige regels",
+  "recentContracts": "Recente contracten",
+  "recentSales": "Recente verkopen",
+  "revenueOverTime": "Omzet in de tijd",
+  "revenueOverTimeDesc": "Deze grafiek toont de omzet in de tijd voor de klant."
+}

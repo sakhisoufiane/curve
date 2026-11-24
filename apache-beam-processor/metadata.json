@@ -1,0 +1,18 @@
+{
+  "name": "Beam Processor Options",
+  "description": "Options to run this code on GCP",
+  "parameters": [
+    {
+      "name": "ingestionConfiguration",
+      "label": "ingestionConfiguration object string",
+      "isOptional": true,
+      "helpText": "JSON valid string which parses into Configuration object."
+    },
+    {
+      "name": "ingestionConfigurationUrl",
+      "label": "URL location",
+      "isOptional": true,
+      "helpText": "A GCS url file location of the json configuration to run."
+    }
+  ]
+}

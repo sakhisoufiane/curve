@@ -1,0 +1,53 @@
+<script>
+  // Google Captcha Login Form
+  var captchaElement = 'captcha-ele';
+  var onloadCaptchCb = function () {
+    grecaptcha.render(captchaElement, {
+      'sitekey': '{{siteKey}}'
+    });
+  };
+</script>
+
+<div id="CUR-WzUHOFpc" class="row">
+  <div id="CUR-aNtoUgoP" class="col-xs-12 text-center">
+    <img src="/assets/img/curvetyp2x.png" alt="logo" class="logo">
+  </div>
+</div>
+<div id="CUR-UiZYIlyy" class="row">
+  <div id="CUR-ggEzjuhw" class="col-xs-12">
+    <div id="notification" style="margin-top: 20px">
+      {{#if success}}
+      <div id="CUR-SxEHXbsD" class="alert alert-success" role="alert">
+        <p>{{message}}</p>
+      </div>
+      <div id="CUR-ZzGbABBl" class="col-md-12 text-center">
+        <a id="CUR-GXjUbwcz" href="/login" class="text-info">
+          <button id="CUR-ytehctCz" class="btn btn-complete m-t-10 w-xs-100-p m-xs-l-0" type="submit">
+            <a id="CUR-pBtPGWdn" href="/login" class="text-white">Sign In</a>
+          </button>
+        </a>
+      </div>
+      {{else}}
+      <div id="CUR-puEWrRzc" class="alert alert-danger" role="alert">
+        <p>{{message}}</p>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<script>
+
+  {{#if favicon}}
+  var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+  link.type = 'image/x-icon';
+  link.rel = 'shortcut icon';
+  link.href = "{{favicon}}";
+  document.getElementsByTagName('head')[0].appendChild(link);
+  {{/if}}
+      {{#if pageTitle}}
+      document.title = "{{pageTitle}}"
+      {{else}}
+      document.title = "Curve"
+      {{/if}}
+</script>

@@ -1,0 +1,38 @@
+{
+  "name": "@curveroyaltysystems/i18n",
+  "version": "1.0.0",
+  "description": "Internationalization package for Curve applications",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "dev": "npm run build && tsc --watch",
+    "build": "rimraf dist && tsc && npm run copyfiles",
+    "copyfiles": "copyfiles -u 1 \"src/locales/**/*\" dist/",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "lint": "eslint \"src/**/*.[ts|js]*\"",
+    "lint:quiet": "eslint \"src/**/*.[ts|js]*\" --quiet",
+    "test:coverage": "jest --coverage",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "i18next": "25.5.2",
+    "react-i18next": "16.0.0"
+  },
+  "devDependencies": {
+    "@curveroyaltysystems/eslint-config": "*",
+    "@curveroyaltysystems/prettier-config": "*",
+    "@curveroyaltysystems/test-config": "*",
+    "@curveroyaltysystems/typescript-config": "*",
+    "copyfiles": "2.4.1",
+    "rimraf": "3.0.2"
+  },
+  "prettier": "@curveroyaltysystems/prettier-config",
+  "jest": {
+    "preset": "@curveroyaltysystems/test-config"
+  }
+}

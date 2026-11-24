@@ -1,0 +1,871 @@
+<div id="CUR-TPyrxPzL" class="jumbotron" data-pages="parallax">
+  <div id="CUR-jxqrsHvI" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-pAmbRWmv" class="inner">
+      <ul id="CUR-mMbsLxtN" class="breadcrumb">
+        <li id="CUR-JJgvVQGA">
+          <a id="CUR-nkacwfZX" href="/#/libraryTemplates">Library Templates</a>
+        </li>
+        <li id="CUR-AlCJbaGw" ng-show="!libraryTemplate._id">
+          <a id="CUR-nlOGicxx" href="/#/libraryTemplates/new" class="active">Create</a>
+        </li>
+        <li id="CUR-FzGcCtOI" ng-show="libraryTemplate._id">
+          <a id="CUR-SfJdtLEW" href="/#/libraryTemplates/{{libraryTemplate._id}}/edit" class="active">{{libraryTemplate.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-DPwFhTmK" class="container-fluid container-fixed-lg sm-p-l-5 sm-p-r-5">
+  <div id="CUR-hlvLFdKT" class="row m-b-20">
+    <div id="CUR-YJFOLTgC" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-Xcyawbyq" class="btn btn-success" ng-click="togglePublish()" ng-if="!libraryTemplate.published"><i class="fa fa-unlock"></i> Publish</button>
+      <button id="CUR-NPqASoXn" class="btn btn-danger" ng-click="togglePublish()" ng-if="libraryTemplate.published"><i class="fa fa-lock"></i> Unpublish</button>
+      <button id="CUR-MIptgVut" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" ng-if="libraryTemplate._id">
+        <i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-jkCyggDO" class="btn btn-complete" ng-click="save()">
+        <i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-YlRZCXKc" class="row">
+    <div id="CUR-ZKGjodrW" class="alert alert-danger" role="alert" ng-if="setupErrors.length > 0">
+      <strong>Errors:</strong><br />
+      <ul id="CUR-FEZqypoq">
+        <li id="CUR-xmgRasGG" ng-repeat="error in setupErrors">{{ error }}</li>
+      </ul>
+    </div>
+  </div>
+  <div id="CUR-HFgQGKWH" class="row">
+    <div id="CUR-CAcfqAsS" class="panel panel-transparent hidden-xs">
+      <!-- Nav tabs -->
+      <ul id="CUR-CaqVQVKg" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-VbxqJGVu" class="active" ng-click="setTab('overview')">
+          <a id="CUR-WSKSdqNo" data-toggle="tab" aria-expanded="true">
+            <span id="CUR-rHPSylxV">Overview</span>
+          </a>
+        </li>
+        <li id="CUR-LUvDupJB" ng-click="setTab('mapping')">
+          <a id="CUR-sXzJDaRQ" data-toggle="tab" aria-expanded="false">
+            <span id="CUR-CqCwgJhB">Mapping</span>
+          </a>
+        </li>
+        <li id="CUR-AsFbjjBD" ng-click="setTab('calculation')">
+          <a id="CUR-VDIiSazR" data-toggle="tab" aria-expanded="false">
+            <span id="CUR-uVZDZddY">Calculation</span>
+          </a>
+        </li>
+        <li id="CUR-hupRSpwc" ng-click="setTab('identifiers')">
+          <a id="CUR-cEKZsUWk" data-toggle="tab" aria-expanded="false">
+            <span id="CUR-rqvTcnvq">Bulk Identifiers</span>
+          </a>
+        </li>
+      </ul>
+      <div id="CUR-rhzxLPcx" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-kpRNPvdz" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+        <div id="CUR-xDyJxRsZ" ng-show="activeTab === 'mapping'" ng-include="'mapping-tab.html'"></div>
+        <div id="CUR-KPqeebNn" ng-show="activeTab === 'calculation'" ng-include="'calculation-tab.html'"></div>
+        <div id="CUR-IRCcynmC" ng-show="activeTab === 'identifiers'" ng-include="'identifiers-tab.html'"></div>
+      </div>
+    </div>
+    <div id="CUR-jiuZbXtv" class="col-xs-12 visible-xs p-l-20 p-r-20" ng-if="showAccordions">
+      <uib-accordion close-others="true" ng-init="status1.open = true; status2.open = false; status3.open = false">
+        <div id="CUR-gOgGJfCX" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>
+            Overview
+            <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-zUdPIZTv" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div id="CUR-lFDBrDJr" uib-accordion-group class="panel-default" is-open="status2.open">
+          <uib-accordion-heading>
+            Mapping
+            <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-tPzCktKl" ng-include="'mapping-tab.html'"></div>
+        </div>
+        <div id="CUR-QLDKbghw" uib-accordion-group class="panel-default" is-open="status3.open">
+          <uib-accordion-heading>
+            Calculation
+            <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-BBTkgDtE" ng-include="'calculation-tab.html'"></div>
+        </div>
+        <div id="CUR-VbECmLLp" uib-accordion-group class="panel-default" is-open="status4.open">
+          <uib-accordion-heading>
+            Bulk Identifiers
+            <i class="pull-right glyphicon"
+               ng-class="{'glyphicon-chevron-down': status4.open, 'glyphicon-chevron-right': !status4.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-eYYNHJRt" ng-include="'identifiers-tab.html'"></div>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+  <div id="CUR-TxTvKbfK" class="row">
+    <div id="CUR-CxGTZKvV" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-GpHqbFBB" ng-show="libraryTemplate.updatedAt">Last Updated on {{ libraryTemplate.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-njIgrKxW" href="javascript:;" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+
+<!--<div id="CUR-vcmMFSbL" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-VIBvYyng" class="row">
+    <div id="CUR-KgwmStWa" class="col-sm-12 text-right">
+      <h6>Created By: {{libraryTemplate.createdBy.email}}</h6>
+      <h6>Last Modified By: {{libraryTemplate.lastModifiedBy.email}}</h6>
+    </div>
+  </div>
+</div>-->
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-KRZtbscd" class="modal-dialog">
+    <div id="CUR-EhwGKbEu" class="modal-content">
+      <div id="CUR-iWJbOrgK" class="modal-header clearfix text-left">
+        <button id="CUR-CgVrtCsB" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-KEPlLOSC">Delete Cost</h5>
+      </div>
+      <div id="CUR-uSriXHpI" class="modal-body">
+        <div id="CUR-eqoNHrlz" class="row">
+          <div id="CUR-HoZvKcYK" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this template? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-ZKhQNFDk" class="row">
+          <div id="CUR-TbULYaAb" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-sUhwkoUh" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-NOKYcCjm" type="button" class="btn btn-danger m-t-5" ng-click="delete()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="overview-tab.html">
+  <div id="CUR-NgvHSRQH" class="row">
+    <div id="CUR-iwEihGbp" class="col-xs-12 col-md-6">
+      <div id="CUR-OtZiaFZW" class="panel panel-default">
+        <div id="CUR-EWDYYaZZ" class="panel-heading">
+          <div id="CUR-wSvMWrdj" class="panel-title">
+            Configuration
+          </div>
+        </div>
+        <div id="CUR-hkjbCRzz" class="panel-body p-t-15">
+          <div id="CUR-bExTXsez" class="row">
+            <div id="CUR-epaZDlpe" class="col-xs-12 col-md-12">
+              <div id="CUR-xyagVriG" class="form-group">
+                <label id="CUR-YlOniRWg">Client Type</label>
+                <ui-select ng-model="libraryTemplate.clientType">
+                  <ui-select-match>
+                    <span id="CUR-ybaTuaPa" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in ['Label', 'Publisher']">
+                    <span id="CUR-kqwdWMbr" ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-NywjkdJy" class="form-group">
+                <label id="CUR-pvnEaAfH">Name</label>
+                <input id="CUR-jTTXbTcj" type="text" class="form-control" ng-model="libraryTemplate.name">
+                <label id="CUR-UPMcHutd" class="error" ng-if="setupErrors.includes('Template is required to have a name')">Name is required</label>
+              </div>
+              <div id="CUR-tWzrqQXB" class="form-group" ng-if="clientType != 'Publisher'">
+                <label id="CUR-yKhuAqsB">Source <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Who is the file from? This will group your templates together"></i></label>
+                <input id="CUR-HjnbPZSf" type="text" class="form-control" ng-model="libraryTemplate.source">
+                <label id="CUR-SYuFiMcU" class="error" ng-if="setupErrors.includes('Template is required to have a source')">Source is required</label>
+              </div>
+              <div id="CUR-KkvTZGyA" class="form-group">
+                <label id="CUR-qLskchaR">File Type
+                  <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This selects whether a file is a Excel/CSV type structured file, or in the standard PRO style format"></i>
+                </label>
+                <ui-select ng-model="libraryTemplate.fileType">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-WSuIXsmg" ng-bind="$select.selected.display"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="fileType.name as fileType in fileTypes | orderBy: 'code' | filter: $select.search">
+                    <span id="CUR-qKgjLrFs" ng-bind-html="fileType.display"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-OeFiTkqU" class="form-group">
+                <label id="CUR-BBAwvrZo">Tab Number</label>
+                <input id="CUR-uxreMbZm" type="text" class="form-control" ng-model="libraryTemplate.tab">
+                <label id="CUR-VmPwdodL" class="error" ng-if="setupErrors.includes('Template is required to have a tab')">Tab is required</label>
+              </div>
+              <div id="CUR-ArlgjccR" class="form-group">
+                <label id="CUR-wXgTzwFC">Header Row <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Which row contains the heading data?"></i></label>
+                <input id="CUR-SSxpFseQ" type="number" class="form-control" ng-model="libraryTemplate.headerRow">
+                <label id="CUR-WdfhObGK" class="error" ng-if="setupErrors.includes('Template is required to have a header row')">Header Row is required</label>
+              </div>
+              <div id="CUR-wdcJxcwv" class="form-group">
+                <label id="CUR-fxGdddPq">Starting Row <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Which row does the data start from?"></i></label>
+                <input id="CUR-PawywgSn" type="number" class="form-control" ng-model="libraryTemplate.startingLine">
+                <label id="CUR-ORQomhtL" class="error" ng-if="setupErrors.includes('Template is required to have a starting row')">Starting Row is required</label>
+              </div>
+              <div id="CUR-AVXHRYUP" class="form-group">
+                <label id="CUR-SSYFLbbF">Delimiter</label>
+                <input id="CUR-KSbvLKlY" type="text" class="form-control" ng-model="libraryTemplate.delimiter">
+              </div>
+              <div id="CUR-FfvAWqEr" class="form-group">
+                <label id="CUR-TFbrKqGF">Encoding <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Leave blank if you don't know the encoding of the file. Can be used in specific cases where a non-standard character encoding is used on the file, such as UTF-16"></i></label>
+                <ui-select ng-model="libraryTemplate.encoding">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-uXZIeKbM" ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item.encoding as item in encodings | filter: $select.search track by $index">
+                    <span id="CUR-CQbhbYVZ" ng-bind="item.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-jpAGIVAc" class="panel panel-default" ng-if="clientType != 'Publisher'">
+        <div id="CUR-ZrambYvE" class="panel-heading">
+          <div id="CUR-vwlmtcQz" class="panel-title">
+            Catalogue Overwrite Sales
+          </div>
+        </div>
+        <div id="CUR-mUNFimzZ" class="panel-body">
+          <div id="CUR-tUshlFMR" class="row m-b-20">
+            <div id="CUR-AlqkNOCM" class="col-xs-12">
+              <p>The overwriting with catalogue values configurations allow you to overwrite the values taken from the sales
+                files with the ones set for the catalogue item. For instance, if you want to set the format for physical
+                products from the mapped release.</p>
+            </div>
+          </div>
+          <div id="CUR-stavtNCa" class="form-group">
+            <input id="CUR-iGmYOaUZ" type="checkbox" value="1" ng-model="libraryTemplate.overwriteFields.overwriteDistributionChannelWithCatalogue">
+            <label id="CUR-dbhutZuM">Overwrite Distribution Channel</label>
+          </div>
+          <div id="CUR-ramWYfTN" class="form-group">
+            <input id="CUR-eDZfMPgp" type="checkbox" value="1" ng-model="libraryTemplate.overwriteFields.overwriteConfigWithCatalogue">
+            <label id="CUR-gdOSOwwz">Overwrite Configuration</label>
+          </div>
+          <div id="CUR-ZzPOUxni" class="form-group">
+            <input id="CUR-kVyLBvwu" type="checkbox" value="1" ng-model="libraryTemplate.overwriteFields.overwritePriceCategoryWithCatalogue">
+            <label id="CUR-FdlYoziP">Overwrite Price Category</label>
+          </div>
+          <div id="CUR-TaEqWkUf" class="form-group">
+            <input id="CUR-Vjdvcaks" type="checkbox" value="1" ng-model="libraryTemplate.overwriteFields.overwriteTrackPriceCategoryWithCatalogue">
+            <label id="CUR-NGoXaJnd">Overwrite Track Price Category</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-WierybmE" class="col-xs-12 col-md-6">
+      <div id="CUR-fWdheZhz" class="panel panel-default">
+        <div id="CUR-PZHiOlKL" class="panel-heading">
+          <div id="CUR-MTWnDOZU" class="panel-title">
+            Example file
+          </div>
+        </div>
+        <div id="CUR-HpYDpjPb" class="panel-body p-t-15">
+          <div id="CUR-ynZFnQuM" class="form-group required">
+            <input id="fileUploadField" type="file" ngf-select="selectFile($file)" ngf-allow-dir="false">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-ITHcIKnG" class="col-xs-12 col-md-6">
+      <div id="CUR-ruNFagKR" class="panel panel-default">
+        <div id="CUR-WOfMvcby" class="panel-heading">
+          <div id="CUR-COlJJjif" class="panel-title">
+            Required Fields
+          </div>
+        </div>
+        <div id="CUR-UaYAsgMC" class="panel-body p-t-15">
+          <div id="CUR-udmWeSXw" class="form-group">
+            <i class="fa fa-check text-success" ng-if="includesTerritory"></i>
+            <i class="fa fa-times text-danger" ng-if="!includesTerritory"></i>
+            <label id="CUR-PszUZwfL">Territory</label>
+          </div>
+          <div id="CUR-xBgLzzct" class="form-group">
+            <i class="fa fa-check text-success" ng-if="includesDistributionChannel"></i>
+            <i class="fa fa-times text-danger" ng-if="!includesDistributionChannel"></i>
+            <label id="CUR-dqTWHmWq">Distribution Channel</label>
+          </div>
+          <div id="CUR-DqmyoyCo" class="form-group">
+            <i class="fa fa-check text-success" ng-if="includesConfiguration"></i>
+            <i class="fa fa-times text-danger" ng-if="!includesConfiguration"></i>
+            <label id="CUR-yCaOGuGC">Configuration</label>
+          </div>
+          <div id="CUR-Wwlihmes" class="form-group">
+            <i class="fa fa-check text-success" ng-if="includesSource"></i>
+            <i class="fa fa-times text-danger" ng-if="!includesSource"></i>
+            <label id="CUR-zOwxQCuE">Source</label>
+          </div>
+          <div id="CUR-jWTNehss" class="form-group">
+            <i class="fa fa-check text-success" ng-if="includesCurrency"></i>
+            <i class="fa fa-times text-danger" ng-if="!includesCurrency"></i>
+            <label id="CUR-zgmdzoKX">Currency</label>
+          </div>
+          <div id="CUR-giBGtIto" class="form-group">
+            <i class="fa fa-check text-success" ng-if="includesUnits"></i>
+            <i class="fa fa-times text-danger" ng-if="!includesUnits"></i>
+            <label id="CUR-hwlLZoiN">Units</label>
+          </div>
+          <div id="CUR-QdTBjMFs" class="form-group">
+            <i class="fa fa-check text-success" ng-if="includesNetAmount"></i>
+            <i class="fa fa-times text-danger" ng-if="!includesNetAmount"></i>
+            <label id="CUR-fhtLpRTj">Net Amount</label>
+          </div>
+          <div id="CUR-NfDumbMp" class="form-group">
+            <i class="fa fa-check text-success" ng-if="includesSaleDate"></i>
+            <i class="fa fa-times text-danger" ng-if="!includesSaleDate"></i>
+            <label id="CUR-EmUBMLoi">Sale Date</label>
+          </div>
+          <div id="CUR-FkHyWZZn" class="form-group">
+            <i class="fa fa-check text-success" ng-if="includesTransactionDate"></i>
+            <i class="fa fa-times text-danger" ng-if="!includesTransactionDate"></i>
+            <label id="CUR-SKfgjbAR">Transaction Date</label>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-ortjdgdu" class="panel panel-default">
+        <div id="CUR-yBdJkSBQ" class="panel-heading">
+          <div id="CUR-jMkLoNzh" class="panel-title">
+            Target Cells
+          </div>
+        </div>
+        <div id="CUR-SriNhuMW" class="panel-body">
+          <p>Use this configuration to tell the system where to load specific values from in the file, such as when an Exchange Rate or Pro Rata Amount is determined in a specific cell. Select your field from the left, and define the cell using the letter-numbering coding, as defined in Excel, eg. B3</p>
+          <div id="CUR-gqLDYJJy" class="form-group m-t-20">
+            <target-cell-row edit="true" ng-repeat="targetCell in libraryTemplate.overwriteFieldTargetCells track by $index"
+              target-cell="targetCell" target-cell-fields="targetCellFields" target-cell-types="targetCellTypes" index="$index" delete="deleteTargetCell(targetCell)">
+            </target-cell-row>
+            <div id="CUR-ztibodRu" class="row">
+              <div id="CUR-JcfJpnaT" class="form-group col-sm-12">
+                <button id="CUR-jOFGHaGh" class="btn btn-complete w-xs-100-p" ng-click="addTargetCell()">+ Target Cell</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-POordKUt" class="row">
+    <div id="CUR-AuuuIPhV" class="col-xs-12 col-md-12 col-sm-12">
+      <div id="CUR-qzOeMrBL" class="panel panel-default">
+        <div id="CUR-xYSkcqZV" class="panel-heading">
+          <div id="CUR-WLjgblzy" class="panel-title">
+            Defaults <documentation link="http://guide.curveroyaltysystems.com/article/sales-templates/#standardfields"></documentation>
+          </div>
+        </div>
+        <div id="CUR-WxAyCRAg" class="panel-body p-t-15">
+          <div id="CUR-VpvurzpQ" class="row">
+            <div id="CUR-tjWZdOnS" class="col-xs-12 col-sm-3">
+              <div id="CUR-UkKVKJDm" class="form-group">
+                <label id="CUR-JYRotJsj">Source</label>
+                <input id="CUR-TdEYNmsj" type="text" class="form-control" ng-model="libraryTemplate.overwriteFields.source">
+              </div>
+            </div>
+            <div id="CUR-tcWlXZvk" class="col-xs-12 col-sm-3">
+              <div id="CUR-ahKpDsTW" class="form-group">
+                <label id="CUR-iTFUGcPW">Channel</label>
+                <ui-select ng-model="libraryTemplate.overwriteFields.originalDistributionChannel">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-qzOMoAfh" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in distributionChannels | orderBy:'item' | filter: $select.search track by $index">
+                    <span id="CUR-WQElFcRi" ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+            <div id="CUR-oyeKNDcZ" class="col-xs-12 col-sm-3">
+              <div id="CUR-aIaJPTTo" class="form-group">
+                <label id="CUR-CUyUnsjw">Currency</label>
+                <ui-select ng-model="libraryTemplate.overwriteFields.originalCurrency">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-NHdkGZTa" ng-bind="$select.selected.code"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                    <span id="CUR-JOyWdQnR" ng-bind-html="currency.code"></span>
+                    <span id="CUR-anTISpgR"> &nbsp; - &nbsp; </span>
+                    <span id="CUR-lXifMxRy" ng-bind-html="currency.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+            <div id="CUR-bkwZkAzr" class="col-xs-12 col-sm-3">
+            </div>
+            <div id="CUR-jvQhfRvB" class="col-xs-12 col-sm-3">
+              <div id="CUR-fFSsDmLs" class="form-group">
+                <label id="CUR-laDQuKgH">Configuration</label>
+                <ui-select ng-model="libraryTemplate.overwriteFields.originalConfiguration">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-KcZOcXeI" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in configurations | orderBy:'item' | filter: $select.search track by $index">
+                    <span id="CUR-nNFzjMwD" ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+            <div id="CUR-weVOMZnW" class="col-xs-12 col-sm-3">
+              <div id="CUR-WhPhWyHQ" class="form-group">
+                <label id="CUR-JtCXASGG">Sub Source</label>
+                <input id="CUR-lfsfvIUT" type="text" class="form-control" ng-model="libraryTemplate.overwriteFields.subSource">
+              </div>
+            </div>
+            <div id="CUR-HsuYsQML" class="col-xs-12 col-sm-3">
+              <div id="CUR-LqJFLXjM" class="form-group">
+                <label id="CUR-anwpwwPQ">Territory</label>
+                <ui-select ng-model="libraryTemplate.overwriteFields.originalTerritory">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-BTfrFCnz" ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices group-by="groupFind" repeat="territory.code as territory in territories | filter: $select.search">
+                    <span id="CUR-dgkFnAer" class="country" ng-bind="territory.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+            <div id="CUR-xMmBlcEQ" class="col-xs-12 col-sm-3">
+            </div>
+            <div id="CUR-WaoEcinm" class="col-xs-12 col-sm-3">
+            </div>
+            <div id="CUR-DtgadGtD" class="col-xs-12 col-sm-3" ng-if="clientType != 'Publisher'">
+              <div id="CUR-MMXEerZH" class="form-group">
+                <label id="CUR-IMzRsFcI">Price Category</label>
+                <ui-select ng-model="libraryTemplate.overwriteFields.originalPriceCategory">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-YMvpbBpA" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item  in priceCategories | orderBy:'item' | filter: $select.search track by $index">
+                    <span id="CUR-uEbkudyE" ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+            <div id="CUR-XYrvopmn" class="col-xs-12 col-sm-3">
+
+            </div>
+            <div id="CUR-UeIYKqfe" class="col-xs-12 col-sm-3">
+              <div id="CUR-CNvwYzWH" class="form-group">
+                <label id="CUR-frYUwlTu">Multiplier</label>
+                <input id="CUR-clUFOGGE" type="number" class="form-control" ng-model="libraryTemplate.overwriteFields.multiplier">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-XEkDmwRY" class="row">
+    <div id="CUR-TkVwShaS" class="col-xs-12 col-md-12 col-sm-12">
+      <div id="CUR-JrBeIRLW" class="panel panel-default">
+        <div id="CUR-TBBXLvIA" class="panel-heading">
+          <div id="CUR-WbjSqnff" class="panel-title">
+            Example lines <documentation link="http://guide.curveroyaltysystems.com/article/sales-templates/#examplelines"></documentation>
+          </div>
+        </div>
+        <div id="CUR-hGTNABLI" class="panel-body p-t-15">
+          <div id="CUR-EQJTPpAs" class="table-responsive">
+            <table id="CUR-ZnGaIHyg" class="table table-hover table-condensed dataTable no-footer sales-table sales-table-with-checkbox">
+              <thead>
+              <tr id="CUR-hEjchHSJ">
+                <td id="CUR-VmwnUIrR">
+                  <div id="CUR-wmHorMnw" class="form-group m-b-0">
+                    <label id="CUR-UKowErwM" class="m-t-8 text-grey"></label>
+                  </div>
+                </td>
+                <td id="CUR-pyaZnCBA" class="template-table-column" ng-repeat="column in libraryTemplate.fields track by $index">
+                  <div id="CUR-ttmrjVbp" class="form-group m-b-0 text-center text-grey">
+                    {{$index + 1}}
+                  </div>
+                </td>
+                <td id="CUR-ieXACHHd" ng-if="libraryTemplate.fileType == 'Character'"></td>
+              </tr>
+              <tr id="CUR-ziTLqAOm">
+                <td id="CUR-rZtSLLjR">
+                  <div id="CUR-XeuFyfXq" class="form-group m-b-0">
+                    <label id="CUR-SqoLJEFy" class="m-t-8">Field</label>
+                  </div>
+                </td>
+                <td id="CUR-uqWltDbF" class="template-table-column" ng-repeat="column in libraryTemplate.fields track by $index">
+                  <div id="CUR-dLDmAmxe" class="form-group m-b-0">
+                    <ui-select ng-model="column.field" on-select="updateFields(column.field)">
+                      <ui-select-match allow-clear="true">
+                        <span id="CUR-ufMrMXTS" ng-bind="$select.selected.name"></span>
+                      </ui-select-match>
+                      <ui-select-choices repeat="field.value as field in templateFields | filter: $select.search">
+                        <span id="CUR-uTKAGASW" ng-bind="field.name"></span>
+                      </ui-select-choices>
+                    </ui-select>
+                  </div>
+                </td>
+                <td id="CUR-HHmEaBxA" ng-if="libraryTemplate.fileType == 'Character'"></td>
+              </tr>
+              <tr id="CUR-VfwIXwFd">
+                <td id="CUR-njfbgbdi">
+                  <div id="CUR-nDaXEqys" class="form-group m-b-0">
+                    <label id="CUR-nhfcgylR" class="m-t-8">Type</label>
+                  </div>
+                </td>
+                <td id="CUR-dFmIQHCX" class="template-table-column" ng-repeat="column in libraryTemplate.fields track by $index">
+                  <div id="CUR-aVClCCmW" class="form-group m-b-0">
+                    <select class="form-control" ng-model="column.type" ng-options="type.value as type.name for type in templateTypes" ng-change="updateFields(column.type)"></select>
+                  </div>
+                </td>
+                <td id="CUR-NRiGdMcT" ng-if="libraryTemplate.fileType == 'Character'"></td>
+              </tr>
+              <tr id="CUR-oXixghKu" ng-if="libraryTemplate.fileType == 'Character'">
+                <td id="CUR-fLdVVClU">
+                  <div id="CUR-XLMFhXVP" class="form-group m-b-0">
+                    <label id="CUR-eFhQFOWh" class="m-t-8">Characters</label>
+                  </div>
+                </td>
+                <td id="CUR-nbwWTkvM" class="template-table-column" ng-repeat="column in libraryTemplate.fields track by $index">
+                  <div id="CUR-FmBxEGbJ" class="form-group m-b-0">
+                    <input id="CUR-PnRyNJFM" type="number" class="form-control template-table-column characters-field" ng-model="column.characters" on-change="updateFields(column.characters)">
+                  </div>
+                </td>
+                <td id="CUR-kHUkQBwn"></td>
+              </tr>
+              <tr id="CUR-qvyBryQN" ng-if="libraryTemplate.fileType == 'Character'">
+                <td id="CUR-QdqYHiZc"></td>
+                <td id="CUR-dQFbipzk" class="template-table-column" ng-repeat="column in libraryTemplate.fields track by $index">
+                  <button id="CUR-KTmGpvyV" class="btn btn-sm btn-danger w-100-p" ng-click="deleteField(column)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+                <td id="CUR-cchPKIvW" ng-if="libraryTemplate.fileType == 'Character'">
+                  <button id="CUR-AhqYFxhq" class="btn btn-primary m-b-0" ng-click="addField()">+ Field</button>
+                </td>
+              </tr>
+              </thead>
+              <tbody id="CUR-dujXIDnS">
+              <tr id="CUR-sEAvsFvU" ng-repeat="row in libraryTemplate.exampleLines track by $index">
+                <td id="CUR-kAHLFCxP"></td>
+                <td id="CUR-ZvwJMULn" ng-repeat="column in row track by $index">
+                  {{column}}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="mapping-tab.html">
+  <div id="CUR-BuPwBZOl" class="row">
+    <div id="CUR-IgkaOnqp" class="col-xs-12 col-sm-6">
+      <div id="CUR-YHKANbOa" class="panel panel-default">
+        <div id="CUR-QLGPDbLC" class="panel-heading">
+          <div id="CUR-ShHbYSfI" class="panel-title">
+            Territory Mapping
+          </div>
+        </div>
+        <div id="CUR-uobYZbfy" class="panel-body p-t-15">
+          <div id="CUR-ZiWoKXzs" class="row">
+            <div id="CUR-MyxakHkv" class="col-xs-5">
+              <div id="CUR-MSrHosSu" class="form-group">
+                <label id="CUR-FiUjjAFA">Country</label>
+              </div>
+            </div>
+            <div id="CUR-SiwuICqf" class="col-xs-7">
+              <div id="CUR-NVwkPbQe" class="form-group">
+                <label id="CUR-sAKrRQWk">Mapping</label>
+              </div>
+            </div>
+          </div>
+          <sales-template-territory-row edit="true" ng-repeat="territory in displayTerritories track by $index" territories="territories" territory="territory"
+            delete="deleteTerritory(territory)">
+          </sales-template-territory-row>
+          <button id="CUR-VieiEYoB" class="btn btn-complete w-xs-100-p" ng-click="addTerritory()">+ Territory</button>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-pMhqgYWt" class="col-xs-12 col-sm-6">
+      <div id="CUR-NoImnpds" class="panel panel-default">
+        <div id="CUR-cYuqLXsu" class="panel-heading">
+          <div id="CUR-toteifbe" class="panel-title">
+            Channel Mapping
+          </div>
+        </div>
+        <div id="CUR-weQPPOVt" class="panel-body p-t-15">
+          <div id="CUR-oBAzzcvV" class="row">
+            <div id="CUR-EYatIXCT" class="col-xs-5">
+              <div id="CUR-aiCwevMx" class="form-group">
+                <label id="CUR-LcAiSjZG">Channel</label>
+              </div>
+            </div>
+            <div id="CUR-kqaYNLOX" class="col-xs-7">
+              <div id="CUR-vQljulMu" class="form-group">
+                <label id="CUR-dgURLodD">Mapping</label>
+              </div>
+            </div>
+          </div>
+          <sales-template-distribution-channels-row edit="true" ng-repeat="channel in displayDistributionChannels track by $index" channels="distributionChannels"
+            channel="channel" delete="deleteDistributionChannel(channel)">
+          </sales-template-distribution-channels-row>
+          <button id="CUR-ZZiCPXRO" class="btn btn-complete w-xs-100-p" ng-click="addDistributionChannel()">+ Channel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-uMCvwbph" class="row">
+    <div id="CUR-DOTvFbvi" class="col-xs-12 col-sm-6">
+      <div id="CUR-eqMDWmnH" class="panel panel-default">
+        <div id="CUR-cnymeBVl" class="panel-heading">
+          <div id="CUR-fCKDjqXn" class="panel-title">
+            Configuration Mapping
+          </div>
+        </div>
+        <div id="CUR-xOwYHxfw" class="panel-body p-t-15">
+          <div id="CUR-AnKdmRXY" class="row">
+            <div id="CUR-IUXSIWWF" class="col-xs-5">
+              <div id="CUR-PfFHFFme" class="form-group">
+                <label id="CUR-hzYUBgAl">Configuration</label>
+              </div>
+            </div>
+            <div id="CUR-FywRIvpQ" class="col-xs-7">
+              <div id="CUR-ZMBqbdUR" class="form-group">
+                <label id="CUR-aFPGZzxJ">Mapping</label>
+              </div>
+            </div>
+          </div>
+          <sales-template-configurations-row edit="true" ng-repeat="configuration in displayConfigurations track by $index" configurations="configurations"
+            configuration="configuration" delete="deleteConfiguration(configuration)">
+          </sales-template-configurations-row>
+          <button id="CUR-buExSlOZ" class="btn btn-complete w-xs-100-p" ng-click="addConfiguration()">+ Configuration</button>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-fFCbpPuB" class="col-xs-12 col-sm-6" ng-if="clientType != 'Publisher'">
+      <div id="CUR-EhmuGLGK" class="panel panel-default">
+        <div id="CUR-KfqLLEUr" class="panel-heading">
+          <div id="CUR-qtpoOCor" class="panel-title">
+            Price category Mapping
+          </div>
+        </div>
+        <div id="CUR-XCmaYcUw" class="panel-body p-t-15">
+          <div id="CUR-FQprnYGE" class="row">
+            <div id="CUR-yiSxxqPY" class="col-xs-5">
+              <div id="CUR-FVmbJXyf" class="form-group">
+                <label id="CUR-aSxHSVIE">Price category</label>
+              </div>
+            </div>
+            <div id="CUR-tHgwLDBM" class="col-xs-7">
+              <div id="CUR-MgBQPtPm" class="form-group">
+                <label id="CUR-gWKgqVNN">Mapping</label>
+              </div>
+            </div>
+          </div>
+          <sales-template-price-category-row edit="true" ng-repeat="category in displayPriceCategories track by $index" categories="priceCategories"
+            category="category" delete="deletePriceCategory(category)">
+          </sales-template-price-category-row>
+          <button id="CUR-KNUQIqXM" class="btn btn-complete w-xs-100-p" ng-click="addPriceCategory()">+ Price Category</button>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-cTqVwtth" class="col-xs-12 col-sm-6" ng-if="clientType != 'Publisher'">
+      <div id="CUR-UhoKwZtA" class="panel panel-default">
+        <div id="CUR-rRROyVlJ" class="panel-heading">
+          <div id="CUR-ANCROTNH" class="panel-title">
+            Source Mapping
+          </div>
+        </div>
+        <div id="CUR-HuukfnnU" class="panel-body p-t-15">
+          <div id="CUR-tJKvNyyr" class="row">
+            <div id="CUR-gjELigrr" class="col-xs-5">
+              <div id="CUR-CHICPgXs" class="form-group">
+                <label id="CUR-gUAKFXQh">Map To</label>
+              </div>
+            </div>
+            <div id="CUR-SQBlBqFz" class="col-xs-7">
+              <div id="CUR-YCkgObrO" class="form-group">
+                <label id="CUR-FERhSBta">Map From</label>
+              </div>
+            </div>
+          </div>
+          <sales-template-source-row edit="true" ng-repeat="source in displaySources track by $index"
+            source="source" delete="deleteSource(source)">
+          </sales-template-source-row>
+          <button id="CUR-jGlcJUMo" class="btn btn-complete w-xs-100-p" ng-click="addSource()">+ Source</button>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-pZXbVfmL" class="col-xs-12 col-sm-6">
+      <div id="CUR-XBlLZHim" class="panel panel-default">
+        <div id="CUR-iFMLNqZs" class="panel-heading">
+          <div id="CUR-kRRgJSvZ" class="panel-title">
+            Sub Source Mapping
+          </div>
+        </div>
+        <div id="CUR-qRxghFbm" class="panel-body p-t-15">
+          <div id="CUR-NBMtKAvD" class="row">
+            <div id="CUR-sIqcjEkC" class="col-xs-5">
+              <div id="CUR-AmLXAzqX" class="form-group">
+                <label id="CUR-nMsByQFa">Map To</label>
+              </div>
+            </div>
+            <div id="CUR-eczGvAyf" class="col-xs-7">
+              <div id="CUR-iBkHwNGb" class="form-group">
+                <label id="CUR-tuzOWrMv">Map From</label>
+              </div>
+            </div>
+          </div>
+          <sales-template-sub-source-row edit="true" ng-repeat="subSource in displaySubSources track by $index"
+            sub-source="subSource" delete="deleteSubSource(subSource)">
+          </sales-template-sub-source-row>
+          <button id="CUR-EiMwmEiP" class="btn btn-complete w-xs-100-p" ng-click="addSubSource()">+ Sub Source</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-knRpFqxC" class="col-xs-12 col-sm-6">
+      <div id="CUR-wfCpJUUd" class="panel panel-default">
+        <div id="CUR-fwTbCPCT" class="panel-heading">
+          <div id="CUR-zAZUvvdB" class="panel-title">
+            Currency Mapping
+          </div>
+        </div>
+        <div id="CUR-ssUrduDE" class="panel-body p-t-15">
+          <div id="CUR-DGjEVWqJ" class="row">
+            <div id="CUR-wxfVplID" class="col-xs-5">
+              <div id="CUR-mGkxdCtg" class="form-group">
+                <label id="CUR-ASFxKoVp">Currency</label>
+              </div>
+            </div>
+            <div id="CUR-RICAYUYO" class="col-xs-7">
+              <div id="CUR-dVJqrSUz" class="form-group">
+                <label id="CUR-hhcWlNgt">Mapping</label>
+              </div>
+            </div>
+          </div>
+          <sales-template-currency-row edit="true" ng-repeat="currency in displayCurrencies track by $index" currencies="currencies" currency="currency"
+                                        delete="deleteCurrency(currency)">
+          </sales-template-currency-row>
+          <button id="CUR-YrtrpEVH" class="btn btn-complete w-xs-100-p" ng-click="addCurrency()">+ Currency</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-wStdiSij" class="col-xs-12 col-sm-6">
+      <div id="CUR-nhIWJaaI" class="panel panel-default">
+        <div id="CUR-qnoyXBUu" class="panel-heading">
+          <div id="CUR-PbrhhnRz" class="panel-title">
+            Copy Fields
+          </div>
+        </div>
+        <div id="CUR-ImzhKqQK" class="panel-body p-t-15">
+          <div id="CUR-mEWgVIJF" class="row">
+            <div id="CUR-UOrlUAQD" class="col-xs-5">
+              <div id="CUR-ZWizLBIn" class="form-group">
+                <label id="CUR-vcHQzSkC">From Field</label>
+              </div>
+            </div>
+            <div id="CUR-pjjkZMge" class="col-xs-7">
+              <div id="CUR-URueYSAG" class="form-group">
+                <label id="CUR-glHLvgjj">To Field</label>
+              </div>
+            </div>
+          </div>
+          <sales-template-copy-fields-row edit="true" ng-repeat="field in displayCopyFields track by $index" fields="templateFields" field="field"
+            delete="deleteCopyField(field)">
+          </sales-template-copy-fields-row>
+          <button id="CUR-iuOzzghN" class="btn btn-complete w-xs-100-p" ng-click="addCopyField()">+ Copy Field</button>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-QKFssgYX" class="col-xs-12 col-sm-6" ng-if="clientType == 'Publisher'">
+      <div id="CUR-dVhLOOHa" class="panel panel-default">
+        <div id="CUR-vNLCtCXu" class="panel-heading">
+          <div id="CUR-yeieIxij" class="panel-title">
+            Positive/Negative Mapping
+          </div>
+        </div>
+        <div id="CUR-souOdJLD" class="panel-body p-t-15">
+          <div id="CUR-eWozAZnU" class="row">
+            <div id="CUR-yHGpQeNw" class="col-xs-5">
+              <div id="CUR-XKsVwMdD" class="form-group">
+                <label id="CUR-VtXrXPxm">Value</label>
+              </div>
+            </div>
+            <div id="CUR-hXGFgJup" class="col-xs-7">
+              <div id="CUR-TqJhJBFl" class="form-group">
+                <label id="CUR-lPufePdc">Mapping</label>
+              </div>
+            </div>
+          </div>
+          <sales-template-positive-negative-row edit="true" ng-repeat="category in displayPositiveNegatives track by $index" category="category"
+            delete="deletePositiveNegative(category)">
+          </sales-template-positive-negative-row>
+          <button id="CUR-HfhAoHja" class="btn btn-complete w-xs-100-p" ng-click="addPositiveNegative()">+ Value</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="calculation-tab.html">
+  <div id="CUR-GxXwpdCi" class="row">
+    <div id="CUR-rsbepFuw" class="col-xs-12">
+      <div id="CUR-EjWTEdJE" class="panel panel-transparent">
+        <div id="CUR-NApXgeFW" class="panel-body">
+          <h3 id="CUR-CJHOAACk">Sales Ingestion Calculations</h3>
+          <p>To allow you the ultimate flexibility in managing your royalties, you can manage calculations, or conditional statements that allow you to set values as part of the sales ingestion process.</p>
+          <p>For instance, if you wanted to assign a Price Category of 'Return' to any physical negative units, or wanted to remove a distribution fee in a specific territory, you can manage that by configuring below.</p>
+          <p>Click the + Calculation button below to get started.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-OOvlZURX" class="row">
+    <div id="CUR-qPzbKaOJ" class="col-xs-12 col-sm-12">
+      <sales-template-calculation-row edit="true" ng-repeat="calculation in displayCalculations track by $index" calculation="calculation" options="dirOptions"
+        delete="deleteCalculation(calculation)">
+      </sales-template-calculation-row>
+    </div>
+    <div id="CUR-yymyXlRw" class="col-xs-12 col-sm-12">
+      <button id="CUR-KmnrXmzm" class="btn btn-complete w-xs-100-p" ng-click="addCalculation()">+ Calculation</button>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="identifiers-tab.html">
+  <div id="CUR-xaFQBZrJ" class="row" ng-if="activeTab === 'identifiers'">
+    <div id="CUR-ONOZhYgy" class="col-xs-12">
+      <div id="CUR-AXsyNRtS" class="panel panel-transparent">
+        <div id="CUR-WupdMPRF" class="panel-body">
+          <h3 id="CUR-cInJexBZ">Bulk Identifier Associations</h3>
+          <p>These associations show where bulk ingestion matches have been created. These are used to match any future files, and are created every time you upload a file to the template, or match a sales file to this template.</p>
+          <p>You can remove these should a sales file be mismatched to a template, or causing issues with auto matching. But it is advised to leave these as the system creates them, unless you have an issue.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-ZxBjVshG" class="row">
+    <div id="CUR-AMnrvzAy" class="col-xs-12">
+      <div id="CUR-USpZsXfR" class="panel panel-default">
+        <div id="CUR-hlTdtZIN" class="panel-body">
+          <div id="CUR-TedLHmCM" class="table-responsive">
+            <table id="CUR-DBTPnXAz" class="table table-hover dataTable no-footer">
+              <thead>
+              <tr id="CUR-akrSSzWo">
+                <th>Sales File</th>
+                <th>&nbsp;</th>
+              </tr>
+              </thead>
+              <tbody id="CUR-PGzgRvol">
+                <tr id="CUR-jXVsBLku" template-identifier-table-row ng-repeat="identifier in libraryTemplate.identification" identifier="identifier" delete="removeIdentifier(identifier)" edit="rights.sales == 'Edit'"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<model-history data="libraryTemplate.modelHistory"></model-history>

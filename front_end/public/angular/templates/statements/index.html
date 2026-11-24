@@ -1,0 +1,342 @@
+<div id="CUR-uDdehaLt" class="jumbotron" data-pages="parallax">
+  <div id="CUR-oQSdhJyU" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-IBRdNQjm" class="inner">
+      <ul id="CUR-AXOwoKNH" class="breadcrumb">
+        <li id="CUR-Qwqyxeui"><a id="CUR-ynAAvKJW" href="/#/statements" class="active">Statements</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-sMzbzCjm" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-xaUckBJX" class="row m-b-20">
+    <div id="CUR-gOMtOCMT" class="col-sm-12 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+      <form id="CUR-JRfzdqCV" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-sHmyzqxv" class="input-group transparent">
+          <input id="CUR-WBKJWKoQ" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-bzBwwprg" class="input-group-addon pointer" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="CUR-CloNtrjv" class="row" ng-if="!payeeId">
+    <div id="CUR-OvtHLYJe" class="form-group col-xs-4">
+      <label id="CUR-cRIQfQMq">Period</label>
+      <ui-select ng-model="filter.periodId" close-on-select="true">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-UxhwsdaO" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in periods | filter:$select.search" refresh="searchPeriods($select)"
+          refresh-delay="500">
+          <div id="CUR-TiSQWTUm" ng-bind-html="item.name | highlight: $select.search"></div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-DqaNLEOm" class="form-group col-xs-4">
+      <label id="CUR-MQMEexwv">Type</label>
+      <ui-select ng-model="filter.type" close-on-select="true">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-bMJAgBGE" ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item as item in types | filter:$select.search" refresh-delay="500">
+          <div id="CUR-zAGCrnMd" ng-bind-html="item | highlight: $select.search"></div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-vaQaGeKI" class="form-group col-xs-4">
+      <label id="CUR-zjAnqLqN">Contract</label>
+      <ui-select multiple ng-model="filter.contractIds" close-on-select="true">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-eixqaNCq" style="vertical-align:middle;">{{$item.name}}</span>
+          <span id="CUR-uGrfOXEy" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in contracts | filter:$select.search"
+          refresh="searchContracts($select)" refresh-delay="500">
+          <div id="CUR-QgutiQSw">
+            <div id="CUR-MmQOJvOa" class="clear">
+              <div id="CUR-WwpLQLcB" ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+
+    <!-- Statements filter -->
+     <div class="col-sm-12">
+      <div class="row">
+        <div id="contract-payee-search-div" class="form-group col-sm-4">
+          <label id="contract-payee-search-label">Payee</label>
+          <ui-select id="contract-payee-search-select" multiple ng-model="filter.payeeIds" close-on-select="true">
+            <ui-select-match id="contract-payee-search-select-match">
+              <span id="contract-payee-search-span-select-match-1" style="vertical-align:middle;">{{$item.name}}</span>
+              <span id="contract-payee-search-span-select-match-2" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item._id as item in payees | filter:$select.search"
+              refresh="searchPayees($select)" refresh-delay="500">
+              <div id="contract-payee-search-choices-div">
+                <div id="contract-payee-search-choices-div-div" class="clear">
+                  <div id="contract-payee-search-choices-div-div-div" ng-bind-html="item.name | highlight: $select.search"></div>
+                </div>
+              </div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+        <div id="CUR-UBJcRsgF" class="form-group col-sm-4">
+          <label id="CUR-JnbARxvG">Published</label>
+          <ui-select class="full-width" ng-model="filter.published">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-EqTpujMy" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item.value as item in publishedValues | filter: $select.search">
+              <span id="CUR-WgAygZXB" ng-bind="item.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+        <div id="CUR-UBJcRdsdG" class="form-group col-sm-4">
+          <label id="CUR-JnbARlklkjs">Sent</label>
+          <ui-select class="full-width" ng-model="filter.sent">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-EqTMdsay" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item.value as item in sentValues | filter: $select.search">
+              <span id="CUR-WgAMMSAB" ng-bind="item.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div class="row">
+        <div id="contract-contractCategories-search-div" class="form-group col-sm-4">
+          <label id="contract-contractCategories-search-label">Contract Categories</label>
+          <ui-select id="contract-contractCategories-search-select" multiple ng-model="filter.contractCategories" close-on-select="true">
+            <ui-select-match id="contract-contractCategories-search-select-match">{{$item}}</ui-select-match>
+            <ui-select-choices repeat="category in contractCategories | filter:$select.search">
+              {{category}}
+            </ui-select-choices>
+          </ui-select>
+        </div>
+        <div id="contract-payeeCategories-search-div" class="form-group col-sm-4">
+          <label id="contract-payeeCategories-search-label">Payee Categories</label>
+          <ui-select id="contract-payeeCategories-search-select" multiple ng-model="filter.payeeCategories" close-on-select="true">
+            <ui-select-match id="contract-payeeCategories-search-select-match">{{$item}}</ui-select-match>
+            <ui-select-choices repeat="category in payeeCategories | filter:$select.search">
+              {{category}}
+            </ui-select-choices>
+          </ui-select>
+        </div>
+        
+        <div id="contract-company-search-div" class="form-group col-sm-4">
+          <label id="contract-company-search-label">Company</label>
+          <ui-select id="contract-company-search-select" multiple ng-model="filter.companyIds" close-on-select="true">
+            <ui-select-match id="contract-company-search-select-match">
+              <span id="contract-company-search-span-select-match-1" style="vertical-align:middle;">{{$item.name}}</span>
+              <span id="contract-company-search-span-select-match-2" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item._id as item in companies | filter:$select.search"
+              refresh="searchCompanies($select)" refresh-delay="500">
+              <div id="contract-company-search-choices-div">
+                <div id="contract-company-search-choices-div-div" class="clear">
+                  <div id="contract-company-search-choices-div-div-div" ng-bind-html="item.name | highlight: $select.search"></div>
+                </div>
+              </div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div class="row">
+        <div id="CUR-yvJjWBnO" class="form-group col-sm-3">
+          <label id="CUR-yJUDpSWI">Created After</label>
+          <div id="datepicker-component" class="form-group input-group date">
+            <input id="CUR-PwVGYguM" type="text" class="form-control" ng-model="filter.createdAfter" uib-datepicker-popup="{{dateFormat}}"
+              ng-model-options="{timezone: 'utc'}" is-open="createdAfterPopup" ng-click="openCreatedAfterPopup()">
+            <span id="CUR-WFsTBdmV" class="input-group-addon" ng-click="openCreatedAfterPopup()">
+              <i class="fa fa-calendar"></i>
+            </span>
+          </div>
+        </div>
+        <div id="CUR-GUqaepOF" class="form-group col-sm-3">
+          <label id="CUR-kZVaHCNi">Created Before</label>
+          <div id="datepicker-component" class="form-group input-group date">
+            <input id="CUR-ahBDiZSy" type="text" class="form-control" ng-model="filter.createdBefore" uib-datepicker-popup="{{dateFormat}}"
+              ng-model-options="{timezone: 'utc'}" is-open="createdBeforePopup" ng-click="openCreatedBeforePopup()">
+            <span id="CUR-rXWnnWPJ" class="input-group-addon" ng-click="openCreatedBeforePopup()">
+              <i class="fa fa-calendar"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+     </div>
+    
+  </div>
+  <div id="CUR-aBCKyVTf" class="row" ng-if="payeeId">
+    <div id="CUR-FxQjWfWE" class="form-group col-xs-6">
+      <label id="CUR-QAyyRFWR">Period</label>
+      <ui-select ng-model="filter.periodId" close-on-select="true">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-zTKhNllQ" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in periods | filter:$select.search" refresh="searchPeriods($select)"
+          refresh-delay="500">
+          <div id="CUR-XyLvaNvI" ng-bind-html="item.name | highlight: $select.search"></div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-mEtscTzz" class="form-group col-xs-6">
+      <label id="CUR-iHNuaZgW">Contract</label>
+      <ui-select multiple ng-model="filter.contractIds" close-on-select="true">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-UjnMJKiV" style="vertical-align:middle;">{{$item.name}}</span>
+          <span id="CUR-rvuqwBLD" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in contracts | filter:$select.search"
+          refresh="searchContracts($select)" refresh-delay="500">
+          <div id="CUR-slYUhaXL">
+            <div id="CUR-CydKENpg" class="clear">
+              <div id="CUR-hwnyXZXy" ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+  <div id="CUR-vIOzsnBx" class="row">
+    <div id="CUR-dpFdYGEN" class="col-sm-12 text-center">
+      <button id="CUR-NsfLNPuP" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i> Filter</button>
+    </div>
+  </div>
+
+  <div id="CUR-UMYrJrlj" class="col-sm-12" style="display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+    <div ng-show="true" id="statements-download-btn-group" class="btn-group dropdown-default"> 
+      <a id="statements-download-dropdown-toggle" class="btn dropdown-toggle w-xs-100-p" data-toggle="dropdown" style="width: 141px;" aria-expanded="false">
+        <i class="fa fa-download"></i> Download
+        <span id="statements-download-caret" class="caret"></span> 
+      </a>
+    <ul id="statements-download-dropdown-menu" class="dropdown-menu w-xs-100-p" style="width: 141px;">
+      <li id="statements-download-selected-li" ng-if="true">
+        <a id="statements-download-selected-link" ng-click="downloadedSelectedStatements()">Download Selected</a>
+      </li>
+    </ul>
+  </div>
+  <h5 id="CUR-CtXcbdVb">Total: {{total? total : 0}}</h5>
+  </div>
+  <div id="CUR-kYNdBwlo" class="row">
+    <div id="CUR-VFrbmBtF" class="col-xs-12">
+      <div id="CUR-dcGrXiyq" class="panel panel-default">
+        <div id="CUR-YlVsRWFo" class="panel-heading">
+          <div id="CUR-HMNPiJDJ" class="panel-title">
+            Statements <documentation link="http://guide.curveroyaltysystems.com/topics/curve-for-artists/">
+            </documentation>
+          </div>
+        </div>
+        <div id="CUR-KLuFsIPl" class="panel-body">
+          <div id="CUR-YxdjgveE" class="table-responsive" ng-if="!payeeId">
+            <table id="CUR-bDVEURjD" class="table table-hover dataTable no-footer">
+              <thead>
+                <tr id="CUR-KeutqPXX">
+                  <th class="table-checkbox hidden-xs"><input id="CUR-ArWaVZLS" ng-show="rights.periods == 'Edit'" type="checkbox"
+                      class="select-all" ng-click="selectAll(statements)"></th>
+                  <th ng-click="getSortedData('name')" ng-class="whatClassIsIt('date name')">Name</th>
+                  <th ng-click="getSortedData('grossAmount')" ng-class="whatClassIsIt('grossAmount')">Gross Sales</th
+                    ng-if="payeeId">
+                  <th ng-click="getSortedData('netAmount')" ng-class="whatClassIsIt('netAmount')" class="hidden-xs">Net
+                    Sales</th>
+                  <th ng-click="getSortedData('grossCosts')" ng-class="whatClassIsIt('grossCosts')" class="hidden-xs"
+                    ng-if="clientType != 'Publisher'">Gross Costs</th>
+                  <th ng-click="getSortedData('netCosts')" ng-class="whatClassIsIt('netCosts')" class="hidden-xs"
+                    ng-if="clientType != 'Publisher'">Net Costs</th>
+                  <th ng-click="getSortedData('date')" ng-class="whatClassIsIt('date')" class="hidden-xs">
+                    Created</th>
+                  <th ng-click="getSortedData('status')" ng-class="whatClassIsIt('status')" class="hidden-xs">Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="CUR-bkUowpSN">
+                <tr statement-table-row ng-repeat="statement in statements" index="{{$index}}" statement="statement"
+                  client-type="clientType"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="CUR-QUmxIDdX" class="table-responsive hidden-xs" ng-if="payeeId">
+            <div id="CUR-WXtxovvx" class="dataTables_wrapper form-inline no-footer">
+              <table id="CUR-eJxduhIP" class="table table-hover dataTable no-footer" role="grid">
+                <thead>
+                  <tr id="CUR-mjRbvRhk">
+                    <th class="table-checkbox hidden-xs"><input id="CUR-ArWaVZLS" type="checkbox"
+                      class="select-all" ng-click="selectAll(statements)"></th>
+                    <th class="no-border-top">Name</th>
+                    <th class="no-border-top v-align-middle text-right">Opening</th>
+                    <th class="no-border-top v-align-middle text-right">Revenue</th>
+                    <th class="no-border-top v-align-middle text-right" ng-if="clientType != 'Publisher'">Costs</th>
+                    <th class="no-border-top v-align-middle text-right">Closing</th>
+                  </tr>
+                </thead>
+                <tbody id="CUR-hPQmdZMP">
+                  <tr id="CUR-FyFKpUVN" role="row" ng-repeat="statement in statements">
+                    <td ng-if="!noLinks" class="v-align-middle hidden-xs">
+                      <input id="statement-select-{{index}}" type="checkbox" class='select-unit' ng-model="statement.selected">
+                    </td>
+                    <td id="CUR-DuWgYGVt" class="v-align-middle semi-bold"><a id="CUR-BkNAKcVn" href="#/statements/{{statement._id}}">{{statement.name}}</a>
+                    </td>
+                    <td id="CUR-UTRZEzVf" class="v-align-middle text-right">
+                      {{currencySymbol}}{{statement.openingBalance || 0 | number: 2}}
+                    </td>
+                    <td id="CUR-kYMHXVDC" class="v-align-middle text-right">
+                      {{currencySymbol}}{{statement.netAmount || 0 | number: 2}}
+                    </td>
+                    <td id="CUR-vvaKxuEZ" class="v-align-middle text-right" ng-if="clientType != 'Publisher'">
+                      {{currencySymbol}}{{statement.netCosts || 0 | number: 2}}
+                    </td>
+                    <td id="CUR-CpoFanlo" class="v-align-middle text-right">
+                      {{currencySymbol}}{{statement.closingBalance || 0 | number: 2}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="CUR-eQGvetKe" class="table-responsive hidden-sm hidden-md hidden-lg hidden-xl" ng-if="payeeId">
+            <div id="CUR-dmcLPFpC" class="dataTables_wrapper form-inline no-footer">
+              <table id="CUR-qJgOHzEz" class="table table-hover dataTable no-footer" role="grid">
+                <thead>
+                  <tr id="CUR-hRGxuQeQ">
+                    <th class="no-border-top"></th>
+                    <th class="no-border-top v-align-middle text-right">Earnings</th>
+                    <th class="no-border-top v-align-middle text-right">Closing</th>
+                  </tr>
+                </thead>
+                <tbody id="CUR-tpUNYvAm">
+                  <tr id="CUR-cbFLkwnc" role="row" ng-repeat="statement in statements">
+                    <td id="CUR-QLeISgSI" class="v-align-middle semi-bold"><a id="CUR-IIhXotjQ" href="#/statements/{{statement._id}}">{{statement.name}}</a>
+                    </td>
+                    <td id="CUR-LBXGeXdi" class="v-align-middle text-right">
+                      {{currencySymbol}}{{statement.netAmount - statement.netCosts || 0 | number: 2}}
+                    </td>
+                    <td id="CUR-viMXkDFW" class="v-align-middle text-right">
+                      {{currencySymbol}}{{statement.closingBalance || 0 | number: 2}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-gUWvopQS" class="col-sm-12">
+    <div id="CUR-LGuKjRlB" class="pull-right">
+      <span id="CUR-HferKigm" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <span id="CUR-GzGDodsD" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-BneZSGMe" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-MuZUOhKW" class="row">
+    <div id="CUR-MhpZOzXQ" class="col-xs-12 text-center">
+      <pagination id="CUR-gpwYldIn" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>

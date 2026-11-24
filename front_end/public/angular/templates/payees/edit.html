@@ -1,0 +1,870 @@
+<div id="CUR-DsGKwETA" class="jumbotron" data-pages="parallax">
+  <div id="CUR-uktgrrUY" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-xsWkSqxG" class="inner">
+      <ul id="CUR-KzfuJGkE" class="breadcrumb">
+        <li id="CUR-SsYxyMWU">
+          <a id="CUR-jbbBXmfV" href="/#/payees">Payees</a>
+        </li>
+        <li id="CUR-OCDGxuBq" ng-show="!payee._id">
+          <a id="CUR-WYoIrJTE" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-wBgVvLtb" ng-show="payee._id">
+          <a id="CUR-GDeQOECg" href="/#/payees/{{payee._id}}/edit" class="active">{{payee.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-aPKgnZIE" class="container-fluid container-fixed-lg">
+  <div id="CUR-pGfPiNCY" class="row">
+    <div id="CUR-hvdJPmjK" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-DkcbEfDr" ng-show="rights.contracts == 'Edit'" class="btn btn-danger" data-toggle="modal"
+        data-target="#deleteModal">
+        <i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-pUrJnkLb" ng-show="rights.contracts == 'Edit'" class="btn btn-warning" ng-click="copy()"
+        ng-show="payee._id"><i class="fa fa-copy"></i> Copy</button>
+      <button id="CUR-dJtpHGja" ng-show="rights.contracts == 'Edit'" class="btn btn-complete" ng-click="save()">
+        <i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-ULwLlTnu" ng-show="deletionError" class="alert alert-danger">
+    <p><strong>This payee can't be deleted:</strong></p>
+    <ul id="CUR-tUsVMlfV">
+      <li id="CUR-ikhYdoyA" ng-repeat="error in deletionError">
+        <span id="CUR-FoNwQVPG" ng-if="error.reason">{{error.reason}}</span> <a id="CUR-fizkKopY" ng-if="error.link"
+          href="#/{{error.link}}">{{error.name}}</a>
+        <span id="CUR-xuHYgzaE" ng-if="error.message">{{error.message}}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div id="CUR-LXpnnkMj" ng-show="payee.validationErrors && payee.validationErrors.length !== 0 "
+    class="alert alert-warning">
+    <p><b>This payee has some issues that may affect its ability to report and grant access to royalties for this payee
+        -</b></p>
+    <ul id="CUR-dpIYpbiv">
+      <li ng-repeat="error in payee.validationErrors track by $index">
+        {{error}}
+      </li>
+    </ul>
+  </div>
+  <div ng-if="curvePayError" class="error-message" style="color: red; font-weight: bold;">
+   
+  </div>
+  <div id="CUR-TYpmnkKo" ng-show="curvePayError"
+  class="alert alert-danger">
+  <p><b> Payments Details: {{curvePayError}}</b></p>
+</div>
+
+  <div id="CUR-KulUInZB" class="row">
+    <div id="CUR-AKqKcGxG" class="panel panel-transparent hidden-xs">
+      <ul id="CUR-raCqmgus" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-fRbTCZCr" class="active" ng-click="setTab('overview')">
+          <a id="CUR-xKCvSVdG" data-toggle="tab" aria-expanded="true"><span id="CUR-qEZGsLmK">Overview</span></a>
+        </li>
+        <li id="CUR-nOLpTins" ng-click="setTab('transactions')" ng-show="features.payeeBalances">
+          <a id="CUR-OraHZPiv" data-toggle="tab" aria-expanded="false"><span id="CUR-uhQVGoJz">Transactions</span></a>
+        </li>
+        <li id="CUR-nOLpTins" ng-click="setTab('statements')" ng-show="features.payeeBalances">
+          <a id="CUR-OraHZPiv" data-toggle="tab" aria-expanded="false"><span id="CUR-uhQVGoJz">Statements</span></a>
+        </li>
+        <li id="CUR-UpxBfdFU" ng-if="adminType === 'Admin' || internalUser || parentUser" ng-click="setTab('users')">
+          <a id="CUR-oIMwvqQS" data-toggle="tab" aria-expanded="false"><span id="CUR-ezshOabu">Users</span></a>
+        </li>
+        <li id="CUR-GwKtdZbC" ng-click="setTab('contracts')">
+          <a id="CUR-aPIShmSs" data-toggle="tab" aria-expanded="false"><span id="CUR-ySaZEDxG">Contracts</span></a>
+        </li>
+        <li id="CUR-nOLpTins" ng-click="setTab('analytics')">
+          <a id="CUR-OraHZPiv" data-toggle="tab" aria-expanded="false"><span id="CUR-uhQVGoJz">Analytics</span></a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-kgcqScUD" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-cyoZkoFc" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+        <div id="CUR-cyoZkoFc" ng-show="activeTab === 'transactions'" ng-include="'transactions-tab.html'"></div>
+        <div id="CUR-cyoZkoFc" ng-show="activeTab === 'statements'" ng-include="'statements-tab.html'"></div>
+        <div id="CUR-APUAbFmT" ng-show="activeTab === 'contracts'" ng-include="'contracts-tab.html'"></div>
+        <div id="CUR-OtfroCKy" ng-show="activeTab === 'users'" ng-include="'users-tab.html'"></div>
+        <div id="CUR-SsisXgGK" ng-show="activeTab === 'analytics'">
+          <analytics-suite analytics-config="analyticsConfig"
+            analytics-info="'Payee analytics displays all catalogue associated with the contracts, associated with this payee, at 100% of revenue.'">
+          </analytics-suite>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-fBFiTObp" class="col-xs-12 visible-xs p-l-20 p-r-20" ng-if="showAccordions">
+      <uib-accordion close-others="true" ng-init="status1.open = true;">
+        <div id="CUR-QiXNylSb" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>
+            Overview <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-GudXaxiL" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div id="CUR-xohbqenv" uib-accordion-group class="panel-default" is-open="status3.open">
+          <uib-accordion-heading>
+            Contracts <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-IFEEanWY" ng-include="'contracts-tab.html'"></div>
+        </div>
+        <div id="CUR-rdkguCpe" uib-accordion-group class="panel-default" is-open="status2.open">
+          <uib-accordion-heading>
+            Users <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-KLhPnwSA" ng-include="'users-tab.html'"></div>
+        </div>
+        <div id="CUR-CTZtbrAk" uib-accordion-group class="panel-default" is-open="status3.open">
+          <uib-accordion-heading>
+            Analytics <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"></i>
+          </uib-accordion-heading>
+          <analytics-suite analytics-config="analyticsConfig" analytics-mobile-sections="true"></analytics-suite>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+  <div id="CUR-DkFiwqEW" class="row">
+    <div id="CUR-ptYbOujG" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-tjOsfcSH" ng-show="payee.updatedAt">Last Updated on {{ payee.updatedAt | date : dateFormat : 'UTC'
+        }}.</span> <a href="javascript:;" ng-if="payee._id" ng-click="modelHistory()"
+        ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="overview-tab.html">
+  <div id="CUR-auMZImpn" class="row">
+    <div id="CUR-LFPhwMbW" class="col-xs-12 col-sm-6">
+      <div id="CUR-UQIuWsio" class="panel panel-default">
+        <div id="CUR-heWGXnZS" class="panel-heading">
+          <div id="CUR-ijSuXtJM" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-uoSWcrqO" class="panel-body p-t-15">
+          <div id="CUR-MwCzZFfg" class="form-group required">
+            <label id="CUR-mXkxTzsO">Name</label>
+            <input id="CUR-vNACcVKV" type="text" class="form-control" ng-model="payee.name" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-CXyBkJFM" class="form-group required">
+            <label id="CUR-okAsjqkO">Alternate Name</label>
+            <input id="CUR-CJyhlJZW" type="text" class="form-control" ng-model="payee.alternateName" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-wpEFHDbH" class="form-group required">
+            <label id="CUR-djkyfizS">Foreign ID</label>
+            <input id="CUR-GRdOwpVU" type="text" class="form-control" ng-model="payee.foreignId" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-projectId" class="form-group required">
+            <label id="CUR-projectId-label">Project ID</label>
+            <input id="CUR-projectId-input" type="text" class="form-control" ng-model="payee.projectId" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-projectId" class="form-group required">
+            <label id="CUR-supplierCode-label">Supplier Code</label>
+            <input id="CUR-supplierCode-input" type="text" class="form-control" ng-model="payee.supplierCode" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-SkgjMnBW" class="form-group">
+            <label id="CUR-NckAXatU">Categories</label>
+            <ui-select multiple ng-model="payee.payeeCategories">
+              <ui-select-match allow-clear="true">
+                {{$item}}
+              </ui-select-match>
+              <ui-select-choices repeat="item in (payeeCategories | filter: $select.search)">
+                <span id="CUR-VdAmZOKL" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-usfvCYhb" class="form-group required" ng-if="clientAdminUser">
+            <label id="CUR-hkDzhZCq">Contact Email</label>
+            <input id="CUR-NaYgFDcA" type="text" class="form-control" ng-model="payee.contactEmail" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-GfnUxdBv" class="form-group" ng-if="clientAdminUser">
+            <label id="CUR-ZZTwxZXs">Address</label>
+            <textarea class="form-control standard-textarea" ng-model="payee.address" ng-disabled="rights.contracts != 'Edit'"></textarea>
+          </div>
+          <div id="CUR-FScRJsWN" class="form-group">
+            <label id="CUR-GUNMwXuz">Country</label>
+            <ui-select ng-model="payee.country" ng-disabled="rights.contracts != 'Edit'">
+              <ui-select-match>
+                <span id="CUR-BIlDZUWd" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices group-by="groupFind"
+                                  repeat="country.code as country in countries | filter: $select.search">
+                <span id="CUR-xFhifEer" class="country" ng-bind="country.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-poBpwNqC" class="panel panel-default" ng-if="features && (features.selfBilling || features.withholdingTax)">
+        <div id="CUR-tcSLwaIj" class="panel-heading">
+          <div id="CUR-buOzxDWU" class="panel-title">
+            Tax Info
+          </div>
+        </div>
+        <div id="CUR-ZhBlohjZ" class="panel-body p-t-15">
+          <div id="CUR-cKDDIEkW" class="form-group">
+            <label id="CUR-hkpftJCW">VAT/GST/Sales Tax No. <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                            tooltip-template="The code or identifier that will be displayed on any self billing invoice."></i></label>
+            <input id="CUR-MuenDpiw" type="text" class="form-control" ng-model="payee.vatNo" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-gUbAjiWk" class="form-group" ng-if="features && features.selfBilling">
+            <label id="CUR-pYfGaJtk">Tax Wording <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                  tooltip-template="What wording should the sales tax take, such as VAT, GST, Sales Tax, etc. Displays on the self billing invoice"></i></label>
+            <input id="CUR-qMPSYmVs" type="text" class="form-control" ng-model="payee.selfBillingTaxText" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-mKUgNqTD" class="form-group" ng-if="features && features.selfBilling">
+            <label id="CUR-fSvlZOZe">Self Billing Tax Rate <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                            tooltip-template="The rate at which tax will be added to this payee's Self Billing Invoice."></i></label>
+            <input id="CUR-viqCfpXo" type="number" class="form-control" ng-model="payee.selfBillingTaxRate" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-dcWyggOy" class="form-group" ng-if="features && features.withholdingTax">
+            <label id="CUR-PkwbRAub">Withholding Tax Wording <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                            tooltip-template="What wording should be used for Withholding Tax on statements and self billing invoice?"></i></label>
+            <input id="CUR-uEYmidLa" type="text" class="form-control" ng-model="payee.withholdingTaxWording" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-RcBvoRlP" class="form-group" ng-if="features && features.withholdingTax">
+            <label id="CUR-bdhCirHy">Withholding Tax Rate <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                            tooltip-template="Should any withholding tax be taken against this payee?"></i></label>
+            <input id="CUR-vhAOhxOf" type="number" class="form-control" ng-model="payee.withholdingTaxRate" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-bCqMmuDF" class="form-group" ng-if="features && features.selfBilling">
+            <label id="CUR-NlBjNEOf">Fees Invoice Tax Rate <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                            tooltip-template="The rate at which tax to your distribution fees."></i></label>
+            <input id="CUR-QiMJZhFy" type="number" class="form-control" ng-model="payee.feesInvoiceTaxRate" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+        </div>
+      </div>
+      <div id="CUR-tDCnvhRD" class="panel panel-default">
+        <div id="CUR-clCgVWrs" class="panel-heading">
+          <div id="CUR-CzvuAESR" class="panel-title">
+            Notes
+          </div>
+        </div>
+        <div id="CUR-cFVEEeVv" class="panel-body p-t-15">
+          <div id="CUR-aOdlBPEr" class="form-group">
+            <textarea class="form-control standard-textarea" ng-model="payee.notes" ng-disabled="rights.contracts != 'Edit'"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payee Balances -->
+    <div id="CUR-MvKiahSI" class="col-xs-12 col-sm-6" ng-show="features.payeeBalances">
+      <div id="CUR-tNtPJcYY" class="panel panel-default">
+        <div id="CUR-ntcHZlPt" class="panel-heading">
+          <div id="CUR-pjwNXtFv" class="panel-title">
+            Payee Balances
+          </div>
+        </div>
+        <div id="CUR-wVrIeWiM" class="panel-body p-t-15">
+          <div id="CUR-lwpgxvxV" class="form-group required">
+            <label id="CUR-SLbbXXpa">Min Payout</label>
+            <input id="CUR-MnQDkMSC" type="text" class="form-control" ng-model="payee.minPayout" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-isvSrjLA" class="form-group required">
+            <label 
+              id="CUR-tXdmkGHf" 
+              tooltips
+              tooltip-class="wider"
+              tooltip-template="All contract balances designated for transfer to the 
+              specified payee shall undergo conversion into the designated currency.">
+              Payee Currency
+            </label>
+            <ui-select ng-model="payee.payeeBalanceCurrency" ng-disabled="rights.contracts != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span ng-bind="$select.selected.code"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                <span ng-bind-html="currency.code"></span>
+                <span> &nbsp; - &nbsp; </span>
+                <span ng-bind-html="currency.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-xzwTmbnK" class="form-group" style="margin-top: 25px;" ng-if="clientType !== 'Distributor'">
+            <input id="CUR-NbVBVKni" type="checkbox" value="1" ng-model="payee.selfBilling" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-uWfbINAj">Generate Self Billing Invoice <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Creates a Self Billing Invoice delivered as part of the statement"></i></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-MvKiahSI" class="col-xs-12 col-sm-6" ng-show="features.payeeBalances">
+      <div id="CUR-tNtPJcYY" class="panel panel-default">
+        <div id="CUR-ntcHZlPt" class="panel-heading">
+          <div id="CUR-pjwNXtFv" class="panel-title">
+            Auto Payment
+          </div>
+        </div>
+        <div id="CUR-wVrIeWiM" class="panel-body p-t-15">
+          <div id="CUR-yVbLhETb" class="form-group">
+            <input id="CUR-XTiyvqea" type="checkbox" value="1" ng-model="payee.autoPayment" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-cBpyNKHy">Generate Auto Payment <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Automatically creates transaction if balance is over Min Payout. Auto Payment is required if creating a self billing invoice."></i></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-JcDthJBb" ng-if="clientAdminUser">
+      <!-- START: Payment Details -->
+      <div id="CUR-lZTAhFwefw" class="col-xs-12 col-sm-6" ng-if="paymentProvider == 'Curve Pay' && features && features.payments">
+        <div id="CUR-ryjBNhds" class="panel panel-default">
+          <div id="CUR-UZMwnh2er2" class="panel-heading">
+            <div id="CUR-wRQHSefds" class="panel-title">
+              Payment Details
+            </div>
+          </div>
+          <div id="CUR-HYtHsdfsd" class="panel-body p-t-15">
+            <div id="CUR-jAzLHyewrwe">
+              <iframe ng-if="curvePayiFrameUrl" ng-src="{{curvePayiFrameUrl}}" frameborder="0" style="width: 100%; height: 1600px"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-lZTAhFxU" class="col-xs-12 col-sm-6" ng-if="paymentProvider == 'Tipalti' && features && features.payments">
+        <div id="CUR-ryjBNhRf" class="panel panel-default">
+          <div id="CUR-UZMwnhjm" class="panel-heading">
+            <div id="CUR-wRQHSekb" class="panel-title">
+              Payment Details
+            </div>
+          </div>
+          <div id="CUR-HYtHzcWQ" class="panel-body p-t-15">
+            <div id="CUR-vxtcuVww" class="form-group required" ng-if="tipaltiCrossPayeeDetails">
+              <label id="CUR-BNzAPtJJ">Tipalti Payee ID
+                <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The Tipalti ID is used to associate your Payee in Curve with the Payee in Tipalti. This defaults to the Curve ID, but if you have Payees previously set up in Tipalti, you can enter that here."></i>
+              </label>
+              <input id="CUR-BDfZmCTD" type="text" class="form-control" ng-model="payee.paymentProviders.tipalti.payeeId" ng-disabled="rights.contracts != 'Edit'">
+            </div>
+            <div id="CUR-jAzLHycH">
+              <iframe ng-if="tipaltiIframeUrl" ng-src="{{tipaltiIframeUrl}}" frameborder="0" style="width: 100%; height: 1600px"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-lHFVutfL" class="col-xs-12 col-sm-6" ng-if="paymentProvider == 'Wise' && features && features.payments">
+        <div id="CUR-rOUmAFbx" class="panel panel-default">
+          <div id="CUR-bZYKAjvM" class="panel-heading">
+            <div id="CUR-jNNoFqIt" class="panel-title">
+              Payment Details
+            </div>
+          </div>
+          <div id="CUR-HsXDzkvN" class="panel-body p-t-15">
+            <div id="CUR-OyDQtNRe" class="form-group required" ng-if="payee.paymentProviders && payee.paymentProviders.wise && !createWiseRecipientMode">
+                <label>Select a Payee from Wise</label>
+                <ui-select id="CUR-OyDQXXde" class="m-b-10" ng-model="payee.paymentProviders.wise.recipientId" ng-disabled="rights.contracts != 'Edit'" on-select="onWiseRecipientSelect($item)">
+                  <ui-select-match allow-clear="false">
+                    {{$select.selected.name}} ({{$select.selected.currency}})
+                  </ui-select-match>
+                  <ui-select-choices
+                          repeat="recipient.id as recipient in wiseRecipients | orderBy: 'name' | filter: $select.search">
+                      <span id="CUR-kwzmHHUF" ng-bind-html="recipient.name"></span>&nbsp; (<span id="CUR-zGhADaGb" ng-bind-html="recipient.currency"></span>)
+                  </ui-select-choices>
+                </ui-select>
+                <button ng-if="!createWiseRecipientMode" id="CUR-dJtpHGdsQ" class="btn btn-complete m-t-20" ng-click="enterCreateWiseRecipientMode()">
+                  <i class="fa fa-plus"></i> Create Payee in Wise</button>
+            </div>
+            <div id="CUR-LSuFqEZC" ng-if="payee.paymentProviders && payee.paymentProviders.wise && createWiseRecipientMode">
+              <div id="CUR-OyDQLKde" class="form-group required">
+                <label id="CUR-RMWZFxSL" class="m-t-20">Payment Currency</label>
+                <ui-select ng-model="payee.paymentCurrency" ng-disabled="rights.contracts != 'Edit'">
+                  <ui-select-match allow-clear="false">
+                      <span id="CUR-siUhiDkq" ng-bind="$select.selected.code"></span>
+                  </ui-select-match>
+                  <ui-select-choices
+                          repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                      <span id="CUR-cuDsgVmE" ng-bind-html="currency.code"></span>
+                      <span id="CUR-cheuETlX"> &nbsp; - &nbsp; </span>
+                      <span id="CUR-nieNIlfR" ng-bind-html="currency.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-iPlkVRVL" class="form-group required">
+                <label id="CUR-mbIRpuEY">Payment Method</label>
+                <p id="CUR-PqGhsHps" ng-if="!paymentRequirements || !paymentRequirements.length">This currency is currently not supported by Wise. Please choose a different currency or contact the support team.</p>
+                <div id="CUR-pEWAlODx" ng-if="paymentRequirements && paymentRequirements.length">
+                  <ui-select class="m-b-10" ng-model="payee.paymentProviders.wise.paymentMethod" ng-disabled="rights.contracts != 'Edit'">
+                    <ui-select-match allow-clear="false">
+                        <span id="CUR-QHvDNvkV" ng-bind="$select.selected.title"></span>
+                    </ui-select-match>
+                    <ui-select-choices
+                            repeat="method.type as method in paymentRequirements | orderBy: 'title' | filter: $select.search">
+                        <span id="CUR-RNOARqAv" ng-bind-html="method.title"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                  <small ng-if="payee.paymentProviders.wise.paymentMethodRequirements && payee.paymentProviders.wise.paymentMethodRequirements.usageInfo"><b>{{payee.paymentProviders.wise.paymentMethodRequirements.usageInfo}}</b></small>
+                  <div id="CUR-nxBNHhEY" class="m-t-20" ng-if="payee.paymentProviders.wise.paymentMethodRequirements && payee.paymentProviders.wise.paymentMethodRequirements.fields">
+                    <div id="CUR-dWcEsBdb" ng-repeat="field in payee.paymentProviders.wise.paymentMethodRequirements.fields track by $index">
+                      <div id="CUR-lFDehgTU" ng-if="field.group" ng-repeat="groupField in field.group track by $index">
+                        <div id="CUR-rAsSayqn" class="form-group" ng-if="groupField.key !== 'address.state' || (groupField.key === 'address.state' && payee.paymentProviders.wise.paymentFields['address.country'] === 'US') || (groupField.key === 'address.state' && payee.paymentProviders.wise.paymentFields['address.country'] === 'CA')">
+                          <label id="CUR-LRZDdmln">{{groupField.name}}
+                            <i ng-if="groupField.type == 'text' && groupField.example" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Example: {{groupField.example}}"></i>
+                          </label>
+                          <input id="CUR-bkQidsCi" ng-if="groupField.type == 'text'" type="text" class="form-control" ng-model="payee.paymentProviders.wise.paymentFields[groupField.key]">
+                          <ui-select ng-if="groupField.type == 'select' || groupField.type == 'radio'" ng-model="payee.paymentProviders.wise.paymentFields[groupField.key]" ng-disabled="rights.contracts != 'Edit'">
+                            <ui-select-match allow-clear="false">
+                                <span id="CUR-jRgnWYsU" ng-bind="$select.selected.name"></span>
+                            </ui-select-match>
+                            <ui-select-choices
+                                    repeat="option.key as option in groupField.valuesAllowed | orderBy: 'title' | filter: $select.search track by $index ">
+                                <span id="CUR-hgogIuQD" ng-bind-html="option.name"></span>
+                            </ui-select-choices>
+                          </ui-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="CUR-iPlkVRVL" class="form-group required text-right">
+                <button ng-if="createWiseRecipientMode" id="CUR-dJtdswGdQQ" class="btn btn-danger m-r-10 m-t-20" ng-click="clearWiseRecipientDetails()">
+                  <i class="fa fa-times"></i> Cancel</button>
+                <button ng-if="createWiseRecipientMode" id="CUR-dJtdswGdQQ" class="btn btn-complete m-t-20" ng-click="createWiseRecipient()">
+                  <i class="fa fa-check"></i> Create</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-MvKiahSI" class="col-xs-12 col-sm-6" ng-if="(paymentProvider === 'Standard CSV' || !paymentProvider || !features || !features.payments) && clientAdminUser">
+        <div id="CUR-tNtPJcYY" class="panel panel-default">
+          <div id="CUR-ntcHZlPt" class="panel-heading">
+            <div id="CUR-pjwNXtFv" class="panel-title">
+              Payment Details
+            </div>
+          </div>
+          <div id="CUR-wVrIeWiM" class="panel-body p-t-15">
+            <div id="CUR-lwpgxvxV" class="form-group required">
+              <label id="CUR-SLbbXXpa">Payment Email</label>
+              <input id="CUR-MnQDkMSC" type="text" class="form-control" ng-model="payee.paymentEmail" ng-disabled="rights.contracts != 'Edit'">
+            </div>
+            <div id="CUR-LGVopfOj" class="form-group required">
+              <label id="CUR-dPzHiybT">Payment Currency</label>
+              <ui-select ng-model="payee.paymentCurrency" ng-disabled="rights.contracts != 'Edit'">
+                <ui-select-match allow-clear="false">
+                    <span id="CUR-hVVpjLxy" ng-bind="$select.selected.code"></span>
+                </ui-select-match>
+                <ui-select-choices
+                        repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                    <span id="CUR-qnidqazH" ng-bind-html="currency.code"></span>
+                    <span id="CUR-hKtsGkio"> &nbsp; - &nbsp; </span>
+                    <span id="CUR-oBZtjuSV" ng-bind-html="currency.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-rjUSsacX" class="form-group">
+              <label id="CUR-LSyYPIXD">Bank Name</label>
+              <input id="CUR-yyhcuPTu" type="text" class="form-control" ng-model="payee.bankName" ng-disabled="rights.contracts != 'Edit'">
+            </div>
+            <div id="CUR-fjfsuHQg" class="form-group">
+              <label id="CUR-odOoZFVb">Bank Address</label>
+              <textarea class="form-control standard-textarea" ng-model="payee.bankAddress" ng-disabled="rights.contracts != 'Edit'"></textarea>
+            </div>
+            <div id="CUR-nobrlHBn" class="form-group">
+              <label id="CUR-yqqVbEKh">Account No.</label>
+              <input id="CUR-xJpyMOcS" type="text" class="form-control" ng-model="payee.accountNo" ng-disabled="rights.contracts != 'Edit'">
+            </div>
+            <div id="CUR-YPdDQZIp" class="form-group">
+              <label id="CUR-GwJPYeUh">Sort Code</label>
+              <input id="CUR-XVRkUxZq" type="text" class="form-control" ng-model="payee.sortCode" ng-disabled="rights.contracts != 'Edit'">
+            </div>
+            <div id="CUR-Nnuemctn" class="form-group">
+              <label id="CUR-vdSMXWec">IBAN</label>
+              <input id="CUR-xbtHjbhy" type="text" class="form-control" ng-model="payee.iban" ng-disabled="rights.contracts != 'Edit'">
+            </div>
+            <div id="CUR-sKqdFWYU" class="form-group required">
+              <label id="CUR-wiWOrKlO">Swift Code</label>
+              <input id="CUR-RVHhAHbs" type="text" class="form-control" ng-model="payee.swiftCode" ng-disabled="rights.contracts != 'Edit'">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END: Payment Details -->
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="transactions-tab.html">
+  <div id="CUR-xaMyRDjj" class="row">
+    <div id="CUR-siTgIyAC" class="col-xs-12">
+      <div id="CUR-nDXQEeQR" class="panel panel-default">
+        <div id="CUR-XyEJVIGP" class="panel-heading">
+          <div id="CUR-HQyliBvP" class="panel-title">
+            Transactions
+          </div>
+        </div>
+        <div id="CUR-jryUYaUf" class="panel-body">
+          <div id="CUR-AQbVtRXm" class="row">
+            <div id="CUR-pkFQzyKc" class="col-xs-12 text-right two-cols-row">
+              <a id="CUR-bMVuVPHT" ng-click="openTransactionModal()" ng-show="rights.contracts == 'Edit'" class="btn btn-complete"><i class="fa fa-plus"></i>&nbsp;Create</a>
+            </div>
+          </div>
+          <div id="CUR-WbvwoGDm" class="row">
+            <div id="CUR-sDYXbohL" class="col-xs-12">
+              <div id="CUR-hExYGJjT" class="table-responsive">
+                <table id="CUR-ilFEDiYz" class="table table-hover table-condensed dataTable no-footer">
+                  <thead>
+                  <tr id="CUR-vvdmeKcQ">
+                    <th class="col-xs-3 col-sm-2">Date</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Invoice No.</th>
+                    <th class="col-xs-2">Amount</th>
+                    <th class="col-xs-2">Balance</th>
+                    <th class="col-xs-2">Published
+                      <i 
+                        class="fa fa-question-circle"
+                        style="margin-top:50px;"
+                        tooltips 
+                        tooltip-class="even-wider"
+                        tooltip-side="left"
+                        tooltip-template="This shows transaction visibility to the <strong>Payee User</strong>: Manual transactions auto-publish, while period transactions appear upon statement release.">
+                      </i>
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody id="CUR-bkzhmXhY">
+                    <tr id="CUR-vqhIatRK">
+                      <td id="CUR-svXgjvdB" class="v-align-middle"></td>
+                      <td id="CUR-EgkbDskX" class="v-align-middle"><a ng-click="updateOpeningBalance()">Opening Balance</a></td>
+                      <td id="CUR-CAZMIJHz" class="v-align-middle"></td>
+                      <td id="CUR-lTmvhmvq" class="v-align-middle"></td>
+                      <td id="CUR-lTmvhmvq" class="v-align-middle"></td>
+                      <td id="CUR-vLUZhMTX" class="v-align-middle">{{ payee.openingBalance | number: 2 }}</td>
+                      <td id="CUR-lTmvhmvq" class="v-align-middle"></td>
+                    </tr>
+                    <tr ng-repeat="transaction in transactions" >
+                      <td class="v-align-middle">{{ transaction.date | date : dateFormat : 'UTC' }}</td>
+                      <td class="v-align-middle" ng-if="transaction.userCreated"><a ng-click="openTransactionModal(transaction)">{{ transaction.name }}</a></td>
+                      <td class="v-align-middle" ng-if="!transaction.userCreated">{{ transaction.name }}</td>
+                      <td class="v-align-middle">
+                        <span ng-if="transaction.type === 'Period Transfer'" class="label label-success">Period</span>
+                        <span ng-if="transaction.type === 'Payment'" class="label label-warning">{{ transaction.type }}</span>
+                        <span ng-if="transaction.type === 'Royalties'" class="label label-success">{{ transaction.type }}</span>
+                        <span ng-if="transaction.type === 'Advance'" class="label label-info">{{ transaction.type }}</span>
+                        <span ng-if="transaction.type === 'Other'" class="label label-default">{{ transaction.type }}</span>
+                        <span ng-if="transaction.type === 'Tax'" class="label label-primary">{{ transaction.type }}</span>
+                      </td>
+                      <td class="v-align-middle">{{ transaction.invoiceNo }}</td>
+                      <td class="v-align-middle">
+                        <strong>{{ transaction.amountInPayeeCurrency | number: 2 }} {{ transaction.currency }}</strong></br>
+                        <span style="font-weight: 400; font-size: 11px;" ng-show="transaction.originalCurrency !== transaction.currency">
+                          {{ transaction.amountInOriginalCurrency | number: 2 }} {{transaction.originalCurrency}} @ {{ transaction.amountInPayeeCurrency / transaction.amountInOriginalCurrency | number: 2 }}
+                        </span>
+                      </td>
+                      <td class="v-align-middle">{{ transaction.balance | number: 2 }}</td>
+                      <td class="v-align-middle hidden-xs">
+                        <span class="label label-danger" tooltips tooltip-template="Unpublished - To publish transaction, publish the related statement {{transaction.statementId}}" ng-if="!transaction.published">U</span>
+                        <span class="label label-success" tooltips tooltip-template="Published" ng-if="transaction.published">P</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="statements-tab.html">
+  <div id="CUR-xaMyRDjj" class="row">
+    <div id="CUR-siTgIyAC" class="col-xs-12">
+      <div id="CUR-nDXQEeQR" class="panel panel-default">
+        <div id="CUR-XyEJVIGP" class="panel-heading">
+          <div id="CUR-HQyliBvP" class="panel-title">
+            Statements
+          </div>
+        </div>
+        <div id="CUR-jryUYaUf" class="panel-body">
+          <div id="CUR-WbvwoGDm" class="row">
+            <div id="CUR-sDYXbohL" class="col-xs-12">
+              <div id="CUR-hExYGJjT" class="table-responsive">
+                <table id="CUR-ilFEDiYz" class="table table-hover table-condensed dataTable no-footer">
+                  <thead>
+                  <tr id="CUR-vvdmeKcQ">
+                    <th class="col-xs-3 col-sm-2">Date</th>
+                    <th>Name</th>
+                    <th>Period</th>
+                    <th class="col-xs-2">Link</th>
+                    <th class="col-xs-2">Published</th>
+                  </tr>
+                  </thead>
+                  <tbody id="CUR-bkzhmXhY">
+                    <tr ng-repeat="statement in statements" >
+                      <td class="v-align-middle">{{ statement.date | date : dateFormat : 'UTC' }}</td>
+                      <td class="v-align-middle">{{ statement.name }}</td>
+                      <td class="v-align-middle">
+                        <a href="{{statement.periodLink}}">{{ statement.periodName }}</a>
+                      </td>
+                      <td class="v-align-middle">
+                        <a href="{{ statement.publicLink }}"><i class="fa fa-download"></i></a>
+                      </td>
+                      <td class="v-align-middle hidden-xs">
+                        <span class="label label-danger" ng-if="statement.status =='Pending'">U</span>
+                        <span class="label label-success" ng-if="statement.status =='Published'">P</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="users-tab.html">
+  <div id="CUR-xaMyRDjj" class="row">
+    <div id="CUR-siTgIyAC" class="col-xs-12">
+      <div id="CUR-nDXQEeQR" class="panel panel-default">
+        <div id="CUR-XyEJVIGP" class="panel-heading">
+          <div id="CUR-HQyliBvP" class="panel-title">
+            Users
+          </div>
+        </div>
+        <div id="CUR-iSLLhYjj" class="panel-body">
+          <div id="CUR-GGNrMBfI" class="table-responsive">
+            <table id="CUR-sGllBdih" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+              <tr id="CUR-PlyNFvhJ">
+                <th ng-click="getSortedDataUsers('email')" ng-class="whatClassIsItUsers('email')">Email</th>
+                <th ng-click="getSortedDataUsers('createdAt')" ng-class="whatClassIsItUsers('createdAt')">Created</th>
+                <th ng-click="getSortedDataUsers('status')" ng-class="whatClassIsItUsers('status')">Status</th>
+              </tr>
+              </thead>
+              <tbody id="CUR-elmhDuWV" ng-init="noCheckboxes=true">
+              <tr id="CUR-mkYnqmME" payees-table-row ng-repeat="user in users" user="user"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-yjXestBQ" class="col-sm-12">
+    <div id="CUR-JpByslGZ" class="pull-right">
+      <span id="CUR-LNYjxHuS" class="inline-block" ng-if="!isShowingAllUsers">Showing 25 Per Page  |</span>
+      <a id="CUR-tkPcREVg" class="p-l-5" ng-if="!isShowingAllUsers" ng-click="showAllUsers()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-iFTmbdMo" ng-if="!isShowingAllUsers" class="row">
+    <div id="CUR-CRHKqaCc" class="col-xs-12 text-center">
+      <pagination id="CUR-OTcFilNA" pages="pagesUsers" total="totalPagesUsers" current="currentPageUsers" change-page="changePageUsers(page)"></pagination>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="contracts-tab.html">
+  <div id="CUR-xqVbfAle" class="row">
+    <div id="CUR-EEzglgOv" class="col-xs-12">
+      <div id="CUR-SoIvkDZE" class="panel panel-default">
+        <div id="CUR-ifEKnlBt" class="panel-heading">
+          <div id="CUR-pXYxwnnZ" class="panel-title">
+            Contracts
+          </div>
+        </div>
+        <div id="CUR-PZNkMDTd" class="panel-body">
+          <div id="CUR-ylfUWIRk" class="table-responsive">
+            <table id="CUR-ieSLtSMZ" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+              <tr id="CUR-sxCPnfpL">
+                <th ng-click="getSortedDataContracts('name')" ng-class="whatClassIsItContracts('name')">Name</th>
+                <th ng-click="getSortedDataContracts('type')" ng-class="whatClassIsItContracts('type')">Type</th>
+                <th ng-click="getSortedDataContracts('categories')" ng-class="whatClassIsItContracts('categories')">Categories</th>
+                <th ng-show="features.payeeBalances">Share %</th>
+                <th ng-click="getSortedDataContracts('createdAt')" ng-class="whatClassIsItContracts('createdAt')">Created</th>
+                <th ng-class="whatClassIsItContracts('status')">Valid</th>
+              </tr>
+              </thead>
+              <tbody id="CUR-lIbPVdwO" ng-init="noCheckboxes=true">
+                <tr id="CUR-JgoNXoHM" contract-table-row ng-repeat="contract in contracts" contract="contract" no-checkboxes="true" payee-id="payee._id" show-payee-share="features.payeeBalances"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-uLfCXELU" class="col-sm-12">
+    <div id="CUR-bcJSwGtB" class="pull-right">
+      <span id="CUR-LtbhAice" class="inline-block" ng-if="!isShowingAllContracts">Showing 25 Per Page  |</span>
+      <a id="CUR-WWDmuSAk" class="p-l-5" ng-if="!isShowingAllContracts" ng-click="showAllContracts()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-LwxuCNIE" ng-if="!isShowingAllContracts" class="row">
+    <div id="CUR-OhZFgzVn" class="col-xs-12 text-center">
+      <pagination id="CUR-RAMSGgyd" pages="pagesContracts" total="totalPagesContracts" current="currentPageContracts" change-page="changePageContracts(page)"></pagination>
+    </div>
+  </div>
+</script>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-UqLrFwPO" class="modal-dialog">
+    <div id="CUR-KccMBFTd" class="modal-content">
+      <div id="CUR-gFLDCtUs" class="modal-header clearfix text-left">
+        <button id="CUR-XjjPNELZ" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-LDFmfOmp">Delete Payee</h5>
+      </div>
+      <div id="CUR-kQuGixXE" class="modal-body">
+        <div id="CUR-YLYJEXnA" class="row">
+          <div id="CUR-ZDUIBzzQ" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this payee? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-yXWNUYdN" class="row">
+          <div id="CUR-OrrGncEX" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-GlIEbmwZ" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-vGcbzDYC" type="button" class="btn btn-danger m-t-5" ng-click="delete()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createTransactionModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-ZYbPpzvO" class="modal-dialog" style="margin: 0 auto; margin-top: 6% !important;">
+    <div id="CUR-hrjaasoH" class="modal-content">
+      <div id="CUR-UaFGXTbr" class="modal-header clearfix text-left">
+        <button id="CUR-iIgkdOdE" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+            class="pg-close fs-14"></i>
+        </button>
+      </div>
+      <div id="CUR-VVeZxWMS" class="modal-body">
+        <div id="CUR-tNzAAkoc" class="container-fluid container-fixed-lg sm-p-l-8 sm-p-r-8">
+
+          <div id="CUR-yIruIKfN" ng-if="transactionValidation()" class="alert alert-warning" style="width: 500px">
+            <p><b>The following validation errors occurred -</b></p>
+            <ul id="CUR-ZReLGKqC">
+              <li id="CUR-zaUevyIH" ng-if="transaction.type === 'Payment'">
+                Payments should be negative, unless you are adjusting a previous payment amount.
+              </li>
+              <li id="CUR-qLNbFxQr" ng-if="transaction.type === 'Advance'">
+                Advances should be negative, unless you are adjusting a previous advance amount.
+              </li>
+              <li id="CUR-TmVzuayL" ng-if="transaction.type === 'Royalties'">
+                Royalties should be positive, unless you are adjusting a previous royalty amount.
+              </li>
+            </ul>
+          </div>
+          <div id="CUR-PuTcPbax" class="row">
+            <div id="CUR-NdWqZCnj" class="panel" style="width: 520px">
+              <div id="CUR-ifEKnlBt" class="panel-heading">
+                <div id="CUR-pXYxwnnZ" class="panel-title">
+                  {{ transaction._id ? 'Edit' : 'Create' }} Transaction
+                </div>
+              </div>
+              <div id="CUR-tfomwaoG" class="panel-body p-t-15">
+                <div id="CUR-ePdNSnNu" class="form-group required">
+                  <label id="CUR-MjZbazYV">ID</label>
+                  <input id="CUR-rOAQPZdZ" type="text" class="form-control" ng-model="transaction._id"
+                    ng-disabled="true">
+                </div>
+                <div id="CUR-ePdNSnNu" class="form-group required">
+                  <label id="CUR-MjZbazYV">Name</label>
+                  <input id="CUR-rOAQPZdZ" type="text" class="form-control" ng-model="transaction.name"
+                    ng-disabled="rights.contracts != 'Edit'">
+                </div>
+                <div id="CUR-WOpFYorN" class="form-group required">
+                  <label id="CUR-GusUoHcQ">Type</label>
+                  <ui-select ng-model="transaction.type" ng-disabled="rights.contracts != 'Edit'">
+                    <ui-select-match allow-clear="true">
+                      <span id="CUR-mwrMNWRE" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item in (transactionTypes | filter: $select.search)">
+                      <span id="CUR-JzKQgTvT" ng-bind="item"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+                <div id="CUR-CaOAwyrD" class="form-group required">
+                  <label id="CUR-HzudwDuc">Date</label>
+                  <div id="datepicker-component" class="form-group input-group date">
+                    <input id="CUR-PXQpTyqN" type="text" class="form-control" ng-model="transaction.date"
+                      uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}" is-open="datePopup"
+                      ng-click="openDatePopup()" ng-disabled="rights.contracts != 'Edit'">
+                    <span id="CUR-cUGrDDiO" class="input-group-addon" ng-click="openDatePopup()">
+                      <i class="fa fa-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+                <div id="CUR-xfPKSGWa" class="form-group required">
+                  <label id="CUR-kZbCPCrq">Amount</label>
+                  <input id="CUR-ArcmuGxY" type="number" class="form-control"
+                    ng-model="transaction.amountInPayeeCurrency" ng-disabled="rights.contracts != 'Edit'">
+                </div>
+                <div id="CUR-xfPKSGWa" class="form-group required">
+                  <label id="CUR-kZbCPCrq">Invoice No.</label>
+                  <input id="CUR-ArcmuGxY" type="text" class="form-control" ng-model="transaction.invoiceNo"
+                    ng-disabled="rights.contracts != 'Edit'">
+                </div>
+                <div id="CUR-xfPKSGWa" class="form-group required">
+                  <label id="CUR-kZbCPCrq">Description</label>
+                  <textarea class="form-control standard-textarea" ng-model="transaction.description"
+                    ng-disabled="rights.contracts != 'Edit'"></textarea>
+                </div>
+              </div>
+              <div id="CUR-OZTjozWu" class="col-xs-8 text-right two-cols-row">
+                <button id="CUR-ExznbBfG" ng-show="rights.contracts == 'Edit' && transaction._id" class="btn btn-danger"
+                  ng-click="deleteTransaction(transaction)"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+                <button id="CUR-XFFhEaMr" ng-show="rights.contracts == 'Edit'" class="btn btn-complete pull-right"
+                  ng-click="saveTransaction()"><i class="fa fa-check"></i>&nbsp;Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="updateOpeningBalancePayeeModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header clearfix text-left">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5>Edit Opening Balance</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <p>Are you sure you want to change the Opening Balance of this Payee? If a statement has already been
+              created for this Payee, the Opening Balance will no longer be in line with that on the produced statement.
+              Please only change the Opening Balance if it is your intention to reprocess the Statement(s) of this
+              Payee.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-11 m-t-20">
+            <div class="form-group">
+              <label for="">Opening Balance</label>
+              <input class="form-control" ng-model="openingBalance" ng-trim="false">
+            </div>
+          </div>
+          <div ng-show="showValidation" class="col-xs-1 m-t-25 p-l-5">
+            <p class="fa fa-check text-success"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 m-t-20 text-right">
+            <button type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-complete m-t-5" ng-click="save()"><i
+                class="fa fa-check"></i>&nbsp;Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<model-history data="payee.modelHistory"></model-history>

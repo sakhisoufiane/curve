@@ -1,0 +1,62 @@
+name: Deploy Curve App to ECR
+
+env:
+  AWS_REGION: eu-west-1
+
+on: workflow_call
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'main' # temporary: remove this condition when other environments are ready
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set environment based on branch
+        id: set-env
+        run: |
+          case "${{ github.ref_name }}" in
+            main) environment="release"; region="${{ env.AWS_REGION }}"; repo="${{ vars.RELEASE_CURVE_APP_ECR }}" ;; # temporary: uncomment other branches below when ready
+            # main) environment="production"; region="${{ env.AWS_REGION }}"; repo="${{ vars.CURVE_APP_ECR }}" ;;
+            # beta) environment="beta";       region="${{ vars.BETA_REGION }}"; repo="${{ vars.BETA_CURVE_APP_ECR }}" ;;
+            # *)    environment="development"; region="${{ env.AWS_REGION }}"; repo="${{ vars.DEVELOP_CURVE_APP_ECR }}" ;;
+          esac
+          echo "environment=$environment" >> $GITHUB_OUTPUT
+          echo "region=$region" >> $GITHUB_OUTPUT
+          echo "repository=$repo" >> $GITHUB_OUTPUT
+
+      - name: Log deployment environment
+        run: |
+          echo "Deploying to environment: ${{ steps.set-env.outputs.environment }} -> ${{ steps.set-env.outputs.repository }}"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::238239381222:role/GithubEcrPushRole-frontend
+          aws-region: ${{ steps.set-env.outputs.region }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push Docker image to ECR
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./apps/curve-app/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ steps.set-env.outputs.repository }}:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ steps.set-env.outputs.repository }}:latest
+          build-args: |
+            NPM_TOKEN=${{ secrets.NPM_PUBLISH_TOKEN }}
+            VITE_API_URL=${{ vars.VITE_API_URL }}
+            VITE_APPLICATION_TOKEN=${{ secrets.VITE_APPLICATION_TOKEN }}

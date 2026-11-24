@@ -1,0 +1,327 @@
+<div id="CUR-dSDEVcWV" class="jumbotron" data-pages="parallax">
+  <div id="CUR-OPziwTLs" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-aeXIOpWP" class="inner">
+      <ul id="CUR-xfjTboaR" class="breadcrumb">
+        <li id="CUR-kCSmYKJY">
+          <a id="CUR-emfdbood" href="/#/iswcDeliveries">ISWC Acknowledgements</a>
+        </li>
+        <li id="CUR-ZrPQOGxd" ng-show="!iswcAcknowledgement._id">
+          <a id="CUR-GqHducWu" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-JCdVxRvn" ng-show="iswcAcknowledgement._id">
+          <a id="CUR-GYTzGJPu" href="/#/iswcAcknowledgements/{{iswcAcknowledgement._id}}/edit" class="active">{{iswcAcknowledgement.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-NrAAawsw" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-noWorksInDeliveryRow" class="row" ng-if="delivery._id && !associatedWorks.length">
+    <div id="CUR-noWorksInDeliveryCol" class="col-xs-10">
+      <div id="CUR-noWorksInDeliveryMessage" class="alert alert-warning" role="alert" style="display: inline;">There are no Works in this Delivery - please check the  filters you have applied. Remember, Works on Hold or Ready for Approval do not get picked up by any Delivery filters</div>
+    </div>
+  </div>
+  <div id="CUR-temXvjTO" class="row">
+    <div id="CUR-nlFcYgLe" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-wmnDPimP" ng-if="iswcAcknowledgement._id" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
+        ng-show="rights.catalogue == 'Edit'"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+    </div>
+  </div>
+  <div id="CUR-tzDcTgiA" class="row">
+    <div id="CUR-BSJCaVpW" class="col-sm-6">
+      <div id="CUR-adPxEeeK" class="panel panel-default">
+        <div id="CUR-JaCgSTVJ" class="panel-heading">
+          <div id="CUR-JzTasRSm" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-zFyRhAEK" class="panel-body p-t-15">
+          <div id="CUR-iDKRsTHJ" class="form-group required">
+            <label id="CUR-lcQVHJlD">Name</label>
+            <input id="CUR-npGmlHCl" type="text" class="form-control" ng-model="iswcAcknowledgement.fileName" disabled>
+          </div>
+          <div id="CUR-ITzxfgii" class="form-group required">
+            <label id="CUR-vLRfgbta">Delivery Partner</label>
+            <input id="CUR-HFdnfltD" type="text" class="form-control" ng-model="selectedDeliveryPartner.name" disabled>
+          </div>
+          <div id="CUR-deliveryPartnerType" class="form-group required">
+            <label id="CUR-deliveryPartnerTypeLabel">Delivery Type</label>
+            <input id="CUR-deliveryPartnerTypeInput" type="text" class="form-control" ng-model="iswcAcknowledgement.outputFormat" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-kTAwumni" class="col-xs-12 col-md-6">
+      <div id="CUR-oixrGCTZ" class="panel panel-default">
+        <div id="CUR-ppWNQEbL" class="panel-heading">
+          <div id="CUR-dETNzPXX" class="panel-title">
+            ISWC Acknowledgement File
+          </div>
+        </div>
+        <div id="CUR-YfVnBNDD" class="panel-body p-t-15">
+          <a id="CUR-CZtPrvBa" href="{{iswcAcknowledgement.publicLink}}" target="_blank">{{iswcAcknowledgement.fileName}}</a>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-iswc-ack-status-div" class="col-xs-12 col-md-6">
+      <div id="CUR-iswc-ack-status-div-panel-default" class="panel panel-default">
+        <div id="CUR-iswc-ack-status-div-panel-heading" class="panel-heading">
+          <div id="CUR-iswc-ack-status-div-panel-title" class="panel-title">
+            Status
+          </div>
+        </div>
+        <div id="CUR-iswc-ack-status-div-panel-body" class="panel-body p-t-15">
+          <div id="CUR-iswc-ack-status-div-panel-body-ackContainer-accepted" class="ackContainer">
+            <div id="CUR-iswc-ack-status-div-panel-body-accepted-txt" class="ackContainer-text-column all-caps">Complete</div>
+            <div id="CUR-iswc-ack-status-div-panel-body-accepted-circle" class="ackContainer-circle-column">
+              <div id="CUR-iswc-ack-status-div-panel-body-accepted-total" class="successCircle" style="margin-left: 10px" ng-style="{'width': '25px', 'height': '25px'}">{{formatNumber(iswcAcknowledgement.iswcComplete) || 0}}</div>
+            </div>
+          </div>
+          <div id="CUR-iswc-ack-status-div-panel-body-ackContainer-rejected" class="ackContainer">
+            <div id="CUR-iswc-ack-status-div-panel-body-rejected-txt" class="ackContainer-text-column all-caps">Rejected</div>
+            <div id="CUR-iswc-ack-status-div-panel-body-rejected-circle" class="ackContainer-circle-column">
+              <div id="CUR-iswc-ack-status-div-panel-body-rejected-total" class="dangerCircle" style="margin-left: 10px" ng-style="{'width': '25px', 'height': '25px'}">{{formatNumber(iswcAcknowledgement.iswcRejected) || 0}}</div>
+            </div>
+          </div>
+          <div id="CUR-iswc-ack-status-div-panel-body-ackContainer-other" class="ackContainer">
+            <div id="CUR-iswc-ack-status-div-panel-body-other-txt" class="ackContainer-text-column all-caps">Incomplete</div>
+            <div id="CUR-iswc-ack-status-div-panel-body-other-circle" class="ackContainer-circle-column">
+              <div id="CUR-iswc-ack-status-div-panel-body-other-total" class="disabledCircle" style="margin-left: 10px" ng-style="{'width': '25px', 'height': '25px'}">{{formatNumber(iswcAcknowledgement.iswcIncomplete) || 0}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-FpiVzUAP" class="row" ng-if="delivery.filterType === 'custom'">
+    <div id="CUR-OvEtPhFw" class="col-xs-12 col-sm-6">
+      <div id="CUR-oEoHYLVk" class="panel panel-default">
+        <div id="CUR-BVCozikE" class="panel-heading">
+          <div id="CUR-MnoXncMx" class="panel-title">
+            Delivery Profile
+          </div>
+        </div>
+        <div id="CUR-ujjTmcZE" class="panel panel-body">
+          <ui-select ng-model="delivery.deliveryProfileId" ng-change="deliveryProfileChange()" ng-disabled="rights.catalogue != 'Edit'">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-MQydvXlU" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices group-by="groupFind"
+              repeat="deliveryProfile._id as deliveryProfile in deliveryProfiles | filter: $select.search track by $index"
+              refresh="searchDeliveryProfiles($select)" refresh-delay="500">
+              <span id="CUR-XTxuGpvy" class="country" ng-bind="deliveryProfile.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <delivery-filter ng-if="!delivery.deliveryProfileId && delivery.filterType === 'custom' || !delivery.deliveryProfileId && delivery.additionalCustomFilters" edit="rights.catalogue != 'Edit'" filter="delivery.filter" filtertype="delivery.filterType" dateformat="dateFormat" count="filterCount"></delivery-filter>
+
+  <div id="CUR-nzPmHqSK" class="row">
+    <div id="CUR-bjkkGbyM" class="col-sm-12">
+      <h5 id="CUR-dxVwQgZX" class="pull-right">Total: {{total? total : 0}}</h5>
+    </div>
+    <div id="CUR-ThIMqRmO" class="col-xs-12">
+      <div id="CUR-mwYFIbDA" class="panel panel-default">
+        <div id="CUR-itYuUAYi" class="panel-heading">
+          <div id="CUR-iAxwSkHy" class="panel-title">
+            Works
+          </div>
+        </div>
+        <div id="CUR-QQhjSKYo" class="panel-body">
+          <div id="CUR-SXogdSRP" class="row">
+            <div id="CUR-MbUzfFeS" class="col-xs-10 text-right">
+              <button id="CUR-HvZiSsye" class="btn btn-default" ng-click="exportWorks()"><i class="fa fa-download"></i> Export</button>
+            </div>
+            <div id="CUR-LzkaoZol" class="form-group col-xs-12 col-sm-2">
+              <ui-select ng-model="filter.status" ng-disabled="edit" ng-change="updateFilter()">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-iswc-ack-filter-status-form-select" ng-bind="$select.selected"></span>
+                </ui-select-match>
+            
+                <ui-select-choices repeat="item in ['All', 'Complete', 'Rejected'] | filter: $select.search">
+                  <span id="CUR-iswc-ack-filter-status-form-item" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>            
+          </div>
+          <table id="CUR-cantFMKu" class="table table-hover dataTable no-footer" ng-class="{'table-selectable': selectable}">
+            <thead>
+              <tr id="CUR-DEyAzQoF">
+                <th ng-click="getSortedData('work.title')" ng-class="whatClassIsIt('work.title')">Title</th>
+                <th ng-click="getSortedData('work.composer')" ng-class="whatClassIsIt('composer')">Composers</th>
+                <th ng-click="getSortedData('work.identifier')" ng-class="whatClassIsIt('work.identifier')">Main Identifier</th>
+                <th ng-click="getSortedData('preferredIswc')" ng-class="whatClassIsIt('preferredIswc')">Returned ISWC</th>
+                <th ng-click="getSortedData('transactionStatus')" ng-class="whatClassIsIt('transactionStatus')">Status</th>
+              </tr>
+            </thead>
+            <tbody id="CUR-jwHjOrZn">
+              <tr id="CUR-AIMfEoxi" ng-repeat="deliveredWork in deliveredWorks">
+                <td id="CUR-jaGKPXOM"><a id="CUR-WBcrZdWy" href="/#/works/{{deliveredWork.workId}}/edit">
+                    {{deliveredWork.work[0].title}}
+                </a></td>
+                <td id="CUR-gDNqinQa">{{deliveredWork.work[0].composer}}</td>
+                <td id="CUR-KgsfxYAt">{{deliveredWork.work[0].identifier}}</td>
+                <td id="CUR-DqfCoMxJ">{{deliveredWork.preferredIswc}}</td>
+                <td id="CUR-JQOuOcZM">
+                  <span id="CUR-vNbBATgX" class="label label-sm label-green" ng-if="['FullyAccepted'].includes(deliveredWork.transactionStatus)">Complete</span>
+                  <span id="CUR-qfkTlpNY" class="label label-sm label-danger" ng-if="['Rejected'].includes(deliveredWork.transactionStatus)" tooltips tooltip-side="bottom" tooltip-template="Errored<br/><br/>{{deliveredWork.errorMessages.message}}">Rejected</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="CUR-OwddTzZU" class="row">
+            <div id="CUR-OKmZNeNz" class="col-xs-12 text-center">
+              <pagination id="CUR-BYqwTiHC" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)">
+              </pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-piWZiKZU" class="col-sm-12">
+      <div id="CUR-zApswDek" class="pull-right">
+        <span id="CUR-YatdnFUK" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page  |</span>
+        <span id="CUR-tqVrsyma" class="inline-block" ng-if="isShowingAll">Showing {{worksPagination.limit}} Per Page</span>
+        <a id="CUR-nhaTKDjC" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-WBNMquQd" class="row">
+    <div id="CUR-ImBwtdPX" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-OSwkXTEl" ng-show="delivery.updatedAt">Last Updated on {{ delivery.updatedAt | date : dateFormat : 'UTC' }}.</span> <a
+        href="javascript:;" ng-if="delivery._id" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-lKdTHtnx" class="modal-dialog">
+    <div id="CUR-bPUGXvTF" class="modal-content">
+      <div id="CUR-ObmCPaNr" class="modal-header clearfix text-left">
+        <button id="CUR-HyBIWIGO" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-DTCuitVW">Delete ISWC Acknowledgement</h5>
+      </div>
+      <div id="CUR-wSAbvIvl" class="modal-body">
+        <div id="CUR-zoXodAtC" class="row">
+          <div id="CUR-TIZbuWHC" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this ISWC acknowledgement? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-sRrKwLaV" class="row">
+          <div id="CUR-pwvEgrUO" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-POZnqsVv" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-bFjhKyfg" type="button" class="btn btn-danger m-t-5" ng-click="delete()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="exportModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-rgTWTchL" class="modal-dialog">
+    <div id="CUR-WFUWOegR" class="modal-content">
+      <div id="CUR-gunhrmzo" class="modal-header clearfix text-left">
+        <button id="CUR-jcHPtkCQ" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-yjhozhsj">Mark Works as Delivered?</h5>
+      </div>
+      <div id="CUR-NqjXYUzb" class="modal-body">
+        <div id="CUR-MDEbVyxZ" class="row">
+          <div id="CUR-vJpneLcG" class="col-xs-12 m-t-20">
+            <p>Please click Yes if you will send this file to your society or sub-publisher, as Curve will only process an Acknowledgement file when the Works have a Delivered status.</p>
+          </div>
+        </div>
+        <div id="CUR-vfnLZdWN" class="row">
+          <div id="CUR-BNbtWMID" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-DjJhifHu" type="button" class="btn btn-danger m-t-5" data-dismiss="modal" ng-click="export()">No</button>
+            <button id="CUR-xBwTRMru" type="button" class="btn btn-success-green m-t-5" data-dismiss="modal" ng-click="export(true)">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-nPSuZVab" class="modal-dialog">
+    <div id="CUR-GuvoEpbI" class="modal-content">
+      <div id="CUR-eRUiMzfO" class="modal-header clearfix text-left">
+        <button id="CUR-aEvSsLRS" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-fXnZZZXf">Import Acknowledgement</h5>
+      </div>
+      <div id="CUR-dJtIdiFa" class="modal-body">
+        <div id="CUR-XrtcIBkI" class="row">
+          <div id="CUR-OhorGSLF" class="col-xs-12 m-t-20">
+            <form id="CUR-tEiMTRfs">
+              <div id="CUR-YtilYirN" class="form-group">
+                <label id="CUR-jGhlzCNS" for="email">File</label>
+                <input id="CUR-njwTlskD" type="file" ng-model="importFile" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-DEyiaHUn" class="row" ng-if="importErrors">
+          <div id="CUR-rdrzqsjF" class="col-sm-12">
+            <ul id="CUR-GSwHlbIR">
+              <li id="CUR-RYzgUDjo" ng-repeat="error in importErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-nBskPmOg" class="row">
+          <div id="CUR-nVAdOLQz" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-VtDYrOwe" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-aIsjuVXh" type="button" class="btn btn-complete m-t-5" ng-click="import()"><i
+                class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="worksBulkModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-HSUWWXmv" class="modal-dialog">
+    <div id="CUR-Xzqjemtk" class="modal-content">
+      <div id="CUR-ZGPLyUCx" class="modal-header clearfix text-left">
+        <button id="CUR-olKAqjYT" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-ZzumGPpy">Include Specific Works</h5>
+      </div>
+      <div id="CUR-yODMhEXv" class="modal-body">
+        <div id="CUR-qPsioNEz" class="row">
+          <div id="CUR-zbsqeUrW" class="col-xs-12">
+            <small><b>Please ensure that there is only one ID per line.</b></small>
+          </div>
+        </div>
+        <div id="CUR-XmyLogFb" class="row">
+          <div id="CUR-diHPSmnQ" class="col-xs-12 m-t-20">
+            <form id="CUR-iPMHIKPU">
+              <div id="CUR-WawVoHTE" class="form-group">
+                <label id="CUR-kxpCsctK">Works IDs</label>
+                <textarea class="form-control standard-textarea" ng-model="bulkIncludeIds"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-BlsBRbfA" class="row">
+          <div id="CUR-TqFifiIV" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-wbpqWQTc" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-EfZwBAeT" type="button" class="btn btn-complete m-t-5" ng-click="includeBulkWorks()"><i
+                class="fa fa-plus"></i>&nbsp;Include</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<model-history data="delivery.modelHistory"></model-history>

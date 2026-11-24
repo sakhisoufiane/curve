@@ -1,0 +1,33 @@
+<div class="{{extendContainer ? 'col-xs-12' : 'col-xs-8'}}">
+  <input
+      type="text" 
+      ng-model="getterSetter"
+      ng-disabled="edit == false || disable"
+      ng-model-options="{getterSetter: true}"
+      typeahead-min-length="3" 
+      typeahead-loading="loadingLocations" 
+      typeahead-no-results="noResults" 
+      typeahead-focus-on-select="false"
+      typeahead-on-select="setValueToSelected($item, $model, $label);" 
+      ng-click="clickOnSelect()" 
+      ng-blur="blurSelect()"
+      uib-typeahead="item as item.name for item in getPartners($viewValue)" 
+      typeahead-wait-ms="500" 
+      class="form-control input-field"
+      placeholder="Type to Search"
+      tooltip-enable="{{(tempValue.name.length > 25) ? 'true':'false'}}"
+      tooltip-placement="top" 
+      tooltip-animation="true"
+      uib-tooltip="{{tempValue.name}}">
+  <div ng-if="allowClear && showClear" class="form-group clear-button-wrapper m-r-10">
+    <button type="submit" data-ng-click="clearSelect()" class="clear-button">
+        <span class="fa fa-times"></span>
+    </button>
+  </div>
+</div>
+<div class="col-xs-4">
+  <button id="CUR-div-panel-body-fg-partner-form-delete-button" ng-if="showDeleteBtn && edit" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="delete(name)">
+    <i class="fa fa-trash"></i>
+  </button>
+</div>
+<read-only-field ng-if="!edit" parent-field="tempValue" field="'email'"></read-only-field>

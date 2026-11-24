@@ -1,0 +1,104 @@
+<div id="CUR-WmFtCvRk" class="jumbotron" data-pages="parallax">
+  <div id="CUR-IqwiQgox" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-KYqssFIx" class="inner">
+      <ul id="CUR-XfOaHeaE" class="breadcrumb">
+        <li id="CUR-zcOapRgD"><a id="CUR-EBUOvnGO" href="/#/accountingPeriods" class="active">Accounting Periods</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-PQvBtOjb" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-VTjRhxcY" class="row m-b-20">
+    <div id="CUR-rGAoIRbc" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-XPHxcDNf" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-ApoqnNsi" class="input-group transparent">
+          <input id="CUR-yzVyDcKo" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-qulEQnYk" class="input-group-addon pointer" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-JFtrVVGv" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-XZQRbzbc" class="sm-p-l-15 sm-p-r-15">
+        <button id="CUR-UTrTeBRP" ng-show="rights.periods == 'Edit'" class="btn btn-danger hidden-xs" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+        <a id="CUR-WruMSVRb" ng-show="rights.periods == 'Edit' && !demoMode" href="/#/accountingPeriods/new">
+          <button id="CUR-BzdXOkzD" class="btn btn-complete w-xs-100-p m-xs-l-0"><i class="fa fa-plus"></i>&nbsp;Create</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-omIJSvmU" class="col-sm-12">
+      <h5 id="CUR-nWTCDgoR" class="pull-right">Total: {{total? total : 0}}</h5>
+    </div>
+  <div id="CUR-QAhVKqFC" class="row">
+    <div id="CUR-PLAifOfX" class="col-xs-12">
+      <div id="CUR-nCeHssuI" class="panel panel-default">
+        <div id="CUR-yLmqdELZ" class="panel-heading">
+          <div id="CUR-lcSKvPYD" class="panel-title">
+            Accounting Periods
+          </div>
+        </div>
+        <div id="CUR-HfrnkhFU" class="panel-body">
+          <div id="CUR-MCNxdnIS" class="table-responsive">
+            <table id="CUR-pztPnnqs" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+                <tr id="CUR-oYTdsbgA">
+                  <th class="table-checkbox hidden-xs"><input id="CUR-PAZJZvBr" ng-show="rights.periods == 'Edit'" type="checkbox" class="select-all" ng-click="selectAll(periods)"></th>
+                  <th ng-click="getSortedData('name')" ng-class="whatClassIsIt('name')">Name</th>
+                  <th ng-click="getSortedData('year')" ng-class="whatClassIsIt('year')">Year</th>
+                  <th ng-click="getSortedData('accountingPeriod')" ng-class="whatClassIsIt('accountingPeriod')">Period</th>
+                  <th ng-click="getSortedData('grossAmount')" ng-class="whatClassIsIt('grossAmount')">Gross Sales</th>
+                  <th ng-click="getSortedData('createdAt')" ng-class="whatClassIsIt('createdAt')">Created</th>
+                  <th ng-click="getSortedData('status')" ng-class="whatClassIsIt('status')">Status</th>
+                </tr>
+              </thead>
+              <tbody id="CUR-NcjRhXDJ">
+                <tr accounting-period-table-row ng-repeat="period in accountingPeriods" index="{{$index}}" period="period" client-type="clientType"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-QniUzRCS" class="col-sm-12">
+    <div id="CUR-yhMofpEh" class="pull-right">
+      <span id="CUR-GIQyfjjI" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page  |</span>
+      <span id="CUR-FnXjqwkY" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-uLgOXNBS" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+<div id="CUR-wwGtqkzg" class="row">
+  <div id="CUR-SeoJcsIa" class="col-xs-12 text-center">
+    <pagination id="CUR-mWqcfVfE" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+  </div>
+</div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-SHkPvrPN" class="modal-dialog">
+    <div id="CUR-PpDFEZiE" class="modal-content">
+      <div id="CUR-qEMlmADJ" class="modal-header clearfix text-left">
+        <button id="CUR-oPBLzpzg" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-oFLSxBXR">Delete Periods</h5>
+      </div>
+      <div id="CUR-wjlVbgdi" class="modal-body">
+        <div id="CUR-cosWGSWk" class="row">
+          <div id="CUR-QGRBdyQi" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected periods?  This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-irfYLEqs" class="row">
+          <div id="CUR-mKFUuwku" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-zWmzTkvb" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-JemAIKDb" type="button" class="btn btn-danger m-t-5" ng-click="deleteSelected()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<td class="v-align-middle">{{ transaction.date | date : dateFormat : 'UTC' }}</td>
+<td class="v-align-middle" ng-if="transaction.userCreated && contractId"><a href="#/transactions/{{ transaction._id }}/edit?contractId={{contractId}}">{{ transaction.name }}</a></td>
+<td class="v-align-middle" ng-if="!transaction.userCreated || !contractId">{{ transaction.name }}</td>
+<td class="v-align-middle">
+	<span ng-if="transaction.type === 'Payment'" class="label label-warning">{{ transaction.type }}</span>
+	<span ng-if="transaction.type === 'Royalties'" class="label label-success">{{ transaction.type }}</span>
+	<span ng-if="transaction.type === 'Advance'" class="label label-info">{{ transaction.type }}</span>
+	<span ng-if="transaction.type === 'Other'" class="label label-default">{{ transaction.type }}</span>
+</td>
+<td class="v-align-middle">{{ transaction.invoiceNo }}</td>
+<td class="v-align-middle">{{ transaction.amount | number: 2 }}</td>
+<td class="v-align-middle">{{ transaction.balance | number: 2 }}</td>

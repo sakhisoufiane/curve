@@ -1,0 +1,208 @@
+[
+  {
+    "type": "SimpleMapping",
+    "condition": {
+      "type": "OR",
+      "conditions": [
+        {
+          "type": "contains",
+          "leftValueFieldName": "Territory",
+          "rightValue": "UK"
+        },
+        {
+          "type": "doesNotContain",
+          "not": true,
+          "leftValueFieldName": "Territory",
+          "rightValue": "US"
+        },
+        {
+          "type": "equals",
+          "leftValueFieldName": "Channel",
+          "rightValue": "Digital"
+        },
+        {
+          "type": "greaterThan",
+          "not": true,
+          "leftValueFieldName": "Money",
+          "rightValue": "1.23"
+        },
+        {
+          "type": "greaterThanOrEqualTo",
+          "leftValueFieldName": "Two DP",
+          "rightValue": "4.56"
+        },
+        {
+          "type": "isBlank",
+          "leftValueFieldName": "Territory2"
+        },
+        {
+          "type": "isNotBlank",
+          "leftValueColumnIndex": 0
+        },
+        {
+          "type": "lessThan",
+          "leftValueFieldName": "Money",
+          "rightValue": "12.34"
+        },
+        {
+          "type": "lessThanOrEqualTo",
+          "leftValueFieldName": "Two DP",
+          "rightValue": "45.567"
+        },
+        {
+          "type": "notEquals",
+          "leftValueFieldName": "Channel",
+          "rightValue": "Analog"
+        }
+      ]
+    },
+    "regex": "[0-9]+",
+    "replaceOutputValue": true,
+    "inputValueFieldName": "Territory",
+    "outputField": "outputTerritory",
+    "mappings": {
+      "UK": "GB"
+    }
+  },
+  {
+    "type": "HierarchicalMapping",
+    "inputValueColumnIndex": 1,
+    "outputField": "outputTerritory",
+    "replaceOutputValue": true,
+    "context": [
+      "Channel",
+      "Territory"
+    ],
+    "mappings": {
+      "Physical": {
+        "UK": {
+          "CATNO01": "physical_uk_CATNO01",
+          "CATNO02": "physical_uk_CATNO02",
+          "_default": "physical_uk_default_id"
+        },
+        "USA": {
+          "CATNO01": "physical_usa_CATNO01",
+          "CATNO02": "physical_usa_CATNO02",
+          "_default": "physical_usa_default_id"
+        },
+        "_default": {
+          "CATNO01": "physical_default_CATNO01",
+          "CATNO02": "physical_default_CATNO02",
+          "_default": "physical_default_default_id"
+        }
+      },
+      "Digital": {
+        "UK": {
+          "CATNO01": "digital_uk_CATNO01",
+          "CATNO02": "digital_uk_CATNO02",
+          "_default": "digital_uk_default_id"
+        },
+        "USA": {
+          "CATNO01": "digital_usa_CATNO01",
+          "CATNO02": "digital_usa_CATNO02",
+          "_default": "digital_usa_default_id"
+        },
+        "_default": {
+          "CATNO01": "digital_default_CATNO01",
+          "CATNO02": "digital_default_CATNO02",
+          "_default": "digital_default_default_id"
+        }
+      },
+      "_default": {
+        "UK": {
+          "CATNO01": "default_uk_CATNO01",
+          "CATNO02": "default_uk_CATNO02",
+          "_default": "default_uk_default_id"
+        },
+        "USA": {
+          "CATNO01": "default_usa_CATNO01",
+          "CATNO02": "default_usa_CATNO02",
+          "_default": "default_usa_default_id"
+        },
+        "_default": {
+          "CATNO01": "default_default_CATNO01",
+          "CATNO02": "default_default_CATNO02",
+          "_default": "default_default_default_id"
+        }
+      }
+    }
+  },
+  {
+    "type": "Calculation",
+    "inputFixedValue": "Hello!",
+    "outputField": "outputTerritory",
+    "replaceOutputValue": false,
+    "equations": [
+      {
+        "calculationType": "addition",
+        "equationValueFieldName": "Money"
+      },
+      {
+        "calculationType": "subtraction",
+        "equationValueFieldName": "Two DP"
+      },
+      {
+        "calculationType": "multiplication",
+        "equationValueFieldName": "Five DP"
+      },
+      {
+        "calculationType": "division",
+        "equationValueColumnIndex": "5"
+      },
+      {
+        "calculationType": "left",
+        "equationValueFieldName": "Money"
+      },
+      {
+        "calculationType": "right",
+        "equationValueFieldName": "Money"
+      },
+      {
+        "calculationType": "concatenation",
+        "equationValueFieldName": "SaleDate"
+      }
+    ]
+  },
+  {
+    "type": "SwitchDefault",
+    "outputField": "catType",
+    "replaceOutputValue": true,
+    "defaultValue": "Release",
+    "mappings": [{
+      "condition": {
+        "type": "IsNotBlank",
+        "leftValueFieldName": "outputTerritory"
+      },
+      "value": "Track"
+    },{
+      "condition": {
+        "type": "equals",
+        "leftValueFieldName": "Territory",
+        "rightValue": "UK"
+      },
+      "value": "Work"
+    }]
+  },
+  {
+    "type": "copy",
+    "outputField": "catType",
+    "replaceOutputValue": true,
+    "inputFixedValue": "Release"
+  },
+  {
+    "type": "discard",
+    "condition": {
+      "type": "equals",
+      "leftValueFieldName": "Territory",
+      "rightValue": "USA"
+    }
+  },
+  {
+    "type": "searchAndReplace",
+    "replaceOutputValue": false,
+    "inputValueColumnIndex": 1,
+    "outputField": "outputTerritory",
+    "regex": "[0-9]+",
+    "replacement": "A"
+  }
+]

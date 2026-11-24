@@ -1,0 +1,13 @@
+<ui-select ng-model="$parent.selectedTerritory">
+  <ui-select-match allow-clear="true">
+    <span ng-bind="$select.selected.name"></span>
+  </ui-select-match>
+  <ui-select-choices
+    group-by="groupFind"
+    repeat="territory.code as territory in territoriesWithGroups | filter: $select.search"
+    refresh="searchTerritories($select.search)"
+    refresh-delay="300"
+  >
+    <span class="country" ng-bind="territory.name"></span>
+  </ui-select-choices>
+</ui-select>

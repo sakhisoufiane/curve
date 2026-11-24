@@ -1,0 +1,182 @@
+openapi: 3.0.0
+paths:
+  '/fuga/v2/suborg/{subOrgId}/statements':
+    get:
+      tags:
+        - Fuga v2 - White Label
+      summary: Retrieve white label statements
+      description: >-
+        Returns a list of white label statements for a specific
+        sub-organization. Requires read access to periods.
+      parameters:
+        - in: path
+          name: subOrgId
+          required: true
+          schema:
+            type: string
+          description: Sub-organization ID
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+      responses:
+        '200':
+          description: Successfully retrieved white label statements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WhiteLabelStatements'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  '/fuga/v2/suborg/{subOrgId}/statements/{id}':
+    get:
+      tags:
+        - Fuga v2 - White Label
+      summary: Retrieve a specific white label statement
+      description: >-
+        Returns details for a specific white label statement by ID. Requires
+        read access to periods.
+      parameters:
+        - in: path
+          name: subOrgId
+          required: true
+          schema:
+            type: string
+          description: Sub-organization ID
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Statement ID
+      responses:
+        '200':
+          description: Successfully retrieved white label statement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhiteLabelStatement'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+components:
+  schemas:
+    WhiteLabelStatements:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          url:
+            type: string
+          packageLink:
+            type: string
+
+    WhiteLabelStatement:
+      type: object
+      properties:
+        currency:
+          type: string
+        packageLink:
+          type: string
+        totals:
+          type: object
+          properties:
+            streams:
+              type: number
+            downloads:
+              type: number
+            netRevenue:
+              type: number
+            salesIncome:
+              type: number
+            mutationsTotals:
+              type: number
+        financialTotals:
+          type: array
+          items:
+            type: object
+            properties:
+              salesIncome:
+                type: number
+              companyRoyalty:
+                type: number
+              mutationsTotals:
+                type: number
+              royaltiesEarned:
+                type: number
+              organizationName:
+                type: string
+        topNetRevenues:
+          type: object
+          properties:
+            assets:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  value:
+                    type: number
+            labels:
+              type: array
+              items:
+                type: object
+            stores:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  value:
+                    type: number
+            artists:
+              type: array
+              items:
+                type: object
+            products:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  value:
+                    type: number
+            countries:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  value:
+                    type: number

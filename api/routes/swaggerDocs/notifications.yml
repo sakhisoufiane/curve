@@ -1,0 +1,254 @@
+openapi: 3.0.3
+info:
+  title: Notifications API
+  version: 1.0.0
+  description: API for managing user notifications
+
+paths:
+  /notifications:
+    get:
+      tags:
+        - Notifications
+      summary: Retrieve notifications
+      description: Returns a paginated list of notifications for the authenticated user. Requires a valid client or payee ID.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: read
+          schema:
+            type: boolean
+          description: Filter by read status
+        - in: query
+          name: createdAfter
+          schema:
+            type: string
+            format: date-time
+          description: Filter notifications created after this date
+        - in: query
+          name: createdBefore
+          schema:
+            type: string
+            format: date-time
+          description: Filter notifications created before this date
+      responses:
+        200:
+          description: Successfully retrieved notifications
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notifications:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notification'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /notifications/count:
+    get:
+      tags:
+        - Notifications
+      summary: Count notifications
+      description: Returns the count of notifications for the authenticated user. Requires a valid client or payee ID.
+      parameters:
+        - in: query
+          name: read
+          schema:
+            type: boolean
+          description: Filter by read status
+        - in: query
+          name: createdAfter
+          schema:
+            type: string
+            format: date-time
+          description: Filter notifications created after this date
+        - in: query
+          name: createdBefore
+          schema:
+            type: string
+            format: date-time
+          description: Filter notifications created before this date
+      responses:
+        200:
+          description: Successfully retrieved notification count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /notifications/mark_read:
+    get:
+      tags:
+        - Notifications
+      summary: Mark notifications as read
+      description: Marks specified notifications as read. Requires a valid client or payee ID.
+      parameters:
+        - in: query
+          name: ids
+          schema:
+            type: array
+            items:
+              type: string
+          description: Array of notification IDs to mark as read
+      responses:
+        200:
+          description: Successfully marked notifications as read
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Notifications successfully marked read.
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /notifications/{id}:
+    get:
+      tags:
+        - Notifications
+      summary: Retrieve a specific notification
+      description: Returns details for a specific notification by ID. Requires a valid client or payee ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Notification ID
+      responses:
+        200:
+          description: Successfully retrieved notification
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notification:
+                    $ref: '#/components/schemas/Notification'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+components:
+  schemas:
+    Notification:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the notification
+        clientId:
+          type: string
+          description: Client ID associated with the notification
+        userId:
+          type: string
+          description: User ID associated with the notification
+        name:
+          type: string
+          description: Name or title of the notification
+        description:
+          type: string
+          description: Detailed description of the notification
+        link:
+          type: string
+          description: Link associated with the notification
+        urls:
+          type: array
+          items:
+            type: string
+          description: URLs associated with the notification
+        notificationErrors:
+          type: array
+          items:
+            type: object
+          description: Errors associated with the notification
+        read:
+          type: boolean
+          description: Whether the notification has been read
+        createdBy:
+          type: string
+          description: ID of the user who created the Notification
+        lastModifiedBy:
+          type: string
+          description: ID of the user who last modified the Notification
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was last updated
+  responses:
+    Forbidden:
+      description: Forbidden, the user does not have sufficient rights
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Forbidden
+    NotFound:
+      description: Notification not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Could not find Notification with ID 123456789012
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Internal error, please try again

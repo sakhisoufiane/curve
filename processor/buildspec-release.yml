@@ -1,0 +1,37 @@
+version: 0.2
+
+env:
+  secrets-manager:
+    DOCKER_ACCOUNT_PASS: DOCKER_PASSWORD:CURVEROYALTYSYSTEMS
+    NPM_TOKEN: NPM_TOKEN:CURVEPRODUCTION
+
+phases:
+  install:
+    runtime-versions:
+      # deprecated - ignnored in build
+      docker: 18
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login --region eu-west-1 --no-include-email)
+      - REPOSITORY_URI=238239381222.dkr.ecr.eu-west-1.amazonaws.com/processor-release
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker login --username curveroyaltysystems --password $DOCKER_ACCOUNT_PASS
+      - docker build -f old.Dockerfile -t $REPOSITORY_URI:latest --build-arg NPM_TOKEN=$NPM_TOKEN .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"processor-release","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json

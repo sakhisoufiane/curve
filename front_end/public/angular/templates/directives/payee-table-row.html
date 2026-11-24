@@ -1,0 +1,4 @@
+<td class="v-align-middle hidden-xs"><input type="checkbox" class='select-unit' ng-model="payee.selected" ng-if="!noLinks && edit"></td>
+<td class="v-align-middle"><a href="#/payees/{{ payee._id }}/edit">{{ payee.name }}</a></td>
+<td class="v-align-middle"></td>
+<td class="v-align-middle">{{ payee.createdAt | date : dateFormat : 'UTC' }}</td>

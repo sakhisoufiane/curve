@@ -1,0 +1,26 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "stream",
+  "tasks": {
+    "build": {
+      "outputs": ["dist/**", "build/**"],
+      "dependsOn": ["typecheck", "^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "start": {
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "typecheck": { "dependsOn": ["^build"], "cache": true },
+    "typecheck:watch": { "dependsOn": ["^build"], "cache": true },
+    "test": {
+      "env": ["BQ_private_key", "BQ_project_id", "BQ_client_email"]
+    }
+  }
+}

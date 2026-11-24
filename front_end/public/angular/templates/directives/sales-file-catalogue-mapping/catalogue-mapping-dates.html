@@ -1,0 +1,39 @@
+<div class="row catalogue-mapping-wrapper">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <h4>Dates</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-info">
+          <p>You have missing <span ng-if="salesFile.invalidFields.saleDate">Sale Dates</span><span ng-if="salesFile.invalidFields.saleDate && salesFile.invalidFields.transactionDate"> and </span><span ng-if="salesFile.invalidFields.transactionDate">Transaction Dates</span>.</p>
+          <p>Please enter date<span ng-if="salesFile.invalidFields.saleDate && salesFile.invalidFields.transactionDate">s</span> to be used for all your sales lines below.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row" ng-if="salesFile.invalidFields.saleDate || salesFile.invalidFields.transactionDate">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-if="salesFile.invalidFields.saleDate">
+        <div class="form-group">
+          <label>Sale Date</label>
+          <div id="datepicker-component" class="form-group input-group date">
+            <input type="text" class="form-control" ng-model="salesFile.overwriteFields.saleDate" uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}" is-open="saleDatePopup" ng-click="openSaleDatePopup()">
+            <span class="input-group-addon" ng-click="openSaleDatePopup()"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-if="salesFile.invalidFields.transactionDate">
+        <div class="form-group">
+          <label>Transaction Date</label>
+          <div id="datepicker-component" class="form-group input-group date">
+            <input type="text" class="form-control" ng-model="salesFile.overwriteFields.transactionDate" uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}" is-open="transactionDatePopup" ng-click="openTransactionDatePopup()">
+            <span class="input-group-addon" ng-click="openTransactionDatePopup()"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

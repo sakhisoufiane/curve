@@ -1,0 +1,1195 @@
+openapi: 3.0.3
+info:
+  title: Releases API
+  version: '1.0.0'
+  description: |
+    API for managing release records in the system.
+    Supports CRUD operations on releases with access control validation.
+    Includes support for release metadata, tracks, mechanicals, and contracts.
+    
+    Access Control:
+    - Read access requires catalogue read permissions
+    - Write access requires catalogue write permissions
+    - Client users can only access releases in their organization
+    - Payee users can only access releases linked to their contracts
+
+paths:
+  /releases:
+    get:
+      tags:
+        - "Releases"
+      summary: Retrieve all releases
+      description: Returns a paginated list of releases with filtering capabilities. Supports text search, ID filtering, and date ranges.
+      parameters:
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Filter on supplied text string. Searches release titles and IDs using regex patterns.
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+            enum: ["artist", "catNo", "barcode", "format", "totalParticipation", "createdAt", "status","updatedAt"]
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: ids
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by specific release IDs
+        - in: query
+          name: catalogueGroups
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by catalogue groups
+        - in: query
+          name: contractIds
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by contract IDs
+        - in: query
+          name: createdAfter
+          schema:
+            type: string
+            format: date
+          description: Filter releases created after this date
+        - in: query
+          name: createdBefore
+          schema:
+            type: string
+            format: date
+          description: Filter releases created before this date
+      responses:
+        200:
+          description: Successfully retrieved releases with pagination metadata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  releases:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Release'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+    post:
+      tags:
+        - "Releases"
+      summary: Create a new release
+      description: Creates a new release with validation and access control checks. Requires catalogue write access.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                  description: Name of the release
+                artist:
+                  type: string
+                  description: Artist name
+                catNo:
+                  type: string
+                  description: Catalogue number
+                barcode:
+                  type: string
+                  description: Release barcode
+                salesReturnsRights:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      percentage:
+                        type: number
+                      contractId:
+                        type: string
+                unmappedReleaseId:
+                  type: string
+                  description: ID of unmapped release to link
+      responses:
+        200:
+          description: Successfully created release
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    delete:
+      tags:
+        - "Releases"
+      summary: Bulk delete releases
+      description: |
+        Delete multiple releases by IDs with validation for dependencies. Only accessible to client users with Edit catalogue permissions.
+        - Validates that releases are not in use by sales files or other dependencies
+        - Supports different deletion types (multi, force, etc.)
+        - Returns detailed validation results for each release
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of release IDs to delete
+                type:
+                  type: string
+                  default: "multi"
+                  description: Type of deletion operation
+      responses:
+        200:
+          description: Bulk deletion completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  results:
+                    type: array
+                    items:
+                      type: object
+        201:
+          description: Some or all releases are attached to sales files
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: string
+                    example: "Some or all of these releases are attached to sales files which will need to be deleted first"
+                  - type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        link:
+                          type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Releases not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Releases"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /releases/{id}:
+    get:
+      tags:
+        - "Releases"
+      summary: Retrieve a specific release
+      description: Returns details for a specific release by ID with populated references. Requires catalogue read access.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Release ID
+      responses:
+        200:
+          description: Successfully retrieved release
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Release not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Release with ID {id}"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+    put:
+      tags:
+        - "Releases"
+      summary: Update a release
+      description: |
+        Updates a release's details. Requires catalogue write access.
+        - Automatically handles distribution channel, format and price category fields
+        - Updates lastModifiedBy timestamp
+        - Repopulates mechanical licenses after update
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Release ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                artist:
+                  type: string
+                catNo:
+                  type: string
+                barcode:
+                  type: string
+                distributionChannel:
+                  type: string
+                format:
+                  type: string
+                priceCategory:
+                  type: string
+                salesReturnsRights:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      percentage:
+                        type: number
+                      contractId:
+                        type: string
+      responses:
+        200:
+          description: Successfully updated release
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Release not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Release with ID {id}"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /releases/{id}/history:
+    get:
+      tags:
+        - "Releases"
+      summary: Retrieve release history
+      description: Returns the modification history for a specific release. Requires catalogue read access.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Release ID
+      responses:
+        200:
+          description: Successfully retrieved release history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                          format: date-time
+                        author:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            email:
+                              type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Release not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Release with ID {id}"
+
+  /releases/{id}/add_alias:
+    put:
+      tags:
+        - "Releases"
+      summary: Add aliases to a release
+      description: Adds one or more aliases to a release. Requires catalogue write access.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Release ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                alias:
+                  type: string
+                  description: Single alias to add
+                aliases:
+                  type: array
+                  items:
+                    type: string
+                  description: Multiple aliases to add
+      responses:
+        200:
+          description: Successfully added aliases
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Alias added"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Release not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Release with ID {id}"
+
+  /releases/{id}/tracks:
+    get:
+      tags:
+        - "Releases"
+      summary: Get release tracks
+      description: Returns all tracks associated with a release. Requires catalogue read access.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Release ID
+      responses:
+        200:
+          description: Successfully retrieved tracks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tracks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        title:
+                          type: string
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Release not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Release with ID {id}"
+
+  /releases/import:
+    post:
+      tags:
+        - "Releases"
+      summary: Import releases
+      description: Import releases from a file. Requires catalogue write access.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: File to import
+                overwriteBlanks:
+                  type: string
+                  enum: ["true", "false"]
+                  description: Whether to overwrite blank values
+                importTemplateVersion:
+                  type: string
+                  default: v1
+                  description: Version of import template to use
+      responses:
+        200:
+          description: Successfully started import
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Releases are importing, and a report will be sent to you shortly."
+        400:
+          description: Bad request - missing file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+
+  /releases/add_bulk_aliases:
+    post:
+      tags:
+        - "Releases"
+      summary: Add aliases to multiple releases
+      description: Add aliases to multiple releases based on filter criteria. Requires catalogue write access.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - aliases
+              properties:
+                aliases:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of aliases to add to the releases
+                filter:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                      description: Filter based on text search
+                    ids:
+                      type: array
+                      items:
+                        type: string
+                      description: Filter by release IDs
+      responses:
+        200:
+          description: Successfully added aliases
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Completed Adding Aliases to Releases"
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /releases/create_many:
+    post:
+      tags:
+        - "Releases"
+      summary: Create multiple releases
+      description: Create multiple releases in bulk. Requires catalogue write access.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - releases
+              properties:
+                releases:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                      artist:
+                        type: string
+                      catNo:
+                        type: string
+                      barcode:
+                        type: string
+                      unmappedReleaseId:
+                        type: string
+      responses:
+        200:
+          description: Successfully created releases
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: array
+                    items:
+                      type: number
+                    description: Indexes of successfully created releases
+                  failed:
+                    type: array
+                    items:
+                      type: number
+                    description: Indexes of releases that failed to create
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /releases/export:
+    post:
+      tags:
+        - "Releases"
+      summary: Export releases
+      description: Export releases to a file. Requires catalogue read access.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Release IDs to export
+                filter:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                    catalogueGroups:
+                      type: array
+                      items:
+                        type: string
+                    contractIds:
+                      type: array
+                      items:
+                        type: string
+                    createdAfter:
+                      type: string
+                      format: date
+                    createdBefore:
+                      type: string
+                      format: date
+      responses:
+        200:
+          description: Successfully started export
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Your report will be sent to you via email shortly"
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /releases/raw-export:
+    post:
+      tags:
+        - "Releases"
+      summary: Raw export releases
+      description: |
+        Export releases to a raw CSV file. By default, the export is processed asynchronously
+        and a notification email is sent when complete. When sync=true, the request waits for
+        the export to complete and returns the download URL directly in the response.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of release IDs to export. If not provided, uses filter criteria.
+                filter:
+                  type: object
+                  description: Filter criteria for selecting releases when specific IDs are not provided
+                clientType:
+                  type: string
+                  description: Type of client for export processing
+                sync:
+                  type: boolean
+                  default: false
+                  description: |
+                    If true, waits for export to complete and returns download URL directly.
+                    If false (default), sends notification email when export is ready.
+      responses:
+        200:
+          description: |
+            When sync=false (default): Export process started successfully, email notification will be sent.
+            When sync=true: Export completed, returns download URL (expires in 24 hours).
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Your report will be sent to you via email shortly"
+                    description: Response when sync=false (default)
+                  - type: object
+                    properties:
+                      csvPublicLink:
+                        type: string
+                        format: uri
+                        example: "https://s3.amazonaws.com/bucket/raw_exports/Client-releases%20raw%20export.csv"
+                    description: Response when sync=true
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /releases/updateCatNo:
+    post:
+      tags:
+        - "Releases"
+      summary: Update catalog numbers
+      description: Update catalog numbers for releases by uploading an Excel file. Requires catalogue write access.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Excel file containing catalog number updates
+              required:
+                - file
+      responses:
+        200:
+          description: Catalog number update completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Catalog numbers updated successfully"
+        400:
+          description: Bad request - invalid file or format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /releases/pro_rata_contracts_from_tracks:
+    post:
+      tags:
+        - "Releases"
+      summary: Pro-rata contracts from tracks
+      description: Calculate pro-rata contracts from linked tracks for multiple releases. Requires catalogue write access.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Release IDs to process
+                filter:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                    catalogueGroups:
+                      type: array
+                      items:
+                        type: string
+                    contractIds:
+                      type: array
+                      items:
+                        type: string
+                    createdAfter:
+                      type: string
+                      format: date
+                    createdBefore:
+                      type: string
+                      format: date
+      responses:
+        200:
+          description: Successfully started pro-rata calculation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Pro Rata Contracts started. You will be notificed shortly once it has completed."
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /releases/inherit_mechanicals_from_tracks:
+    post:
+      tags:
+        - "Releases"
+      summary: Inherit mechanicals from tracks
+      description: Inherit mechanical licenses from linked tracks for multiple releases. Requires catalogue write access.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Release IDs to process
+                filter:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                    catalogueGroups:
+                      type: array
+                      items:
+                        type: string
+                    contractIds:
+                      type: array
+                      items:
+                        type: string
+      responses:
+        200:
+          description: Successfully started mechanical inheritance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Inherit Mechanicals started. You will be notificed shortly once it has completed."
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /releases/{id}/inherit_track_mechanicals:
+    get:
+      tags:
+        - "Releases"
+      summary: Inherit mechanicals from tracks for a release
+      description: Inherit mechanical licenses from linked tracks for a single release. Requires catalogue write access.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Release ID
+      responses:
+        200:
+          description: Successfully inherited mechanicals
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  release:
+                    $ref: '#/components/schemas/Release'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          description: Release not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Release with ID {id}"
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /releases/{id}/pro_rata_track_contracts:
+    get:
+      tags:
+        - "Releases"
+      summary: Get pro-rata contracts from tracks
+      description: Calculate pro-rata contracts from linked tracks for a single release. Requires catalogue write access.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Release ID
+      responses:
+        200:
+          description: Successfully retrieved contracts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contracts:
+                    type: object
+                    properties:
+                      salesReturnsRights:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            percentage:
+                              type: number
+                            contractId:
+                              type: string
+                      costsRights:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            percentage:
+                              type: number
+                            contractId:
+                              type: string
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          description: Release not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Release with ID {id}"
+        500:
+          $ref: '#/components/responses/InternalError'
+
+components:
+  schemas:
+    Release:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the release
+        clientId:
+          type: string
+          description: Client ID associated with the release
+        title:
+          type: string
+          description: Title of the release
+        artist:
+          type: string
+          description: Artist name
+        catNo:
+          type: string
+          description: Catalogue number
+        barcode:
+          type: string
+          description: Release barcode
+        releaseDate:
+          type: string
+          format: date-time
+          description: Release date
+        distributionChannel:
+          type: string
+          nullable: true
+          description: Distribution channel
+        format:
+          type: string
+          nullable: true
+          description: Release format
+        priceCategory:
+          type: string
+          nullable: true
+          description: Price category
+        salesReturnsRights:
+          type: array
+          items:
+            type: object
+            properties:
+              percentage:
+                type: number
+              contractId:
+                type: string
+        costsRights:
+          type: array
+          items:
+            type: object
+            properties:
+              percentage:
+                type: number
+              contractId:
+                type: string
+        aliases:
+          type: array
+          items:
+            type: string
+          description: Alternative names for the release
+        totalParticipation:
+          type: number
+          description: Total participation percentage
+        valid:
+          type: boolean
+          description: Whether the release is valid
+        createdBy:
+          type: string
+          description: ID of user who created the release
+        lastModifiedBy:
+          type: string
+          description: ID of user who last modified the release
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the release was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the release was last updated
+    Forbidden:
+      description: Forbidden, the user does not have sufficient rights
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Forbidden"
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Internal error, please try again"

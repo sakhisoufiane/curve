@@ -1,0 +1,80 @@
+<div class="row catalogue-mapping-wrapper">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <h4>Releases</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-info">
+          <p>Below are all Cat Nos and Barcodes that did not get matched to your catalogue.</p>
+          <p>Match the values on the right using the dropdowns on the left. These will all be remembered and saved as aliases on the release for future mapping.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row" ng-show="salesFile.invalidFields.releasesWarning.message && salesFile.invalidFields.releases.length > 0">
+      <div class="col-xs-12">
+        <div class="alert alert-warning">
+          <i class="fa fa-exclamation-triangle" style="font-size: 20px; margin: 10px 0;"></i>
+          <p>{{salesFile.invalidFields.releasesWarning.message}}</p>
+          <a href="{{salesFile.invalidFields.releasesWarning.url}}">Unmapped Page</a>
+        </div>
+      </div>
+    </div>
+    <div class="row m-b-20" ng-if="salesFile.invalidFields.releases.length !== 0">
+      <div class="col-xs-12">
+        <h5 class="pull-right">Total: {{salesFile.invalidFields.releases.length}}</h5>
+      </div>
+    </div>
+    <div class="row m-b-20" ng-if="salesFile.invalidFields.releases.length !== 0">
+      <div class="col-xs-1 p-t-5">
+        <input id="select-all-releases" type="checkbox" class="select-all" ng-click="selectAllReleases()" ng-checked="selectAllReleasesChecked">
+      </div>
+      <div class="col-xs-11 text-right">
+        <div class="btn-group dropdown-default">
+          <a id="bulk-create-releases" class="btn btn-complete dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-plus"></i>&nbsp;Bulk Create <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu w-xs-100-p">
+            <li>
+              <a id="bulk-create-releases-selected" class="pointer" data-toggle="modal" data-target="#createReleasesModal">Selected</a>
+            </li>
+            <li>
+              <a id="bulk-create-releases-all" class="pointer" data-toggle="modal" data-target="#createReleasesAllModal">All</a>
+            </li>
+          </ul>
+        </div>
+        
+      </div>
+    </div>
+    <div class="alert alert-success" ng-if="salesFile.invalidFields.releases.length === 0">All done! All releases have been created.</div>
+    <div class="row m-b-20" ng-repeat="release in salesFile.invalidFields.releases | limitTo: 25: releaseMappingIndex">
+      <div class="col-xs-1 p-t-5">
+        <input id="release-select-{{$index}}" type="checkbox" ng-model="release.selected">
+      </div>
+      <div class="col-xs-4">
+        <release-select-field edit="rights.catalogue === 'Edit'" value="mappedReleases[$index + releaseMappingIndex]"></release-select-field>
+      </div>
+      <div class="col-xs-5">
+        <input type="text" class="form-control" ng-model="release.display" readonly>
+      </div>
+      <div class="col-xs-2 text-right">
+        <button id="create-release-{{$index}}" class="btn btn-complete" ng-click="createRelease(release)">+ Create</button>
+      </div>
+    </div>
+    <div class="row m-b-20" ng-if="salesFile.invalidFields.releases && salesFile.invalidFields.releases.length > 25">
+      <div class="col-xs-4">
+        Showing {{releaseMappingIndex + 1}} to {{lowestValue(releaseMappingIndex + 25, salesFile.invalidFields.releases.length)}} of {{salesFile.invalidFields.releases.length}}
+      </div>
+      <div class="col-xs-4 text-center">
+        <div class="btn-group">
+          <button ng-disabled="!(releaseMappingIndex > 0)" type="button" class="btn btn-default" ng-click="minusFromIndex('releaseMappingIndex', 25)"><</button>
+          <button ng-disabled="!(salesFile.invalidFields.releases.length > releaseMappingIndex + 25)" type="button" class="btn btn-default" ng-click="addToIndex('releaseMappingIndex', 25)">></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

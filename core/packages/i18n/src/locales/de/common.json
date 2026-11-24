@@ -1,0 +1,19 @@
+{
+  "loggedInAs": "Angemeldet als {{name}}",
+  "notifications": "Benachrichtigungen",
+  "noNotifications": "Keine Benachrichtigungen",
+  "clearAll": "Alles löschen",
+  "markAllAsRead": "Alle als gelesen markieren",
+  "darkMode": "Dunkelmodus",
+  "signOut": "Abmelden",
+  "language": "Sprache",
+  "search": "Suchen",
+  "launchTour": "Tour starten",
+  "totalRevenue": "Gesamteinnahmen",
+  "totalCosts": "Gesamtkosten",
+  "incompleteLines": "Unvollständige Zeilen",
+  "recentContracts": "Neueste Verträge",
+  "recentSales": "Neueste Verkäufe",
+  "revenueOverTime": "Einnahmen im Zeitverlauf",
+  "revenueOverTimeDesc": "Dieses Diagramm zeigt die Einnahmen im Zeitverlauf für den Kunden."
+}

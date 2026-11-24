@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-xs-3">
+    <div class="form-group">
+      <ui-select ng-model="pc.priceCategory" ng-disabled="edit != true">
+        <ui-select-match allow-clear="true">
+          <span ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in priceCategories | filter: $select.search track by $index">
+          <span ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+  <div class="col-xs-3">
+    <div class="form-group">
+      <ui-select ng-model="pc.territory" ng-disabled="edit != true">
+        <ui-select-match allow-clear="true">
+          <span ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices group-by="groupFind" repeat="country.code as country in countries | filter: $select.search track by $index">
+          <span class="country" ng-bind="country.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+  <div class="col-xs-2">
+    <div class="form-group">
+      <input ng-disabled="edit != true" type="number" class="form-control" ng-model="pc.dealerPrice">
+    </div>
+  </div>
+  <div class="col-xs-3">
+    <div class="form-group">
+      <ui-select ng-model="pc.currency" ng-disabled="edit != true">
+        <ui-select-match allow-clear="true">
+          <span ng-bind="$select.selected.code"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+          <span ng-bind-html="currency.code"></span>
+          <span> &nbsp; - &nbsp; </span>
+          <span ng-bind-html="currency.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+  <div class="col-xs-1">
+    <div class="form-group">
+      <button class="btn btn-danger" ng-show="edit == true" ng-click="delete({ priceCategoryDealerPrice: pc })"><i class="fa fa-trash"></i></button>
+    </div>
+  </div>
+</div>

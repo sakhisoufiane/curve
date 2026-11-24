@@ -1,0 +1,182 @@
+<div class="panel panel-default">
+  <div class="panel-body p-t-15">
+    <div class="row">
+      <div class="form-group col-sm-4">
+        <label>Calculation</label>
+      </div>
+      <div class="form-group col-xs-8 text-right">
+        <button class="btn btn-danger"ng-show="edit == true" ng-click="delete({ calculation: calculation })">
+          <i class="fa fa-trash"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row m-r-0 m-l-0 ">
+      <div class="panel panel-default bg-gray-l">
+        <div class="panel-body p-t-15">
+          <div class="row">
+            <div class="col-sm-12">
+              <h4 class="m-t-0">Conditions</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>When</label>
+                <select class="form-control" ng-model="calculation.conditionType" ng-options="item.value as item.name for item in calculationConditions" ng-disabled="edit != true"></select>
+              </div>
+            </div>
+          </div>
+          <div class="row" ng-if="calculation.conditionType != 'Always'">
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label>Input Type <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Select the Field or a Column in the input sheet"></i></label>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label>Input Value <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Select the Field Name, or Column number, eg. if wanting select column C, enter 3"></i></label>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label>Comparison</label>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label>Value</label>
+              </div>
+            </div>
+          </div>
+          <sales-template-calculation-condition-row ng-if="calculation.conditionType != 'Always'" edit="edit" ng-repeat="condition in calculation.displayConditions track by $index" condition="condition" delete="deleteCondition(condition)"></sales-template-calculation-condition-row>
+          <button class="btn btn-complete w-xs-100-p" ng-show="edit == true" ng-if="calculation.conditionType != 'Always'" ng-click="addCondition()">+ Condition</button>
+        </div>
+      </div>
+    </div>
+    <div class="row m-r-0 m-l-0">
+      <div class="panel panel-default">
+        <div class="panel-body p-t-15">
+          <div class="row">
+            <div class="col-sm-12">
+              <h4 class="m-t-0">Calculation & Output</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 m-b-15">
+              <input type="checkbox" value="1" ng-model="calculation.calculateAfterMapping">
+              <label>Calculate After Mapping <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                tooltip-template="Only use this function if your calculation requires the output of mapped values"></i></label>
+            </div>
+          </div>  
+          <div class="row" ng-init="calculation.calculation.function = 'Equals'">
+            <div class="form-group col-sm-3 m-b-0">
+              <label>Output Field</label>
+            </div>
+            <div class="form-group col-sm-1 m-b-0">
+            </div>
+            <div class="form-group col-sm-3 m-b-0">
+              <label>Value Type</label>
+            </div>
+            <div class="form-group col-sm-3 m-b-0">
+              <label>Value</label>
+            </div>
+            <div class="form-group col-sm-3">
+              <!-- <input type="text" class="form-control" ng-model="calculation.outputField"> -->
+              <ui-select ng-model="calculation.outputField" ng-disabled="edit != true">
+                <ui-select-match>
+                  <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item.value as item in templateFields | filter: $select.search">
+                  <span class="country" ng-bind="item.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div class="form-group col-sm-1">
+              <label class="m-t-8" ng-if="calculation.outputField != 'Skip Row'">Equals</label>
+            </div>
+            <div class="form-group col-sm-3" ng-if="calculation.outputField != 'Skip Row'">
+              <ui-select ng-model="calculation.calculation.valueType" ng-disabled="edit != true">
+                <ui-select-match>
+                  <span ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices group-by="groupFind" repeat="item in valueTypes | filter: $select.search">
+                  <span class="country" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div class="form-group col-sm-3" ng-if="calculation.calculation.valueType === 'Column' && calculation.outputField != 'Skip Row'">
+              <input type="number" class="form-control" ng-model="calculation.calculation.value" ng-disabled="edit != true">
+            </div>
+            <div class="form-group col-sm-3" ng-if="calculation.calculation.valueType === 'Value' && calculation.outputField != 'Skip Row'">
+              <input type="text" class="form-control" ng-model="calculation.calculation.value" ng-disabled="edit != true" ng-if="calculation.outputField !== 'territory'">
+              <ui-select ng-model="calculation.calculation.value" ng-disabled="edit != true" ng-if="calculation.outputField === 'territory'">
+                <ui-select-match>
+                  <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item.code as item in territories | filter: $select.search">
+                  <span class="country" ng-bind="item.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div class="form-group col-sm-3" ng-if="calculation.calculation.valueType === 'Field' && calculation.outputField != 'Skip Row'">
+              <ui-select ng-model="calculation.calculation.value" ng-disabled="edit != true">
+                <ui-select-match>
+                  <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item.value as item in templateFields | filter: $select.search">
+                  <span class="country" ng-bind="item.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div class="form-group col-sm-2">
+            </div>
+          </div>
+          <div class="row" ng-if="calculation.outputField === 'saleDate' || calculation.outputField === 'transactionDate' || calculation.outputField === 'dateFrom' || calculation.outputField === 'dateTo'">
+            <div class="form-group col-sm-3">
+              <label>Date Format</label>
+              <ui-select ng-model="calculation.dateFormat" ng-disabled="edit != true">
+                <ui-select-match>
+                  <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item.value as item in dateTypes | filter: $select.search">
+                  <span class="country" ng-bind="item.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div class="row" ng-if="calculation.outputField != 'Skip Row'">
+            <div class="form-group col-sm-1 col-sm-offset-3 m-b-0">
+              <label>Then...</label>
+            </div>
+          </div>
+          <div class="row" ng-if="calculation.outputField != 'Skip Row'">
+              <div class="form-group col-sm-3">
+                  <label>Calculation</label>
+                  </div>
+              <div class="form-group col-sm-1">
+                </div>
+              <div class="form-group col-sm-3">
+                  <label>Value Type</label>
+                </div>
+              <div class="form-group col-sm-3">
+                  <label>Value</label>
+                </div>
+            </div>
+          <sales-template-calculation-outputfield-row edit="edit" ng-repeat="outputField in calculation.displayOutputFields track by $index" outputField="outputField" delete="deleteOutputField(outputField)" calculate-after-mapping="calculation.calculateAfterMapping" enable-publisher-mapping="enablePublisherMapping">
+          </sales-template-calculation-outputfield-row>
+          <div class="row">
+            <div class="form-group col-sm-12">
+              <button class="btn btn-complete w-xs-100-p" ng-show="edit == true" ng-click="addOutputField()" ng-if="calculation.outputField != 'Skip Row'">+ Output Calculation</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-12">
+        <label>Notes</label>
+        <textarea class="form-control" ng-model="calculation.notes">{{outputfield.notes}}</textarea>
+      </div>
+    </div>
+  </div>
+</div>

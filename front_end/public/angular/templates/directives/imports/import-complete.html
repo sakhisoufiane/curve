@@ -1,0 +1,75 @@
+<div class="container-fluid container-fixed-lg">
+  <div class="row">
+    <div class="col-xs-12 col-md-10 col-md-offset-1">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row m-b-20">
+            <div class="col-xs-12">
+              <ul class="breadcrumb wizard-breadcrumb">
+                <li>
+                  <a ng-click="changePage('Setup')">Setup</a>
+                </li>
+                <li>
+                  <a ng-click="changePage('Files')">Files</a>
+                </li>
+                <li>
+                  <a ng-click="changePage('Mapping')">Mapping</a>
+                </li>
+                <li ng-if="import.transferringSystem === 'Counterpoint Recordings'">
+                  <a ng-click="changePage('Defaults')">Defaults</a>
+                </li>
+                <li>
+                  <a class="active">Complete</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row" ng-if="import.transferringSystem === 'Counterpoint Recordings'">
+            <div class="col-xs-8 col-xs-offset-2">
+              <h3 class="align-center p-b-20">Import Complete</h3>
+              <div class="align-center alert alert-info">
+                <p>Imported Payees: {{import.ingestedPayees}}</p>
+                <p>Imported Contracts: {{import.ingestedContracts}}</p>
+                <p>Imported Releases: {{import.ingestedReleases}}</p>
+                <p>Imported Tracks: {{import.ingestedTracks}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="row" ng-if="import.transferringSystem === 'CWR' || import.transferringSystem === 'Catalogue Shipment'">
+            <div class="col-xs-8 col-xs-offset-2">
+              <h3 class="align-center p-b-20">Import Complete</h3>
+              <div class="align-center alert alert-info">
+                <p>Imported Works: {{import.ingestedWorks}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="row" ng-if="import.transferringSystem === 'Maestro 400 Catalogue Shipment'">
+            <div class="col-xs-8 col-xs-offset-2">
+              <h3 class="align-center p-b-20">Import Complete</h3>
+              <div class="align-center alert alert-info">
+                <p>Imported Works: {{import.ingestedWorks}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="row" ng-if="import.transferringSystem === 'Counterpoint Publishing'">
+            <div class="col-xs-8 col-xs-offset-2">
+              <h3 class="align-center p-b-20">Import Complete</h3>
+              <div class="align-center alert alert-info">
+                <p>Imported Payees: {{import.ingestedPayees}}</p>
+                <p>Imported Contracts: {{import.ingestedContracts}}</p>
+                <p>Imported Works: {{import.ingestedWorks}}</p>
+                <p>Imported Composers: {{import.ingestedComposers}}</p>
+                <p>Imported Publishers: {{import.ingestedPublishers}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="row m-t-20">
+            <div class="col-xs-12">
+              <a ng-click="changePage('Defaults')" class="btn btn-default pull-right">Back</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

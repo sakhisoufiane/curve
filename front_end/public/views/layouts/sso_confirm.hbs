@@ -1,0 +1,27 @@
+<div id="CUR-stEVcLvM" class="row">
+  <div id="CUR-QcoRNcHu" class="col-xs-12 text-center">
+    <img src="/assets/img/curvetyp2x.png" alt="logo" class="logo">
+  </div>
+</div>
+<div id="CUR-FExGXBXt" class="row">
+  <div id="CUR-rkvRzUIV" class="col-xs-12">
+    <div id="notification" style="margin-top: 20px">
+      {{#if success}}
+      <div class="alert alert-success" role="alert" id="ssoSuccess">
+        <p>{{message}}</p>
+      </div>
+      {{else}}
+      <div id="CUR-KoHikIop" class="alert alert-danger" role="alert">
+        <p>{{message}}</p>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/sso.js?rel=5" type="text/javascript"></script>
+<script>
+  {{#if success}}
+  completeSso('{{token}}');
+  {{/if}}
+</script>

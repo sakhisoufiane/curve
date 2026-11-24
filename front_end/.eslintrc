@@ -1,0 +1,52 @@
+{
+  "env": {
+    "es2022": true,
+    "node": true
+  },
+  "extends": [
+    "airbnb-base"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+      "ecmaVersion": 13
+  },
+  "rules": {
+    "max-len": [
+      "warn", { 
+        "code": 250,
+        "comments": 5000,
+        "ignoreStrings": true
+      }
+    ],
+    "prefer-destructuring": ["error", {
+      "array": false,
+      "object": true
+    }],
+    "func-names": ["error", "never"],
+    "array-callback-return": "off",
+    "object-curly-newline": "off",
+    "radix": "off",
+    "no-shadow": "off",
+    "consistent-return": "off",
+    "no-use-before-define": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-vars": [
+      "warn", {"args": "none"}
+    ],
+    "no-param-reassign": "off",
+    "no-console": "off",
+    "no-restricted-syntax": [
+        "error", {
+            "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|off|error|info|trace|time|timeEnd)$/]",
+            "message": "Unexpected property on console object was called"
+        },
+        {
+            "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(trace|time|timeEnd)$/]",
+            "message": "Use @curveroyaltysystems/platform-shared-utils > logger[debug|info|error] ( [Mixed] )"
+        }
+    ]
+  }
+}

@@ -1,0 +1,163 @@
+<div id="CUR-eRFyqNnq" class="jumbotron" data-pages="parallax">
+  <div id="CUR-FrLuiisD" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-jongYcrN" class="inner">
+      <ul id="CUR-RSpcwfvZ" class="breadcrumb">
+        <li id="CUR-GFdTErem"><a id="CUR-XPIXmeoM" href="/#/periods" class="active">Periods</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-XICzwUFM" class="container-fluid container-fixed-lg">
+  <!-- Errors -->
+  <div id="CUR-WCFJwPrA" ng-show="periodErrors && periodErrors.length !== 0 " class="alert alert-danger">
+    <p><b>The following validation errors occurred -</b></p>
+    <ul id="CUR-NChoCqLc">
+      <li ng-repeat="error in periodErrors">
+        {{error.message}} - <strong><a id="CUR-sKBtEAuf" href="{{error.link}}">{{error.name}}</a></strong>
+      </li>
+    </ul>
+  </div>
+  <!-- Search and Buttons -->
+  <div id="CUR-sSAejTBz" class="row m-b-20">
+    <div id="CUR-KjikitJE" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-WtaKCKnu" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-SSsnkEoZ" class="input-group transparent">
+          <input id="CUR-GnwMOudf" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-TxFFYZkq" class="input-group-addon pointer" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-EIoMbNgO" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-HOkxQTEW" class="sm-p-l-15 sm-p-r-15">
+        <button id="CUR-knYbtmzh" ng-show="rights.periods == 'Edit'" class="btn btn-danger hidden-xs" data-toggle="modal"
+          data-target="#deleteModal"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+        <a id="CUR-neIvcvug" ng-show="rights.periods == 'Edit' && !demoMode" href="/#/periods/new">
+          <button id="CUR-gYxIZkCO" class="btn btn-complete w-xs-100-p m-xs-l-0"><i class="fa fa-plus"></i>&nbsp;Create</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-tKiNTBcm" class="row">
+    <div id="CUR-aVjKYsxb" class="form-group col-xs-4">
+      <label id="CUR-SnOKuwaC">Accounting Period</label>
+      <ui-select ng-model="filter.accountingPeriod" close-on-select="true">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-iKJgQMgR" ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item as item in accountingPeriods | filter:$select.accountingPeriod" refresh-delay="500">
+          <div id="CUR-uhsJQdUZ" ng-bind-html="item | highlight: $select.accountingPeriod"></div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    
+    <div id="CUR-jUYSebzK" class="form-group col-xs-4">
+      <label id="CUR-wfCMkfKT">Year</label>
+      <ui-select ng-model="filter.year" close-on-select="true">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-KDrihZmA" ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item as item in years | filter:$select.year" refresh-delay="500">
+          <div id="CUR-LaimtnWd" ng-bind-html="item | highlight: $select.year"></div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+
+    <div id="CUR-wtCFYitd" class="form-group col-xs-4" ng-if="clientType != 'Publisher'">
+      <label id="CUR-tGQIKFhQ">Type</label>
+      <ui-select ng-model="filter.contractType" close-on-select="true">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-VsZWeQba" ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item as item in contractType | filter:$select.contractType" refresh-delay="500">
+          <div id="CUR-kzCFruux" ng-bind-html="item | highlight: $select.contractType"></div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+  <div id="CUR-IDwcVYsw" class="row">
+    <div id="CUR-Rzjnxggr" class="col-sm-12 text-center">
+      <button id="CUR-jhJPPLlZ" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i> Filter</button>
+    </div>
+  </div>
+  <div id="CUR-vHfcLoUx" class="col-sm-12">
+    <h5 id="CUR-nSpuSgTb" class="pull-right">Total: {{total? total : 0}}</h5>
+  </div>
+  <div id="CUR-mrCDCqKa" class="row">
+    <div id="CUR-uVoAHtlC" class="col-xs-12">
+      <div id="CUR-CTBeUXsF" class="panel panel-default">
+        <div id="CUR-fyCJGnuf" class="panel-heading">
+          <div id="CUR-TpyUyTmM" class="panel-title">
+            Periods <documentation
+              link="http://guide.curveroyaltysystems.com/article/reviewing-a-period-sending-statements/">
+            </documentation>
+          </div>
+        </div>
+        <div id="CUR-epoSWqSv" class="panel-body">
+          <div id="CUR-ilajBlTY" class="table-responsive">
+            <table id="CUR-FpasAYSv" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+                <tr id="CUR-voQajThx">
+                  <th class="table-checkbox hidden-xs"><input id="CUR-ygEYzrHP" ng-show="rights.periods == 'Edit'" type="checkbox"
+                      class="select-all" ng-click="selectAllPeriods()" ng-checked="selectAllChecked"></th>
+                  <th ng-click="getSortedData('name')" ng-class="whatClassIsIt('name')">Name</th>
+                  <th ng-click="getSortedData('year')" ng-class="whatClassIsIt('year')">Year</th>
+                  <th ng-click="getSortedData('accountingPeriod')" ng-class="whatClassIsIt('accountingPeriod')">Period
+                  </th>
+                  <th ng-click="getSortedData('grossAmount')" ng-class="whatClassIsIt('grossAmount')">Gross Sales</th>
+                  <th ng-click="getSortedData('grossCosts')" ng-class="whatClassIsIt('grossCosts')"
+                    ng-if="clientType != 'Publisher'">Gross Costs</th>
+                  <th ng-click="getSortedData('createdAt')" ng-class="whatClassIsIt('createdAt')">Created</th>
+                  <th ng-click="getSortedData('status')" ng-class="whatClassIsIt('status')">Status</th>
+                </tr>
+              </thead>
+              <tbody id="CUR-iXFdMjLD">
+                <tr period-table-row ng-repeat="period in periods" index="{{$index}}" period="period" client-type="clientType"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-juUorLcH" class="col-sm-12">
+    <div id="CUR-HvVtqpqb" class="pull-right">
+      <span id="CUR-gFGgldQd" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <span id="CUR-uHUSPYZL" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-iavAzfbC" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-FNXvGdXW" class="row">
+    <div id="CUR-DiCITzDa" class="col-xs-12 text-center">
+      <pagination id="CUR-BKQWINUH" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-KvIBtAyM" class="modal-dialog">
+    <div id="CUR-FodMzXkq" class="modal-content">
+      <div id="CUR-pdbEpLwW" class="modal-header clearfix text-left">
+        <button id="CUR-giRjsNun" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-QDcmMeFH">Delete Periods</h5>
+      </div>
+      <div id="CUR-HsbkyUbu" class="modal-body">
+        <div id="CUR-HDQgMjTF" class="row">
+          <div id="CUR-FSgNeWnl" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected periods? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-BtyoahvR" class="row">
+          <div id="CUR-rTRvrMMd" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-ERHQWMeK" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-bsqGxjeL" type="button" class="btn btn-danger m-t-5" ng-click="deleteSelected()"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

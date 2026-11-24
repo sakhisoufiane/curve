@@ -1,0 +1,686 @@
+openapi: 3.0.3
+info:
+  title: Parents API
+  version: '1.0.0'
+  description: |
+    API for managing parent company records in the system.
+    Supports CRUD operations on parent companies with access control validation.
+    Includes support for hierarchical relationships and company associations.
+    
+    Access Control:
+    - Only accessible to internal users
+    - Read access requires admin read permissions
+    - Write access requires admin write permissions
+
+paths:
+  /parents:
+    get:
+      tags:
+        - "Parents"
+      summary: Retrieve parents
+      description: Returns a list of parents with pagination. Only accessible to internal users. Text filtering supports regex pattern matching and ObjectId lookup.
+      parameters:
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Filter on supplied text string. Supports regex search on parent names and ObjectId validation for exact ID matches (24-character hex strings).
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number to return
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items to return per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Column to order by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Order direction
+      responses:
+        200:
+          description: Successfully retrieved parents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Parent'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        403:
+          description: Forbidden, the user is not an internal user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    post:
+      tags:
+        - "Parents"
+      summary: Create a parent
+      description: Creates a new parent. Only accessible to internal users. Subdomain will be automatically converted to lowercase with spaces replaced by underscores. Custom domain validation is performed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParentInput'
+      responses:
+        200:
+          description: Successfully created parent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parent'
+        403:
+          description: Forbidden, the user is not an internal user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error or parent with name already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "A Parent with this name already exists"
+
+  /parents/{id}:
+    get:
+      tags:
+        - "Parents"
+      summary: Retrieve a specific parent
+      description: Returns details for a specific parent by ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Parent ID
+      responses:
+        200:
+          description: Successfully retrieved parent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parent'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Parent not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Parent with ID {id}"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    put:
+      tags:
+        - "Parents"
+      summary: Update a parent
+      description: Updates a parent by ID. Uses document-level access control to verify user permissions. Custom domain validation is performed.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Parent ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParentInput'
+      responses:
+        200:
+          description: Successfully updated parent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parent'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Parent not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Parent with ID {id}"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    delete:
+      tags:
+        - "Parents"
+      summary: Delete a parent
+      description: Deletes a parent by ID. Only accessible to internal users.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Parent ID
+      responses:
+        200:
+          description: Successfully deleted parent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parent'
+        403:
+          description: Forbidden, the user is not an internal user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Parent not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Parent with ID {id}"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /parents/{id}/history:
+    get:
+      tags:
+        - "Parents"
+      summary: Retrieve history for a parent
+      description: Returns the update history for a specific parent.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Parent ID
+      responses:
+        200:
+          description: Successfully retrieved parent history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ops:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              op:
+                                type: string
+                              path:
+                                type: string
+                              value:
+                                type: string
+                        _id:
+                          type: string
+                        ref:
+                          type: string
+                        author:
+                          type: object
+                          nullable: true
+                        timestamp:
+                          type: string
+                          format: date-time
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Parent not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Parent with ID {id}"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /parents/{id}/uploadDarkLogo:
+    post:
+      tags:
+        - "Parents"
+      summary: Upload dark logo for a parent
+      description: Uploads a dark logo image for a specific parent. Only accessible to internal users. Accepts common image formats (PNG, JPG, SVG).
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Parent ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Logo image file
+              required:
+                - file
+      responses:
+        200:
+          description: Successfully uploaded dark logo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parent'
+        400:
+          description: Bad request, file is missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        403:
+          description: Forbidden, the user is not an internal user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error or parent not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Parent with ID {id}"
+
+  /parents/{id}/uploadLightLogo:
+    post:
+      tags:
+        - "Parents"
+      summary: Upload light logo for a parent
+      description: Uploads a light logo image for a specific parent. Only accessible to internal users. Accepts common image formats (PNG, JPG, SVG).
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Parent ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Logo image file
+              required:
+                - file
+      responses:
+        200:
+          description: Successfully uploaded light logo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parent'
+        400:
+          description: Bad request, file is missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        403:
+          description: Forbidden, the user is not an internal user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error or parent not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Parent with ID {id}"
+
+  /parents/{id}/uploadFavicon:
+    post:
+      tags:
+        - "Parents"
+      summary: Upload favicon for a parent
+      description: Uploads a favicon image for a specific parent. Only accessible to internal users. Accepts ICO, PNG formats for favicon.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Parent ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Favicon image file
+              required:
+                - file
+      responses:
+        200:
+          description: Successfully uploaded favicon
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parent'
+        400:
+          description: Bad request, file is missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        403:
+          description: Forbidden, the user is not an internal user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error or parent not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Parent with ID {id}"
+
+components:
+  schemas:
+    Parent:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the parent
+        name:
+          type: string
+          description: Name of the parent
+        subdomain:
+          type: string
+          description: Subdomain for the parent
+        customDomain:
+          type: string
+          nullable: true
+          description: Custom domain for the parent
+        address:
+          type: string
+          nullable: true
+          description: Physical address for the parent organization
+        supportEmail:
+          type: string
+          nullable: true
+          description: Custom support email for the parent organization
+        whiteLabelCommunication:
+          type: boolean
+          nullable: true
+          description: Flag to enable white-label communication settings
+        useLogoForClients:
+          type: boolean
+          nullable: true
+          description: Flag to control whether clients can use parent logos
+        pageTitle:
+          type: string
+          nullable: true
+          description: Custom page title for the parent organization
+        darkLogo:
+          type: string
+          nullable: true
+          description: Path to the dark logo in S3
+        publicDarkLogo:
+          type: string
+          nullable: true
+          description: Public URL for the dark logo
+        lightLogo:
+          type: string
+          nullable: true
+          description: Path to the light logo in S3
+        publicLightLogo:
+          type: string
+          nullable: true
+          description: Public URL for the light logo
+        favicon:
+          type: string
+          nullable: true
+          description: Path to the favicon in S3
+        publicFavicon:
+          type: string
+          nullable: true
+          description: Public URL for the favicon
+        createdBy:
+          type: object
+          properties:
+            _id:
+              type: string
+            email:
+              type: string
+          description: User who created the parent
+        lastModifiedBy:
+          type: object
+          properties:
+            _id:
+              type: string
+            email:
+              type: string
+          description: User who last modified the parent
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the parent was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the parent was last updated
+        __v:
+          type: integer
+          description: Document version (Mongoose versioning field)
+    ParentInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the parent
+        subdomain:
+          type: string
+          description: Subdomain for the parent. Will be automatically converted to lowercase with spaces replaced by underscores.
+        customDomain:
+          type: string
+          nullable: true
+          description: Custom domain for the parent. Must be a valid domain format. Will be trimmed and set to null if it matches the default Curve domain.
+        address:
+          type: string
+          nullable: true
+          description: Physical address for the parent organization
+        supportEmail:
+          type: string
+          nullable: true
+          description: Custom support email for the parent organization
+        whiteLabelCommunication:
+          type: boolean
+          nullable: true
+          description: Flag to enable white-label communication settings
+        useLogoForClients:
+          type: boolean
+          nullable: true
+          description: Flag to control whether clients can use parent logos
+        pageTitle:
+          type: string
+          nullable: true
+          description: Custom page title for the parent organization
+      required:
+        - name
+        - subdomain

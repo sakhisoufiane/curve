@@ -1,0 +1,37 @@
+[
+  {
+    "type": "SimpleMapping",
+    "inputValueFieldName": "Territory",
+    "outputField": "outputTerritory",
+    "mappings": {
+      "UK": "GB"
+    }
+  },
+  {
+    "type": "HierarchicalMapping",
+    "inputValueColumnIndex": 1,
+    "outputField": "outputTerritory",
+    "context": [
+      "Channel",
+      "Territory"
+    ],
+    "mappings": {
+      "_default": {
+        "_default": {
+          "_default": "default_default_default_id"
+        }
+      }
+    }
+  },
+  {
+    "type": "Calculation",
+    "inputFixedValue": "Hello!",
+    "outputField": "outputTerritory",
+    "equations": [
+      {
+        "calculationType": "addition",
+        "equationValueFieldName": "Money"
+      }
+    ]
+  }
+]

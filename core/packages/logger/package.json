@@ -1,0 +1,33 @@
+{
+  "name": "@curveroyaltysystems/logger",
+  "version": "2.0.1",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "rimraf dist && tsc",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "lint": "eslint \"src/**/*.ts*\"",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "dotenv": "16.6.1",
+    "winston": "3.19.0",
+    "winston-cloudwatch": "6.3.0"
+  },
+  "devDependencies": {
+    "@curveroyaltysystems/eslint-config": "*",
+    "@curveroyaltysystems/prettier-config": "*",
+    "@curveroyaltysystems/typescript-config": "*",
+    "@types/uuid": "9.0.8",
+    "rimraf": "3.0.2"
+  },
+  "prettier": "@curveroyaltysystems/prettier-config"
+}

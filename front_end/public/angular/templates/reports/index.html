@@ -1,0 +1,152 @@
+<div id="CUR-XnVEHJeX" class="jumbotron" data-pages="parallax">
+  <div id="CUR-cdHVPQlQ" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-FQiaOCAA" class="inner">
+      <ul id="CUR-ErJOhMAt" class="breadcrumb">
+        <li id="CUR-RXLTXQPl">
+          <a id="CUR-eLNMGIqs" href="/#/reports" class="active">Reports</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-lEqtzDJu" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-qnbrvtQY" class="row m-b-20">
+    <div id="CUR-gZQsXMyB" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-UNLHephS" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-YdXnyfPI" class="input-group transparent">
+          <input id="CUR-DMXJBYsp" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-tULsfUnn" class="input-group-addon pointer" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-jwcFcgvW" class="col-sm-12 col-md-7 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-WcYLRgQU" class="sm-p-l-20 sm-p-r-15">
+        <button id="CUR-lmeSNAUy" class="btn btn-danger hidden-xs" data-toggle="modal" data-target="#deleteModal">
+          <i class="fa fa-trash"></i>&nbsp;Delete
+        </button>
+        <div id="CUR-SHKPSPfA" class="btn-group  dropdown-default" ng-if="features && features.fixedReports && fixedReports.length > 0">
+          <a id="CUR-qIHIFTHv" class="btn btn-complete dropdown-toggle w-xs-200-p" data-toggle="dropdown" aria-expanded="false" style="width: 125px;">
+            <i class="fa fa-plus"></i>&nbsp;Create <span id="CUR-FVKRoGnd" class="caret"></span>
+          </a>
+          <ul id="CUR-cPBKnmSk" class="dropdown-menu w-xs-200-p">
+            <li id="CUR-LJGOskVc">
+              <a id="CUR-BzpsFdGR" href="/#/reports/new" ng-click="createNewReport()">Custom Report</a>
+            </li>
+            <li id="CUR-bWkzaikO">
+              <a id="CUR-NLrNkAsS" href="javascript:void(0)" data-toggle="modal" data-target="#fromFixedReportsModal">Fixed Report</a>
+            </li>
+          </ul>
+        </div>
+        <a id="CUR-vlanOaxG" href="/#/reports/new" ng-if="!demoMode" ng-show="!features || !features.fixedReports || fixedReports.length == 0">
+          <button id="CUR-gDgkBmGy" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="createNewReport()">
+            <i class="fa fa-plus"></i>&nbsp;Create</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-UVvySXnM" class="col-sm-12">
+      <h5 id="CUR-wyrxksQx" class="pull-right">Total: {{total? total : 0}}</h5>
+    </div>
+  <div id="CUR-adLToVsv" class="row">
+    <div id="CUR-aEmyBHPd" class="col-xs-12">
+      <div id="CUR-HbxhUBZG" class="panel panel-default">
+        <div id="CUR-wtFVDqax" class="panel-heading">
+          <div id="CUR-UFoHGSbn" class="panel-title">
+            Reports <documentation link="http://guide.curveroyaltysystems.com/article/reports/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-ZNFABrxF" class="panel-body">
+          <responsive-table
+          headers="headers"
+          data="reports"
+          order-by="filter.orderBy"
+          selectable="true"
+          sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-NpkpABxX" class="col-sm-12">
+      <div id="CUR-xecSoaob" class="pull-right">
+        <span id="CUR-VIPPRfsT" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page  |</span>
+        <a id="CUR-JrtywuKD" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+      </div>
+    </div>
+  <div id="CUR-dKRXZyYj" ng-if="!isShowingAll" class="row">
+    <div id="CUR-RVxXCtol" class="col-xs-12 text-center">
+      <pagination id="CUR-SpwCiVpo" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-aRFtBALs" class="modal-dialog">
+    <div id="CUR-MyOpNmgC" class="modal-content">
+      <div id="CUR-WUdUdqbF" class="modal-header clearfix text-left">
+        <button id="CUR-pIlfwwnh" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-rQElsknL">Delete Reports</h5>
+      </div>
+      <div id="CUR-mDCoxjct" class="modal-body">
+        <div id="CUR-iRyxfoyQ" class="row">
+          <div id="CUR-VmdUQbnb" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected reports? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-MCvXivkM" class="row">
+          <div id="CUR-gKIyPovU" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-XIELBPPl" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-nGthGmKp" type="button" class="btn btn-danger m-t-5" ng-click="deleteSelected()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="fromFixedReportsModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-gnaVCRAE" class="modal-dialog">
+    <div id="CUR-PpNDGKJT" class="modal-content">
+      <div id="CUR-EUBipFyB" class="modal-header clearfix text-left">
+        <button id="CUR-TaOPXwdt" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-EjROCjcT">Create Fixed Report</h5>
+      </div>
+      <div id="CUR-exSpQclm" class="modal-body">
+        <div id="CUR-bHhAiBFm" class="row">
+          <div id="CUR-LOqFYYQM" class="col-xs-12 m-t-20">
+            <p>
+              Select which type of Fixed Report you would like to Create.
+            </p>
+            <ui-select ng-model="selectedFixedReport" on-select="setCurrentReport($item)">
+              <ui-select-match>
+                <span id="CUR-NsFwEEmc" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices 
+                repeat="fixedReport._id as fixedReport in fixedReports | filter:$select.search" 
+                refresh="loadFixedReports()" 
+                refresh-delay="500"
+              >
+              <span id="CUR-lJooSHlx" ng-bind-html="fixedReport.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div id="CUR-fTpIUcyn" class="row">
+          <div id="CUR-lJOWJStO" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-fqnUapVg" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-fKhMDFpM" type="button" class="btn btn-complete m-t-5" ng-click="createFromFixedReport()"  ng-disabled="!selectedFixedReport">
+              <i class="fa fa-plus"></i>&nbsp;Create
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

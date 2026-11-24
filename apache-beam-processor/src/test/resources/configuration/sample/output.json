@@ -1,0 +1,6 @@
+{
+  "type": "Unsharded GCS",
+  "fileType": "csv",
+  "bucketName": "gs://apache-beam-test-sam/sam-output-test-bucket",
+  "fileName": "simpleMappingTestOutput"
+}

@@ -1,0 +1,1708 @@
+openapi: 3.1.0
+info:
+  title: Contracts API
+  version: 1.10.0
+paths:
+  /contracts:
+    get:
+      tags:
+        - Contracts
+      summary: Retrieve a list of Contracts
+      description: This route retrieves a list of Contracts based on the provided filters.
+      parameters:
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: The text to be searched.
+        - in: query
+          name: page
+          schema:
+            type: number
+          description: The page number for pagination, defaults to 1.
+        - in: query
+          name: limit
+          schema:
+            type: number
+          description: The number of items to return per page, defaults to 25.
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+            enum: ["name", "type", "createdAt"]
+          description: The field to order by.
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: ["asc", "desc"]
+          description: The direction to order by.
+        - in: query
+          name: createdAfter
+          schema:
+            type: string
+            format: date
+          description: Filter contracts created on or after this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: createdBefore
+          schema:
+            type: string
+            format: date
+          description: Filter contracts created on or before this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: updatedAfter
+          schema:
+            type: string
+            format: date
+          description: Filter contracts updated on or after this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: updatedBefore
+          schema:
+            type: string
+            format: date
+          description: Filter contracts updated on or before this date (inclusive, YYYY-MM-DD format)
+      responses:
+        '200':
+          description: Successfully retrieved the list of Contracts, returns Contracts along with metadata.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contracts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Contract'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                        description: Current page number.
+                      totalPages:
+                        type: integer
+                        description: Total number of pages available.
+                      total:
+                        type: integer
+                        description: Total number of Contracts available.
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to retrieve the Contracts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    post:
+      tags:
+        - Contracts
+      summary: Create a new Contract
+      description: This route allows for the creation of a new Contract.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractInput'
+        responses:
+        '200':
+          description: Successfully created the Contract.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to save the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    delete:
+      tags:
+        - Contracts
+      summary: Delete one or multiple Contracts
+      description: This route allows for the deletion of multiple Contracts, specified by their IDs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  example: ["620a912lz295e377a20a13z2", "684bbda7a4eb464a2ac3cb80"]
+                type:
+                  type: string
+                  description: Deletion type, it can be 'multi'. Defaults to 'multi' if not specified.
+                  hidden: true
+      responses:
+        '200':
+          description: Successfully deleted the Contracts, returns the result of the operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '201':
+          description: Indicates that some or all Contracts are attached to other data which needs to be deleted first, returns a message indicating the issue.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden, the user does not have sufficient rights to perform the deletion.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not found, the specified Contracts could not be found, returns a message indicating the issue.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to delete the Contracts, returns a message indicating an internal error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /contracts/{id}:
+    get:
+      tags:
+        - Contracts
+      summary: Retrieve a specific Contract by ID
+      description: This route retrieves a specific Contract by its ID.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Contract to retrieve.
+      responses:
+        '200':
+          description: Successfully retrieved the Contract.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Contract not found, no Contract exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Contract with ID 6c0ef989427a6638a9b3727c"
+        '500':
+          description: Internal server error occurred while trying to retrieve the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    put:
+      tags:
+        - Contracts
+      summary: Update single Contract
+      description: This route finds and updates a specific Contract by its ID.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Contract to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractInput'
+      responses:
+        '200':
+          description: Successfully updated the Contract.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Contract not found, no Contract exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to update the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /contracts/{id}/history:
+    get:
+      tags:
+        - Contracts
+      summary: Retrieve Contract history
+      description: This route retrieves the history of a specific Contract by its ID.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Contract to retrieve history for.
+      responses:
+        '200':
+          description: Successfully retrieved the Contract history.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: date-time
+                        clientId:
+                          type: string
+                        author:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            email:
+                              type: string
+                        ops:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              op:
+                                type: string
+                                example: replace
+                              path:
+                                type: string
+                                example: /name
+                              value:
+                                type: string
+                                example: New Contract Name
+                                nullable: true
+                              originalValue:
+                                type: string
+                                example: Old Contract Name
+                                nullable: true
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Contract not found, no Contract exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to retrieve the Contract history.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /contracts/{id}/statuses:
+    get:
+      tags:
+        - Contracts
+      summary: Retrieve Contract statuses by Payee ID
+      description: This route retrieves the statuses of a specific Contract by Payee ID.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Payee to retrieve Contract statuses for.
+      responses:
+        '200':
+          description: Successfully retrieved the Contract statuses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    balance:
+                      type: number
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to retrieve the Contract statuses.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string'
+  /contracts/{id}/releases:
+    get:
+      tags:
+        - Contracts
+      summary: Retrieve Releases for a specific Contract
+      description: This route retrieves the Releases associated with a specific Contract by its ID.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Contract to retrieve Releases for.
+      responses:
+        '200':
+          description: Successfully retrieved the Releases for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  releases:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ContractRelease'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                        description: Current page number.
+                      totalPages:
+                        type: integer
+                        description: Total number of pages available.
+                      total:
+                        type: integer
+                        description: Total number of Releases associated with the Contract.
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Contract not found, no Contract exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Contract with ID 6c0ef989427a6638a9b3727c"
+        '500':
+          description: Internal server error occurred while trying to retrieve the Releases for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /contracts/{id}/tracks:
+    get:
+      tags:
+        - Contracts
+      summary: Retrieve Tracks for a specific Contract
+      description: This route retrieves the Tracks associated with a specific Contract by its ID.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Contract to retrieve Tracks for.
+      responses:
+        '200':
+          description: Successfully retrieved the Tracks for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tracks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ContractTrack'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                        description: Current page number.
+                      totalPages:
+                        type: integer
+                        description: Total number of pages available.
+                      total:
+                        type: integer
+                        description: Total number of Tracks associated with the Contract.
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Contract not found, no Contract exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Contract with ID 6c0ef989427a6638a9b3727c"
+        '500':
+          description: Internal server error occurred while trying to retrieve the Tracks for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /contracts/{id}/works:
+    get:
+      tags:
+        - Contracts
+      summary: Retrieve Works for a specific Contract
+      description: This route retrieves the Works associated with a specific Contract by its ID.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Contract to retrieve Works for.
+      responses:
+        '200':
+          description: Successfully retrieved the Works for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  works:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Work'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                        description: Current page number.
+                      totalPages:
+                        type: integer
+                        description: Total number of pages available.
+                      total:
+                        type: integer
+                        description: Total number of Works associated with the Contract.
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Contract not found, no Contract exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Contract with ID 6c0ef989427a6638a9b3727c"
+        '500':
+          description: Internal server error occurred while trying to retrieve the Works for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /contracts/{id}/costs:
+    get:
+      tags:
+        - Contracts
+      summary: Retrieve Costs for a specific Contract
+      description: This route retrieves the Costs associated with a specific Contract by its ID.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Contract to retrieve Costs for.
+      responses:
+        '200':
+          description: Successfully retrieved the Costs for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  associatedReleaseIds:
+                    type: array
+                    items:
+                      type: object
+                      description: List of Release IDs associated with the Contract.
+                      properties:
+                        _id:
+                          type: string
+                          description: The ID of the associated Release.
+                  associatedTrackIds:
+                    type: array
+                    items:
+                      type: object
+                      description: List of Track IDs associated with the Contract.
+                      properties:
+                        _id:
+                          type: string
+                          description: The ID of the associated Track.
+                  costs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Cost'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                        description: Current page number.
+                      totalPages:
+                        type: integer
+                        description: Total number of pages available.
+                      total:
+                        type: integer
+                        description: Total number of Costs associated with the Contract.
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Contract not found, no Contract exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Contract with ID 6c0ef989427a6638a9b3727c"
+        '500':
+          description: Internal server error occurred while trying to retrieve the Costs for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /contracts/{id}/transactions:
+    get:
+      tags:
+        - Contracts
+      summary: Retrieve Transactions for a specific Contract
+      description: >
+        Retrieves the Transactions associated with a specific Contract by its ID.
+        When the `page` query parameter is provided, returns a paginated response
+        including a `meta` object with pagination details. Without `page`, returns
+        all transactions as a flat list.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Contract to retrieve Transactions for.
+        - in: query
+          name: page
+          schema:
+            type: number
+          description: The page number for pagination. When provided, the response includes a `meta` object. Defaults to 1.
+        - in: query
+          name: limit
+          schema:
+            type: number
+          description: The number of transactions to return per page. Defaults to 25. Only applies when `page` is provided.
+      responses:
+        '200':
+          description: Successfully retrieved the Transactions for the Contract.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - description: Non-paginated response (when `page` query param is omitted).
+                    type: object
+                    properties:
+                      transactions:
+                        type: array
+                        items:
+                          allOf:
+                            - $ref: '#/components/schemas/Transaction'
+                            - type: object
+                              properties:
+                                balance:
+                                  type: number
+                                  description: Running balance of the contract at the time of this transaction, calculated from the contract's opening balance.
+                  - description: Paginated response (when `page` query param is provided).
+                    type: object
+                    properties:
+                      transactions:
+                        type: array
+                        items:
+                          allOf:
+                            - $ref: '#/components/schemas/Transaction'
+                            - type: object
+                              properties:
+                                balance:
+                                  type: number
+                                  description: Running balance of the contract at the time of this transaction, calculated from the contract's opening balance.
+                      meta:
+                        type: object
+                        properties:
+                          currentPage:
+                            type: number
+                            example: 1
+                          totalPages:
+                            type: number
+                            example: 4
+                          total:
+                            type: number
+                            example: 87
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Contract not found, no Contract exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Contract with ID 6c0ef989427a6638a9b3727c"
+        '500':
+          description: Internal server error occurred while trying to retrieve the Transactions for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /contracts/{id}/future_transactions:
+    get:
+      tags:
+        - Contracts
+      summary: Retrieve Future Transactions for a specific Contract
+      description: This route retrieves the Future Transactions associated with a specific Contract by its ID.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Contract to retrieve Future Transactions for.
+      responses:
+        '200':
+          description: Successfully retrieved the Future Transactions for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Contract not found, no Contract exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Contract with ID 6c0ef989427a6638a9b3727c"
+        '500':
+          description: Internal server error occurred while trying to retrieve the Future Transactions for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /contracts/{id}/active_advances:
+    get:
+      tags:
+        - Contracts
+      summary: Retrieve active advance recoupment status for a specific Contract
+      description: This route retrieves the active advance tracking information for a specific Contract, including the overall balance, completed recoupments, and current recoupment cycle details at a given point in time.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Contract to retrieve active advances for.
+        - in: query
+          name: date
+          schema:
+            type: string
+            format: date-time
+          description: The point-in-time date for calculating active advances. Defaults to the current date if not provided.
+      responses:
+        '200':
+          description: Successfully retrieved the active advance recoupment status for the Contract.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActiveAdvance'
+        '400':
+          description: Bad request, invalid date format or unsupported contract type.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Profit Share contracts do not track advance recoupment"
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Contract not found, no Contract exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Contract with ID 6c0ef989427a6638a9b3727c"
+        '500':
+          description: Internal server error occurred while trying to retrieve the active advances for the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /contracts/{id}/add_alias:
+    put:
+      tags:
+        - Contracts
+      summary: Add an alias to a Contract
+      description: This route allows adding an alias to a specific Contract by its ID.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: "6c0ef989427a6638a9b3727c"
+          required: true
+          description: The ID of the Contract to add an alias to.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  properties:
+                    alias:
+                      type: string
+                      example: "New Alias"
+                - type: object
+                  properties:
+                    aliases:
+                      type: array
+                      items:
+                        type: string
+                        example: ["Alias 1", "Alias 2"]
+      responses:
+        '200':
+          description: Successfully added the alias to the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Alias added"
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Contract not found, no Contract exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to add the alias to the Contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /contracts/raw-export:
+    post:
+      tags:
+        - Contracts
+      summary: Raw CSV Export of Contracts
+      description: |
+        Export contracts data to a raw CSV file. By default, the export is processed asynchronously
+        and a notification email is sent when complete. When sync=true, the request waits for
+        the export to complete and returns the download URL directly in the response.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sync:
+                  type: boolean
+                  default: false
+                  description: |
+                    If true, waits for export to complete and returns download URL directly.
+                    If false (default), sends notification email when export is ready.
+                filter:
+                  type: object
+                  description: Filter object to select contracts for export.
+                  properties:
+                    text:
+                      type: string
+                      description: Text search filter for name, labels, foreignId, etc.
+                    contractType:
+                      type: string
+                      enum: ["Standard", "Mechanical", "All"]
+                      description: Filter by contract type.
+                    valid:
+                      type: boolean
+                      description: Filter by validity status.
+                    createdAfter:
+                      type: string
+                      format: date
+                      description: Filter for contracts created on or after this date. Date-only values use start of day UTC.
+                      example: "2025-01-01"
+                    createdBefore:
+                      type: string
+                      format: date
+                      description: Filter for contracts created on or before this date. Date-only values use end of day UTC.
+                      example: "2025-12-31"
+                    updatedAfter:
+                      type: string
+                      format: date
+                      description: Filter for contracts updated on or after this date. Date-only values use start of day UTC.
+                      example: "2025-01-01"
+                    updatedBefore:
+                      type: string
+                      format: date
+                      description: Filter for contracts updated on or before this date. Date-only values use end of day UTC.
+                      example: "2025-12-31"
+      responses:
+        '200':
+          description: |
+            When sync=false (default): Export process started successfully, email notification will be sent.
+            When sync=true: Export completed, returns download URL (expires in 24 hours).
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Your report will be sent to you via email shortly"
+                    description: Response when sync=false (default)
+                  - type: object
+                    properties:
+                      csvPublicLink:
+                        type: string
+                        format: uri
+                        example: "https://s3.amazonaws.com/bucket/raw_exports/Client-contracts%20raw%20export%2020260120133708304.csv"
+                    description: Response when sync=true
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while processing the export.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: string
+                    description: Error details (only returned when sync=true)
+
+components:
+  schemas:
+    Contract:
+      type: object
+      properties:
+        _id:
+          type: string
+        accountingPeriod:
+          type: string
+        active:
+          type: boolean
+        advance:
+          type: number
+        aliases:
+          type: array
+          items:
+            type: string
+        autoPayment:
+          type: boolean
+        autoPaymentConditions:
+          type: array
+          items:
+            type: object
+            properties:
+              contractId:
+                type: string
+              condition:
+                type: string
+        clientId:
+          type: string
+        collectionEndDate:
+          type: string
+          format: date
+        companyId:
+          type: string
+        complete:
+          type: boolean
+        contractCategories:
+          type: array
+          items:
+            type: string
+        contractType:
+          type: string
+        costs:
+          type: array
+          items:
+            type: object
+        costsTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CostTerm'
+        createdBy:
+          type: string
+        crossContracts:
+          type: array
+          items:
+            type: object
+            properties:
+              condition:
+                type: string
+              process:
+                type: string
+              contractId:
+                type: string
+              percentage:
+                type: number
+              whenAutoPaymentTriggered:
+                type: boolean
+        currency:
+          type: string
+        currentBalance:
+          type: number
+        deductWithholding:
+          type: boolean
+        deductionsTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CostTerm'
+        endDate:
+          type: string
+          format: date
+        escalationEquivalents:
+          type: array
+          items:
+            type: object
+        escalationTrackers:
+          type: array
+          items:
+            type: object
+        escalationTracking:
+          type: object
+        feesInvoice:
+          type: boolean
+        files:
+          type: array
+          items:
+            type: object
+        foreignId:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        lastModifiedBy:
+          type: string
+        licenseNo:
+          type: string
+        mechanicalContractTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesTerm'
+        mechanicalTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/MechanicalTerm'
+        minPayout:
+          type: number
+        name:
+          type: string
+        notes:
+          type: string
+        openingBalance:
+          type: number
+        partitionNo:
+          type: number
+        payeeBalanceCondition:
+          type: string
+          enum: [Always, When Positive, Never]
+        payees:
+          type: array
+          items:
+            type: object
+        primaryContract:
+          type: boolean
+        profitSharePercentage:
+          type: number
+        projectId:
+          type: string
+        releases:
+          type: array
+          items:
+            type: object
+        reserveBasis:
+          type: string
+        reserves:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reserve'
+        retentionPeriodEndDate:
+          type: string
+          format: date
+        salesTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesTerm'
+        selfBilling:
+          type: boolean
+        startDate:
+          type: string
+          format: date
+        statementDesign:
+          type: string
+        summaryContractTotals:
+          type: boolean
+        tracks:
+          type: array
+          items:
+            type: object
+        transactions:
+          type: array
+          items:
+            type: object
+        type:
+          type: string
+        valid:
+          type: boolean
+        validationErrors:
+          type: array
+          items:
+            type: object
+        withholdingTaxTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CostTerm'
+        works:
+          type: array
+          items:
+            type: object
+        subClientId:
+          type: string
+        isMainSubClientContract:
+          type: boolean
+
+    EscalationCondition:
+      type: object
+      properties:
+        escalationTracker:
+          type: string
+        thresholdType:
+          type: string
+        when:
+          type: string
+        threshold:
+          type: object
+
+    Escalation:
+      type: object
+      properties:
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EscalationCondition'
+        rate:
+          type: number
+        rateBasis:
+          type: string
+        type:
+          type: string
+        multiplier:
+          type: number
+        reductionRate:
+          type: number
+        reserve:
+          type: number
+
+    CostTerm:
+      type: object
+      properties:
+        contractName:
+          type: string
+        territory:
+          type: object
+        escalationTrackers:
+          type: array
+          items:
+            type: string
+        type:
+          type: string
+        rate:
+          type: number
+        escalations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Escalation'
+
+    SalesTerm:
+      type: object
+      properties:
+        contractName:
+          type: string
+        catType:
+          type: string
+        catalogueGroup:
+          type: object
+        territory:
+          type: object
+        channel:
+          type: object
+        configuration:
+          type: object
+        priceCategory:
+          type: object
+        source:
+          type: object
+        escalationTrackers:
+          type: array
+          items:
+            type: string
+        type:
+          type: string
+        rate:
+          type: number
+        multiplier:
+          type: number
+        reductionRate:
+          type: number
+        unitRate:
+          type: number
+        reserve:
+          type: number
+        escalations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Escalation'
+
+    MechanicalTerm:
+      type: object
+      properties:
+        contractName:
+          type: string
+        catType:
+          type: string
+        catalogueGroup:
+          type: object
+        territory:
+          type: object
+        channel:
+          type: object
+        configuration:
+          type: object
+        priceCategory:
+          type: object
+        source:
+          type: object
+        deductionType:
+          type: string
+        type:
+          type: string
+        rateBasis:
+          type: string
+        rate:
+          type: number
+        unitRate:
+          type: number
+        reserve:
+          type: number
+        currency:
+          type: string
+
+    Reserve:
+      type: object
+      properties:
+        contractName:
+          type: string
+        rate:
+          type: number
+
+    ContractRelease:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        artist:
+          type: string
+        catNo:
+          type: string
+        barcode:
+          type: string
+        format:
+          type: string
+        salesReturnsRights:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rights'
+        createdAt:
+          type: string
+          format: date-time
+    
+    Rights:
+      type: object
+      properties:
+        contractId:
+          type: string
+          description: The ID of the contract associated with the rights
+        percentage:
+          type: number
+          description: The percentage of rights associated with the contract
+        displayPercentage:
+          type: number
+          description: The display percentage of rights associated with the contract
+    
+    ContractTrack:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        artist:
+          type: string
+        isrc:
+          type: string
+        salesReturnsRights:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rights'
+      
+    ContractInput:
+      type: object
+      properties:
+        accountingPeriod:
+          type: string
+        active:
+          type: boolean
+        advance:
+          type: number
+        aliases:
+          type: array
+          items:
+            type: string
+        autoPayment:
+          type: boolean
+        autoPaymentConditions:
+          type: array
+          items:
+            type: object
+            properties:
+              contractId:
+                type: string
+              condition:
+                type: string
+        collectionEndDate:
+          type: string
+          format: date
+        companyId:
+          type: string
+        complete:
+          type: boolean
+        contractCategories:
+          type: array
+          items:
+            type: string
+        contractType:
+          type: string
+        costs:
+          type: array
+          items:
+            type: object
+        costsTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CostTerm'
+        crossContracts:
+          type: array
+          items:
+            type: object
+            properties:
+              condition:
+                type: string
+              process:
+                type: string
+              contractId:
+                type: string
+              percentage:
+                type: number
+              whenAutoPaymentTriggered:
+                type: boolean
+        currency:
+          type: string
+        currentBalance:
+          type: number
+        deductWithholding:
+          type: boolean
+        deductionsTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CostTerm'
+        endDate:
+          type: string
+          format: date
+        escalationEquivalents:
+          type: array
+          items:
+            type: object
+        escalationTrackers:
+          type: array
+          items:
+            type: object
+        escalationTracking:
+          type: object
+        feesInvoice:
+          type: boolean
+        files:
+          type: array
+          items:
+            type: object
+        foreignId:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        licenseNo:
+          type: string
+        mechanicalContractTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesTerm'
+        mechanicalTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/MechanicalTerm'
+        minPayout:
+          type: number
+        name:
+          type: string
+        notes:
+          type: string
+        openingBalance:
+          type: number
+        payeeBalanceCondition:
+          type: string
+          enum: [Always, When Positive, Never]
+        payees:
+          type: array
+          items:
+            type: object
+        primaryContract:
+          type: boolean
+        profitSharePercentage:
+          type: number
+        projectId:
+          type: string
+        releases:
+          type: array
+          items:
+            type: object
+        reserveBasis:
+          type: string
+        reserves:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reserve'
+        retentionPeriodEndDate:
+          type: string
+          format: date
+        salesTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesTerm'
+        selfBilling:
+          type: boolean
+        startDate:
+          type: string
+          format: date
+        statementDesign:
+          type: string
+        summaryContractTotals:
+          type: boolean
+        tracks:
+          type: array
+          items:
+            type: object
+        transactions:
+          type: array
+          items:
+            type: object
+        type:
+          type: string
+        withholdingTaxTerms:
+          type: array
+          items:
+            $ref: '#/components/schemas/CostTerm'
+        works:
+          type: array
+          items:
+            type: object
+        subClientId:
+          type: string
+        isMainSubClientContract:
+          type: boolean
+
+    ActiveAdvance:
+      type: object
+      properties:
+        contractId:
+          type: string
+          description: The ID of the Contract.
+        pointInTime:
+          type: string
+          format: date-time
+          description: The point-in-time date used for the calculation.
+        overallBalance:
+          type: number
+          description: The overall balance of the Contract at the given point in time.
+        completedRecoupments:
+          type: integer
+          description: The number of fully completed recoupment cycles.
+        recoupment:
+          type: object
+          description: Details of the current recoupment cycle.
+          properties:
+            advancesIssued:
+              type: number
+              description: Total advances issued in the current recoupment cycle.
+            amountRecouped:
+              type: number
+              description: Amount recouped so far in the current cycle.
+            outstanding:
+              type: number
+              description: Outstanding amount still to be recouped in the current cycle.

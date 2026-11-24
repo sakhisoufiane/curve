@@ -1,0 +1,486 @@
+openapi: 3.0.3
+info:
+  title: ISWC Deliveries API
+  version: 1.0.0
+  description: API for managing ISWC deliveries
+paths:
+  /iswcDeliveries:
+    get:
+      tags:
+        - ISWC Deliveries
+      summary: Retrieve all ISWC deliveries
+      description: Returns a paginated list of ISWC deliveries. Requires read access to catalogue.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Filter by text (searches delivery name)
+      responses:
+        '200':
+          description: Successfully retrieved ISWC deliveries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  iswcDeliveries:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/IswcDelivery'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - ISWC Deliveries
+      summary: Create a new ISWC delivery
+      description: Creates a new ISWC delivery. Requires write access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IswcDeliveryInput'
+      responses:
+        '200':
+          description: Successfully created ISWC delivery
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IswcDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /iswcDeliveries/bulk:
+    delete:
+      tags:
+        - ISWC Deliveries
+      summary: Delete multiple ISWC deliveries
+      description: Deletes multiple ISWC deliveries by their IDs. Requires write access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of ISWC delivery IDs to delete
+      responses:
+        '200':
+          description: Successfully deleted ISWC deliveries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                description: Array of deleted ISWC delivery IDs
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /iswcDeliveries/{id}:
+    get:
+      tags:
+        - ISWC Deliveries
+      summary: Retrieve a specific ISWC delivery
+      description: Returns details for a specific ISWC delivery by ID. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ISWC delivery ID
+      responses:
+        '200':
+          description: Successfully retrieved ISWC delivery
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IswcDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: ISWC delivery not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - ISWC Deliveries
+      summary: Update an ISWC delivery
+      description: Updates an ISWC delivery's details. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ISWC delivery ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IswcDeliveryInput'
+      responses:
+        '200':
+          description: Successfully updated ISWC delivery
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IswcDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: ISWC delivery not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - ISWC Deliveries
+      summary: Delete an ISWC delivery
+      description: Deletes an ISWC delivery by ID. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ISWC delivery ID
+      responses:
+        '200':
+          description: Successfully deleted ISWC delivery
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IswcDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: ISWC delivery not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /iswcDeliveries/{id}/works:
+    get:
+      tags:
+        - ISWC Deliveries
+      summary: Retrieve works for an ISWC delivery
+      description: Returns works associated with a specific ISWC delivery. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ISWC delivery ID
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Filter by text (searches work title)
+      responses:
+        '200':
+          description: Successfully retrieved works
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  works:
+                    type: array
+                    items: {}
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: ISWC delivery not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /iswcDeliveries/{id}/export_works:
+    get:
+      tags:
+        - ISWC Deliveries
+      summary: Export works for an ISWC delivery
+      description: Exports works associated with a specific ISWC delivery. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ISWC delivery ID
+      responses:
+        '200':
+          description: Successfully exported works (empty response, actual export sent via email)
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Empty response object
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: ISWC delivery not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /iswcDeliveries/{id}/deliver:
+    get:
+      tags:
+        - ISWC Deliveries
+      summary: Deliver an ISWC delivery
+      description: Initiates the delivery process for a specific ISWC delivery. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ISWC delivery ID
+      responses:
+        '200':
+          description: Successfully initiated delivery
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IswcDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: ISWC delivery not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    IswcDelivery:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the ISWC delivery
+        clientId:
+          type: string
+          description: Client ID associated with the ISWC delivery
+        name:
+          type: string
+          description: Name of the ISWC delivery
+        deliveryPartnerId:
+          type: string
+          description: ID of the delivery partner
+        status:
+          type: string
+          enum: [draft, queued, delivered, error]
+          description: Status of the ISWC delivery
+        deliveredWorkIds:
+          type: array
+          items:
+            type: string
+          description: IDs of works included in the delivery
+        deliveredDate:
+          type: string
+          format: date-time
+          description: Date when the delivery was sent
+        filter:
+          description: Filter object
+        filterType:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the ISWC delivery was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the ISWC delivery was last updated
+    IswcDeliveryInput:
+      type: object
+      required:
+        - name
+        - deliveryPartnerId
+      properties:
+        name:
+          type: string
+          description: Name of the ISWC delivery
+        deliveryPartnerId:
+          type: string
+          description: ID of the delivery partner
+        filter:
+          description: Filter object
+        filterType:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+      required:
+        - message

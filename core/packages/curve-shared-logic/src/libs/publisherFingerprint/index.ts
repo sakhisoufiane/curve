@@ -1,0 +1,1 @@
+export { generatePublisherFingerprint } from './publisherFingerprint';

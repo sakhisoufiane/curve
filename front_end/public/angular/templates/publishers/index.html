@@ -1,0 +1,196 @@
+<div id="CUR-PESwdhHc" class="jumbotron" data-pages="parallax">
+  <div id="CUR-VYHUruAn" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-EHXDeWQZ" class="inner">
+      <ul id="CUR-BZWrdBPk" class="breadcrumb">
+        <li id="CUR-xeVeOFva">
+          <a id="CUR-WPeTuqhB" href="/#/publishers" class="active">Publishers</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-EYYXEMQS" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-ofOhgAXM" class="row m-b-20">
+    <div id="CUR-zODKCbPg" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-TGUagVuU" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-ZmkhyzQe" class="input-group transparent">
+          <input id="CUR-JnoepRFN" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-HiCNhUSw" class="input-group-addon pointer" ng-click="search()">
+              <i class="pg-search"></i>
+            </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-ojkUlHIq" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-bnFYJAed" class="sm-p-l-15 sm-p-r-15">
+        <button id="CUR-uUdsnFba" class="btn btn-default hidden-xs" ng-show="isInternal" ng-click="rawExport()"><i class="fa fa-upload"></i>&nbsp;Raw Export</button>
+        <button id="CUR-qSMNNTsL" class="btn btn-default hidden-xs" ng-click="export()"><i class="fa fa-upload"></i>&nbsp;Export</button>
+        <button id="CUR-cRnLChHq" class="btn btn-default hidden-xs" data-toggle="modal" data-target="#importModal" ng-show="rights.catalogue == 'Edit'"><i class="fa fa-download"></i>&nbsp;Import</button>
+        <div id="CUR-mXlHKeuI" class="btn-group  dropdown-default" ng-show="rights.catalogue == 'Edit'">
+          <a id="CUR-cUnwntgQ" class="btn btn-danger dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-trash"></i>&nbsp;Delete <span id="CUR-zuKSgAhp" class="caret"></span>
+          </a>
+          <ul id="CUR-VaFigORF" class="dropdown-menu w-xs-100-p">
+            <li id="CUR-bbdOkCVQ">
+              <a id="CUR-qukxgPfg" class="pointer" data-toggle="modal" data-target="#deleteModal">Selected</a>
+            </li>
+            <li id="CUR-JqxSPxye">
+              <a id="CUR-owFgqtli" class="pointer" data-toggle="modal" data-target="#deleteBulkModal">Bulk</a>
+            </li>
+          </ul>
+        </div>
+        <a id="CUR-ZmdtdgmG" href="/#/publishers/new">
+          <button id="CUR-gzVjvyDf" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-show="rights.catalogue == 'Edit' && !demoMode"><i class="fa fa-plus"></i>&nbsp;Create</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-DGGrLxUy" class="col-sm-12">
+    <h5 id="CUR-DFbNUokU" class="pull-right">Total: {{total? total : 0}}</h5>
+  </div>
+  <div id="CUR-cwvnegPt" class="row">
+    <div id="CUR-SSJWXrPy" class="col-xs-12">
+      <div id="CUR-OrmeDGir" class="panel panel-default">
+        <div id="CUR-UuBwavpP" class="panel-heading">
+          <div id="CUR-IdTyYZVz" class="panel-title">
+            Publishers <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-publishers/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-UBgtBBTg" class="panel-body">
+          <responsive-table
+            headers="headers"
+            data="publishers"
+            order-by="filter.orderBy"
+            selectable="rights.catalogue == 'Edit'"
+            sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-zrjnUzFs" class="col-sm-12">
+    <div id="CUR-EgrpkPAr" class="pull-right">
+      <span id="CUR-UyCYXogv" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page  |</span>
+      <span id="CUR-LbvNpMQd" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-ZlQYpBSV" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+<div id="CUR-FhRGkMBS" class="row">
+  <div id="CUR-zLRJzyAv" class="col-xs-12 text-center">
+    <pagination id="CUR-cbvTmkiU" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+  </div>
+</div>
+</div>
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-JMRxyHIn" class="modal-dialog">
+    <div id="CUR-qDHvVbis" class="modal-content">
+      <div id="CUR-xyrpRBlx" class="modal-header clearfix text-left">
+        <button id="CUR-PqhDwkhS" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-fiQeEsaL">Delete Publishers</h5>
+      </div>
+      <div id="CUR-MQtMbFyM" class="modal-body">
+        <div id="CUR-HVWIieUK" class="row">
+          <div id="CUR-AKDjXgwK" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected publishers? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-JZeZNaiA" class="row">
+          <div id="CUR-ngzXptJY" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-rZEbIfWP" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-CjxlqYCI" type="button" class="btn btn-danger m-t-5" ng-click="delete('selected')">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteBulkModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-YjDTrMlQ" class="modal-dialog">
+    <div id="CUR-iEXeZNng" class="modal-content">
+      <div id="CUR-dxXUOZob" class="modal-header clearfix text-left">
+        <button id="CUR-llOuWTHL" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-XEmFrClA">Delete Publishers</h5>
+      </div>
+      <div id="CUR-rzMqOGqC" class="modal-body">
+        <div id="CUR-XUrZPmdV" class="row">
+          <div id="CUR-oqrabUec" class="col-xs-12 m-t-20">
+            <p>
+              Paste the publisher IDs below to bulk delete. You can get these IDs from the first column of the export.
+              Ensure that there is one ID per line, and be sure you want to delete these publishers, as this cannot be undone.
+            </p>
+          </div>
+        </div>
+        <div id="CUR-wHCakIyQ" class="row">
+          <div id="CUR-uReIKEUG" class="col-xs-12 m-t-20">
+            <form id="CUR-CVKAZouV">
+              <div id="CUR-cDAHHVTH" class="form-group">
+                <label id="CUR-JFOdxNMT">Publishers IDs</label>
+                <textarea class="form-control standard-textarea" ng-model="bulkDeleteIds"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-XLWcczvb" class="row">
+          <div id="CUR-PkJtDPvx" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-RsQjucmn" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-byacFTkM" type="button" class="btn btn-danger m-t-5" ng-click="delete('bulk')"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-MijlygIc" class="modal-dialog">
+    <div id="CUR-mRSEMYYd" class="modal-content">
+      <div id="CUR-YougbNwX" class="modal-header clearfix text-left">
+        <button id="CUR-xEUPqxoL" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-KyjPfcXo">Import Publishers</h5>
+      </div>
+      <div id="CUR-mhWhCYuA" class="modal-body">
+        <div id="CUR-yKOHNFpu" class="row">
+          <div id="CUR-TXJprmwG" class="col-xs-12 m-t-20">
+            <form id="CUR-cQLwJqgC">
+              <div id="CUR-zbAvuaEe" class="form-group">
+                <label id="CUR-xEBheYFP" for="email">File</label>
+                <input id="CUR-hTfbnvBd" type="file" ng-model="importFile" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-KhpcNVzz" class="row">
+          <div id="CUR-rewqNypP" class="col-xs-12 m-t-20">
+            <form id="CUR-VgsiwVTE">
+              <div id="CUR-OEbDrlyo" class="form-group">
+                <input type="checkbox" ng-model="overwriteBlanks" id="overwriteblanks">
+                <label id="CUR-gbAYwMtv" for="overwriteblanks">Overwrite Blank Values <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Blank values in the template will overwrite and delete data on Curve when this box is checked"></i></label>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-neVPMRjC" class="row" ng-if="importErrors">
+          <div id="CUR-rYHahVAJ" class="col-sm-12">
+            <ul id="CUR-tMFUwvFf">
+              <li id="CUR-WHfqFTrk" ng-repeat="error in importErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-LTOTDTtL" class="row">
+          <div id="CUR-EtBvldOq" class="col-xs-12 m-t-20 text-right">
+            <a id="CUR-MwEvZGYb" class="btn btn-success m-t-5" ng-click="downloadTemplate()">Download Template</a>
+            <button id="CUR-KbWtAJDg" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-dwTjiytw" type="button" class="btn btn-complete m-t-5" ng-click="import()"><i class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

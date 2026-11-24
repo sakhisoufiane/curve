@@ -1,0 +1,64 @@
+<div id="CUR-GCWUlbLM" class="row">
+  <div id="CUR-SiVMYsaO" class="col-xs-12 text-center">
+    <img src="{{darkLogo}}" alt="logo" class="logo" crossorigin="anonymous">
+  </div>
+</div>
+<div id="CUR-jwrROdJf" class="row">
+  <div id="CUR-tZpySDrY" class="col-xs-12">
+    {{# if error }}
+    <div id="CUR-mmFGphsC" class="wording m-b-lg">
+      <p>{{{ error }}}</p>
+    </div>
+    {{else}}
+    <div id="CUR-FOezjPpr" class="wording m-b-lg">
+      <p>{{{ message }}}</p>
+    </div>
+    <div id="CUR-fyScvmlG" class="col-xs-12 notification-container">
+      <form id="expired-password" class="p-t-15" role="form">
+        <div id="notification"></div>
+        <div id="CUR-gjpoOAbq" class="form-group">
+          <label id="CUR-hlZrrtPs">Enter Current Password</label>
+          <input type="password" id="current-password" autocomplete="current-password" name="current-password" placeholder="Current Password" class="form-control">
+        </div>
+
+        <div id="CUR-gjpoOAbq" class="form-group">
+          <label id="CUR-hlZrrtPs">Enter New Password</label>
+          <input type="password" id="new-password" autocomplete="new-password" name="new-password" placeholder="New Password" class="form-control">
+          <div id="pass-error">
+            <span id="CUR-ZuoMmweg">Your password must have: </span>
+            <span id="pass-error1" class="block">12 or more characters</span>
+            <span id="pass-error2" class="block">At least one lowercase letter</span>
+            <span id="pass-error3" class="block">At least one Uppercase letter</span>
+            <span id="pass-error4" class="block">At least one number</span>
+            <span id="pass-error5" class="block">At least one symbol</span>
+          </div>
+        </div>
+
+        <div id="CUR-gjpoOAbq" class="form-group">
+          <label id="CUR-hlZrrtPs">Re-Enter New Password</label>
+          <input type="password" id="new-password-repeat" autocomplete="new-password" name="new-password-repeat" placeholder="New Password" class="form-control">
+          <span id="new-password-repeat-error" class="text-error"></span>
+        </div>
+        
+        <button id="expired-password-button" class="btn btn-complete m-t-10 w-xs-100-p m-xs-l-0" type="submit">Update</button>
+      </form>
+    </div>
+    {{/ if }}
+  </div>
+</div>
+
+<script>
+  {{#if favicon}}
+    var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = "{{{favicon}}}";
+    link.crossOrigin = 'anonymous';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  {{/if}}
+  {{#if pageTitle}}
+    document.title = "{{pageTitle}}"
+  {{else}}
+    document.title = "Curve"
+  {{/if}}
+</script>

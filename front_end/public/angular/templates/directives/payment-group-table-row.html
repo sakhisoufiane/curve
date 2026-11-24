@@ -1,0 +1,12 @@
+<td class="v-align-middle hidden-xs" ng-if="!noCheckboxes"><input type="checkbox" class='select-unit' ng-model="group.selected" ng-if="!noLinks && edit"></td>
+<td class="v-align-middle">
+	<a href="#/paymentGroups/{{ group._id }}/edit" ng-bind-html="group.name"></a>
+</td>
+<td class="v-align-middle">
+	<span class="label label-sm label-success" ng-if="group.status === 'Fully Paid'">{{ group.status }}</span>
+	<span class="label label-sm label-info" ng-if="group.status === 'Partially Paid'">{{ group.status }}</span>
+	<span class="label label-sm label-warning" ng-if="group.status === 'Unpaid'">{{ group.status }}</span>
+</td>
+<td class="v-align-middle">
+	{{ group.createdAt | date : dateFormat : 'UTC' }}
+</td>

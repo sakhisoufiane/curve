@@ -1,0 +1,160 @@
+<div id="CUR-nJvQpFcD" class="jumbotron" data-pages="parallax">
+  <div id="CUR-OzlwrLXd" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-VOTODlDT" class="inner">
+      <ul id="CUR-lXiTnQNN" class="breadcrumb">
+        <li id="CUR-FGFzYyiw"><a id="CUR-xqwHwZAC" href="/#/contracts/{{contractId}}/edit">Contract</a></li>
+        <li id="CUR-rmIWzkBD" ng-show="!transaction._id"><a id="CUR-NykMnKnR" href="" class="active">Create</a></li>
+        <li id="CUR-DpKaWFsm" ng-show="transaction._id"><a id="CUR-oslFyaSS" href="/#/transactions/{{transaction._id}}/edit" class="active">{{transaction.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-tNzAAkoc" class="container-fluid container-fixed-lg sm-p-l-5 sm-p-r-5">
+
+  <div id="CUR-yIruIKfN" ng-if="transactionValidation()" class="alert alert-warning">
+    <p><b>The following validation errors occurred -</b></p>
+    <ul id="CUR-ZReLGKqC">
+      <li id="CUR-zaUevyIH" ng-if="transaction.type === 'Payment'">
+        Payments should be negative, unless you are adjusting a previous payment amount.
+      </li>
+      <li id="CUR-qLNbFxQr" ng-if="transaction.type === 'Advance'">
+        Advances should be negative, unless you are adjusting a previous advance amount.
+      </li>
+      <li id="CUR-TmVzuayL" ng-if="transaction.type === 'Royalties'">
+        Royalties should be positive, unless you are adjusting a previous royalty amount.
+      </li>
+    </ul>
+  </div>
+
+  <div id="CUR-PFnNCjLA" class="row">
+    <div id="CUR-OZTjozWu" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-ExznbBfG" ng-show="rights.contracts == 'Edit'" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-XFFhEaMr" ng-show="rights.contracts == 'Edit'" class="btn btn-complete pull-right" ng-click="validateTransaction()"><i class="fa fa-check"></i>&nbsp;Save</button>
+    </div>
+  </div>
+  <div id="CUR-PuTcPbax" class="row">
+    <div id="CUR-NdWqZCnj" class="col-xs-12 col-sm-6">
+      <div id="CUR-uzyQgdAa" class="panel panel-default">
+        <div id="CUR-SfZPCJeR" class="panel-heading">
+          <div id="CUR-MyTDqWBl" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-tfomwaoG" class="panel-body p-t-15">
+          <div id="CUR-ePdNSnNu" class="form-group required">
+            <label id="CUR-MjZbazYV">Name</label>
+            <input id="CUR-rOAQPZdZ" type="text" class="form-control" ng-model="transaction.name" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-WOpFYorN" class="form-group required">
+            <label id="CUR-GusUoHcQ">Type</label>
+            <ui-select ng-model="transaction.type" ng-disabled="rights.contracts != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-mwrMNWRE" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in (transactionTypes | filter: $select.search)">
+                <span id="CUR-JzKQgTvT" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-CaOAwyrD" class="form-group required">
+            <label id="CUR-HzudwDuc">Date</label>
+            <div id="datepicker-component" class="form-group input-group date">
+              <input id="CUR-PXQpTyqN" type="text" class="form-control" ng-model="transaction.date" uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}" is-open="datePopup" ng-click="openDatePopup()" ng-disabled="rights.contracts != 'Edit'">
+              <span id="CUR-cUGrDDiO" class="input-group-addon" ng-click="openDatePopup()">
+                <i class="fa fa-calendar"></i>
+              </span>
+            </div>
+          </div>
+          <div id="CUR-xfPKSGWa" class="form-group required">
+            <label id="CUR-kZbCPCrq">Amount</label>
+            <input id="CUR-ArcmuGxY" type="number" class="form-control" ng-model="transaction.amount" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-xfPKSGWa" class="form-group required">
+            <label id="CUR-kZbCPCrq">Invoice No.</label>
+            <input id="CUR-ArcmuGxY" type="text" class="form-control" ng-model="transaction.invoiceNo" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-ZwZyZbJS" class="form-group" ng-if="clientType != 'Publisher'">
+            <input id="CUR-RFQojTMa" type="checkbox" value="1" ng-model="transaction.isReserveRelease" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-EbqlGcVR">Reserve Released</label>
+          </div>
+          <div id="CUR-cDXXaQmp" class="form-group" ng-if="clientType != 'Publisher'">
+            <input id="CUR-NLeuCPAH" type="checkbox" value="1" ng-model="transaction.isReserveWithholding" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-IbvODImw">Reserve Taken</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-UHmobCpt" class="col-xs-12 col-sm-6">
+      <div id="CUR-tiiaIUZy" class="panel panel-default">
+        <div id="CUR-baEMNLPW" class="panel-heading">
+          <div id="CUR-FmqItfuQ" class="panel-title">
+            Description
+          </div>
+        </div>
+        <div id="CUR-yJOCpawV" class="panel-body p-t-15">
+          <div id="CUR-badUXfIt" class="form-group">
+            <textarea class="form-control standard-textarea" ng-model="transaction.description" ng-disabled="rights.contracts != 'Edit'"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-PMEiMsBL" class="row">
+    <div id="CUR-tOFrZJGZ" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-zxjeIsbI" ng-show="transaction.updatedAt">Last Updated on {{ transaction.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-qjcHcwBu" href="javascript:;" ng-if="transaction._id" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-pKCFOFUf" class="modal-dialog">
+    <div id="CUR-jJNJTtpf" class="modal-content">
+      <div id="CUR-bhBhYrwB" class="modal-header clearfix text-left">
+        <button id="CUR-swtVTFeg" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-xooQcGrB">Delete Transaction</h5>
+      </div>
+      <div id="CUR-yDViZean" class="modal-body">
+        <div id="CUR-ieQjqyqW" class="row">
+          <div id="CUR-eePYNdPE" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this transaction? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-HjhgGnir" class="row">
+          <div id="CUR-QXBUKekN" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-fYWAwWQY" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-VWxaSzMt" type="button" class="btn btn-danger m-t-5" ng-click="delete()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="validateTransactionModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-MjMDfoHo" class="modal-dialog">
+    <div id="CUR-eWwRgNvC" class="modal-content">
+      <div id="CUR-qzdWkrLV" class="modal-header clearfix text-left">
+        <button id="CUR-JSdmDqGW" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-RqecefWZ">Profit Share Transactions</h5>
+      </div>
+      <div id="CUR-tSLhxJBr" class="modal-body">
+        <div id="CUR-oAWmKwjY" class="row">
+          <div id="CUR-LoQpouPz" class="col-xs-12 m-t-20">
+            <p>{{validateTransactionMessage}}</p>
+          </div>
+        </div>
+        <div id="CUR-NmustcFO" class="row">
+          <div id="CUR-PZfzSMTt" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-yZGxVgfZ" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-anHMfZCz" type="button" class="btn btn-complete m-t-5" ng-click="save()" data-dismiss="modal"><i class="fa fa-check"></i>&nbsp;Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<model-history data="transaction.modelHistory"></model-history>

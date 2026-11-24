@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="form-group col-xs-8 col-sm-8">
+    <ui-select ng-model="item.name">
+      <ui-select-match>
+        <span ng-bind="$select.selected"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="listItem as listItem in (items | filter: $select.search)">
+        <span ng-bind="listItem"></span>
+      </ui-select-choices>
+    </ui-select>
+  </div>
+  <div class="form-group col-xs-4 col-sm-4 text-right">
+    <button class="btn btn-danger" ng-click="delete({ item: item })"><i class="fa fa-trash"></i></button>
+  </div> 
+</div> 

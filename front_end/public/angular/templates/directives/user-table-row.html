@@ -1,0 +1,22 @@
+<td ng-if="!noCheckboxes" class="v-align-middle hidden-xs"><input id="user-select-{{index}}" type="checkbox" class='select-unit' ng-model="user.selected"></td>
+<td class="v-align-middle">
+	<a id="user-{{index}}" ng-if="!noLinks" href="#/users/{{ user._id }}/edit"> {{ user.email }}</a><span class="label label-complete m-l-10" ng-if="user.adminType === 'Admin'">Admin</span>
+	<span ng-if="noLinks">{{ user.email }}</span>
+</td>
+<td class="v-align-middle hidden-xs">
+	{{ user.createdAt | date : dateFormat : 'UTC' }}
+</td>
+<td class="v-align-middle hidden-xs">
+	{{ user.lastLogin | date : 'dd/MM/yyyy HH:mm:ss' : 'UTC' }}
+</td>
+<td class="v-align-middle">
+	<span class="label label-success" ng-if="user.status">{{ user.status }}</span>
+</td>
+<td ng-if="addIcon" class="v-align-middle">
+	<button ng-if="!user.added" class="btn btn-sm btn-complete" ng-click="addFunction(user)">
+		<i class="fa fa-plus"></i>
+	</button>
+	<button ng-if="user.added" class="btn btn-sm btn-success" disabled="true">
+		<i class="fa fa-check"></i>
+	</button>
+</td>

@@ -1,0 +1,194 @@
+<div id="CUR-XErrvzxd" class="jumbotron" data-pages="parallax">
+  <div id="CUR-TrwLAsmm" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-otxXMiQv" class="inner">
+      <ul id="CUR-RGMqkUUU" class="breadcrumb">
+        <li id="CUR-IBsTEiGP">
+          <a id="CUR-nGyBlXgG" href="/#/cwrAcknowledgements" class="active">Acknowledgements</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-BjnKuFvz" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-OZZebVeF" class="row m-b-20">
+    <div id="CUR-ack-filter-blank-left-col" class="col-sm-12 col-md-2 col-lg-2">
+    </div>
+    <div id="CUR-osSKutlW" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-baIdmPHU" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-FUtdqoKL" class="input-group transparent">
+          <input id="CUR-hBDRhqcs" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-IplXlTVc" class="input-group-addon pointer" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-whJnIxPv" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-md-offset-0 text-right">
+      <div id="CUR-TESqZHlb" class="sm-p-l-15 sm-p-r-15">
+        <button id="CUR-QHCApqvA" class="btn btn-danger hidden-xs" data-toggle="modal" data-target="#deleteModal"
+          ng-show="rights.catalogue == 'Edit'">
+          <i class="fa fa-trash"></i>&nbsp;Delete</button>
+        
+        <button id="CUR-archive-btn" class="btn btn-warning hidden-xs" data-toggle="modal" data-target="#archiveModal"
+          ng-show="rights.sales == 'Edit' && unarchived"><i class="fa fa-lock"></i> Archive</button>
+        <button id="CUR-unarchive-btn" class="btn btn-warning hidden-xs" data-toggle="modal" data-target="#unarchiveModal"
+          ng-show="rights.sales == 'Edit' && !unarchived"><i class="fa fa-unlock"></i> Unarchive</button>
+
+        <a id="CUR-mQhwuDIu" href="/#/cwrAcknowledgements/new-bulk?type=Standard" ng-show="rights.catalogue == 'Edit' && !demoMode">
+          <button id="CUR-nOMWcuIZ" class="btn btn-complete w-xs-100-p m-xs-l-0"><i class="fa fa-plus"></i>&nbsp;Create</button>
+        </a>
+
+      </div>
+    </div>
+  </div>
+  <div id="CUR-ack-tab-div-row-1" class="row sm-m-t-10" ng-if="clientType == 'Publisher'">
+    <div id="CUR-ack-filter-blank-left-col" class="col-sm-3">
+    </div>
+    <div id="CUR-ack-filter-partner-col" class="col-sm-3">
+      <div id="CUR-ack-filter-partner-form" class="form-group">
+        <label id="CUR-ack-filter-partner-form-label">Partner</label>
+          <ui-select ng-model="filter.deliveryPartnerId" ng-disabled="edit">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-ack-filter-partner-form-select" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item._id as item in deliveryPartners | filter: $select.search track by $index">
+              <span id="CUR-ack-filter-partner-form-item" ng-bind="item.name"></span>
+            </ui-select-choices>
+          </ui-select>
+      </div>
+    </div>
+    <div id="CUR-ack-filter-status-col" class="col-sm-3">
+      <div id="CUR-ack-filter-status-form" class="form-group">
+        <label id="CUR-ack-filter-status-form-label">Status</label>
+        <ui-select ng-model="filter.status" ng-disabled="edit">
+          <ui-select-match allow-clear="true">
+            <span id="CUR-ack-filter-status-form-select" ng-bind="$select.selected"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item in (['Archived','Unarchived'] | filter: $select.search)">
+            <span id="CUR-ack-filter-status-form-item" ng-bind="item"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div id="CUR-ack-filter-blank-right-col" class="col-sm-3">
+    </div>
+  </div>
+  <!-- Filter Button -->
+  <div id="CUR-filter-div" class="row m-t-10">
+    <div id="CUR-filter-div-div" class="col-sm-12 text-center">
+      <button id="CUR-filter-div-div-btn" class="btn btn-complete" ng-click="search()"><i class="fa fa-filter"></i> Filter</button>
+    </div>
+  </div>
+  <div id="CUR-ulbhmbLI" class="col-sm-12">
+    <h5 id="CUR-tukmBjHE" class="pull-right">Total: {{total? total : 0}}</h5>
+  </div>
+  <div id="CUR-QvgqPZAH" class="row">
+    <div id="CUR-adOlZYeL" class="col-xs-12">
+      <div id="CUR-dZTqloRX" class="panel panel-default">
+        <div id="CUR-fDkQvSNA" class="panel-heading">
+          <div id="CUR-JYlOIkSZ" class="panel-title">
+            Acknowledgements
+          </div>
+        </div>
+        <div id="CUR-WNKvhxjX" class="panel-body">
+          <responsive-table headers="headers" data="cwrAcknowledgements" selectable="true" order-by="filter.orderBy"
+            sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-tswnjYhm" class="col-sm-12">
+    <div id="CUR-EAWZxgyD" class="pull-right">
+      <span id="CUR-pfSRsHCU" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <span id="CUR-lhtAPkZS" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-uiqLbhhQ" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-JpgxWLgf" class="row">
+    <div id="CUR-yFBhHUYw" class="col-xs-12 text-center">
+      <pagination id="CUR-CiieiUqc" pages="pages" total="totalPages" current="currentPage"
+        change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-archiveModal-dialog" class="modal-dialog">
+    <div id="CUR-archiveModal-content" class="modal-content">
+      <div id="CUR-archiveModal-header" class="modal-header clearfix text-left">
+        <button id="CUR-archiveModal-btn" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-archiveModal-h5-ack">Archive Acknowledgement</h5>
+      </div>
+      <div id="CUR-archiveModal-body" class="modal-body">
+        <div id="CUR-archiveModal-row-txt" class="row">
+          <div id="CUR-archiveModal-row-txt-div" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to archive the selected Acknowledgement files?</p>
+          </div>
+        </div>
+        <div id="CUR-archiveModal-row-cancel" class="row">
+          <div id="CUR-archiveModal-row-cancel-div" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-archiveModal-row-cancel-btn" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-archiveModal-row-archive-btn" type="button" class="btn btn-warning m-t-5" ng-click="archiveSelected()"><i
+                class="fa fa-lock"></i>&nbsp;Archive</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="unarchiveModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-unarchiveModal-dialog" class="modal-dialog">
+    <div id="CUR-unarchiveModal-content" class="modal-content">
+      <div id="CUR-unarchiveModal-header" class="modal-header clearfix text-left">
+        <button id="CUR-unarchiveModal-btn" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-unarchiveModal-h5-ack">Unarchive Acknowledgement</h5>
+      </div>
+      <div id="CUR-unarchiveModal-body" class="modal-body">
+        <div id="CUR-unarchiveModal-row-txt" class="row">
+          <div id="CUR-unarchiveModal-row-txt-div" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to unarchive the selected Acknowledgement files?</p>
+          </div>
+        </div>
+        <div id="CUR-unarchiveModal-row-cancel" class="row">
+          <div id="CUR-unarchiveModal-row-cancel-div" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-unarchiveModal-row-cancel-btn" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-unarchiveModal-row-archive-btn" type="button" class="btn btn-warning m-t-5" ng-click="unarchiveSelected()"><i
+                class="fa fa-unlock"></i>&nbsp;Unarchive</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-QXNYLxfE" class="modal-dialog">
+    <div id="CUR-BHyPHsNa" class="modal-content">
+      <div id="CUR-qbhrboxA" class="modal-header clearfix text-left">
+        <button id="CUR-jXIeYwAa" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-PqeZwlGu">Delete Acknowledgements</h5>
+      </div>
+      <div id="CUR-SBUdRCen" class="modal-body">
+        <div id="CUR-kTZtgZHk" class="row">
+          <div id="CUR-ICvqEJts" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected acknowledgements? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-tVygjteQ" class="row">
+          <div id="CUR-NOqSNpCd" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-YJzHDfEW" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-mrUwkvus" type="button" class="btn btn-danger m-t-5" ng-click="deleteSelected()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

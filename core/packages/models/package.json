@@ -1,0 +1,38 @@
+{
+  "name": "@curveroyaltysystems/models",
+  "version": "4.0.17",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./mongoose": "./dist/mongoose.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "typesVersions": {
+    "*": {
+      "mongoose": [
+        "dist/mongoose.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "rimraf dist && tsc",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "lint": "eslint \"src/**/*.ts*\"",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@curveroyaltysystems/eslint-config": "*",
+    "@curveroyaltysystems/prettier-config": "*",
+    "@curveroyaltysystems/typescript-config": "*",
+    "rimraf": "3.0.2"
+  },
+  "dependencies": {
+    "mongoose": "8.23.0"
+  },
+  "prettier": "@curveroyaltysystems/prettier-config"
+}

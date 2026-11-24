@@ -1,0 +1,50 @@
+TerritoryChannelNet AmountGross AmountEnabledSales DateMoneyTwo DPFive DPTerritory2
+   Digital12.318.36 Harry Styles                            TRUE 17-JUn-20231234,5612.3665.32489  1  
+   Digital12.458.37 Yoko Ono                                TRUE 17-JUn-20231234,5712.3665.32489  2  
+   Digital12.458.38 Cher Lloyd                              TRUE 17-JUn-20231234,5812.3665.32489  3  
+   Digital12.458.39 Yoko Ono                                TRUE 17-JUn-20231234,5912.3665.32489  4  
+   Digital12.458.40 Ricky Martin                            TRUE 17-JUn-20231234,6012.3665.32489  5  
+   Digital12.458.41 Thalia                                  TRUE 17-JUn-20231234,6112.3665.32489  6  
+   Digital12.458.42 Lenny Kravitz                           TRUE 17-JUn-20231234,6212.3665.32489  7  
+   Digital12.458.43 Mac Miller                              TRUE 17-JUn-20231234,6312.3665.32489  8  
+   Digital12.458.44 John Legend                             TRUE 17-JUn-20231234,6412.3665.32489  9  
+   Digital12.458.45 Daddy Yankee                            TRUE 17-JUn-20231234,6512.3665.32489  10 
+   Digital12.458.46 Siwon Choi                              TRUE 17-JUn-20231234,6612.3665.32489  11 
+   Digital12.458.47 Trey Songz                              TRUE 17-JUn-20231234,6712.3665.32489  12 
+          12.458.48 iamdiddy                                TRUE 17-JUn-20231234,6812.3665.32489  13 
+   Digital12.458.49 T.I., One Direction, Cody Simpson       TRUE 17-JUn-20231234,6912.3665.32489  14 
+   Digital12.458.50 will.i.am                               TRUE 17-JUn-20231234,7012.3665.32489  15 
+   Digital12.458.51 Queen Latifah                           TRUE 17-JUn-20231234,7112.3665.32489  16 
+   Digital12.458.52 Rev Run                                 TRUE 17-JUn-20231234,7212.3665.32489  17 
+   Digital12.458.53 Agnes Monica                            TRUE 17-JUn-20231234,7312.3665.32489  18 
+   Digital12.458.54 Cody Simpson                            TRUE 17-JUn-20231234,7412.3665.32489  19 
+   Digital12.458.55 Nick Jonas, Jaden Smith, Adam Levine    TRUE 17-JUn-20231234,7512.3665.32489  20 
+   Digital12.458.56 Mariah Carey                            TRUE 17-JUn-20231234,7612.3665.32489  21 
+   Digital12.458.57 Usher, Lady Gaga                        TRUE 17-JUn-20231234,7712.3665.32489  22 
+   Digital12.458.58 Selena Gomez, Ne-Yo                     TRUE 17-JUn-20231234,7812.3665.32489  23 
+          12.458.59 Kelly Clarkson, Lily Allen              TRUE 17-JUn-20231234,7912.3665.32489  24 
+   Digital12.458.60 David Guetta                            TRUE 17-JUn-20231234,8012.3665.32489  25 
+   Digital12.458.61 Ne-Yo                                   TRUE 17-JUn-20231234,8112.3665.32489  26 
+   Digital12.458.62 Kanye West                              TRUE 17-JUn-20231234,8212.3665.32489  27 
+   Digital12.458.63 J. Cole, Agnes Monica                   TRUE 17-JUn-20231234,8312.3665.32489  28 
+   Digital12.458.64 Sherina Munaf                           TRUE 17-JUn-20231234,8412.3665.32489  29 
+          12.458.65 Jessie J, Alejandro Sanz                TRUE 17-JUn-20231234,8512.3665.32489  30 
+   Digital12.458.66 Enrique Iglesias                        TRUE 17-JUn-20231234,8612.3665.32489  31 
+   Digital12.458.67 50cent, Cody Simpson                    TRUE 17-JUn-20231234,8712.3665.32489  32 
+   Digital12.458.68 joe jonas                               TRUE 17-JUn-20231234,8812.3665.32489  33 
+USADigital12.458.69 Britney Spears                          TRUE 17-JUn-20231234,8912.3665.32489  34 
+USADigital12.458.70 Rev Run                                 TRUE 17-JUn-20231234,9012.3665.32489  35 
+USA       12.458.71 Britney Spears, Kelly Clarkson          TRUE 17-JUn-20231234,9112.3665.32489  36 
+USADigital12.458.72 Lil Wayne WEEZY F                       TRUE 17-JUn-20231234,9212.3665.32489  37 
+USADigital12.458.73 Juan Luis Guerra, Vidi Aldiano          TRUE 17-JUn-20231234,9312.3665.32489  38 
+USADigital12.458.74 Calle 13, Jason Mraz                    TRUE 17-JUn-20231234,9412.3665.32489  39 
+USA       12.458.75 Lily Allen                              TRUE 17-JUn-20231234,9512.3665.32489  40 
+USADigital12.458.76 Jonas Brothers                          TRUE 17-JUn-20231234,9612.3665.32489  41 
+USADigital12.458.77 Alejandro Sanz                          TRUE 17-JUn-20231234,9712.3665.32489  42 
+USADigital12.458.78 50cent, Mary J. Blige, Sandy Leah       TRUE 17-JUn-20231234,9812.3665.32489  43 
+USADigital12.458.79 Soulja Boy                              TRUE 17-JUn-20231234,9912.3665.32489  44 
+USADigital12.458.80 Lenny Kravitz, John Legend              TRUE 17-JUn-20231235,0012.3665.32489  45 
+USADigital12.458.81 Marshall Mathers                        TRUE 17-JUn-20231235,0112.3665.32489  46 
+USADigital12.458.82 Katy Perry                              TRUE 17-JUn-20231235,0212.3665.32489  47 
+USADigital12.458.83 Luan Santana                            TRUE 17-JUn-20231235,0312.3665.32489  48 
+USADigital12.458.84 Pitbull                                 TRUE 17-JUn-20231235,0412.3665.32489  49 

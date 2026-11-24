@@ -1,0 +1,107 @@
+{
+  "mappings": {
+    "dynamic": false,
+    "fields": {
+      "_id": {
+        "type": "objectId"
+      },
+      "aliases": {
+        "type": "string",
+        "analyzer": "lowercaseKeyword"
+      },
+      "artist": {
+        "type": "string",
+        "analyzer": "lowercaseKeyword"
+      },
+      "catalogueGroups": {
+        "type": "string",
+        "analyzer": "lucene.keyword"
+      },
+      "clientId": {
+        "type": "string",
+        "analyzer": "lucene.keyword"
+      },
+      "createdAt": {
+        "type": "date"
+      },
+      "updatedAt": {
+        "type": "date"
+      },
+      "foreignId": {
+        "type": "string",
+        "analyzer": "lowercaseKeyword"
+      },
+      "isrc": [
+        {
+          "analyzer": "lowercaseKeyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "label": {
+        "type": "string",
+        "analyzer": "lowercaseKeyword"
+      },
+      "mechanicalContractIds": {
+        "type": "string",
+        "analyzer": "lucene.keyword"
+      },
+      "projectId": {
+        "type": "string",
+        "analyzer": "lowercaseKeyword"
+      },
+      "salesReturnsRights": {
+        "type": "document",
+        "fields": {
+          "contractId": {
+            "type": "string",
+            "analyzer": "lucene.keyword"
+          }
+        }
+      },
+      "tags": {
+        "type": "string",
+        "analyzer": "lucene.keyword"
+      },
+      "title": [
+        {
+          "analyzer": "lowercaseKeyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "totalParticipation": {
+        "type": "number"
+      },
+      "valid": {
+        "type": "boolean"
+      },
+      "version": [
+        {
+          "analyzer": "lowercaseKeyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ]
+    }
+  },
+  "analyzers": [
+    {
+      "name": "lowercaseKeyword",
+      "tokenFilters": [
+        {
+          "type": "lowercase"
+        }
+      ],
+      "tokenizer": {
+        "type": "keyword"
+      }
+    }
+  ]
+}

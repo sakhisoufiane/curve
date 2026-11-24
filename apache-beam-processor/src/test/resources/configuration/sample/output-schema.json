@@ -1,0 +1,10 @@
+[
+  { "field": "outputTerritory", "type": "VARCHAR" },
+  { "field": "Territory", "type": "VARCHAR" },
+  { "field": "Channel", "type": "VARCHAR" },
+  { "field": "SaleDate", "type": "Date","dateFormat": "DD/MM/YYYY" },
+  { "field": "Net Amount", "type": "NUMERIC" },
+  { "field": "Five DP", "type": "NUMERIC" },
+  { "field": "Channel", "type": "VARCHAR(5)" },
+  { "field": "Five DP", "type": "NUMERIC(7)" }
+]

@@ -1,0 +1,32 @@
+<div class="row">
+	<div class="form-group col-xs-3">
+		<label>Name</label>
+    <input type="text" class="form-control" ng-model="escalation.name" ng-disabled="edit != true || escalation.escalationsAddedByPeriods || escalation.isUsedByTerms">
+  </div>
+  <div class="form-group col-xs-2">
+		<label>Units <i ng-if="escalation.startingUnits || escalation.startingUnits == 0" class="fa fa-question-circle" tooltips tooltip-template="<b>Starting Units</b> </br>{{escalation.startingUnits}}"></i></label>
+    <input type="number" class="form-control" ng-model="escalation.units" ng-disabled="edit != true || escalation.escalationsAddedByPeriods">
+  </div>
+  <div class="form-group col-xs-2">
+		<label>Gross Amount <i ng-if="escalation.startingGross || escalation.startingGross == 0" class="fa fa-question-circle" tooltips tooltip-template="<b>Starting Gross Amount</b> </br>{{escalation.startingGross}}"></i></label>
+    <input type="number" class="form-control" ng-model="escalation.gross" ng-disabled="edit != true || escalation.escalationsAddedByPeriods">
+  </div>
+  <div class="form-group col-xs-2">
+		<label>Net Amount <i ng-if="escalation.startingNet || escalation.startingNet == 0" class="fa fa-question-circle" tooltips tooltip-template="<b>Starting Net Amount</b> </br>{{escalation.startingNet}}"></i></label>
+    <input type="number" class="form-control" ng-model="escalation.net" ng-disabled="edit != true || escalation.escalationsAddedByPeriods">
+  </div>
+  <div class="form-group col-xs-3 col-sm-2 text-right">
+    <button class="btn btn-danger row-button" ng-show="edit == true" ng-click="delete()" ng-if="!escalation.escalationsAddedByPeriods"><i class="fa fa-trash"></i></button>
+  </div> 
+</div>
+<div class="row" ng-if="escalation.escalationsAddedByPeriods">
+  <div class="col-xs-12">
+    <small>The tracker <b>{{escalation.name}}</b> has been used by a Period and can't be edited.</small>
+  </div>
+</div>
+<div class="row" ng-if="!escalation.escalationsAddedByPeriods && escalation.isUsedByTerms">
+  <div class="col-xs-12">
+    <small>The tracker <b>{{escalation.name}}</b> is being used by a term so the name can't be edited.</small>
+  </div>
+</div>
+<hr>

@@ -1,0 +1,14 @@
+name: Bump Version
+description: Bump the patch version of the package and use pre-release suffix if on develop branch
+
+runs:
+  using: composite
+  steps:
+    - name: Bump Version
+      shell: bash
+      env:
+        prerelease: ${{ github.ref == 'refs/heads/develop' && 'prerelease --preid=develop' || 'patch' }}
+      run: |
+        git config user.email "no-reply@curveroyaltysystems.com"
+        git config user.name "curve-github-actions"
+        npm version $prerelease

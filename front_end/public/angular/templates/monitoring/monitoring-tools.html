@@ -1,0 +1,108 @@
+<div id="CUR-NVjrBRcj" class="jumbotron" data-pages="parallax">
+    <div id="CUR-SKyOfcpl" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+        <div id="CUR-TsFvtnso" class="inner">
+            <ul id="CUR-DMqJPJqG" class="breadcrumb">
+                <li id="CUR-FuDAetlF"><a id="CUR-IzooYXUd" href="#/monitoring" class="active">Monitoring</a></li>
+                <li id="CUR-qsPoGdTG"><a id="CUR-hFoLSqIt" href="#/monitoring/tools" class="active">Tools</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="CUR-kWwCBHgL" class="tools-container">
+    <section ng-show="production">
+        <div id="CUR-WkZpWEJu" class="tool-box">
+            <div id="CUR-gPZnfVNK" class="box-body">
+                <h3 id="CUR-hqzycsUJ" class="tool-title">Copy Client</h3>
+                <div id="CUR-UAfZzNHy" class="form-tool">
+                    <client-select-field value="copyClientId" edit="true" allow-clear="true"></client-select-field>
+                    <button id="CUR-yotGQozv" ng-disabled="disableCopyBtn" class="btn btn-complete" ng-click="copy()">Copy</button>
+                </div>
+                <div id="CUR-SBpcNKuS" class="form-group m-t-10">
+                    <label 
+                        id="CUR-EaDOfbkI"
+                        style="color: white;"
+                        tooltip-placement="right"
+                        tooltip-animation="true" 
+                        uib-tooltip="This includes the raw sales file and sales file documents and NOT the sales lines, make sure to select tables if you want the sales lines too"
+                    >
+                        <input id="CUR-sWUjPLzD" type="checkbox" value="1" ng-model="includeSalesFiles">
+                        Include Sales Files
+                    </label>
+                </div>
+                <div ng-show="includeSalesFiles" id="CUR-lLaEoOfu" class="form-group" style="margin-top: -10px;">
+                    <label 
+                        id="CUR-XHKtyBGM"
+                        style="color: white;"
+                        tooltip-placement="right"
+                        tooltip-animation="true" 
+                        uib-tooltip="This includes any sales files that have been archived by the client"
+                    >
+                        <input id="CUR-yhOqeFEV" type="checkbox" value="1" ng-model="includeArchived">
+                        Include Archived Sales Files
+                    </label>
+                </div>
+                <div id="CUR-lLaEoOfu" class="form-group" style="margin-top: -10px;">
+                    <label 
+                        id="CUR-XHKtyBGM"
+                        style="color: white;"
+                        tooltip-placement="right"
+                        tooltip-animation="true" 
+                        uib-tooltip="This includes all sales lines from this client"
+                    >
+                        <input id="CUR-yhOqeFEV" type="checkbox" value="1" ng-model="includeTables">
+                        Include Tables
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="tool-box">
+        <div id="CUR-qcvIuYKM" class="flush-container" style="background-color: #333333;">
+            <div id="CUR-NdvicZHZ" class="flush-box">
+                <h3 id="CUR-QqOJRkPZ" class="tool-title">Script Tool Box</h3>
+                <div id="CUR-GliwQJRC" class="form-tool">
+                    <ui-select ng-model="selectedScript" on-select="setCurrentScript($item)" style="width: 400px;">
+                        <ui-select-match style="width: 400px;">
+                          <span id="CUR-KVhsloDI" ng-bind="selectedScript.script"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="script in (supportScripts | filter: $select.search)">
+                          <span id="CUR-oMOIhrQi" ng-bind="script.script"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div id="CUR-ftpIngestionSelectContainer" class="form-tool" style="margin-top: 5px;" ng-show="selectedScript.script === 'triggerIngestion'">
+                    <ui-select ng-model="selectedIngestion" on-select="setSelectedIngestion($item)" style="width: 400px;">
+                        <ui-select-match style="width: 400px;">
+                          <span id="CUR-ftpIngestionSelectMatch" ng-bind="selectedIngestion.name"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="option in (selectedScript.scriptParams | filter: $select.search)">
+                          <span id="CUR-ftpIngestionSelectChoices" ng-bind="option.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div id="CUR-ftpIngestionDropdown" class="form-tool" style="margin-top: 5px;" ng-show="selectedScript.script === 'triggerIngestion' && selectedIngestion.items && selectedIngestion.name !== 'Catalogue'">
+                    <div ng-if="selectedIngestion.items.length === 0" style="color: #999; padding: 4px; font-style: italic;">
+                        No active FTP servers setup for this client
+                    </div>
+                    <ui-select ng-if="selectedIngestion.items.length > 0" ng-model="selectedFtpIngestion" on-select="setSelectedFtpIngestion($item)" style="width: 400px;">
+                        <ui-select-match style="width: 400px;">
+                          <span ng-bind="selectedFtpIngestion"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="name in (selectedIngestion.items | filter: $select.search) track by $index">
+                          <span ng-bind="name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div id="CUR-SJDgaYKQ" class="options" ng-show="selectedScript && selectedScript.script !== 'triggerIngestion'" style="margin-top: 20px;">
+                    <div id="CUR-RPRGcBBK" ng-repeat="argument in selectedScript.scriptParams" class="option-field">
+                        <input id="CUR-AgEkeEUj" type="text" required ng-model="argument.value" ng-show="argument.type == 'string'" class="form-control" placeholder="{{argument.name}}" style="margin-top: 5px;">
+                        <textarea ng-show="argument.type == 'array'" ng-model="argument.value" class="form-control standard-textarea" ng-model="bulkDeleteIds" placeholder="{{argument.name}}"></textarea>
+                    </div>
+                </div>
+                <button id="CUR-KpkyghlP" ng-disabled="false" ng-show="selectedScript && selectedScript.script !== 'triggerIngestion'" class="btn btn-light" ng-click="createScriptTask()" style="margin-top: 30px;">Create Task</button>
+                <button id="CUR-triggerIngestionButton" ng-disabled="!selectedFtpIngestion && selectedIngestion.name !== 'Catalogue'" ng-show="selectedScript.script === 'triggerIngestion'" class="btn btn-light" ng-click="triggerFtpIngestion()" style="margin-top: 30px;">Trigger Ingestion</button>
+            </div>
+        </div>
+    </section>
+</div>

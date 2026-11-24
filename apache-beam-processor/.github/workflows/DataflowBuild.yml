@@ -1,0 +1,42 @@
+name: Dataflow Flex-Template Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4.1.6
+
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+        cache: 'maven'
+
+    - name: GCloud Auth
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCS_KEY }}'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
+
+    - name: 'Use gcloud CLI'
+      run: 'gcloud info'
+
+    - name: Build with Maven
+      run: mvn clean package
+
+    - name: ls
+      run: ls -a ./target
+
+    - name: Build DF
+      run: gcloud dataflow flex-template build gs://apache-beam-test-sam/templates/processor.json --image-gcr-path=europe-west2-docker.pkg.dev/curve-staging-354215/beam-processor/dataflow/beam-processor:latest --metadata-file=./metadata.json --sdk-language=JAVA --flex-template-base-image=gcr.io/dataflow-templates-base/java21-template-launcher-base:latest --jar=./target/beam-processor-bundled-0.1.jar --env="FLEX_TEMPLATE_JAVA_MAIN_CLASS=\"com.curve.App\""

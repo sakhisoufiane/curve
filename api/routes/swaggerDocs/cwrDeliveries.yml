@@ -1,0 +1,1093 @@
+openapi: 3.1.0
+info:
+  title: CWR Deliveries API
+  version: 1.10.0
+paths:
+  /cwrDeliveries:
+    get:
+      tags: ["CWR Deliveries"]
+      summary: Retrieve all CWR deliveries
+      description: Returns a paginated list of CWR deliveries. Requires read access to catalogue.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Search text to filter by name
+        - in: query
+          name: deliveryPartnerId
+          schema:
+            type: string
+          description: Filter by delivery partner ID
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Filter by delivery status
+      responses:
+        200:
+          description: Successfully retrieved CWR deliveries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cwrDeliveries:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CwrDelivery'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    post:
+      tags: ["CWR Deliveries"]
+      summary: Create a new CWR delivery
+      description: Creates a new CWR delivery. Requires write access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CwrDeliveryInput'
+      responses:
+        200:
+          description: Successfully created CWR delivery
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrDelivery'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrDeliveries/specific_deliveries:
+    get:
+      tags: ["CWR Deliveries"]
+      summary: Retrieve specific deliveries
+      description: Returns specific CWR deliveries based on query parameters.
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Filter by delivery status
+        - in: query
+          name: filterType
+          schema:
+            type: string
+          description: Filter type for deliveries
+      responses:
+        200:
+          description: Successfully retrieved specific deliveries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  specificDeliveries:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CwrDelivery'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrDeliveries/flush_delivery_queued_status:
+    get:
+      tags: ["CWR Deliveries"]
+      summary: Flush delivery queued status
+      description: Flushes the queued status for deliveries. Requires edit access to catalogue.
+      responses:
+        200:
+          description: Successfully flushed deliveries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Deliveries flushed"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrDeliveries/pre_delivery_notification:
+    get:
+      tags: ["CWR Deliveries"]
+      summary: Send pre-delivery notifications
+      description: Sends pre-delivery notifications to clients. Requires edit access to catalogue.
+      responses:
+        200:
+          description: Successfully sent notifications
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Clients notified"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrDeliveries/run_scheduled_deliveries:
+    get:
+      tags: ["CWR Deliveries"]
+      summary: Run scheduled deliveries
+      description: Executes scheduled deliveries. Requires edit access to catalogue.
+      responses:
+        200:
+          description: Successfully ran deliveries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Deliveries run"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrDeliveries/{id}:
+    get:
+      tags:
+        - CWR Deliveries
+      summary: Retrieve a specific CWR delivery
+      description: Returns details for a specific CWR delivery by ID. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR delivery ID
+      responses:
+        '200':
+          description: Successfully retrieved CWR delivery
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: CWR delivery not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find Delivery with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+    put:
+      tags:
+        - CWR Deliveries
+      summary: Update a CWR delivery
+      description: Updates a CWR delivery's details. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR delivery ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CwrDeliveryInput'
+      responses:
+        '200':
+          description: Successfully updated CWR delivery
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: CWR delivery not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find Delivery with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+    delete:
+      tags:
+        - CWR Deliveries
+      summary: Delete a CWR delivery
+      description: Deletes a CWR delivery. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR delivery ID
+      responses:
+        '200':
+          description: Successfully deleted CWR delivery
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: CWR delivery not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find Delivery with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+  /cwrDeliveries/{id}/history:
+    get:
+      tags:
+        - CWR Deliveries
+      summary: Retrieve history for a CWR delivery
+      description: Returns the modification history for a specific CWR delivery.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR delivery ID
+      responses:
+        '200':
+          description: Successfully retrieved CWR delivery history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: date-time
+                        clientId:
+                          type: string
+                        author:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            email:
+                              type: string
+                        ops:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              op:
+                                type: string
+                                example: replace
+                              path:
+                                type: string
+                                example: /name
+                              value:
+                                type: string
+                                example: New Delivery Name
+                                nullable: true
+                              originalValue:
+                                type: string
+                                example: Old Delivery Name
+                                nullable: true
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: CWR delivery not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find CwrDelivery with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+  /cwrDeliveries/{id}/export:
+    get:
+      tags:
+        - CWR Deliveries
+      summary: Export a CWR delivery
+      description: Exports a CWR delivery. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR delivery ID
+        - in: query
+          name: markWorksAsDelivered
+          schema:
+            type: string
+            enum: [true, false]
+          description: Whether to mark works as delivered
+      responses:
+        '200':
+          description: Successfully initiated export
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: CWR delivery not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find CwrDelivery with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+  /cwrDeliveries/{id}/deliver:
+    get:
+      tags:
+        - CWR Deliveries
+      summary: Deliver a CWR delivery
+      description: Initiates the delivery process for a CWR delivery. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR delivery ID
+      responses:
+        '200':
+          description: Successfully initiated delivery
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: CWR delivery not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find CwrDelivery with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+  /cwrDeliveries/{id}/works:
+    get:
+      tags:
+        - CWR Deliveries
+      summary: Retrieve works for a CWR delivery
+      description: Returns works associated with a specific CWR delivery. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR delivery ID
+        - in: query
+          name: worksPagination
+          schema:
+            type: object
+            properties:
+              page:
+                type: integer
+              limit:
+                type: integer
+              orderBy:
+                type: string
+              orderDir:
+                type: string
+          description: Pagination parameters for works
+      responses:
+        '200':
+          description: Successfully retrieved works
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  works:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Work'
+                  uncontrolledWorks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Work'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: CWR delivery not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find CwrDelivery with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+  /cwrDeliveries/{id}/redeliver_works:
+    get:
+      tags:
+        - CWR Deliveries
+      summary: Redeliver works for a CWR delivery
+      description: Redelivers works for a specific CWR delivery. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR delivery ID
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Status of works to redeliver
+      responses:
+        '200':
+          description: Successfully redelivered works
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: CWR delivery not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find CwrDelivery with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+  /cwrDeliveries/{id}/export_works:
+    get:
+      tags:
+        - CWR Deliveries
+      summary: Export works for a CWR delivery
+      description: Exports works for a specific CWR delivery. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR delivery ID
+      responses:
+        '200':
+          description: Successfully initiated export
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Your export will be sent to you shortly
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: CWR delivery not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find CwrDelivery with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+  /cwrDeliveries/{id}/importAcknowledgement:
+    post:
+      tags:
+        - CWR Deliveries
+      summary: Import acknowledgement file for a CWR delivery
+      description: Imports an acknowledgement file for a specific CWR delivery. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR delivery ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Acknowledgement file to upload
+      responses:
+        '200':
+          description: Successfully initiated import
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Acknowledgement is importing, and a report will be sent to you shortly.
+        '400':
+          description: Bad request, missing file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: CWR delivery not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find Delivery with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+  /cwrDeliveries/{id}/update_workids:
+    put:
+      tags:
+        - CWR Deliveries
+      summary: Update work IDs for a CWR delivery
+      description: Updates the work IDs associated with a specific CWR delivery.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR delivery ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - workIds
+              properties:
+                workIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of work IDs to add to the delivery
+      responses:
+        '200':
+          description: Successfully updated work IDs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 5 Works successfully added to Delivery
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: CWR delivery not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find Delivery with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+components:
+  schemas:
+    CwrDelivery:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the CWR delivery
+        clientId:
+          type: string
+          description: Client ID associated with the CWR delivery
+        name:
+          type: string
+          description: Name of the CWR delivery
+        status:
+          type: string
+          enum: [Pending, In Progress, Errored, Delivered]
+          description: Status of the delivery
+        deliveryPartnerId:
+          type: string
+          description: ID of the delivery partner
+        deliveryProfileId:
+          type: string
+          description: ID of the delivery profile
+          nullable: true
+        receivingParty:
+          type: string
+          description: Receiving party for the delivery
+        territory:
+          type: string
+          description: Territory code(s) e.g. "WW" or "GB,NL"
+        outputFormat:
+          type: string
+          description: Output format for the delivery
+          example: "CWR"
+        cwrVersion:
+          type: string
+          description: CWR version for the delivery
+          enum: [2.1, 2.2]
+        filterType:
+          type: string
+          description: Type of filter applied to works
+          enum: [newAndUpdated, manuallyAdded, custom, specific]
+        filter:
+          type: object
+          description: Filter criteria for works
+        workIds:
+          type: array
+          items:
+            type: string
+          description: IDs of works included in the delivery
+        deliveryScheduleId:
+          type: string
+          description: ID of the delivery schedule, if applicable
+        fileName:
+          type: string
+          description: Name of the file generated for the delivery
+        deliveryPartnerType:
+          type: string
+          description: Type of delivery partner
+        additionalCustomFilters:
+          type: object
+          description: Additional custom filters applied to the delivery
+        fromScheduledDelivery:
+          type: boolean
+          description: Indicates if the delivery is from a scheduled delivery
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the delivery was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the delivery was last updated
+    CwrDeliveryInput:
+      type: object
+      required:
+        - name
+        - territory
+      properties:
+        name:
+          type: string
+          description: Name of the CWR delivery
+        status:
+          type: string
+          enum: [Pending, In Progress, Errored, Delivered]
+          description: Status of the delivery
+        deliveryPartnerId:
+          type: string
+          description: ID of the delivery partner
+        deliveryProfileId:
+          type: string
+          description: ID of the delivery profile
+          nullable: true
+        receivingParty:
+          type: string
+          description: Receiving party for the delivery
+        territory:
+          type: string
+          description: Territory code(s) e.g. "WW" or "GB,NL"
+        outputFormat:
+          type: string
+          description: Output format for the delivery
+          example: "CWR"
+        cwrVersion:
+          type: string
+          description: CWR version for the delivery
+          enum: [2.1, 2.2]
+        filterType:
+          type: string
+          description: Type of filter applied to works
+          enum: [newAndUpdated, manuallyAdded, custom, specific]
+        filter:
+          type: object
+          description: Filter criteria for works
+        workIds:
+          type: array
+          items:
+            type: string
+          description: IDs of works included in the delivery
+        deliveryScheduleId:
+          type: string
+          description: ID of the delivery schedule, if applicable
+        fileName:
+          type: string
+          description: Name of the file generated for the delivery
+        deliveryPartnerType:
+          type: string
+          description: Type of delivery partner
+        additionalCustomFilters:
+          type: object
+          description: Additional custom filters applied to the delivery
+        fromScheduledDelivery:
+          type: boolean
+          description: Indicates if the delivery is from a scheduled delivery

@@ -1,0 +1,234 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id            String    @id @default(cuid())
+  curveId       String?
+  curveParentId String?
+  paymentTier   String?
+  customerId    String?
+  type       String?
+  name       String
+  active     Boolean   @default(true)
+  notes      String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  logs       ClientLog[]
+  products   Product[]
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         String   @default("Viewer")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  logs          ClientLog[]
+  activityLogs  UserActivityLog[]
+  peopleLogs    PeopleLog[]
+  customerLogs  CustomerLog[]
+}
+
+model Customer {
+  id                                    String    @id @default(cuid())
+
+  // Financial
+  estimatedMonthlyServices              Decimal?  @db.Decimal(15, 2)
+  estimatedMonthlyServicesCurrency      String?
+  activationFee                         Decimal?  @db.Decimal(15, 2)
+  activationFeeCurrency                 String?
+  estimatedAnnualNetRevenue             Decimal?  @db.Decimal(15, 2)
+  estimatedAnnualNetRevenueCurrency     String?
+  estimatedOnboardingFee                Decimal?  @db.Decimal(15, 2)
+  estimatedOnboardingFeeCurrency        String?
+
+  // Sales
+  stage                                 String?
+  closeDate                             DateTime?
+  opportunityOwnerId                    String?
+  opportunityOwner                      People?   @relation(fields: [opportunityOwnerId], references: [id], onDelete: SetNull)
+
+  // Legal
+  hasContract                           Boolean   @default(false)
+  curveTerms                            Boolean   @default(false)
+  amendedTerms                          Boolean   @default(false)
+
+  // General
+  notes                                 String?
+  primaryEmail                          String?
+  secondaryEmail                        String?
+  phone                                 String?
+
+  // Business
+  businessLegalName                     String?
+  businessType                          String?
+  taxCode                               String?
+
+  // Billing address
+  billingAddressLine1                   String?
+  billingAddressLine2                   String?
+  billingCity                           String?
+  billingState                          String?
+  billingPostcode                       String?
+  billingCountry                        String?
+
+  // Billing
+  billingType                           String?
+  billingFrequency                      String?
+  lastInvoiceDate                       DateTime?
+  nextInvoiceDate                       DateTime?
+
+  // Misc
+  curveParentId                         String?
+  referrer                              String?
+  active                                Boolean   @default(true)
+
+  createdAt                             DateTime  @default(now())
+  updatedAt                             DateTime  @updatedAt
+
+  logs                                  CustomerLog[]
+  clients                               Client[]
+  products                              Product[]
+}
+
+model CustomerLog {
+  id         String   @id @default(cuid())
+  customerId String
+  userId     String
+  action     String
+  changes    Json?
+  createdAt  DateTime @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([customerId])
+  @@index([userId])
+}
+
+model People {
+  id         String   @id @default(cuid())
+  name       String
+  department String
+  hourlyRate Decimal  @db.Decimal(10, 2)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  logs                PeopleLog[]
+  products            Product[]
+  productInvolvements ProductInvolvement[]
+  ownedCustomers      Customer[]
+}
+
+model Product {
+  id                       String   @id @default(cuid())
+  customerId               String
+  clientId                 String?
+  type                     String
+  recurring                Boolean  @default(false)
+  recurringPeriod          String?
+  dueDate                  DateTime?
+  closeDate                DateTime?
+  stage                    String?
+  delivered                Boolean  @default(false)
+  ownerId                  String?
+  billingType              String?
+  amount                   Decimal? @db.Decimal(15, 2)
+  actualAmount             Decimal? @db.Decimal(15, 2)
+  currency                 String?
+  convertedAmount          Decimal? @db.Decimal(15, 2)
+  convertedCurrency        String?
+  hourlyRate                              Decimal? @db.Decimal(15, 2)
+  hourlyRateCurrency                      String?
+  estimatedNetAnnualRevenue               Decimal? @db.Decimal(15, 2)
+  estimatedNetAnnualRevenueCurrency       String?
+  calculatedAnnualNetRevenue              Decimal? @db.Decimal(15, 2)
+  calculatedAnnualNetRevenueCurrency      String?
+  calculatedAnnualNetRevenueConveted         Decimal? @db.Decimal(15, 2)
+  calculatedAnnualNetRevenueConvetedCurrency String?
+  estimatedOnboardingFee                     Decimal? @db.Decimal(15, 2)
+  estimatedOnboardingFeeCurrency             String?
+  estimatedMonthlyServicesFee                Decimal? @db.Decimal(15, 2)
+  estimatedMonthlyServicesFeeCurrency        String?
+  productsCap              Int?
+  contractsCap             Int?
+  releasesCap              Int?
+  tracksCap                Int?
+  worksCap                 Int?
+  periodRecalculationsCap  Int?
+  notes                    String?
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  client   Client?  @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  owner    People?  @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  involvements ProductInvolvement[]
+}
+
+model ProductInvolvement {
+  id         String   @id @default(cuid())
+  productId  String
+  personId   String
+  totalHours Decimal  @db.Decimal(10, 2)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  person  People  @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([personId])
+}
+
+model ClientLog {
+  id        String   @id @default(cuid())
+  clientId  String
+  userId    String
+  action    String
+  changes   Json?
+  createdAt DateTime @default(now())
+
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([clientId])
+  @@index([userId])
+}
+
+model PeopleLog {
+  id        String   @id @default(cuid())
+  personId  String
+  userId    String
+  action    String
+  changes   Json?
+  createdAt DateTime @default(now())
+
+  person People @relation(fields: [personId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([personId])
+  @@index([userId])
+}
+
+model UserActivityLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}

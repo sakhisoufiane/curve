@@ -1,0 +1,51 @@
+### APP ### 
+applicationToken="DrLmNC2q9t"
+apiUrl="http://localhost:8081"
+frontEndUrl="http://localhost:8082"
+
+### SENDGRID ### 
+sendgridKey="*****"
+### ENVIRONMENT ### 
+logGroupName="Dev"
+logStreamName="API"
+environmentName="Development"
+
+### S3 ### REGION
+S3_region="eu-west-1"
+### S3 ### DEV ENV KEYS
+S3_access_key="*****"
+S3_secret_key="*****"
+S3_bucket="curve-royalties-staging-new"
+
+### MONGO ### LOCAL
+DB_PROTOCOL="mongodb://"
+DB_URL="localhost:27017"
+DB_NAME="curve-production"
+DB_USER="root"
+DB_PASS="root"
+DB_OPTS=""
+
+### MONGO ### STAGING
+DB_PROTOCOL="mongodb+srv://"
+DB_URL="curvestaging.xseuw.mongodb.net"
+DB_NAME="curve-production"
+DB_USER="*****"
+DB_PASS="*****"
+DB_OPTS="retryWrites=true&w=majority"
+
+### ENCRYPTION KEYS ###
+MASTER_ENCRYPTION_KEY="*****"
+
+### EXCHANGE RATES ###
+exchangeRateApiURL="https://free.currconv.com/api/v7/convert?q="
+exchangeRateApiKey="*****"
+
+### BIG QUERY ###
+BQ_project_id="*****"
+BQ_client_email="*****"
+BQ_private_key="*****"
+
+### PAYMENTS ###
+PAYMENTS_APP_URLhttps://dev-payments.curveroyaltysystems.com
+PAYMENTS_HMAC="*****"
+PAYMENTS_API_KEY="*****"

@@ -1,0 +1,85 @@
+<div class="container-fluid container-fixed-lg">
+  <div class="row">
+    <div class="col-xs-12 col-md-10 col-md-offset-1">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row m-b-20">
+            <div class="col-xs-12">
+              <ul class="breadcrumb wizard-breadcrumb">
+                <li><a class="active">Setup</a></li>
+                <li>Included Sales</li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="alert alert-danger" role="alert" ng-if="setupErrors.length > 0">
+                <strong>Period Setup Errors:</strong><br/>
+                <ul>
+                  <li ng-repeat="error in setupErrors">{{ error }}</li>
+                </ul>
+              </div>
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" ng-model="accountingPeriod.name">
+                <label class="error" ng-if="setupErrors.includes('Acccounting Period is required to have a name')">Name is required</label>
+              </div>
+              <div class="form-group" ng-if="accountingSystem === 'Xero - Ledger' || accountingPeriod.outputType === 'COGS'">
+                <label>Period</label>
+                <ui-select ng-model="accountingPeriod.periodId" on-select="setPeriodDefaults($select.selected)">
+                  <ui-select-match allow-clear="true">
+                    <span ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item._id as item in (periods | filter: $select.search)">
+                    <span ng-bind="item.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div class="form-group">
+                <label>Year</label>
+                <ui-select ng-model="accountingPeriod.year">
+                  <ui-select-match allow-clear="true">
+                    <span ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in (years | filter: $select.search)">
+                    <span ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+                <label class="error" ng-if="setupErrors.includes('Accounting Period is required to have a year')">Year is required</label>
+              </div>
+              <div class="form-group">
+                <label>Accounting Period</label>
+                <ui-select ng-model="accountingPeriod.accountingPeriod">
+                  <ui-select-match allow-clear="true">
+                    <span ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in (accountingPeriods | filter: $select.search)">
+                    <span ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+                <input type="text" class="form-control" ng-model="accountingPeriod.accountingPeriod" ng-if="!isDefaultAccountingPeriod">
+                <label class="error" ng-if="setupErrors.includes('Accounting Period is required to have an accounting period')">Accounting Period is required</label>
+              </div>
+              <div class="form-group required">
+                <label>Accounting Date <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The date that will show on statements"></i></label>
+                <div id="datepicker-component" class="form-group input-group date">
+                  <input type="text" class="form-control" ng-model="accountingPeriod.accountingDate" ng-model-options="{timezone: 'utc'}" uib-datepicker-popup="{{dateFormat}}" is-open="accountingDatePopup" ng-click="openAccountingDatePopup()">
+                  <span class="input-group-addon" ng-click="openAccountingDatePopup()">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                </div>
+                <label class="error" ng-if="setupErrors.includes('Period is required to have an accounting date')">Accounting Date is required</label>
+              </div>
+            </div>
+          </div>
+          <div class="row m-t-20">
+            <div class="col-xs-12">
+              <a ng-click="validateSetup()" class="btn btn-complete pull-right w-xs-100-p" ng-if="!accountingPeriod.periodId">Next</a>
+              <a ng-click="runCalculation()" class="btn btn-primary pull-right" ng-if="accountingPeriod.periodId">Calculate</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

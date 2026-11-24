@@ -1,0 +1,797 @@
+openapi: 3.0.3
+info:
+  title: Payments API
+  version: '1.0.0'
+  description: |
+    API for managing payment records in the system.
+    Supports CRUD operations on payments with access control validation.
+    Includes support for payment processing, status tracking, and history.
+    
+    Access Control:
+    - Read access requires admin read permissions for periods
+    - Write access requires admin write permissions
+    - Advanced filtering available for authorized users
+
+paths:
+  /payments:
+    get:
+      tags:
+        - "Payments"
+      summary: Retrieve all payments
+      description: Returns a paginated list of payments with advanced filtering capabilities. Requires admin read access to periods.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Search text to filter by name or ID. Searches payment names using regex patterns. If the text is exactly 24 characters (valid ObjectId format), it will also search for exact _id matches.
+      responses:
+        200:
+          description: Successfully retrieved payments with populated payment group, contract, and statement references
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Payment'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+              example:
+                payments:
+                  - _id: "507f1f77bcf86cd799439011"
+                    name: "Q1 2024 Payment - Artist Name"
+                    amount: 1500.75
+                    currency: "USD"
+                    status: "Pending"
+                    paymentGroupId: "507f1f77bcf86cd799439012"
+                    warnings: ["The Payee is not linked to a Wise recipient"]
+                    refCode: "1640995200000"
+                    uuid: "123e4567-e89b-12d3-a456-426614174000"
+                meta:
+                  currentPage: 1
+                  totalPages: 5
+                  total: 125
+        400:
+          description: Bad request - invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid query parameters"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+    post:
+      tags:
+        - "Payments"
+      summary: Create a new payment
+      description: Creates a new payment with automatic validation, warning generation, and transaction management. Requires admin write access to periods. The system automatically generates refCode and UUID, validates amount format, and creates associated transactions for contract-linked payments.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInput'
+            example:
+              name: "Q2 2024 Royalty Payment"
+              paymentGroupId: "507f1f77bcf86cd799439012"
+              contractId: "507f1f77bcf86cd799439013"
+              payeeId: "507f1f77bcf86cd799439014"
+              amount: 2500.50
+              currency: "GBP"
+      responses:
+        200:
+          description: Successfully created payment with validation warnings if any
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+              example:
+                _id: "507f1f77bcf86cd799439015"
+                name: "Q2 2024 Royalty Payment"
+                amount: 2500.50
+                currency: "GBP"
+                status: "Pending"
+                warnings: []
+                refCode: "1640995200001"
+                uuid: "987f6d4c-3b2a-1c9d-8e7f-123456789abc"
+                transactionId: "507f1f77bcf86cd799439016"
+                createdBy: "507f1f77bcf86cd799439017"
+                lastModifiedBy: "507f1f77bcf86cd799439017"
+        400:
+          description: Bad request - validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                missing_payee:
+                  summary: Missing payee
+                  value:
+                    message: "Payment must be associated with a payee"
+                invalid_amount:
+                  summary: Invalid amount
+                  value:
+                    message: "Payment must have a positive amount"
+                missing_payment_group:
+                  summary: Missing payment group
+                  value:
+                    message: "Payment must be associated with a payment group"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+    delete:
+      tags:
+        - "Payments"
+      summary: Delete multiple payments
+      description: |
+        Deletes multiple payments by IDs with automatic transaction cleanup. Requires admin write access to periods.
+        - Prevents deletion of payments with status "Paid"
+        - Automatically deletes associated transactions when deleteTransactions flag is used
+        - Processes up to 10 payments concurrently for performance
+        - Returns error immediately if only one payment fails, continues processing for bulk operations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of payment IDs to delete
+                  example: ["507f1f77bcf86cd799439011", "507f1f77bcf86cd799439012"]
+      responses:
+        200:
+          description: Successfully deleted payments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deletedCount:
+                    type: integer
+                    description: Number of payments successfully deleted
+              example:
+                deletedCount: 2
+        404:
+          description: No payments selected
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Required Payments to be selected"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unfortunately we couldn't complete your request. Please try again, or contact the support team."
+
+  /payments/flushStatus:
+    put:
+      tags:
+        - "Payments"
+      summary: Flush payment status for a payment group
+      description: |
+        Flushes and recalculates the status of all payments in a payment group by running validation on each payment.
+        This operation processes payments asynchronously and sends an email notification upon completion with a summary of results.
+        Useful for updating payment statuses after changes to payee configurations or contract relationships.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: Payment group ID to flush
+                  example: "507f1f77bcf86cd799439012"
+      responses:
+        200:
+          description: Successfully initiated status flush operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Flushing payments, you will be notified upon completion"
+        400:
+          description: Bad request - missing payment group ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Payment group ID is required"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /payments/{id}:
+    get:
+      tags:
+        - "Payments"
+      summary: Retrieve a specific payment
+      description: |
+        Returns details for a specific payment by ID with populated references. Requires admin read access to periods.
+        The response includes populated statement (with name), createdBy, and lastModifiedBy user details.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Payment ID
+          example: "507f1f77bcf86cd799439011"
+      responses:
+        200:
+          description: Successfully retrieved payment with populated references
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Payment'
+                  - type: object
+                    properties:
+                      statementId:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          name:
+                            type: string
+                        description: Populated statement details
+                      createdBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          email:
+                            type: string
+                        description: User who created the payment
+                      lastModifiedBy:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          email:
+                            type: string
+                        description: User who last modified the payment
+              example:
+                _id: "507f1f77bcf86cd799439011"
+                name: "Q1 2024 Payment - Artist Name"
+                amount: 1500.75
+                currency: "USD"
+                status: "Pending"
+                warnings: ["The Payee is not linked to a Wise recipient"]
+                statementId:
+                  _id: "507f1f77bcf86cd799439018"
+                  name: "Q1 2024 Statement"
+                createdBy:
+                  _id: "507f1f77bcf86cd799439019"
+                  email: "admin@example.com"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Payment not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Payment with ID 123456789012"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unfortunately we couldn't complete your request. Please try again, or contact the support team."
+
+    put:
+      tags:
+        - "Payments"
+      summary: Update a payment
+      description: |
+        Updates a payment's details with automatic validation and warning generation. Requires admin write access to periods.
+        - Prevents updates to payments with status "Paid"
+        - Automatically updates associated transactions for contract-linked payments
+        - Recalculates payment status based on new data
+        - Regenerates validation warnings
+        - The clientId field is protected and cannot be updated
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Payment ID
+          example: "507f1f77bcf86cd799439011"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInput'
+            example:
+              name: "Updated Q1 2024 Payment"
+              amount: 1750.25
+              currency: "EUR"
+      responses:
+        200:
+          description: Successfully updated payment with recalculated status and warnings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+              example:
+                _id: "507f1f77bcf86cd799439011"
+                name: "Updated Q1 2024 Payment"
+                amount: 1750.25
+                currency: "EUR"
+                status: "Missing Info"
+                warnings: ["The Payment currency and Contract currency don't match"]
+                lastModifiedBy: "507f1f77bcf86cd799439017"
+        400:
+          description: Bad request - validation errors or payment already paid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                already_paid:
+                  summary: Payment already paid
+                  value:
+                    message: "Payment has been paid and cannot be updated"
+                invalid_amount:
+                  summary: Invalid amount
+                  value:
+                    message: "Payment must have a positive amount"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Payment not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Payment with ID 123456789012"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unfortunately we couldn't complete your request. Please try again, or contact the support team."
+
+  /payments/{id}/history:
+    get:
+      tags:
+        - "Payments"
+      summary: Retrieve history for a payment
+      description: Returns the modification history for a specific payment. Requires admin read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Payment ID
+      responses:
+        200:
+          description: Successfully retrieved payment history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                          format: date-time
+                        author:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            email:
+                              type: string
+                        ops:
+                          type: array
+                          items:
+                            type: object
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Payment not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Payment with ID 123456789012"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unfortunately we couldn't complete your request. Please try again, or contact the support team."
+
+  /payments/{id}/pay:
+    get:
+      tags:
+        - "Payments"
+      summary: Mark a payment as paid
+      description: Updates a payment's status to 'Paid'. Requires admin read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Payment ID
+      responses:
+        200:
+          description: Successfully marked payment as paid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Payment not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Payment with ID 123456789012"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unfortunately we couldn't complete your request. Please try again, or contact the support team."
+
+components:
+  schemas:
+    Payment:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the payment
+        clientId:
+          type: string
+          description: Client ID associated with the payment
+        paymentGroupId:
+          type: string
+          description: Payment group ID associated with the payment
+        payeeId:
+          type: string
+          description: Payee ID associated with the payment
+        contractId:
+          type: string
+          nullable: true
+          description: Contract ID associated with the payment (optional)
+        statementId:
+          type: string
+          nullable: true
+          description: Statement ID associated with the payment (optional)
+        transactionId:
+          type: string
+          nullable: true
+          description: Associated transaction ID (auto-created for contract payments)
+        name:
+          type: string
+          description: Name of the payment
+        amount:
+          type: number
+          format: decimal
+          description: Payment amount (automatically rounded to 2 decimal places)
+        currency:
+          type: string
+          description: Payment currency (auto-detected from payee/contract if not provided)
+        status:
+          type: string
+          enum: [Pending, Processing, Paid, Failed, "Payment Error", "Missing Info"]
+          description: Current status of the payment
+        paymentDate:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date when the payment was made
+        refCode:
+          type: string
+          description: Unique reference code (auto-generated timestamp)
+        uuid:
+          type: string
+          format: uuid
+          description: Unique UUID for payment tracking (auto-generated)
+        warnings:
+          type: array
+          items:
+            type: string
+          description: Validation warnings generated during payment processing
+        error:
+          type: string
+          nullable: true
+          description: Error message if payment failed
+        errorLogs:
+          type: array
+          items:
+            type: string
+          description: Historical error log entries
+        missingInfoReason:
+          type: string
+          nullable: true
+          description: Reason why payment status is "Missing Info"
+        paidAdditionalInfo:
+          type: string
+          nullable: true
+          description: Additional information about payment completion
+        paymentDetails:
+          type: object
+          nullable: true
+          description: Payment provider specific details (Wise, CurvePay, Tipalti)
+          properties:
+            wiseTransferId:
+              type: string
+              description: Wise transfer ID for tracking
+            destinationAmount:
+              type: number
+              description: Final amount in destination currency
+            destinationCurrency:
+              type: string
+              description: Destination currency
+            conversionRate:
+              type: number
+              description: Exchange rate used
+            clientExchangeRate:
+              type: number
+              description: Client-specific exchange rate
+            paymentMethod:
+              type: string
+              description: Payment method used
+            fees:
+              type: number
+              description: Fees charged for the payment
+        exchanged:
+          type: boolean
+          default: false
+          description: Whether the payment has been exchanged/processed
+        createdBy:
+          type: string
+          description: ID of the user who created the payment
+        lastModifiedBy:
+          type: string
+          description: ID of the user who last modified the payment
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the payment was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the payment was last updated
+        __v:
+          type: number
+          description: Mongoose version key
+
+    PaymentInput:
+      type: object
+      required:
+        - name
+        - payeeId
+        - paymentGroupId
+        - amount
+      properties:
+        name:
+          type: string
+          description: Name of the payment
+          example: "Q1 2024 Royalty Payment - Artist Name"
+        payeeId:
+          type: string
+          description: Payee ID associated with the payment (required)
+          example: "507f1f77bcf86cd799439014"
+        paymentGroupId:
+          type: string
+          description: Payment group ID associated with the payment (required)
+          example: "507f1f77bcf86cd799439012"
+        contractId:
+          type: string
+          nullable: true
+          description: Contract ID associated with the payment (creates transaction if provided)
+          example: "507f1f77bcf86cd799439013"
+        statementId:
+          type: string
+          nullable: true
+          description: Statement ID associated with the payment
+          example: "507f1f77bcf86cd799439015"
+        amount:
+          type: number
+          format: decimal
+          minimum: 0.01
+          description: Payment amount (must be positive, will be rounded to 2 decimal places)
+          example: 2500.50
+        currency:
+          type: string
+          description: Payment currency (auto-detected from payee/contract if not provided)
+          example: "GBP"
+        status:
+          type: string
+          enum: [Pending, Processing, Paid, Failed, "Payment Error", "Missing Info"]
+          description: Current status of the payment (auto-calculated based on validation)
+          example: "Pending"
+        paymentDate:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date when the payment was made
+          example: "2024-06-17T10:30:00.000Z"

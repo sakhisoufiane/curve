@@ -1,0 +1,324 @@
+const { invert } = require('lodash');
+
+// All country codes defined here are for CISAC approved territories ONLY
+// This does not represent all countries in the world and shouldn't be used as so
+// For anything CWR <> territories related, use these lists
+
+// Taken from https://members.cisac.org/CisacPortal/documentPack20.do?method=detail&id=21
+// Last updated from file: ISTIS-0184a 2022-02-21 "TIS database: full data - Appendix a : list of territories"
+// Key   =  TIS-N
+// Value =  TIS-A
+
+const CISAC_COUNTRIES_AFRICA = {
+  12: 'DZ', // ALGERIA
+  24: 'AO', // ANGOLA
+  72: 'BW', // BOTSWANA
+  108: 'BI', // BURUNDI
+  120: 'CM', // CAMEROON
+  132: 'CV', // CAPE VERDE
+  140: 'CF', // CENTRAL AFRICAN REPUBLIC
+  148: 'TD', // CHAD
+  174: 'KM', // COMOROS
+  178: 'CG', // CONGO
+  180: 'CD', // CONGO, THE DEMOCRATIC REPUBLIC OF THE
+  204: 'BJ', // BENIN
+  226: 'GQ', // EQUATORIAL GUINEA
+  231: 'ET', // ETHIOPIA
+  232: 'ER', // ERITREA
+  262: 'DJ', // DJIBOUTI
+  266: 'GA', // GABON
+  270: 'GM', // GAMBIA
+  288: 'GH', // GHANA
+  324: 'GN', // GUINEA
+  384: 'CI', // COTE D'IVOIRE
+  404: 'KE', // KENYA
+  426: 'LS', // LESOTHO
+  430: 'LR', // LIBERIA
+  434: 'LY', // LIBYA
+  450: 'MG', // MADAGASCAR
+  454: 'MW', // MALAWI
+  466: 'ML', // MALI
+  478: 'MR', // MAURITANIA
+  480: 'MU', // MAURITIUS
+  504: 'MA', // MOROCCO
+  508: 'MZ', // MOZAMBIQUE
+  516: 'NA', // NAMIBIA
+  562: 'NE', // NIGER
+  566: 'NG', // NIGERIA
+  624: 'GW', // GUINEA-BISSAU
+  646: 'RW', // RWANDA
+  678: 'ST', // SAO TOME AND PRINCIPE
+  686: 'SN', // SENEGAL
+  690: 'SC', // SEYCHELLES
+  694: 'SL', // SIERRA LEONE
+  706: 'SO', // SOMALIA
+  710: 'ZA', // SOUTH AFRICA
+  716: 'ZW', // ZIMBABWE
+  728: 'SS', // SOUTH SUDAN
+  729: 'SD', // SUDAN
+  732: 'EH', // WESTERN SAHARA
+  748: 'SZ', // ESWATINI
+  768: 'TG', // TOGO
+  788: 'TN', // TUNISIA
+  800: 'UG', // UGANDA
+  818: 'EG', // EGYPT
+  834: 'TZ', // TANZANIA, UNITED REPUBLIC OF
+  854: 'BF', // BURKINA FASO
+  894: 'ZM', // ZAMBIA
+};
+
+const CISAC_COUNTRIES_AMERICAS = {
+  28: 'AG', // ANTIGUA AND BARBUDA
+  32: 'AR', // ARGENTINA
+  44: 'BS', // BAHAMAS
+  52: 'BB', // BARBADOS
+  68: 'BO', // BOLIVIA
+  76: 'BR', // BRAZIL
+  84: 'BZ', // BELIZE
+  124: 'CA', // CANADA
+  152: 'CL', // CHILE
+  170: 'CO', // COLOMBIA
+  188: 'CR', // COSTA RICA
+  192: 'CU', // CUBA
+  212: 'DM', // DOMINICA
+  214: 'DO', // DOMINICAN REPUBLIC
+  218: 'EC', // ECUADOR
+  222: 'SV', // EL SALVADOR
+  308: 'GD', // GRENADA
+  320: 'GT', // GUATEMALA
+  328: 'GY', // GUYANA
+  332: 'HT', // HAITI
+  340: 'HN', // HONDURAS
+  388: 'JM', // JAMAICA
+  484: 'MX', // MEXICO
+  558: 'NI', // NICARAGUA
+  591: 'PA', // PANAMA
+  600: 'PY', // PARAGUAY
+  604: 'PE', // PERU
+  630: 'PR', // PUERTO RICO
+  659: 'KN', // SAINT KITTS AND NEVIS
+  662: 'LC', // SAINT LUCIA
+  670: 'VC', // SAINT VINCENT AND THE GRENADINES
+  740: 'SR', // SURINAME
+  780: 'TT', // TRINIDAD AND TOBAGO
+  840: 'US', // UNITED STATES
+  858: 'UY', // URUGUAY
+  862: 'VE', // VENEZUELA
+};
+
+const CISAC_COUNTRIES_ASIA = {
+  4: 'AF', // AFGHANISTAN
+  31: 'AZ', // AZERBAIJAN
+  48: 'BH', // BAHRAIN
+  50: 'BD', // BANGLADESH
+  51: 'AM', // ARMENIA
+  64: 'BT', // BHUTAN
+  96: 'BN', // BRUNEI DARUSSALAM
+  104: 'MM', // MYANMAR
+  116: 'KH', // CAMBODIA
+  144: 'LK', // SRI LANKA
+  156: 'CN', // CHINA
+  158: 'TW', // TAIWAN, PROVINCE OF CHINA
+  268: 'GE', // GEORGIA
+  344: 'HK', // HONG KONG
+  356: 'IN', // INDIA
+  360: 'ID', // INDONESIA
+  364: 'IR', // IRAN, ISLAMIC REPUBLIC OF
+  368: 'IQ', // IRAQ
+  376: 'IL', // ISRAEL
+  392: 'JP', // JAPAN
+  398: 'KZ', // KAZAKHSTAN
+  400: 'JO', // JORDAN
+  408: 'KP', // KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF
+  410: 'KR', // KOREA, REPUBLIC OF
+  414: 'KW', // KUWAIT
+  417: 'KG', // KYRGYZSTAN
+  418: 'LA', // LAO PEOPLE'S DEMOCRATIC REPUBLIC
+  422: 'LB', // LEBANON
+  446: 'MO', // MACAO
+  458: 'MY', // MALAYSIA
+  462: 'MV', // MALDIVES
+  496: 'MN', // MONGOLIA
+  512: 'OM', // OMAN
+  524: 'NP', // NEPAL
+  586: 'PK', // PAKISTAN
+  608: 'PH', // PHILIPPINES
+  626: 'TL', // TIMOR-LESTE
+  634: 'QA', // QATAR
+  682: 'SA', // SAUDI ARABIA
+  702: 'SG', // SINGAPORE
+  704: 'VN', // VIET NAM
+  760: 'SY', // SYRIAN ARAB REPUBLIC
+  762: 'TJ', // TAJIKISTAN
+  764: 'TH', // THAILAND
+  784: 'AE', // UNITED ARAB EMIRATES
+  792: 'TR', // TURKEY
+  795: 'TM', // TURKMENISTAN
+  860: 'UZ', // UZBEKISTAN
+  887: 'YE', // YEMEN
+};
+
+const CISAC_COUNTRIES_EUROPE = {
+  8: 'AL', // ALBANIA
+  20: 'AD', // ANDORRA
+  40: 'AT', // AUSTRIA
+  56: 'BE', // BELGIUM
+  70: 'BA', // BOSNIA AND HERZEGOVINA
+  100: 'BG', // BULGARIA
+  112: 'BY', // BELARUS
+  191: 'HR', // CROATIA
+  196: 'CY', // CYPRUS
+  203: 'CZ', // CZECH REPUBLIC
+  208: 'DK', // DENMARK
+  233: 'EE', // ESTONIA
+  246: 'FI', // FINLAND
+  250: 'FR', // FRANCE
+  276: 'DE', // GERMANY
+  300: 'GR', // GREECE
+  336: 'VA', // HOLY SEE (VATICAN CITY STATE)
+  348: 'HU', // HUNGARY
+  352: 'IS', // ICELAND
+  372: 'IE', // IRELAND
+  380: 'IT', // ITALY
+  428: 'LV', // LATVIA
+  438: 'LI', // LIECHTENSTEIN
+  440: 'LT', // LITHUANIA
+  442: 'LU', // LUXEMBOURG
+  470: 'MT', // MALTA
+  492: 'MC', // MONACO
+  498: 'MD', // MOLDOVA, REPUBLIC OF
+  499: 'ME', // MONTENEGRO
+  528: 'NL', // NETHERLANDS
+  578: 'NO', // NORWAY
+  616: 'PL', // POLAND
+  620: 'PT', // PORTUGAL
+  642: 'RO', // ROMANIA
+  643: 'RU', // RUSSIAN FEDERATION
+  674: 'SM', // SAN MARINO
+  688: 'RS', // SERBIA
+  703: 'SK', // SLOVAKIA
+  705: 'SI', // SLOVENIA
+  724: 'ES', // SPAIN
+  752: 'SE', // SWEDEN
+  756: 'CH', // SWITZERLAND
+  804: 'UA', // UKRAINE
+  807: 'MK', // NORTH MACEDONIA
+  826: 'GB', // UNITED KINGDOM
+};
+
+const CISAC_COUNTRIES_OCEANIA = {
+  36: 'AU', // AUSTRALIA
+  90: 'SB', // SOLOMON ISLANDS
+  242: 'FJ', // FIJI
+  258: 'PF', // FRENCH POLYNESIA
+  296: 'KI', // KIRIBATI
+  520: 'NR', // NAURU
+  540: 'NC', // NEW CALEDONIA
+  548: 'VU', // VANUATU
+  554: 'NZ', // NEW ZEALAND
+  583: 'FM', // MICRONESIA, FEDERATED STATES OF
+  584: 'MH', // MARSHALL ISLANDS
+  585: 'PW', // PALAU
+  598: 'PG', // PAPUA NEW GUINEA
+  776: 'TO', // TONGA
+  798: 'TV', // TUVALU
+  882: 'WS', // SAMOA
+};
+
+// Represents single countries (4 — 894)
+const CISAC_APPROVED_COUNTRIES = {
+  ...CISAC_COUNTRIES_AFRICA,
+  ...CISAC_COUNTRIES_AMERICAS,
+  ...CISAC_COUNTRIES_ASIA,
+  ...CISAC_COUNTRIES_EUROPE,
+  ...CISAC_COUNTRIES_OCEANIA,
+};
+
+// Represents continents, areas and all world (2100 — 2136)
+const CISAC_APPROVED_AREAS_CONTINENTS_WORLD = {
+  2100: '2AF', // AFRICA
+  2101: '2AM', // AMERICA
+  2102: '2AC', // AMERICAN CONTINENT
+  2103: '2AN', // ANTILLES
+  2104: '2AP', // APEC COUNTRIES
+  2105: '2AE', // ASEAN COUNTRIES
+  2106: '2AS', // ASIA
+  2107: '2AA', // AUSTRALASIA
+  2108: '2BA', // BALKANS
+  2109: '2BS', // BALTIC STATES
+  2110: '2BE', // BENELUX
+  2111: '2BI', // BRITISH ISLES
+  2112: '2BW', // BRITISH WEST INDIES
+  2113: '2CA', // CENTRAL AMERICA
+  2114: '2CO', // COMMONWEALTH
+  2115: '2CF', // COMMONWEALTH AFRICAN TERRITORIES
+  2116: '2CS', // COMMONWEALTH ASIAN TERRITORIES
+  2117: '2CU', // COMMONWEALTH AUSTRALASIAN TERRITORIES
+  2118: '2CI', // COMMONWEALTH OF INDEPENDENT STATES
+  2119: '2EE', // EASTERN EUROPE
+  2120: '2EU', // EUROPE
+  2121: '2EM', // EUROPEAN ECONOMIC AREA
+  2122: '2EC', // EUROPEAN CONTINENT
+  2123: '2EN', // EUROPEAN UNION
+  2124: '2GC', // GSA COUNTRIES
+  2125: '2ME', // MIDDLE EAST
+  2126: '2NT', // NAFTA COUNTRIES
+  2127: '2NC', // NORDIC COUNTRIES
+  2128: '2NF', // NORTH AFRICA
+  2129: '2NA', // NORTH AMERICA
+  2130: '2OC', // OCEANIA
+  2131: '2SC', // SCANDINAVIA
+  2132: '2SA', // SOUTH AMERICA
+  2133: '2SE', // SOUTH EAST ASIA
+  2134: '2WI', // WEST INDIES
+  2136: '2WL', // WORLD
+};
+
+const AREA_CODES = {
+  WW: 'WW',
+  World: 'World',
+  Europe: 'Europe',
+  Africa: 'Africa',
+  Asia: 'Asia',
+  Americas: 'Americas',
+  Oceania: 'Oceania',
+};
+
+const ALL_WORLD_CODE = 2136;
+
+// All territories (countries, areas, continents, world)
+const CISAC_APPROVED_TERRITORIES = {
+  ...CISAC_APPROVED_COUNTRIES,
+  ...CISAC_APPROVED_AREAS_CONTINENTS_WORLD,
+};
+
+// Flipped version of all territories, useful in places where we have only the country code and no number
+const CISAC_APPROVED_TERRITORIES_REVERSED = invert(CISAC_APPROVED_COUNTRIES);
+
+// Total count of approved countries
+const CISAC_APPROVED_COUNTRIES_COUNT = Object.keys(CISAC_APPROVED_COUNTRIES).length;
+
+// Just the codes for countries, no areas + continents etc.
+const CISAC_APPROVED_COUNTRIES_CODES = Object.values(CISAC_APPROVED_COUNTRIES);
+
+// Just the codes for all territories, including areas + continents etc.
+const CISAC_APPROVED_TERRITORIES_CODES = Object.values(CISAC_APPROVED_TERRITORIES);
+
+module.exports = {
+  // CISAC Constants
+  CISAC_APPROVED_COUNTRIES,
+  CISAC_APPROVED_TERRITORIES,
+  CISAC_APPROVED_TERRITORIES_CODES,
+  CISAC_APPROVED_TERRITORIES_REVERSED,
+  CISAC_APPROVED_COUNTRIES_CODES,
+  CISAC_APPROVED_COUNTRIES_COUNT,
+  // Areas
+  CISAC_COUNTRIES_AFRICA,
+  CISAC_COUNTRIES_AMERICAS,
+  CISAC_COUNTRIES_ASIA,
+  CISAC_COUNTRIES_EUROPE,
+  CISAC_COUNTRIES_OCEANIA,
+  // Util Constants
+  AREA_CODES,
+  ALL_WORLD_CODE,
+};

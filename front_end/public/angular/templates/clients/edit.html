@@ -1,0 +1,531 @@
+<div id="CUR-tpWEfGcr" class="jumbotron" data-pages="parallax">
+  <div id="CUR-dKPkrAeE" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-IfSCIhkU" class="inner">
+      <ul id="CUR-LOLCJZjK" class="breadcrumb">
+        <li id="CUR-pAWHacTb"><a id="CUR-mchYnTvi" href="/#/clients">Clients</a></li>
+        <li id="CUR-AswLNSXT" ng-show="!client._id"><a id="CUR-xxJMTcjO" href="" class="active">Create</a></li>
+        <li id="CUR-dHdUTuEJ" ng-show="client._id"><a id="CUR-hJaSinuo" href="/#/clients/{{client._id}}" class="active">{{client.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-urHGBbYR" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-XokuVfMc" class="row">
+    <div id="CUR-aDDbjQCp" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-WctLPdtk" class="btn btn-danger" ng-click="showDeleteModal()" ng-if="userType == 'internal'"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-jOAZMCSW" class="btn btn-complete" ng-click="save()"><i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-UjGBgaDf" class="row">
+    <div id="CUR-qlRkPxTv" class="col-xs-12 col-sm-6">
+      <div id="CUR-mmlrcwJT" class="panel panel-default">
+        <div id="CUR-XbxEhXyE" class="panel-heading">
+          <div id="CUR-foVKXVah" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-UJZNFWRk" class="panel-body p-t-15">
+          <div id="CUR-jFDjTmVQ" class="form-group required">
+            <label id="CUR-iuDndcuF">Name</label>
+            <input id="CUR-edBQiwda" type="text" class="form-control" ng-model="client.name">
+          </div>
+          <div id="CUR-lgIjIEWp" class="form-group">
+            <label id="CUR-oClPKEzZ">Type</label>
+            <ui-select ng-model="client.clientType">
+              <ui-select-match allow-clear="false">
+                <span id="CUR-etFbCPTo" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in (clientTypes | filter: $select.search)">
+                <span id="CUR-ktFBdDWh" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-zgnbvzUl" class="form-group" ng-show="internalUser">
+            <label id="CUR-fnfBkOZR">Parent</label>
+            <ui-select ng-model="client.parentId">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-zksoreiC" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item._id as item in (parents | filter: $select.search)">
+                <span id="CUR-eNDbZmSy" ng-bind="item.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-yyfDDxzc" class="form-group" ng-show="internalUser">
+            <label id="CUR-dZvLmSIf">Payment Tier</label>
+            <ui-select ng-model="client.paymentTier">
+              <ui-select-match>
+                <span id="CUR-fLxcebSb" ng-bind="$select.selected"></span>
+              </ui-select-match allow-clear="true">
+              <ui-select-choices repeat="item in (paymentTiers | filter: $select.search)">
+                <span id="CUR-JzgogLas" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-kKDHAzsO" class="form-group" ng-show="internalUser">
+            <label id="CUR-pPqwaNET">Monthly Price</label>
+            <input id="CUR-iswEdQzw" type="number" class="form-control" ng-model="client.billing.amount">
+          </div>
+          <div id="CUR-XzYFhzoZ" class="form-group" ng-show="internalUser">
+            <label id="CUR-CCYrpjhK">Additional Charge</label>
+            <input id="CUR-mlmSavVq" type="number" class="form-control" ng-model="client.billing.additionalCharge">
+          </div>
+          <div id="CUR-client-primary-email-div" class="form-group" ng-show="internalUser">
+            <label id="CUR-client-primary-email-label">Primary Email</label>
+            <input id="CUR-client-primary-email-input" type="text" class="form-control" placeholder="Primary Email" ng-model="client.primaryEmail">
+          </div>
+          <!-- The Parent Id in this condition is for Fuga Split Clients, we need to expose certain fields temporarily whilst Fuga Splits is being implemented -->
+          <div id="CUR-lgIjIEWp" class="form-group" ng-show="internalUser">
+            <label id="CUR-oClPKEzZ">Fuga Splits</label>
+            <ui-select ng-model="client.fugaSplitType">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-etFbCPTo" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in (fugaSplits | filter: $select.search)">
+                <span id="CUR-ktFBdDWh" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-lTLlJMKC" class="panel panel-default">
+        <div id="CUR-NffrqiSQ" class="panel-heading">
+          <div id="CUR-bqUXkUDo" class="panel-title">
+            Inherit Catalogue
+          </div>
+        </div>
+        <div id="CUR-QnDoqJeV" class="panel-body p-t-15">
+          <div id="CUR-KjlSgbaK" class="row m-b-20">
+            <div id="CUR-cluXiVSl" class="col-xs-12">
+              <p>You can use this feature to inherit catalogue from an associated client. Selecting the clients below
+                will automatically copy all catalogue from the client associated client, and update all fields on save.
+              </p>
+              <p>If you specify a catalogue group, only items associated with that group will be copied, leaving blank
+                will copy all catalogue. Do ensure the wording and casing matches the catalogue group exactly.</p>
+            </div>
+          </div>
+          <inherit-catalogue-row ng-repeat="client in client.inheritCatalogueFrom track by $index" index="$index"
+            client="client" delete="deleteInheritCatalogueClient(client)" clients="clients" original-client="originalClient"></inherit-catalogue-row>
+          <button id="CUR-xWKrHXtQ" class="btn btn-complete" ng-click="addInheritCatalogueClient()">+ Add</button>
+        </div>
+      </div>
+      <div id="CUR-ZxbFaqeb" class="panel panel-default" ng-if="internalUser">
+        <div id="CUR-IAjAtJIk" class="panel-heading">
+          <div id="CUR-tTCUJMFh" class="panel-title">
+            Calculation Configuration
+          </div>
+        </div>
+        <div id="CUR-WAwnKwre" class="panel-body p-t-15">
+          <div id="CUR-XysGQZOw" class="form-group required">
+            <label id="CUR-saDSPIZr">Calculation Batch Workers</label>
+            <input id="CUR-vMFCmnlT" type="number" class="form-control" ng-model="client.batchWorkers">
+          </div>
+          <div id="CUR-YMxUrbVy" class="form-group required">
+            <label id="CUR-fBHBehhJ">Concurrent Calculations</label>
+            <input id="CUR-crMoBkjl" type="number" class="form-control" ng-model="client.concurrentCalculations">
+          </div>
+          <div id="CUR-FTZiIdEg" class="form-group">
+            <label id="CUR-AaeTTwgW">Concurrent Statements</label>
+            <input id="CUR-flNssRRm" type="number" class="form-control" ng-model="client.concurrentStatementCreations">
+          </div>
+        </div>
+      </div>
+      <div id="CUR-jnCVzDec" class="panel panel-default" ng-if="internalUser">
+        <div id="CUR-hyUogkmy" class="panel-heading">
+          <div id="CUR-CQAiZQqQ" class="panel-title">
+            Thresholds
+          </div>
+        </div>
+        <div id="CUR-MYeZYuNg" class="panel-body p-t-15">
+          <div id="CUR-RVXHgUFZ" class="form-group required">
+            <label id="CUR-DSPYssGq">Contract Cap</label>
+            <input id="CUR-wWMPeQoF" type="number" class="form-control" ng-model="client.contractCap">
+          </div>
+          <div id="CUR-esbjdUxT" class="form-group required">
+            <label id="CUR-IsMpmrKZ">Catalogue Cap</label>
+            <input id="CUR-FGmSaEsC" type="number" class="form-control" ng-model="client.catalogueCap">
+          </div>
+          <div id="CUR-UYaPrVwV" class="form-group required">
+            <label id="CUR-wSXjqJtU">Contract Overages</label>
+            <input id="CUR-eyXHHnso" type="number" class="form-control" ng-model="client.contractOverages">
+          </div>
+          <div id="CUR-AkonSBGN" class="form-group required">
+            <label id="CUR-KRwLahRO">Catalogue Overages</label>
+            <input id="CUR-MlskfAbL" type="number" class="form-control" ng-model="client.catalogueOverages">
+          </div>
+          <div id="CUR-JbXiCwCV" class="form-group required">
+            <label id="CUR-XxGnGMPh">Overages Fee</label>
+            <input id="CUR-cEHBVFSN" type="text" class="form-control" ng-model="client.overagesFee">
+          </div>
+          <div id="CUR-KuCxTwEy" class="form-group required">
+            <label id="CUR-aGDedOQq">Overages Count</label>
+            <input id="CUR-AhdQUZnG" type="text" class="form-control" ng-model="client.overagesCount">
+          </div>
+          <div id="CUR-soYWLEpY" class="form-group required">
+            <label id="CUR-svkFHqQf">Fees</label>
+            <input id="CUR-ufWSHmnR" type="text" class="form-control" ng-model="client.fees">
+          </div>
+          <div id="CUR-gCTWWEif" class="form-group">
+            <label id="CUR-PyUqWsIF">Currency</label>
+            <ui-select ng-model="client.currency">
+                <ui-select-match allow-clear="true">
+                    <span id="CUR-vBfoIXfR" ng-bind="$select.selected.code"></span>
+                </ui-select-match>
+                <ui-select-choices
+                        repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                    <span id="CUR-CzKvgouC" ng-bind-html="currency.code"></span>
+                    <span id="CUR-gSkIyZSd"> &nbsp; - &nbsp; </span>
+                    <span id="CUR-QOPWSVPH" ng-bind-html="currency.name"></span>
+                </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-NBpukNJw" class="form-group">
+            <label id="CUR-mQLEmvYc">Billing Frequency</label>
+            <ui-select ng-model="client.billingFrequency">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-zYLUMPkh" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in billingFrequencies | filter: $select.search">
+                <div id="CUR-CHDCftBc" ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-uGIVqRwC" class="form-group">
+            <label id="CUR-fGhLQcdy">Calculation Frequency</label>
+            <ui-select ng-model="client.calculationFrequency">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-VRiOGWTv" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in calculationFrequencies | filter: $select.search">
+                <div id="CUR-DStxVeoc" ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-kgHkWcXo" class="panel panel-default" ng-if="internalUser">
+        <div id="CUR-eljXbkfI" class="panel-heading">
+          <div id="CUR-bVPZAGIz" class="panel-title">
+            Notes
+          </div>
+        </div>
+        <div id="CUR-gAHgJKsv" class="panel-body p-t-15">
+          <div id="CUR-UppPFTPb" class="form-group">
+            <textarea class="form-control standard-textarea" ng-model="client.notes"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-nWvDjVuO" class="col-xs-12 col-sm-6">
+      <div id="CUR-umUWVmWu" class="panel panel-default" ng-if="internalUser">
+        <div id="CUR-JTYaudZq" class="panel-heading">
+          <div id="CUR-zbRnmwZP" class="panel-title">
+            Account Deletion
+          </div>
+        </div>
+        <div id="CUR-FLRFuVKB" class="panel-body p-t-15">
+          <div id="CUR-GcXbbDFJ" class="form-group">
+            <label id="CUR-lLpXdTQl"><input id="CUR-grGXeUFI" type="checkbox" value="1" ng-model="client.preventDeletion">
+              Prevent Account Deletion</label>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-hbzaRRux" class="panel panel-default" ng-if="internalUser">
+        <div id="CUR-TmUWwrPC" class="panel-heading">
+          <div id="CUR-NKvyPUrT" class="panel-title">
+            Recalculation Filters
+          </div>
+        </div>
+        <div id="CUR-xHjVSSHB" class="panel-body p-t-15">
+          <div id="CUR-qjYxsKbO" class="form-group">
+            <label id="CUR-aValXECT"><input id="CUR-JCrMgIZQ" type="checkbox" value="1" ng-model="client.allowPeriodFilters">
+              Allow Period Recalculation Filters</label>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-exrvMwWP" class="panel panel-default" ng-if="internalUser">
+        <div id="CUR-YIZQMrrq" class="panel-heading">
+          <div id="CUR-jsjAcEeS" class="panel-title">
+            Features
+          </div>
+        </div>
+        <div id="CUR-PTvAxbIv" class="panel-body p-t-15">
+          <div id="CUR-sGcUGbNg" class="form-group required">
+            <input id="CUR-UuRqnTtC" type="checkbox" value="1" ng-model="client.features.accounting">
+            <label id="CUR-LDxnkSyV">Accounting</label>
+          </div>
+          <div id="CUR-WWHCglxz" class="form-group required">
+            <input id="CUR-MbFqBoHb" type="checkbox" value="1" ng-model="client.features.companies">
+            <label id="CUR-JzFtCuYF">Companies</label>
+          </div>
+          <div id="CUR-wOFYXrfu" class="form-group required">
+            <input id="CUR-xmUnLZCh" type="checkbox" value="1" ng-model="client.features.complexSalesTerms">
+            <label id="CUR-DQrIWugL">Complex Sales Terms</label>
+          </div>
+          <div id="CUR-OTkjRgeF" class="form-group required">
+            <input id="CUR-uEnyiYpL" type="checkbox" value="1" ng-model="client.features.crossContracts">
+            <label id="CUR-BNSzxgwf">Cross Contracts</label>
+          </div>
+          <div id="CUR-MKcUGPAt" class="form-group required">
+            <input id="CUR-CXKcrvMW" type="checkbox" value="1" ng-model="client.features.deductionTerms">
+            <label id="CUR-XfawnTuL">Deduction Terms</label>
+          </div>
+          <div id="CUR-RIWzgueJ" class="form-group required">
+            <input id="CUR-bkKTLEjS" type="checkbox" value="1" ng-model="client.features.deliveries">
+            <label id="CUR-CZNmZfFe">Deliveries</label>
+          </div>
+          <div id="CUR-iIeAaESy" class="form-group required">
+            <input id="CUR-dyfkXCqx" type="checkbox" value="1" ng-model="client.features.escalations">
+            <label id="CUR-AKPrHzCl">Escalations</label>
+          </div>
+          <div id="CUR-esThZCfj" class="form-group required">
+            <input id="CUR-USizaxkm" type="checkbox" value="1" ng-model="client.features.ftpIngestion">
+            <label id="CUR-xKebqLno">FTP Ingestion</label>
+          </div>
+          <div id="CUR-cZOtbBan" class="form-group required">
+            <input id="CUR-YjTHLXIr" type="checkbox" value="1" ng-model="client.features.mcps">
+            <label id="CUR-QjfInQBn">MCPS</label>
+          </div>
+          <div id="CUR-elMDbetC" class="form-group required">
+            <input id="CUR-RKwyHUMC" type="checkbox" value="1" ng-model="client.features.mechanicals">
+            <label id="CUR-GruoOGvK">Mechanicals</label>
+          </div>
+          <div id="CUR-veXDrfiw" class="form-group required">
+            <input id="CUR-gLeGtwfW" type="checkbox" value="1" ng-model="client.features.multicurrency">
+            <label id="CUR-iSWEROoy">Multicurrency</label>
+          </div>
+          <div id="CUR-PyfilWtY" class="form-group required">
+            <input id="CUR-ZrduclQE" type="checkbox" value="1" ng-model="client.features.payments">
+            <label id="CUR-vlzRICfu">Payments</label>
+          </div>
+          <div id="CUR-PyfilWtY" class="form-group required">
+            <input id="CUR-ZrduclQE" type="checkbox" value="1" ng-model="client.features.paymentSetup">
+            <label id="CUR-vlzRICfu">Payment Setup</label>
+          </div>
+          <div id="client-payment-details-feature-div" class="form-group required">
+            <input id="client-payment-details-feature-input" type="checkbox" value="1" ng-model="client.features.paymentDetails">
+            <label id="client-payment-details-feature-label">Payment Details</label>
+          </div>
+          <div id="CUR-heYPjXZd" class="form-group required">
+            <input id="CUR-WYTZbGDY" type="checkbox" value="1" ng-model="client.features.profitShareClassic">
+            <label id="CUR-rdqGGanr">Profit Share Classic</label>
+          </div>
+          <div id="CUR-AcKlkkpb" class="form-group required">
+            <input id="CUR-GtaARIqM" type="checkbox" value="1" ng-model="client.features.selfBilling">
+            <label id="CUR-ccRIhNAT">Self Billing</label>
+          </div>
+          <div id="CUR-dVZhucHh" class="form-group required">
+            <input id="CUR-tzVYPPkR" type="checkbox" value="1" ng-model="client.features.settingsConfigurationArea">
+            <label id="CUR-cwnubHwb">Settings Configurations Area</label>
+          </div>
+          <div id="CUR-LYxlUpGc" class="form-group required">
+            <input id="CUR-LIeLPCqt" type="checkbox" value="1" ng-model="client.features.summaryStatements">
+            <label id="CUR-ZAzVxUhD">Summary Statements</label>
+          </div>
+          <div id="CUR-eDkarZzU" class="form-group required">
+            <input id="CUR-pXeqMpcZ" type="checkbox" value="1" ng-model="client.features.termGroups">
+            <label id="CUR-ESKDHiHa">Term Groups</label>
+          </div>
+          <div id="CUR-BdRMygIt" class="form-group required">
+            <input id="CUR-QpQhvmPU" type="checkbox" value="1" ng-model="client.features.withholdingTax">
+            <label id="CUR-YeMynSTe">Withholding Tax</label>
+          </div>
+          <div id="CUR-feature-complex-cross-contracts-div" class="form-group required">
+            <input id="CUR-feature-complex-cross-contracts-checkbox" type="checkbox" value="1" ng-model="client.features.complexCrossContracts">
+            <label id="CUR-feature-complex-cross-contracts-label">Complex Cross Contracts</label>
+          </div>
+          <div id="CUR-BdRMygYE" class="form-group required">
+            <input id="CUR-BdRM4Ret" type="checkbox" value="1" ng-model="client.features.userSso">
+            <label id="CUR-BdRMo8Ub">SSO</label>
+          </div>
+          <div id="CUR-BdRMfdsfsED" class="form-group required">
+            <input id="CUR-BdRM4ewrwF" type="checkbox" value="1" ng-model="client.features.fixedReports">
+            <label id="CUR-BdRMhgd">Fixed Reports</label>
+          </div>
+          <div id="CUR-FDGHDSw" class="form-group required">
+            <input id="CUR-BdRM4ngffD" type="checkbox" value="1" ng-model="client.features.iswcDeliveries">
+            <label id="CUR-BdRMofdghd">ISWC Deliveries</label>
+          </div>
+          <div id="CUR-BdRMygmE" class="form-group required">
+            <input id="CUR-BdRM4Rpe" type="checkbox" value="1" ng-model="client.features.showFugaSyncExtras">
+            <label id="CUR-BdRMo3TR">Show Fuga Sync Extras</label>
+          </div>
+          <div id="CUR-BdRMygmE" class="form-group required">
+            <input id="CUR-BdRM4Rpe" type="checkbox" value="1" ng-model="client.features.distributorFeedDdex">
+            <label id="CUR-BdRMo3TR">Distributor Single Feed Config</label>
+          </div>
+          <div id="CUR-BdRMygmE" class="form-group required">
+            <input id="CUR-BdRM4Rpe" type="checkbox" value="1" ng-model="client.features.updateIPI">
+            <label id="CUR-BdRMo3TR">Update the Interested Party Ids</label>
+          </div>
+          <!-- Hide Feature Flag for Now -->
+          <!-- <div id="client-payee-balances-feature-div" class="form-group required">
+            <input id="client-payee-balances-feature-input" type="checkbox" value="1" ng-model="client.features.payeeBalances">
+            <label id="client-payee-balances-feature-label">Payee Balances</label>
+          </div> -->
+          <div id="CUR-BdRMygmE" class="form-group required">
+            <input id="CUR-BdRM4Rpe" type="checkbox" value="1" ng-model="client.features.platformSalesIngestion">
+            <label id="CUR-BdRMo3TR">(Beta) Platform Sales Ingestion <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Services use only. Beta testing of platform ingestion. Please do not use."></i></label>
+          </div>
+          <div id="CUR-JdIsOepa" class="form-group required">
+            <input id="CUR-PeoSncke" type="checkbox" value="1" ng-model="client.features.enableLinkedContractsInIpChain">
+            <label id="CUR-LspIdjTs">Enable Linked Contracts in IP Chain</label>
+          </div>
+          <div id="CUR-BdRMygmE" class="form-group required">
+            <input id="CUR-BdRM4Rpg" type="checkbox" value="1" ng-model="client.features.enableAutoPaymentTaxBasisFix">
+            <label id="CUR-BdRMo3Tx">Enable the tax basis calculation fix</label>
+          </div>
+          <div id="CUR-JdIsOepa" class="form-group required">
+            <input id="CUR-PeoSncke" type="checkbox" value="1" ng-model="client.features.unreportedFileV2">
+            <label id="CUR-LspIdjTs">Unreported File V2</label>
+          </div>
+          <div id="CUR-feature-release-analytics-for-track-sales-div" class="form-group">
+            <input id="CUR-feature-release-analytics-for-track-sales-checkbox" type="checkbox" value="1" ng-model="client.features.releaseAnalyticsForTrackSales">
+            <label id="CUR-feature-release-analytics-for-track-sales-label">Release analytics for Track sales</label>
+          </div>
+          <div class="form-group required">
+            <input id="feature-alternative-id" type="checkbox" value="1" ng-model="client.features.useAlternativeId">
+            <label for="feature-alternative-id">Use Alternative ID <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Enables the Client to add alternative track IDs. These alternative IDs can be used in the sales ingestion to map to a Track."></i></label>
+          </div>
+          <div class="form-group required">
+            <input id="feature-api-user" type="checkbox" value="1" ng-model="client.features.apiUser">
+            <label for="feature-api-user">API User <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Enables the Client to view the API documentation."></i></label>
+          </div>
+          <div class="form-group required">
+            <input id="feature-fuga-api-user" type="checkbox" value="1" ng-model="client.features.fugaApiUser">
+            <label for="feature-fuga-api-user">Fuga API User <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Enables the Client to view the Fuga API documentation."></i></label>
+          </div>
+          <div id="CUR-feature-suspense" class="form-group">
+            <input id="CUR-feature-suspense-checkbox" type="checkbox" value="1" ng-model="client.features.suspense">
+            <label id="CUR-feature-suspense-label">Suspense <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Allows Clients to put sales lines in and out of suspense"></i></label>
+          </div>
+          <div id="CUR-feature-fuga-gcs" class="form-group">
+            <input id="CUR-feature-fuga-gcs-checkbox" type="checkbox" value="1" ng-model="client.features.fugaPublishStatementsToCloudStorage">
+            <label id="CUR-feature-fuga-gcs-label">(FUGA) Enable Publishing To Cloud Storage <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Enables a FUGA Client to publish Statements to cloud storage (GCS)"></i></label>
+          </div>
+          <div id="CUR-feature-refactored-sales-calculation-div" class="form-group">
+            <input id="CUR-feature-refactored-sales-calculation-checkbox" type="checkbox" value="1" ng-model="client.features.refactoredSalesCalculation">
+            <label id="CUR-feature-refactored-sales-calculation-label">Refactored Sales Calculation <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Enables the new refactored sales calculation. This joins catalogue data to sales data and runs batches on ECS Fargate Tasks"></i></label>
+          </div>
+          <div id="CUR-feature-ingestion-large-catalogue-handling" class="form-group required">
+            <input id="CUR-feature-ingestion-large-catalogue-handling-checkbox" type="checkbox" value="1" ng-model="client.features.largeCatalogueHandling">
+            <label id="CUR-feature-ingestion-large-catalogue-handling-label" for="CUR-feature-ingestion-large-catalogue-handling-checkbox">Enable Large Catalogue Handling<i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Uses an on-disk catalogue for Sales Revalidation for clients whose catalogues are too large to store in memory"></i></label>
+          </div>
+          <div class="form-group">
+            <input id="feature-enhanced-participation-rates" type="checkbox" value="1" ng-model="client.features.enhancedParticipationRates">
+            <label for="feature-enhanced-participation-rates">Enhanced Participation Rates <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Enables Publisher Mapping on Sales Templates, allowing Publishers and Aliases to be mapped to sales lines for Publisher-based Specific Participation Rates."></i></label>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-exrvMwWP" class="panel panel-default" ng-if="internalUser">
+        <div id="CUR-YIZQMrrq" class="panel-heading">
+          <div id="CUR-jsjAcEeS" class="panel-title">
+            Operations
+          </div>
+        </div>
+        <div id="CUR-PTvAxbIv" class="panel-body p-t-15">
+          <div id="CUR-sGcUGbNg" class="form-group required">
+            <input id="CUR-UuRqnTtC" type="checkbox" value="1" ng-model="client.operations.hypercare">
+            <label id="CUR-LDxnkSyV">Hypercare ❤️</label>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-QjkGemHt" class="panel panel-default" ng-if="internalUser">
+        <div id="CUR-qsymVFyS" class="panel-heading">
+          <div id="CUR-jVqAlmLz" class="panel-title">
+            Internal Tools
+          </div>
+        </div>
+        <div id="CUR-HZvTUaLy" class="panel-body p-t-15">
+          <div id="CUR-EVntLmsN" class="form-group" ng-if="!client.billing.nextBillingDate">
+            <label id="CUR-nJkcFSgR">Trial Days</label>
+            <input id="CUR-QaFlqExB" type="text" class="form-control" ng-model="client.trialDays" ng-disabled="client.billing.nextBillingDate">
+            <p><small>This client is in trial. Do you want to end their trial and set a next payment date?</small></p>
+            <button id="CUR-RQ1esasWL" class="btn btn-complete" ng-click="endTrial()"> End Trial</button>
+          </div>
+
+
+          <div id="CUR-DqDLAqMj" class="form-group" ng-if="client.billing.nextBillingDate">
+            <label id="CUR-wfYCnQeI">Next Payment Date ({{timeAgo(client.billing.nextBillingDate)}})</label>
+            <div id="next-payment-date-datepicker-component" class="form-group input-group date">
+              <input id="CUR-wfYCnQeI" type="text" class="form-control" ng-model="client.billing.nextBillingDate" ng-model-options="{timezone: 'utc'}" uib-datepicker-popup="{{dateFormat}}" is-open="nextBillingDatePopup.opened" ng-click="openNextBillingDatePopup()">
+              <span id="CUR-SgKilkBH" class="input-group-addon" ng-click="openNextBillingDatePopup()">
+                <i class="fa fa-calendar"></i>
+              </span>
+            </div>
+            <div class="form-group alert alert-error" ng-if="client.billing.nextBillingDate < today">
+              <b><small>The next billing date should not be a past date.</small></b>
+              <p><small>This will lead to the client being charged tonight.</small></p>
+            </div>
+            <p><small>This client is no longer in trial. Do you want to reactivate their trial and clear the next payment date?</small></p>
+            <button id="CUR-RQ1esajeL" class="btn btn-complete" ng-click="reactivateTrial()"> Reactivate Trial</button>
+          </div>
+          
+          <div id="CUR-WZ212Tdb" class="form-group" ng-if="client.lockedForNonPayment">
+            <p><small>This client has been locked for non-payment. Do you want to reinstate their access?</small></p>
+            <button id="CUR-RQ1edtjeL" class="btn btn-complete" ng-click="flushLockedStatus()"> Flush Locked Status</button>
+          </div>
+          
+          <div id="CUR-XJATLpyz" class="form-group">
+            <label id="CUR-VoVXDLSl">Usage</label>
+            <div id="CUR-lfkRIPnE" class="row">
+              <div id="CUR-irdHDnRt" class="col-sm-6"><b><small>Catalogue</small></b>: {{usage.catalogue}}</div>
+              <div id="CUR-BbCguQlo" class="col-sm-6"><b><small>Contracts</small></b>: {{usage.contracts}}</div>
+              <div id="CUR-JIrgYacM" class="col-sm-6"><b><small>Amount</small></b>: {{usage.amount}} {{usage.currencyToCharge}}</div>
+              <div id="CUR-defhqmon" class="col-sm-6"><b><small>Next billing date</small></b>: {{usage.nextBillingDate | date}}</div>
+            </div>
+          </div>
+          <div id="CUR-WZafITdb" class="form-group text-center m-t-50" ng-show="!production">
+            <button id="CUR-RQFetjeL" class="btn btn-complete" ng-click="chargeClient()"><i class="fa fa-credit-card"></i> Charge Client</button>
+            <div id="CUR-ViZXVhnr" class="alert alert-danger text-center" role="alert" ng-if="chargeError">
+              {{chargeError}}
+            </div>
+            <div id="CUR-sxePRITk" class="alert alert-success text-center" role="alert" ng-if="chargeSuccess">
+              Client charged successfully
+            </div>
+          </div>
+          <hr>
+          <div id="CUR-GEZxXDjN" class="form-group" ng-show="!production">
+            <label id="CUR-lvMiexTq">Processes</label>
+            <p>These are triggered against all clients and not just the one being currently edited.</p>
+            <div id="CUR-jmUmrrRY" class="row">
+              <div id="CUR-jYzJkaqw" class="col-sm-12">
+                <p><small>This script charges all clients that are past their due date</small></p>
+                <button id="CUR-kjHzRMkF" class="btn btn-complete" ng-click="chargeClients()">Charge Clients</button>
+              </div>
+              <div id="CUR-WRqIKUdG" class="col-sm-12">
+                <p><small>This script notifies the clients a day before their trial is due to expire</small></p>
+                <button id="CUR-oKtYHfUd" class="btn btn-complete" ng-click="checkExpiringTrials()">Check Expiring Trials</button>
+              </div>
+              <div id="CUR-bgwXjSyd" class="col-sm-12">
+                <p><small>This script notifies support about any clients due to be deleted in the next 7 days</small></p>
+                <button id="CUR-EFqLcuPx" class="btn btn-complete" ng-click="notifyAboutClientBeingDeleted()">Notify Support About Clients To Be Deleted</button>
+              </div>
+              <div id="CUR-JYVlqMQG" class="col-sm-12">
+                <p><small>This script deletes clients' data 3 months after their accounts were locked</small></p>
+                <button id="CUR-lfAQONAQ" class="btn btn-complete" ng-click="deleteClients()">Delete Clients</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--<div id="CUR-eecCMLZP" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-QflDSaya" class="row">
+    <div id="CUR-OuoQTqxQ" class="col-sm-12 text-right">
+      <h6>Created By: {{client.createdBy.email}}</h6>
+      <h6>Last Modified By: {{client.lastModifiedBy.email}}</h6>
+    </div>
+  </div>
+</div>-->
+
+<validation-modal 
+  header="'Delete Client'" 
+  message="'Are you sure you want to delete this client? This cannot be undone.'" 
+  value-to-validate="client.name" 
+  type="'client'" 
+  method="delete"
+  method-type="'delete'">
+</validation-modal>

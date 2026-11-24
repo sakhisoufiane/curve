@@ -1,0 +1,3 @@
+<td class="v-align-middle hidden-xs"><input type="checkbox" ng-model="delivery.selected"></td>
+<td class="v-align-middle"><a href="#/deliveries/{{ delivery._id }}/edit" ng-bind-html="delivery.name"></a></td>
+<td class="v-align-middle">{{ delivery.createdAt | date : dateFormat : 'UTC' }}</td>

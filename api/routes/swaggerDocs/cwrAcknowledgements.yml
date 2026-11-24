@@ -1,0 +1,1024 @@
+openapi: 3.1.0
+info:
+  title: CWR Acknowledgements API
+  version: 1.10.0
+paths:
+  /cwrAcknowledgements:
+    get:
+      tags:
+        - CWR Acknowledgements
+      summary: Retrieve all CWR acknowledgements
+      description: Returns a paginated list of CWR acknowledgements. Requires read access to catalogue.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Text to search for in acknowledgement names
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Filter by exact name
+        - in: query
+          name: source
+          schema:
+            type: string
+          description: Filter by source
+        - in: query
+          name: deliveryPartnerId
+          schema:
+            type: string
+          description: Filter by delivery partner ID
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [Archived, Unarchived]
+          description: Filter by archive status
+        - in: query
+          name: acknowledgementType
+          schema:
+            type: string
+            enum: [ISWC]
+          description: Filter by acknowledgement type
+      responses:
+        '200':
+          description: Successfully retrieved CWR acknowledgements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cwrAcknowledgements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CwrAcknowledgement'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    post:
+      tags:
+        - CWR Acknowledgements
+      summary: Create a new CWR acknowledgement
+      description: Creates a new CWR acknowledgement. Requires write access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CwrAcknowledgementInput'
+      responses:
+        '200':
+          description: Successfully created CWR acknowledgement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrAcknowledgement'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrAcknowledgements/archive_many:
+    get:
+      tags:
+        - CWR Acknowledgements
+      summary: Archive multiple CWR acknowledgements
+      description: Archives multiple CWR acknowledgements by their IDs. Requires write access to catalogue.
+      parameters:
+        - in: query
+          name: ids
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          description: Array of CWR acknowledgement IDs to archive
+      responses:
+        '200':
+          description: Successfully archived CWR acknowledgements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Acknowledgements successfully archived."
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrAcknowledgements/unarchive_many:
+    get:
+      tags:
+        - CWR Acknowledgements
+      summary: Unarchive multiple CWR acknowledgements
+      description: Unarchives multiple CWR acknowledgements by their IDs. Requires write access to catalogue.
+      parameters:
+        - in: query
+          name: ids
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          description: Array of CWR acknowledgement IDs to unarchive
+      responses:
+        '200':
+          description: Successfully unarchived CWR acknowledgements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Acknowledgements successfully unarchived."
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrAcknowledgements/{id}/importAcknowledgement:
+    post:
+      tags:
+        - CWR Acknowledgements
+      summary: Import an acknowledgement file
+      description: Imports an acknowledgement file for a specific CWR acknowledgement. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR acknowledgement ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Acknowledgement file to import
+      responses:
+        '200':
+          description: Successfully initiated acknowledgement import
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Acknowledgement sent for ingestion."
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: CWR acknowledgement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Delivery with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrAcknowledgements/{id}/works:
+    get:
+      tags:
+        - CWR Acknowledgements
+      summary: Retrieve delivery logs for a CWR acknowledgement
+      description: Returns delivery logs (despite the name) associated with a specific CWR acknowledgement. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR acknowledgement ID
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: deliveryPartnerId
+          schema:
+            type: string
+          description: Filter by delivery partner ID
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Filter by status
+      responses:
+        '200':
+          description: Successfully retrieved works
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deliveryLogs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DeliveryLog'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: CWR acknowledgement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find CwrDelivery with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrAcknowledgements/{id}/works_v1:
+    get:
+      tags:
+        - CWR Acknowledgements
+      summary: Retrieve works for a CWR acknowledgement (v1)
+      description: Returns works associated with a specific CWR acknowledgement. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR acknowledgement ID
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Filter by status
+      responses:
+        '200':
+          description: Successfully retrieved works
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  works:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DeliveredWork'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: CWR acknowledgement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find CwrDelivery with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrAcknowledgements/{id}/redeliver_works:
+    get:
+      tags:
+        - "CWR Acknowledgements"
+      summary: Redeliver works from a CWR acknowledgement
+      description: Redelivers works from a specific CWR acknowledgement. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR acknowledgement ID
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Filter works by status for redelivery
+      responses:
+        '200':
+          description: Successfully redelivered CWR delivery
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrDelivery'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: CWR acknowledgement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find CwrDelivery with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again" 
+  /cwrAcknowledgements/{id}/history:
+    get:
+      tags:
+        - "CWR Acknowledgements"
+      summary: Retrieve history for a CWR acknowledgement
+      description: Returns the modification history for a specific CWR acknowledgement. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR acknowledgement ID
+      responses:
+        '200':
+          description: Successfully retrieved CWR acknowledgement history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: date-time
+                        clientId:
+                          type: string
+                        author:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            email:
+                              type: string
+                        ops:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              op:
+                                type: string
+                                example: replace
+                              path:
+                                type: string
+                                example: /name
+                              value:
+                                type: string
+                                example: New CWR Acknowledgement Name
+                                nullable: true
+                              originalValue:
+                                type: string
+                                example: Old CWR Acknowledgement Name
+                                nullable: true
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: CWR acknowledgement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Acknowledgement with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrAcknowledgements/{id}/export:
+    get:
+      tags:
+        - "CWR Acknowledgements"
+      summary: Export works from a CWR acknowledgement
+      description: Exports works from a specific CWR acknowledgement. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR acknowledgement ID
+        - in: query
+          name: paginationParams.status
+          required: true
+          schema:
+            type: string
+          description: Filter works by status for export
+        - in: query
+          name: v1
+          schema:
+            type: boolean
+          description: Whether to use v1 API for export
+      responses:
+        '200':
+          description: Successfully initiated export
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Your export will be sent to you shortly"
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: CWR acknowledgement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find CwrDelivery with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrAcknowledgements/{id}:
+    get:
+      tags:
+        - "CWR Acknowledgements"
+      summary: Retrieve a specific CWR acknowledgement
+      description: Returns details for a specific CWR acknowledgement by ID. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR acknowledgement ID
+      responses:
+        '200':
+          description: Successfully retrieved CWR acknowledgement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrAcknowledgement'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    put:
+      tags:
+        - "CWR Acknowledgements"
+      summary: Update a CWR acknowledgement
+      description: Updates a CWR acknowledgement's details. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR acknowledgement ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CwrAcknowledgementInput'
+      responses:
+        '200':
+          description: Successfully updated CWR acknowledgement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrAcknowledgement'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: CWR acknowledgement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Delivery with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    delete:
+      tags:
+        - "CWR Acknowledgements"
+      summary: Delete a CWR acknowledgement
+      description: Deletes a CWR acknowledgement by ID. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR acknowledgement ID
+      responses:
+        '200':
+          description: Successfully deleted CWR acknowledgement OR request must be attempted again later as the CWR acknowledgement is still processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CwrAcknowledgement'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: CWR acknowledgement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Delivery with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+  /cwrAcknowledgements/{id}/reingest:
+    post:
+      tags:
+        - "CWR Acknowledgements"
+      summary: Reingest a CWR acknowledgement
+      description: Reingests a CWR acknowledgement file. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: CWR acknowledgement ID
+      responses:
+        '200':
+          description: Successfully initiated reingestion
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name of the CWR acknowledgement
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: CWR acknowledgement not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find CWR Acknowledgement with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+components:
+  schemas:
+    CwrAcknowledgement:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the CWR acknowledgement
+        clientId:
+          type: string
+          description: Client ID associated with the CWR acknowledgement
+        name:
+          type: string
+          description: Name of the CWR acknowledgement
+        cwrDeliveryId:
+          type: string
+          description: ID of the associated CWR delivery
+        deliveryPartnerId:
+          type: object
+          description: Delivery partner name & ID
+          properties:
+            _id:
+              type: string
+              description: Unique identifier for the delivery partner
+            name:
+              type: string
+              description: Name of the delivery partner
+        status:
+          type: string
+          enum: [Pending, Errored, Complete]
+          description: Status of the CWR acknowledgement
+        file:
+          type: string
+          description: Path to the acknowledgement file
+        archived:
+          type: boolean
+          description: Whether the acknowledgement is archived
+        acknowledgementType:
+          type: string
+          description: Type of acknowledgement
+        acceptedTotal:
+          type: integer
+          description: Total number of accepted works in the acknowledgement
+        rejectedTotal:
+          type: integer
+          description: Total number of rejected works in the acknowledgement
+        otherTotal:
+          type: integer
+          description: Total number of other works in the acknowledgement
+        ingestionError:
+          type: string
+          description: Error message if ingestion failed
+        publicLink:
+          type: string
+          description: Public link to the CWR acknowledgement file
+        source:
+          type: string
+          description: Source of the CWR acknowledgement
+        statusTotals:
+          type: array
+        workIds:
+          type: array
+          items:
+            type: string
+          description: List of work IDs associated with the CWR acknowledgement
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the CWR acknowledgement was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the CWR acknowledgement was last updated
+    CwrAcknowledgementInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the CWR acknowledgement
+        cwrDeliveryId:
+          type: string
+          description: ID of the associated CWR delivery
+        deliveryPartnerId:
+          type: object
+          description: ID of the delivery partner
+          properties:
+            _id:
+              type: string
+              description: Unique identifier for the delivery partner
+        status:
+          type: string
+          enum: [Pending, Errored, Complete]
+          description: Status of the CWR acknowledgement
+        file:
+          type: string
+          description: Path to the acknowledgement file
+        archived:
+          type: boolean
+          description: Whether the acknowledgement is archived
+        acknowledgementType:
+          type: string
+          description: Type of acknowledgement
+        acceptedTotal:
+          type: integer
+          description: Total number of accepted works in the acknowledgement
+        rejectedTotal:
+          type: integer
+          description: Total number of rejected works in the acknowledgement
+        otherTotal:
+          type: integer
+          description: Total number of other works in the acknowledgement
+        ingestionError:
+          type: string
+          description: Error message if ingestion failed
+        publicLink:
+          type: string
+          description: Public link to the CWR acknowledgement file
+        source:
+          type: string
+          description: Source of the CWR acknowledgement
+        statusTotals:
+          type: array
+        workIds:
+          type: array
+          items:
+            type: string
+          description: List of work IDs associated with the CWR acknowledgement

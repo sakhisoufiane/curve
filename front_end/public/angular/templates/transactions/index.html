@@ -1,0 +1,70 @@
+<div id="CUR-UgVhFhLu" class="jumbotron" data-pages="parallax">
+  <div id="CUR-WBESbSZe" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-jhSdkFQq" class="inner">
+      <ul id="CUR-OARItBOU" class="breadcrumb">
+        <li id="CUR-kTPqhFCl"><a id="CUR-BqDTTqwF" href="/#/transactions" class="active">Transactions</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-bNuwnFYM" class="container-fluid container-fixed-lg">
+  <div id="CUR-cpEBQNJl" class="row m-b-20">
+    <div id="CUR-yvydQsYa" class="col-xs-3 col-xs-offset-2 text-right">
+      <div id="CUR-lvGdUplK" class="form-group">
+        <label id="CUR-gCudfVAM" class="inline">Contract</label>
+      </div>
+    </div>
+    <div id="CUR-UQwEoQzt" class="col-xs-3">
+      <div id="CUR-GSxvOIXw" class="form-group">
+        <ui-select ng-model="filter.contractId" on-select="selectContract($item)">
+          <ui-select-match>
+            <span id="CUR-VOfbhfIw" ng-bind="$select.selected.name"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item._id as item in (contracts | filter: $select.search)">
+            <span id="CUR-bBpkLtPF" ng-bind="item.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-mtfyQtoG" class="row">
+    <div id="CUR-bNaCMSWy" class="col-xs-12">
+      <div id="CUR-ZNLeAsDr" class="panel panel-default">
+        <div id="CUR-ZjWKCFbL" class="panel-heading">
+          <div id="CUR-TowpMYCx" class="panel-title">
+            Transactions
+          </div>
+        </div>
+        <div id="CUR-IeOXItPf" class="panel-body">
+          <div id="CUR-ioAbIlnw" class="table-responsive">
+            <table id="CUR-BnkLVnYy" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+                <tr id="CUR-AMKLTGCt">
+                  <th class="col-xs-6 col-sm-2">Date</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Invoice No.</th>
+                  <th class="col-xs-2">Amount</th>
+                  <th class="col-xs-2">Balance</th>
+                </tr>
+              </thead>
+              <tbody id="CUR-JnmQuEXE">
+                <tr id="CUR-IZRCudim">
+                  <td id="CUR-ppPCKNxv" class="v-align-middle"></td>
+                  <td id="CUR-rxiuBqAH" class="v-align-middle">Opening Balance</td>
+                  <td id="CUR-BSYyrzqO" class="v-align-middle"></td>
+                  <td id="CUR-lTmkjslO" class="v-align-middle"></td>
+                  <td id="CUR-dWqGbcSO" class="v-align-middle"></td>
+                  <td id="CUR-WQpsELWb" class="v-align-middle">{{ contract.openingBalance | number: 2 }}</td>
+                </tr>
+                <tr transaction-table-row ng-repeat="transaction in transactions" transaction="transaction" index="{{$index}}"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

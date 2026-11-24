@@ -1,0 +1,359 @@
+openapi: 3.0.3
+info:
+  title: ISWC Acknowledgements API
+  version: 1.0.0
+  description: API for managing ISWC Acknowledgements
+paths:
+  /iswcAcknowledgements:
+    get:
+      tags:
+        - ISWC Acknowledgements
+      summary: Retrieve ISWC acknowledgements
+      description: Returns a paginated list of ISWC acknowledgements. Requires read access to catalogue.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Filter by text
+        - in: query
+          name: deliveryPartnerId
+          schema:
+            type: string
+          description: Filter by delivery partner ID
+        - in: query
+          name: outputFormat
+          schema:
+            type: string
+          description: Filter by output format
+      responses:
+        200:
+          description: Successfully retrieved ISWC acknowledgements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  iswcAcknowledgements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/IswcAcknowledgement'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /iswcAcknowledgements/{id}:
+    get:
+      tags:
+        - ISWC Acknowledgements
+      summary: Retrieve a specific ISWC acknowledgement
+      description: Returns details for a specific ISWC acknowledgement by ID. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ISWC acknowledgement ID
+      responses:
+        200:
+          description: Successfully retrieved ISWC acknowledgement
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/IswcAcknowledgement'
+                  - type: object
+                    properties:
+                      publicLink:
+                        type: string
+                        description: Public S3 link for the file
+                      iswcComplete:
+                        type: integer
+                        description: Number of fully accepted delivered works
+                      iswcRejected:
+                        type: integer
+                        description: Number of rejected delivered works
+                      iswcIncomplete:
+                        type: integer
+                        description: Number of incomplete delivered works
+                      deliveryPartnerName:
+                        type: string
+                        description: Name of the delivery partner
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags:
+        - ISWC Acknowledgements
+      summary: Delete an ISWC acknowledgement
+      description: Deletes an ISWC acknowledgement by ID. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ISWC acknowledgement ID
+      responses:
+        200:
+          description: Successfully deleted ISWC acknowledgement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IswcAcknowledgement'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /iswcAcknowledgements/{id}/works:
+    get:
+      tags:
+        - ISWC Acknowledgements
+      summary: Retrieve works for an ISWC acknowledgement
+      description: Returns a paginated list of works for a specific ISWC acknowledgement. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ISWC acknowledgement ID
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: transactionStatus
+          schema:
+            type: string
+          description: Filter by transaction status
+      responses:
+        200:
+          description: Successfully retrieved works
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deliveredWorks:
+                    type: array
+                    items:
+                      type: object
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /iswcAcknowledgements/bulk:
+    delete:
+      tags:
+        - ISWC Acknowledgements
+      summary: Bulk delete ISWC acknowledgements
+      description: Deletes multiple ISWC acknowledgements by IDs. Requires edit access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of ISWC acknowledgement IDs to delete
+      responses:
+        200:
+          description: Successfully deleted ISWC acknowledgements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /iswcAcknowledgements/export:
+    post:
+      tags:
+        - ISWC Acknowledgements
+      summary: Export ISWC acknowledgement works
+      description: Exports works for a specific ISWC acknowledgement as a CSV or XLSX file. Requires read access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ISWC acknowledgement ID
+                transactionStatus:
+                  type: string
+                  description: Filter by transaction status
+      responses:
+        200:
+          description: Successfully started export
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Your report will be sent to you via email shortly
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+components:
+  schemas:
+    IswcAcknowledgement:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the ISWC acknowledgement
+        fileName:
+          type: string
+          description: File name
+        clientId:
+          type: string
+          description: Client ID
+        iswcDeliveryId:
+          type: string
+          description: ISWC delivery ID
+        deliveryPartnerId:
+          type: string
+          description: Delivery partner ID
+        publicKeyS3:
+          type: string
+          description: S3 key for the public file
+        errors:
+          type: array
+          items:
+            type: object
+          description: Errors encountered
+        outputFormat:
+          type: string
+          description: Output format
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was last updated
+      required:
+        - _id
+        - fileName
+        - clientId
+        - deliveryPartnerId
+        - publicKeyS3
+        - outputFormat
+      description: |
+        Persistent fields only. Note: The API may also return computed/augmented fields such as `publicLink`, `iswcComplete`, `iswcRejected`, `iswcIncomplete`, and `deliveryPartnerName` in responses, but these are not part of the persistent model schema.
+  responses:
+    Forbidden:
+      description: Forbidden, the user does not have sufficient rights
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Forbidden
+    NotFound:
+      description: ISWC acknowledgement not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Could not find ISWC Acknowledgement with ID {id}
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Internal error, please try again

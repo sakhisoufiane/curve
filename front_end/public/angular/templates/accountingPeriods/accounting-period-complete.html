@@ -1,0 +1,295 @@
+<div id="CUR-UgtALqwr" class="jumbotron" data-pages="parallax">
+  <div id="CUR-ICcaoiuI" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-TRGuowyG" class="inner">
+      <ul id="CUR-ZovCDofC" class="breadcrumb">
+        <li id="CUR-KbToyhRP"><a id="CUR-ViYzobtM" href="/#/accountingPeriods">Accounting Periods</a></li>
+        <li id="CUR-QfPZMwHs" ng-show="!accountingPeriod._id"><a id="CUR-nIblsyke" href="" class="active">Create</a></li>
+        <li id="CUR-FQOwzGOa" ng-show="accountingPeriod._id"><a id="CUR-eNDArCgw" href="/#/accountingPeriods/{{accountingPeriod._id}}/edit" class="active">{{accountingPeriod.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-nuRRdknc" class="container container-fixed-lg">
+  <div id="CUR-uBownkIe" class="row">
+    <div id="CUR-JgJmFQxA" class="col-xs-12 col-sm-6 sm-p-l-5 sm-p-r-5">
+      <h3 id="CUR-pzMmmJEd">{{accountingPeriod.name}}</h3>
+      <h4 id="CUR-CtHSDFcC" class="m-b-0">{{accountingPeriod.accountingPeriod}} - {{accountingPeriod.year}}</h4>
+    </div>
+    <div id="CUR-imnXSYpM" class="col-xs-12 col-sm-6 sm-p-l-5 sm-p-r-5 text-right two-cols-row">
+      <button id="CUR-xksAZEKV" class="btn btn-primary sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs" ng-click="edit()" ng-if="!accountingPeriod.locked" ng-show="rights.periods == 'Edit'"><i class="fa fa-pencil"></i> Edit</button>
+      <button id="CUR-GZLFBuxR" class="btn btn-danger sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs" data-toggle="modal" data-target="#unlockModal" ng-if="accountingPeriod.locked" ng-show="rights.periods == 'Edit'"><i class="fa fa-unlock"></i> Unlock</button>
+      <button id="CUR-vJLPddtB" class="btn btn-warning sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs" ng-click="toggleLock()" ng-if="!accountingPeriod.locked" ng-show="rights.periods == 'Edit'"><i
+              class="fa fa-lock"></i> Lock</button>
+      <button id="CUR-SJxefYnY" class="btn btn-complete sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs" data-toggle="modal" data-target="#runCalculationModal" ng-if="!accountingPeriod.locked" ng-show="rights.periods == 'Edit'"><i class="fa fa-refresh"></i> Reprocess</button>
+      <div id="CUR-HJfwxkSp" class="btn-group dropdown-default visible-xs"> <a id="CUR-frjgbwvJ" class="btn dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false" ng-show="rights.periods == 'Edit'"> Edit <span id="CUR-qWtPBlEB" class="caret"></span> </a>
+        <ul id="CUR-ZkWERPCe" class="dropdown-menu w-xs-100-p">
+          <li id="CUR-LmSDOMzB">
+            <a id="CUR-zcuvHySv" href="javascript:void(0)" data-toggle="modal" data-target="#unlockModal" ng-if="accountingPeriod.locked">Unlock</a>
+          </li>
+          <li id="CUR-gjXJaOxs">
+            <a id="CUR-bFrnXkWc" href="javascript:void(0)" ng-click="edit()" ng-if="!accountingPeriod.locked">Edit</a>
+          </li>
+          <li id="CUR-uHoKBDEL">
+            <a id="CUR-RUrvViSk" href="javascript:void(0)" ng-click="toggleLock()" ng-if="!accountingPeriod.locked">Lock</a>
+          </li>
+          <li id="CUR-AlhNXvJm">
+            <a id="CUR-WxXSwjOb" href="javascript:void(0)" data-toggle="modal" data-target="#runCalculationModal" ng-if="!accountingPeriod.locked">Reprocess</a>
+          </li>
+        </ul>
+      </div>
+      <div id="CUR-RQtMIuMd" class="btn-group dropdown-default"> <a id="CUR-UQoOCfdJ" class="btn dropdown-toggle w-xs-100-p" data-toggle="dropdown" style="width: 141px;" aria-expanded="false"><i class="fa fa-download"></i> Download <span id="CUR-UKPEzSdX" class="caret"></span> </a>
+        <ul id="CUR-kkbBClZE" class="dropdown-menu w-xs-100-p" style="width: 141px;">
+          <li id="CUR-BXuEIifS" ng-if="accountingPeriod.outputZip && accountingPeriod.outputZipPublicLink">
+            <a id="CUR-OtQNyLDf" target="_blank" href="{{accountingPeriod.outputZipPublicLink}}">Zip</a>
+          </li>
+          <li id="CUR-ryJvxMqm" ng-if="accountingPeriod.allCalculatedSalesCsv && accountingPeriod.allCalculatedSalesCsvPublicLink">
+            <a id="CUR-gCZyVsTU" target="_blank" href="{{accountingPeriod.allCalculatedSalesCsvPublicLink}}">Output</a>
+          </li>
+          <li id="CUR-wMGpxvYl" ng-if="accountingPeriod.allAdjustmentsCsv && accountingPeriod.allAdjustmentsCsvPublicLink">
+            <a id="CUR-psFmTyyV" target="_blank" href="{{accountingPeriod.allAdjustmentsCsvPublicLink}}">Adjustments</a>
+          </li>
+          <li id="CUR-gWDzxvoq" ng-if="accountingPeriod.suspenseSummaryCsv && accountingPeriod.adjustmentSummaryCsvPublicLink">
+            <a id="CUR-zgEinelD" target="_blank" href="{{accountingPeriod.adjustmentSummaryCsvPublicLink}}">Adjustment Summary</a>
+          </li>
+          <li id="CUR-rhlaLOFY" ng-if="accountingPeriod.unreportedSalesCsv && accountingPeriod.unreportedSalesCsvPublicLink">
+            <a id="CUR-miOqRiSJ" target="_blank" href="{{accountingPeriod.unreportedSalesCsvPublicLink}}">Suspense</a>
+          </li>
+          <li id="CUR-bhkdYOEH" ng-if="accountingPeriod.suspenseSummaryCsv && accountingPeriod.suspenseSummaryCsvPublicLink">
+            <a id="CUR-nThMTYMB" target="_blank" href="{{accountingPeriod.suspenseSummaryCsvPublicLink}}">Suspense Summary</a>
+          </li>
+          <li id="CUR-LkVrmCbh" ng-if="accountingPeriod.mappingsCsv && accountingPeriod.mappingsCsvPublicLink">
+            <a id="CUR-olXbOYqo" target="_blank" href="{{accountingPeriod.mappingsCsvPublicLink}}">Mappings</a>
+          </li>
+          <li id="CUR-PlSVPLNr" ng-if="accountingPeriod.reportCsv && accountingPeriod.reportCsvPublicLink">
+            <a id="CUR-fLRAOHog" target="_blank" href="{{accountingPeriod.reportCsvPublicLink}}">Report</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-BKXbrNng" class="row">
+    <div id="CUR-ayJPsvyT" class="col-md-6">
+      <p id="CUR-aZBhoHKI" class="m-b-0">Accounting Date: {{accountingPeriod.accountingDate | date :dateFormat : 'UTC'}}</p>
+    </div>
+    <div id="CUR-FQMntWmk" class="col-md-6 text-right">
+      <p id="CUR-rlRiAjtY" class="m-b-0">Run No: {{accountingPeriod.runNo}}</p>
+      <p id="CUR-PWbhiohK" class="m-b-0">Last Run At: {{accountingPeriod.processStartTime | date : 'dd/MM/yyyy HH:mm:ss'}}</p>
+      <p id="CUR-aeckDrLA" class="m-b-0">Last Run Time: {{getRunTime(accountingPeriod.processStartTime, accountingPeriod.processEndTime)}}</p>
+    </div>
+  </div>
+  <div id="CUR-MMBQxEye" class="row">
+    <div id="CUR-HTthANSl" class="panel panel-transparent hidden-xs">
+      <!-- Nav tabs -->
+      <ul id="CUR-rAlaiOgu" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-DBZmWYgR" class="active" ng-click="setTab('overview')">
+          <a id="CUR-mwdxVOCD" data-toggle="tab" aria-expanded="true"><span id="CUR-ldbwVvPA">Overview</span></a>
+        </li>
+        <li id="CUR-dHAYmBky" ng-click="setTab('includedSales')">
+          <a id="CUR-rrpsDIxz" data-toggle="tab" aria-expanded="false">
+            <span id="CUR-ateeetRA" ng-if="clientType != 'Publisher'">Included Sales</span>
+            <span id="CUR-rrDNChsv" ng-if="clientType == 'Publisher'">Included Income</span>
+          </a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-ekbkobEM" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-LiBlHIBy" class="tab-pane active" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+        <div id="CUR-BIAFMqJo" ng-show="activeTab === 'includedSales'" ng-include="'included-sales-tab.html'"></div>
+        <div id="CUR-CEZsFzQq" ng-show="activeTab === 'deliveries'" ng-include="'deliveries.html'"></div>
+      </div>
+    </div>
+    <div id="CUR-cdqvJqYe" class="col-xs-12 sm-p-l-5 sm-p-r-5 visible-xs" ng-if="showAccordions">
+      <uib-accordion close-others="true"
+                     ng-init="status1.open = true; status2.open = false; status3.open = false; status4.open = false; status5.open = false;">
+        <div id="CUR-NVbvJCwe" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>
+            Overview <i class="pull-right glyphicon"
+                        ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-dRauZcyU" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div id="CUR-lYyBgIVp" uib-accordion-group class="panel-default" is-open="status2.open" ng-click="setTab('includedSales')">
+          <uib-accordion-heading>
+            Included Sales <i class="pull-right glyphicon"
+                              ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-MrdPlELb" ng-include="'included-sales-tab.html'"></div>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="overview-tab.html">
+  <div id="CUR-fLabKTNM" class="row" ng-if="accountingSystem == 'Xero - Ledger'">
+    <div id="CUR-WfHGJISl" class="col-xs-12 col-sm-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-BczQwTMy" class="panel panel-default height-100 bg-success">
+        <div id="CUR-NocEnbMb" class="panel-heading">
+          <div id="CUR-KCiVKylM" class="panel-title text-white">
+            Gross Revenue >
+          </div>
+        </div>
+        <div id="CUR-VWWJAeGL" class="panel-body bg-transparent">
+          <h3 id="CUR-JeDIGlGt" class="text-white no-margin"><span id="CUR-qRfuxWPU" class="semi-bold">{{currencySymbol}}{{accountingPeriod.grossAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-JZTIUpIP" class="col-xs-12 col-sm-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-JcJxVxHQ" class="panel panel-default height-100 bg-complete sm-m-t-5">
+        <div id="CUR-lryOaTmM" class="panel-heading">
+          <div id="CUR-rEQmrmxZ" class="panel-title text-white">
+            Net Payout >
+          </div>
+        </div>
+        <div id="CUR-PzZjFbJf" class="panel-body bg-transparent">
+          <h3 id="CUR-sfWbwsHR" class="text-white no-margin"><span id="CUR-PZuUOySr" class="semi-bold">{{currencySymbol}}{{accountingPeriod.netAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-LHwssvOC" class="col-xs-12 col-sm-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-MwBoZfqR" class="panel panel-default height-100 bg-primary-darker">
+        <div id="CUR-aBJScKuw" class="panel-heading">
+          <div id="CUR-MdiwuqhC" class="panel-title text-white">
+            Gross Costs >
+          </div>
+        </div>
+        <div id="CUR-MnsLXMYU" class="panel-body bg-transparent">
+          <h3 id="CUR-jNepBTdB" class="no-margin text-white"><span id="CUR-HQpAijTh" class="semi-bold">{{currencySymbol}}{{accountingPeriod.grossCosts | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-dDyYiNCK" class="col-xs-12 col-sm-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-wWdwIeEa" class="panel panel-default height-100 bg-info">
+        <div id="CUR-yDMkRLLM" class="panel-heading">
+          <div id="CUR-AHbBeJhi" class="panel-title text-white">
+            Net Costs >
+          </div>
+        </div>
+        <div id="CUR-bRAoAAbn" class="panel-body bg-transparent">
+          <h3 id="CUR-YFLxwhMV" class="no-margin text-white"><span id="CUR-BfnuLMAc" class="semi-bold">{{currencySymbol}}{{accountingPeriod.netCosts | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-YfGmiFwl" class="row">
+    <div id="CUR-aXwDKyEw" class="col-xs-12 sm-p-l-5 sm-p-r-5">
+      <standard-graphs analysis-data="analytics" basis="'gross'"></standard-graphs>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="included-sales-tab.html">
+  <div id="CUR-aPxccEzF" class="row">
+    <div id="CUR-eAGSturS" class="col-xs-12">
+      <div id="CUR-VLSOZBes" class="panel panel-default">
+        <div id="CUR-LIQrgbBw" class="panel-heading">
+          <div id="CUR-YNNbaPYA" class="panel-title">
+            Sales <documentation link="http://guide.curveroyaltysystems.com/article/reviewing-a-accountingPeriod-sending-statements/#includedsales"></documentation>
+          </div>
+        </div>
+        <div id="CUR-aTJOyYsQ" class="panel-body">
+          <div id="CUR-FGrrMReE" class="row hidden-xs">
+            <div id="CUR-IarzUNdD" class="col-xs-12 text-right">
+              <button id="CUR-llfuxBuh" class="btn btn-default sm-m-r-10 sm-p-l-0 sm-p-r-0" ng-click="exportSales()" ng-show="rights.accountingPeriods == 'Edit'"><i class="fa fa-upload"></i> Export</button>
+              <div id="CUR-dNplqtWN" class="btn-group dropdown-default" ng-show="rights.accountingPeriods == 'Edit'"> <a id="CUR-KgJSnJrq" class="btn btn-complete dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false" style="width: 175px;"><i class="fa fa-lock"></i> Archive <span id="CUR-aLMeJWhM" class="caret"></span> </a>
+                <ul id="CUR-OutWkqLJ" class="dropdown-menu w-xs-100-p">
+                  <li id="CUR-vmEOJSgl">
+                    <a id="CUR-XTTBYohJ" ng-click="archiveAllSalesFiles()">Archive All</a>
+                  </li>
+                  <li id="CUR-wAekNFHS">
+                    <a id="CUR-ggPcduyI" ng-click="archiveFullyReportedSalesFiles()">Archive Fully Reported</a>
+                  </li>
+                  <li id="CUR-bGewDDpu">
+                    <a id="CUR-ySZjPGTh" ng-click="archiveSelectedSalesFiles()">Archive Selected</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div id="CUR-EMyxyGma" class="table-responsive">
+            <table id="CUR-bkZGicxU" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+              <tr id="CUR-BoksvjYo">
+                <th class="table-checkbox hidden-xs">
+                  <input id="CUR-daMKjQUp" type="checkbox" class="select-all" ng-click="selectAll(includedSalesFiles)">
+                </th>
+                <th ng-click="includedSalesTable.getSortedData('name')" ng-class="includedSalesTable.whatClassIsIt('name')">Name</th>
+                <th class="hidden-xs" ng-click="includedSalesTable.getSortedData('invoiceNo')" ng-class="includedSalesTable.whatClassIsIt('invoiceNo')">Invoice</th>
+                <th class="hidden-xs" ng-click="includedSalesTable.getSortedData('targetPeriod')" ng-class="includedSalesTable.whatClassIsIt('targetPeriod')">Target</th>
+                <th class="hidden-xs" ng-click="includedSalesTable.getSortedData('salesAccountName')" ng-class="includedSalesTable.whatClassIsIt('salesAccountName')">Account</th>
+                <th class="hidden-xs" ng-click="includedSalesTable.getSortedData('homeCurrencyGrossAmount')" ng-class="includedSalesTable.whatClassIsIt('homeCurrencyGrossAmount')">Gross</th>
+                <th ng-click="includedSalesTable.getSortedData('homeCurrencyNetAmount')" ng-class="includedSalesTable.whatClassIsIt('homeCurrencyNetAmount')">Net</th>
+                <th class="hidden-xs" ng-click="includedSalesTable.getSortedData('invalidLines')" ng-class="includedSalesTable.whatClassIsIt('invalidLines')">Unmapped Lines</th>
+                <th class="hidden-xs"></th>
+              </tr>
+              </thead>
+              <tbody id="CUR-HuGhNmDC">
+              <tr sales-file-table-row ng-repeat="sale in includedSalesFiles" index="{{$index}}" sale="sale" no-links="false" edit="rights.accountingPeriods == 'Edit'"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="CUR-NPgYGHXp" class="row">
+            <div id="CUR-THLZtOeJ" class="col-xs-12 text-center">
+              <pagination id="CUR-wIuymUcZ" pages="salesFilePages" total="totalSalesFilePages" current="currentSalesFilePage" change-page="changeSalesFilePage(page)"></pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<div class="modal fade stick-up" id="unlockModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-QPZncMJA" class="modal-dialog">
+    <div id="CUR-lEIHhder" class="modal-content">
+      <div id="CUR-RMvmvgvf" class="modal-header clearfix text-left">
+        <button id="CUR-YInZPKiw" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-IMJaxJne">Unlock Period</h5>
+      </div>
+      <div id="CUR-dudAPLCL" class="modal-body">
+        <div id="CUR-mzzudKKS" class="row">
+          <div id="CUR-qZAkPJhk" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to unlock this accountingPeriod? Changes will be able to be made which could affect published
+              statements</p>
+          </div>
+        </div>
+        <div id="CUR-pucoINVU" class="row">
+          <div id="CUR-nRWAoGmd" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-iiAcuvng" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-OZqDelBN" type="button" class="btn btn-danger m-t-5" ng-click="toggleLock()"><i
+                    class="fa fa-unlock"></i>&nbsp;Unlock</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade stick-up" id="runCalculationModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-yJrAEltd" class="modal-dialog">
+    <div id="CUR-CRewvlnM" class="modal-content">
+      <div id="CUR-rKVtJxRb" class="modal-header clearfix text-left">
+        <button id="CUR-PRBhPwLz" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-wHsiwCXR">Recalculate</h5>
+      </div>
+      <div id="CUR-JlaKrAjC" class="modal-body">
+        <div id="CUR-ihSthPyh" class="row">
+          <div id="CUR-juGiNrYv" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to recalculate the entire Accounting Period?</p>
+          </div>
+        </div>
+        <div id="CUR-qKHboOAw" class="row">
+          <div id="CUR-GhIMnbPB" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-NBtbvYqr" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-itCAhpHB" type="button" class="btn btn-complete m-t-5" ng-click="runCalculation()" data-dismiss="modal">
+              <i class="fa fa-refresh"></i> Reprocess
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

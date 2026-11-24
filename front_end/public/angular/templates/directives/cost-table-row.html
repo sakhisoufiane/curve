@@ -1,0 +1,15 @@
+<td ng-if="!noCheckbox" class="v-align-middle hidden-xs"><input id="cost-select-{{index}}" type="checkbox" ng-model="cost.selected"></td>
+<td class="v-align-middle">
+	<a id="cost-{{index}}" ng-if="!noLinks" href="#/costs/{{ cost._id }}/edit">{{ cost.name }}</a>
+	<span ng-if="noLinks">{{ cost.name }}</span>
+</td>
+<td class="v-align-middle">{{ cost.amount }}</td>
+<td class="v-align-middle hidden-xs">{{ cost.currency }}</td>
+<td class="v-align-middle hidden-xs">{{ cost.description }}</td>
+<td class="v-align-middle hidden-xs">{{ cost.targetPeriod }}</td>
+<td class="v-align-middle hidden-xs">{{ cost.type }}</td>
+<td class="v-align-middle hidden-xs">{{ cost.createdAt | date : dateFormat : 'UTC' }}</td>
+<td class="v-align-middle hidden-xs">
+	<span class="badge badge-success" ng-if="cost.reportedStatus === 'Complete'" tooltips tooltip-side="top" tooltip-template="Fully Reported">F</span>
+  <span class="badge badge-danger" ng-if="cost.reportedStatus === 'Unreported'" tooltips tooltip-side="top" tooltip-template="Unreported">U</span>
+</td>

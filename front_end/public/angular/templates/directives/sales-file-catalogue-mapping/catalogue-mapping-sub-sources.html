@@ -1,0 +1,43 @@
+<div class="row catalogue-mapping-wrapper">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <h4>Sub Sources</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-info">
+          <p>Below are all sub sources read from the file.</p>
+          <p>You can map the reported sub sources to a more organised set of sub sources by mapping here. This is not required, but can make your reports a lot easier to read.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row m-b-20">
+      <div class="col-xs-12">
+        <h5 class="pull-right">Total: {{salesFile.invalidFields.subSources.length}}</h5>
+      </div>
+    </div>
+    <div class="row m-b-20" ng-repeat="subSource in salesFile.invalidFields.subSources | limitTo: 25: subSourceMappingIndex track by $index">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <input type="text" class="form-control" ng-model="selectedSubSources[$index + subSourceMappingIndex]">
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <input type="text" class="form-control" ng-model="subSource" readonly>
+      </div>
+    </div>
+    <div class="row m-b-20" ng-if="salesFile.invalidFields.subSources && salesFile.invalidFields.subSources.length > 25">
+      <div class="col-xs-4">
+        Showing {{subSourceMappingIndex + 1}} to {{lowestValue(subSourceMappingIndex + 25, salesFile.invalidFields.subSources.length)}} of {{salesFile.invalidFields.subSources.length}}
+      </div>
+      <div class="col-xs-4 text-center">
+        <div class="btn-group">
+          <button ng-disabled="!(subSourceMappingIndex > 0)" type="button" class="btn btn-default" ng-click="minusFromIndex('subSourceMappingIndex', 25)"><</button>
+          <button ng-disabled="!(salesFile.invalidFields.subSources.length > subSourceMappingIndex + 25)" type="button" class="btn btn-default" ng-click="addToIndex('subSourceMappingIndex', 25)">></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

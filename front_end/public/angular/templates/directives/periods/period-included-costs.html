@@ -1,0 +1,247 @@
+<div class="container-fluid container-fixed-lg">
+  <div class="row">
+    <div class="col-xs-12 col-md-10 col-md-offset-1">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row m-b-20">
+            <div class="col-xs-12">
+              <ul class="breadcrumb wizard-breadcrumb">
+                <li><a ng-click="changePage('Setup', false, true)">Setup</a></li>
+                <li><a ng-click="changePage('Included Sales', false, true)">Included Sales</a></li>
+                <li ng-if="features.suspense"><a ng-click="changePage('Included Resolved Income', false, true)">Included Resolved Sales</a></li>
+                <li><a class="active">Included Costs</a></li>
+                <!--<li>Validation</li>-->
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="row row-wrapper">
+                <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <div class="alert alert-info">
+                        <p>Below are two tables, the top showing what is to be included in this period's calculation,
+                          and the bottom what will not be included.</p>
+                        <p>To include costs, filter and select using the bottom table, and use the buttons on the right
+                          to include them in the period.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <div class="form-group">
+                        <h4>Included Costs <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                            tooltip-template="This table displays all Costs that will be included in the period calculations"></i>
+                            <documentation link="http://guide.curveroyaltysystems.com/article/periods-creating-a-period/#incsales+costs"></documentation>                          </h4>
+                      </div>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                      <button class="btn btn-default" ng-click="excludeSelectedCosts()" tooltips tooltip-class="wider"
+                        tooltip-template="This only excludes those Costs you have selected on this page below">Exclude
+                        Selected</button>
+                      <button class="btn btn-primary" ng-click="excludeAllCosts()" tooltips tooltip-class="wider"
+                        tooltip-template="This excludes every Cost, regardless of what you have selected">Exclude
+                        All</button>
+                    </div>
+                  </div>
+                  <div class="table-responsive overflow-x-hidden">
+                    <table class="table table-hover table-condensed dataTable no-footer">
+                      <thead>
+                        <tr>
+                          <th class="table-checkbox"><input type="checkbox" class="select-all"
+                              ng-click="selectAll(includedCosts)"></th>
+                          <th ng-click="getSortedData('name')" ng-class="whatClassIsIt('name')">Name</th>
+                          <th ng-click="getSortedData('amount')" ng-class="whatClassIsIt('amount')">Amount</th>
+                          <th ng-click="getSortedData('currency')" ng-class="whatClassIsIt('currency')">Currency</th>
+                          <th ng-click="getSortedData('description')" ng-class="whatClassIsIt('description')">
+                            Description</th>
+                          <th ng-click="getSortedData('targetPeriod')" ng-class="whatClassIsIt('targetPeriod')">Target
+                            Period</th>
+                          <th ng-click="getSortedData('type')" ng-class="whatClassIsIt('type')">Type</th>
+                          <th ng-click="getSortedData('createdAt')" ng-class="whatClassIsIt('createdAt')">Created</th>
+                          <th ng-click="getSortedData('reportedStatus')" ng-class="whatClassIsIt('reportedStatus')">
+                            Reported</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr cost-table-row ng-repeat="cost in includedCosts" cost="cost" no-links="true" edit="true">
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="col-xs-12 text-center">
+                      <pagination pages="includedCostPages" total="totalIncludedCostPages"
+                        current="currentIncludedCostPage" change-page="changeIncludedCostPage(page)"></pagination>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row m-t-50">
+                <div class="col-xs-12">
+                  <div class="row row-wrapper">
+                    <div class="col-xs-6">
+                      <div class="form-group">
+                        <h4>Excluded Costs <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                            tooltip-template="This table displays all Costs that WILL NOT be included in the period calculations. Any Costs that you want to be included should be selected using the buttons to the right"></i>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row m-b-20">
+                    <div class="col-xs-6 col-md-4">
+                      <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" ng-model="costsFilter.text">
+                      </div>
+                    </div>
+                    <div class="col-xs-6 col-md-4">
+                      <div class="form-group">
+                        <label>Target Period</label>
+                        <input type="text" class="form-control" ng-model="costsFilter.targetPeriod">
+                      </div>
+                    </div>
+                    <div class="col-xs-6 col-md-4">
+                      <div class="form-group">
+                        <label>Reported</label>
+                        <ui-select ng-model="costsFilter.reportedStatus">
+                          <ui-select-match allow-clear="true">
+                            <span ng-bind="$select.selected"></span>
+                          </ui-select-match>
+                          <ui-select-choices repeat="item in costReported">
+                            <span ng-bind="item"></span>
+                          </ui-select-choices>
+                        </ui-select>
+                      </div>
+                    </div>
+                    <div class="col-xs-6 col-md-4">
+                      <div class="form-group">
+                        <label>Created after</label>
+                        <div id="datepicker-component" class="form-group input-group date">
+                          <input type="text" class="form-control" ng-model="costsFilter.costsDateAfter"
+                            uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}"
+                            is-open="costsDateAfterPopup" ng-click="openCostsDateAfterPopup()">
+                          <span class="input-group-addon" ng-click="openCostsDateAfterPopup()">
+                            <i class="fa fa-calendar"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-6 col-md-4">
+                      <div class="form-group">
+                        <label>Created before</label>
+                        <div id="datepicker-component" class="form-group input-group date">
+                          <input type="text" class="form-control" ng-model="costsFilter.costsDateBefore"
+                            uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}"
+                            is-open="costsDateBeforePopup" ng-click="openCostsDateBeforePopup()">
+                          <span class="input-group-addon" ng-click="openCostsDateBeforePopup()">
+                            <i class="fa fa-calendar"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-6 col-md-4">
+                      <div class="form-group">
+                        <label>Archived</label>
+                        <ui-select class="full-width" ng-model="costsFilter.archived">
+                          <ui-select-match allow-clear="true">
+                            <span ng-bind="$select.selected.name"></span>
+                          </ui-select-match>
+                          <ui-select-choices
+                            repeat="item.value as item in archivedFilterValues | filter: $select.search">
+                            <span ng-bind="item.name"></span>
+                          </ui-select-choices>
+                        </ui-select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-4 col-xs-offset-4 center">
+                      <button class="btn btn-complete" ng-click="filterExcludedCosts()"><i
+                          class="fa fa-search"></i>&nbsp;Filter</button>
+                    </div>
+                  </div>
+                  <div class="row m-t-20">
+                    <div class="col-xs-12 text-right">
+                      <button class="btn btn-success pull-right" ng-click="includeSelectedCosts()" tooltips
+                        tooltip-class="wider"
+                        tooltip-template="This only includes those Costs you have selected on this page below">Include
+                        Selected</button>
+                      <button class="btn btn-default pull-right" ng-click="includeFilteredCosts()" tooltips
+                        tooltip-class="wider"
+                        tooltip-template="This includes every Cost based on your filter parameters">Include
+                        Filtered</button>
+                    </div>
+                  </div>
+
+                  <div class="table-responsive overflow-x-hidden">
+                    <table class="table table-hover table-condensed dataTable no-footer">
+                      <thead>
+                        <tr>
+                          <th class="table-checkbox"><input type="checkbox" class="select-all"
+                              ng-click="selectAll(excludedCosts)"></th>
+                          <th ng-click="getSortedData('name')" ng-class="whatClassIsIt('name')">Name</th>
+                          <th ng-click="getSortedData('amount')" ng-class="whatClassIsIt('amount')">Amount</th>
+                          <th ng-click="getSortedData('currency')" ng-class="whatClassIsIt('currency')">Currency</th>
+                          <th ng-click="getSortedData('description')" ng-class="whatClassIsIt('description')">
+                            Description</th>
+                          <th ng-click="getSortedData('targetPeriod')" ng-class="whatClassIsIt('targetPeriod')">Target
+                            Period</th>
+                          <th ng-click="getSortedData('type')" ng-class="whatClassIsIt('type')">Type</th>
+                          <th ng-click="getSortedData('createdAt')" ng-class="whatClassIsIt('createdAt')">Created</th>
+                          <th ng-click="getSortedData('reportedStatus')" ng-class="whatClassIsIt('reportedStatus')">
+                            Reported</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr cost-table-row ng-repeat="cost in excludedCosts" cost="cost" no-links="true" edit="true">
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="col-xs-12 text-center">
+                      <pagination pages="excludedCostPages" total="totalExcludedCostPages"
+                        current="currentExcludedCostPage" change-page="changeExcludedCostPage(page)"></pagination>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row m-t-20">
+            <div class="col-xs-12">
+              <a ng-click="runCalculation()" class="btn btn-primary pull-right">Calculate</a>
+              <a ng-click="saveAndRevert()" class="btn btn-complete pull-right" ng-if="period.runNo">Save</a>
+              <a ng-if="!features.suspense" ng-click="changePage('Included Sales', false, true)" class="btn btn-default pull-right">Back</a>
+              <a ng-if="features.suspense" ng-click="changePage('Included Resolved Income', false, true)" class="btn btn-default pull-right">Back</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header clearfix text-left">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5>No Costs Selected</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12 m-t-20">
+            <p>You have selected no costs to calculate in this period. Are you sure you want to continue?</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 m-t-20 text-right">
+            <button type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-complete m-t-5"
+              ng-click="changePage('Included Costs', true)">Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

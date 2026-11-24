@@ -1,0 +1,243 @@
+openapi: 3.0.0
+paths:
+  /fuga/v2/tracks:
+    post:
+      tags:
+        - Fuga v2 - Tracks
+      summary: Create or update tracks
+      description: Creates or updates tracks. Requires write access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                tracks:
+                  type: string
+                  description: |
+                    array of track objects. Each track object can have:
+                    - `title` (string): Track title
+                    - `isrc` (string): ISRC code
+                    - `payees` (array): Array of payee objects with `id` (string) and `share` (number)
+                  example: '[{"title": "Track Name", "isrc": "USRC12345678", "payees": [{"id": "payee123", "share": 50}]}]'
+      responses:
+        '200':
+          description: Successfully created or updated tracks
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  '/fuga/v2/tracks/{id}':
+    get:
+      tags:
+        - Fuga v2 - Tracks
+      summary: Retrieve a specific track
+      description: >-
+        Returns details for a specific track by ID or Fuga ID. Requires read
+        access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Track ID or Fuga ID
+      responses:
+        '200':
+          description: Successfully retrieved track
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FugaTrack'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  '/fuga/v2/releases/{id}':
+    get:
+      tags:
+        - Fuga v2 - Releases
+      summary: Retrieve a specific release
+      description: >-
+        Returns details for a specific release by Fuga ID. Requires read access
+        to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Fuga ID of the release
+      responses:
+        '200':
+          description: Successfully retrieved release
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FugaRelease'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+
+  /fuga/v2/releases:
+    post:
+      tags:
+        - Fuga v2 - Releases
+      summary: Create or update releases
+      description: Creates or updates releases. Requires write access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                releases:
+                  type: string
+                  description: |
+                    array of release objects. Each release object can have:
+                    - `title` (string): Release title
+                    - `upc` (string): UPC code
+                    - `tracks` (array): Array of track objects with `id` (string)
+                  example: '[{"title": "Album Name", "upc": "123456789012", "tracks": [{"id": "track123"}]}]'
+      responses:
+        '200':
+          description: Successfully created or updated releases
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+components:
+  schemas:
+    FugaTrack:
+      type: object
+      properties:
+        id:
+          type: string
+        fugaId:
+          type: string
+          nullable: true
+        isrc:
+          type: string
+        title:
+          type: string
+        artist:
+          type: string
+        version:
+          type: string
+        duration:
+          type: number
+          nullable: true
+        payeeCount:
+          type: integer
+        releases:
+          type: array
+          items:
+            type: object
+            properties:
+              releaseId:
+                type: string
+              name:
+                type: string
+        contracts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FugaContract'
+
+    FugaRelease:
+      type: object
+      properties:
+        _id:
+          type: string
+        fugaId:
+          type: string
+        title:
+          type: string
+        version:
+          type: string
+        artist:
+          type: string
+        catNo:
+          type: string
+        barcode:
+          type: string
+        releaseDate:
+          type: string
+          format: date
+        label:
+          type: string
+        tracks:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              fugaId:
+                type: string
+                nullable: true
+              isrc:
+                type: string
+              title:
+                type: string
+              artist:
+                type: string
+              version:
+                type: string
+              duration:
+                type: number
+                nullable: true
+              releases:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    releaseId:
+                      type: string
+                    name:
+                      type: string
+              payeeCount:
+                type: integer
+              contracts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FugaContract'
+        contracts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FugaContract'
+
+    FugaContract:
+      type: object
+      properties:
+        payeeId:
+          type: string
+        payeeName:
+          type: string
+        payeeEmail:
+          type: string
+        percentage:
+          type: number
+        isMainSubClientContract:
+          type: boolean
+        salesTermsRate:
+          type: number

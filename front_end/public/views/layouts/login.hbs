@@ -1,0 +1,80 @@
+<script>
+  // Google Captcha Login Form
+    var captchaElement = 'captcha-ele';
+    var onloadCaptchCb = function () {
+      grecaptcha.render(captchaElement, {
+        'sitekey' : '{{siteKey}}'
+      });
+    };
+</script>
+
+<div id="CUR-vYNTPewH" class="row">
+  <div id="CUR-lBGIGgLn" class="col-xs-12 text-center">
+    <img src="{{darkLogo}}" alt="logo" class="logo" crossorigin="anonymous">
+  </div>
+</div>
+<div id="CUR-yLHeprvt" class="row">
+  <div id="CUR-SeevZxAT" class="col-xs-12">
+    <div id="CUR-eKNtThjM" class="login-form-wrapper" style="display:hidden;">
+      <form id="login-form" class="p-t-15" role="form">
+        {{# unless withError }}
+        <div id="notification"></div>
+        {{/ unless }}
+        {{# if withError }}
+          <div id="CUR-acwjAaXN" class="alert alert-info" role="alert"><h4 id="CUR-bfgonagz" class="pull-left">Error Logging In</h4><br><p>{{withError}}</p></div>
+        {{/ if }}
+        <div id="CUR-QwunlBKr" class="form-group">
+          <label id="CUR-uDLgIKMA">Email</label>
+          <input id="CUR-TnIhWZOt" type="text" name="email" placeholder="Email" class="form-control">
+        </div>
+        <div id="CUR-dNOuEGGN" class="form-group">
+          <label id="CUR-CJaRiztb">Password</label>
+          <input id="CUR-jMEIMZkK" type="password" name="password" placeholder="Password" class="form-control">
+        </div>
+        <input id="CUR-KNJywkLn" type="hidden" name="qaKey" value="{{encryptedKey}}">
+        <div id="CUR-UjXorixM" class="row">
+          <div id="CUR-yqGgdDfp" class="col-md-12">
+            <div id="captcha-ele"></div>
+          </div>
+        </div>
+        <div id="CUR-lAHGdESz" class="row">
+          <div id="CUR-fDShbTBr" class="col-md-6 col-md-offset-6 text-right sm-text-center">
+            <a id="CUR-CJpLVijx" href="reset/send_email" class="text-info small">Forgot Password?</a>
+          </div>
+        </div>
+        <button id="CUR-PSsolVHf" class="btn btn-complete m-t-10 w-xs-100-p m-xs-l-0" type="submit">Sign In</button>
+      </form>
+      <div id="CUR-HPteKUqE" class="row m-t-20">
+        <div id="CUR-UrniSgpJ" class="col-xs-12 text-center">
+          <p>
+            By logging in, you agree to our <a id="CUR-ekVIKUop" href="https://www.curveroyaltysystems.com/ts-and-cs" target="_blank">Terms of Use</a><br/>
+            and our <a id="CUR-TuMMiFrt" href="https://www.curveroyaltysystems.com/privacy-policy" target="_blank">Privacy Policy</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script
+  type="text/javascript">!function (e, t, n) { function a() { var e = t.getElementsByTagName("script")[0], n = t.createElement("script"); n.type = "text/javascript", n.async = !0, n.src = "https://beacon-v2.helpscout.net", e.parentNode.insertBefore(n, e) } if (e.Beacon = n = function (t, n, a) { e.Beacon.readyQueue.push({ method: t, options: n, data: a }) }, n.readyQueue = [], "complete" === t.readyState) return a(); e.attachEvent ? e.attachEvent("onload", a) : e.addEventListener("load", a, !1) }(window, document, window.Beacon || function () { });</script>
+<script type="text/javascript">window.Beacon('init', '090a922a-0be0-4014-bee5-d588d4045341')</script>
+
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCaptchCb&render=explicit" async defer></script>
+
+<script>
+  
+  {{#if favicon}}
+    var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = "{{{favicon}}}";
+    link.crossOrigin = 'anonymous';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  {{/if}}
+  {{#if pageTitle}}
+    document.title = "{{pageTitle}}"
+  {{else}}
+    document.title = "Curve"
+  {{/if}}
+</script>

@@ -1,0 +1,549 @@
+<div id="CUR-HQENeRUK" class="jumbotron" data-pages="parallax">
+  <div
+    id="CUR-vrotThMg"
+    class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20"
+  >
+    <div id="CUR-IgQqpKix" class="inner">
+      <ul id="CUR-ILHoKCDn" class="breadcrumb">
+        <li id="CUR-mvYjCcfO">
+          <a
+            id="CUR-HHInRIbW"
+            ng-href="/#/imports?transferringSystem={{transferringSystem}}"
+            >Import Partners</a
+          >
+        </li>
+        <li id="CUR-shbAszko" ng-show="!importPartner._id">
+          <a id="CUR-ZMIfiKAH" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-HobEapLb" ng-show="importPartner._id">
+          <a
+            id="CUR-CpWBXJgm"
+            ng-href="/#/importPartners/{{importPartner._id}}/edit"
+            class="active"
+            >{{importPartner.name}}</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid m-b-20">
+  <div id="CUR-xJajqwUG" class="col-xs-12 col-md-6 col-md-offset-6 text-right">
+    <div id="CUR-IevbIqmn" class="sm-p-r-15">
+      <button
+        id="CUR-RtvJHZzy"
+        class="btn btn-warning"
+        ng-show="importPartner._id"
+        ng-click="copy()"
+      >
+        <i class="fa fa-copy"></i>&nbsp;Copy
+      </button>
+      <button
+        id="CUR-XJkFoQlq"
+        class="btn btn-danger"
+        data-toggle="modal"
+        data-target="#deleteModal"
+        ng-show="importPartner._id"
+      >
+        <i class="fa fa-trash"></i>&nbsp;Delete
+      </button>
+      <button
+        id="CUR-RtvJHZzy"
+        class="btn btn-complete"
+        ng-click="createImportPartner({ isCopy: false })"
+      >
+        <i class="fa fa-check"></i>&nbsp;Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container-fluid">
+  <ul
+    id="CUR-ExXHqycp"
+    class="nav nav-tabs"
+    data-init-reponsive-tabs="dropdownfx"
+    style="margin-bottom: 24px"
+    ng-if="importPartner.transferringSystem === 'Catalogue Shipment'"
+  >
+    <li
+      id="CUR-pHRzIrGk"
+      ng-class="activeTab == 'importPartner' ? 'active' : ''"
+      ng-click="setTab('importPartner')"
+    >
+      <a id="CUR-CxdpPIAR" data-toggle="tab" aria-expanded="true"
+        ><span id="CUR-gjqzzzOM">Import Partner</span></a
+      >
+    </li>
+    <li
+      id="CUR-UxGSDDUK"
+      ng-class="{
+        active: activeTab == 'mappings',
+        disabled: !importPartner._id && !importPartner.mappings
+      }"
+      ng-click="setTab('mappings')"
+    >
+      <a id="CUR-rCVNRbuE" data-toggle="tab" aria-expanded="false"
+        ><span id="CUR-EZFNbIXr">Mappings</span></a
+      >
+    </li>
+  </ul>
+  <div
+    ng-show="activeTab === 'importPartner' || importPartner.transferringSystem !== 'Catalogue Shipment'"
+  >
+    <div class="col-xs-12 col-md-6">
+      <div class="panel panel-default">
+        <div id="CUR-wzCyOdoB" class="panel-heading">
+          <div id="CUR-vSbPUNMa" class="panel-title">Overview</div>
+        </div>
+        <div class="panel-body p-t-15">
+          <div class="form-group">
+            <label>Import Partner Name</label>
+            <input
+              type="text"
+              class="form-control"
+              value=""
+              ng-model="importPartner.name"
+            />
+            <label
+              class="error"
+              ng-if="setupErrors.includes('Import partner is required to have a name')"
+              >Name is required</label
+            >
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div
+          id="CUR-wzCyOdoB"
+          class="panel-heading"
+          style="display: flex; justify-content: space-between"
+        >
+          <div id="CUR-vSbPUNMa" class="panel-title">Identifiers</div>
+        </div>
+        <div class="panel-body p-t-15">
+          <p>
+            Use the Work Identifiers sent in the CWR/Catalogue Shipment as the
+            Main Identifiers of the Work on Curve. Only enable this option if
+            this catalogue is your own content. If you are importing a 3rd party
+            catalogue, we recommend you leave this option disabled as their Work
+            Identifiers may overlap with your own. It is important these Main
+            Identifiers are unique and consistent over time, as societies use
+            these as references when importing your CWR deliveries.
+          </p>
+          <div class="form-group">
+            <input
+              type="checkbox"
+              value="1"
+              ng-model="importPartner.defaults.setMainIdentifier"
+            />
+            <label>Use Work Identifiers</label>
+          </div>
+
+          <div class="form-group">
+            <!-- <label>Interested Party #</label> -->
+            <p>
+              Use the Composer's or Publisher's Interested Party # in the
+              CWR/Catalogue Shipment as the Interested Party # of the Composers
+              and Publishers on Curve. If you are importing a 3rd party
+              catalogue we recommend you leave this option disabled as their
+              Interested Party # may overlap with your own. It is important
+              these Party #'s are unique and consistent over time, as some
+              societies use these as reference when importing your CWR
+              deliveries.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <input
+              type="checkbox"
+              value="1"
+              ng-model="importPartner.defaults.setPublisherInterestedParty"
+            />
+            <label>Use Publisher Interested Party #</label>
+          </div>
+
+          <div class="form-group">
+            <input
+              type="checkbox"
+              value="1"
+              ng-model="importPartner.defaults.setComposerInterestedParty"
+            />
+            <label>Use Composer Interested Party #</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">Insert to IP Chain</div>
+        </div>
+        <div class="panel-body p-t-15">
+          <p>
+            Set your publisher here for it to be added to the top of each
+            claimed IP chain.
+          </p>
+          <div class="row">
+            <div class="form-group col-xs-6">
+              <label>Publisher</label>
+              <publisher-select-field
+                edit="true"
+                value="importPartner.defaults.claimingParty.publisherId"
+                allow-clear="true"
+              ></publisher-select-field>
+            </div>
+            <div class="form-group col-xs-6">
+              <label>Category</label>
+              <select
+                class="form-control"
+                ng-model="importPartner.defaults.claimingParty.contractType"
+                ng-options="item as item for item in ['Admin', 'Sub Publisher', 'Original Publisher', 'Acquirer']"
+              ></select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">Default Contracts</div>
+        </div>
+        <div class="panel-body p-t-15">
+          <p>
+            What contracts should be added to all works? For instance if this
+            has come from a publisher you subpublish, adding the contract here
+            will link all works ingested to it.
+          </p>
+          <div class="form-group required">
+            <contract-row
+              ng-repeat="contract in importPartner.defaults.contracts track by $index"
+              index="$index"
+              contract="contract"
+              contracts="contracts"
+              delete="deleteContract(contract)"
+              edit="true"
+            ></contract-row>
+          </div>
+          <button class="btn btn-complete" ng-click="addContract()">
+            + Contract
+          </button>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">Catalogue Groups</div>
+        </div>
+        <div class="panel-body p-t-15">
+          <p>
+            This will add the below catalogue groups to each of the ingested
+            works.
+          </p>
+          <div class="form-group required">
+            <label>Catalogue Groups</label>
+            <ui-select
+              multiple
+              ng-model="importPartner.defaults.catalogueGroups"
+              close-on-select="true"
+            >
+              <ui-select-match>{{$item}}</ui-select-match>
+              <ui-select-choices
+                repeat="group in catalogueGroups | filter:$select.search"
+              >
+                {{group}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">
+            Ingestion Territory - Leave blank to include All Territories and
+            their IP Chains
+          </div>
+        </div>
+        <div class="panel-body p-t-15">
+          <p>
+            Which territory information should we ingest from the CWR file? If
+            unsure, set this to your home territory.
+          </p>
+          <ui-select ng-model="importPartner.defaults.ingestionTerritory">
+            <ui-select-match allow-clear="true">
+              <span ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices
+              group-by="groupFind"
+              repeat="territory.code as territory in simpleCountries | filter: $select.search"
+            >
+              <span class="country" ng-bind="territory.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+
+      <div
+        class="panel panel-default"
+        ng-if="transferringSystem !== 'Catalogue Shipment'"
+      >
+        <div class="panel-heading">
+          <div class="panel-title">Territories</div>
+        </div>
+        <div class="panel-body p-t-15">
+          <p>
+            Which territories will you assert rights to on each of the attached
+            works? This sets the territories against the work, whilst the
+            territories defined in the CWR will assign the specific territories
+            to the IP chains.
+          </p>
+          <territory-name-field
+            value="selectedTerritory"
+            ng-click="addTerritory()"
+            index="index"
+            edit="edit"
+          ></territory-name-field>
+          <label
+            class="error"
+            ng-if="setupErrors.includes('Territory is required')"
+            >Territories is required</label
+          >
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-6">
+      <div class="panel panel-default">
+        <div id="CUR-wzCyOdoB" class="panel-heading">
+          <div id="CUR-vSbPUNMa" class="panel-title">Notes</div>
+        </div>
+        <div class="panel-body">
+          <textarea
+            class="form-control standard-textarea"
+            ng-model="importPartner.notes"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+    <!-- Loading Page -->
+    <div
+      id="CUR-kczwpSVv"
+      class="container-fluid container-fixed-lg"
+      ng-if="import.status == 'Importing'"
+    >
+      <div id="CUR-BTzXwzPV" class="row">
+        <div id="CUR-cunmuIwo" class="col-xs-12 col-sm-6 col-sm-offset-3">
+          <div id="CUR-RGxxIeGx" class="panel panel-default text-center">
+            <div id="CUR-wTaVaifq" class="panel-body p-t-15">
+              <h3 id="CUR-HyTKCwnY">Import is processing...</h3>
+              <div id="CUR-dslouhvq" class="loading-spinner">
+                <md-progress-circular md-diameter="95"></md-progress-circular>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Error Page -->
+    <div
+      id="CUR-aigePGBE"
+      class="container-fluid container-fixed-lg"
+      ng-if="import.status == 'Errored'"
+    >
+      <div id="CUR-VdHXKrvq" class="row">
+        <div id="CUR-tgtvEvfH" class="col-xs-12 col-sm-6 col-sm-offset-3">
+          <div id="CUR-ngCPLuId" class="panel panel-default text-center">
+            <div id="CUR-gKWbMuPX" class="panel-body p-t-15">
+              <h3 id="CUR-hXFEjCap">Import has Errored</h3>
+              <div id="CUR-JyQpyIkc" class="row">
+                <div
+                  id="CUR-kfCejoLi"
+                  class="col-xs-10 col-xs-offset-1 progress-checklist text-left"
+                >
+                  <p>{{import.calculationError}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ng-show="activeTab === 'mappings'">
+    <import-partner-mappings />
+  </div>
+
+  <div
+    class="modal fade stick-up"
+    id="deleteModal"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+  >
+    <div id="CUR-uJHfqjzX" class="modal-dialog">
+      <div id="CUR-dpexwpmR" class="modal-content">
+        <div id="CUR-kQfQnnOi" class="modal-header clearfix text-left">
+          <button
+            id="CUR-LTSPFozm"
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+          >
+            <i class="pg-close fs-14"></i>
+          </button>
+          <h5 id="CUR-MbufgMrs">Delete Import Partner</h5>
+        </div>
+        <div id="CUR-QWFgjrEt" class="modal-body">
+          <div id="CUR-MUrxYPRU" class="row">
+            <div id="CUR-ynLtjIhp" class="col-xs-12 m-t-20">
+              <p>
+                Are you sure you want to delete this import partner? This cannot
+                be undone.
+              </p>
+            </div>
+          </div>
+          <div id="CUR-QTuenfce" class="row">
+            <div id="CUR-QhAEVGlR" class="col-xs-12 m-t-20 text-right">
+              <button
+                id="CUR-SwaWIatM"
+                type="button"
+                class="btn btn-default m-t-5"
+                data-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                id="CUR-AzjXhskq"
+                type="button"
+                class="btn btn-danger m-t-5"
+                ng-click="deleteImportPartner()"
+              >
+                <i class="fa fa-trash"></i>&nbsp;Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade stick-up"
+    id="addTerritoryModal"
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    <div
+      id="CUR-addTerritoryModal-dialog"
+      class="modal-dialog"
+      ng-style="{'width': territoryChoice.selected.code === 'specific' ? '75%' : '30%'}"
+    >
+      <div id="CUR-addTerritoryModal-content" class="modal-content">
+        <div
+          id="CUR-addTerritoryModal-header"
+          class="modal-header clearfix text-left"
+        >
+          <button
+            id="CUR-addTerritoryModal-button"
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+          >
+            <i class="pg-close fs-14"></i>
+          </button>
+          <h5 id="CUR-addTerritoryModal-h5">Add Territory</h5>
+        </div>
+        <div id="CUR-addTerritoryModal-body" class="modal-body">
+          <div id="CUR-addTerritoryModal-body-territoryChoice" class="row">
+            <div class="col-xs-12 m-t-20">
+              <label id="CUR-addTerritoryModal-body-territoryChoice-label"
+                >Territory</label
+              >
+              <ui-select class="full-width" ng-model="territoryChoice.selected">
+                <ui-select-match allow-clear="true">
+                  <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices
+                  group-by="groupFind"
+                  repeat="country as country in territoryChoices | filter: $select.search"
+                  refresh="searchTerritoryGroups($select)"
+                  refresh-delay="50"
+                >
+                  <span class="country" ng-bind="country.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div
+            id="CUR-addTerritoryModal-fg-checkbox"
+            class="row"
+            ng-if="territoryChoice.selected.code === 'specific' ? true : false"
+          >
+            <div class="col-xs-12 m-t-20">
+              <label>
+                <input
+                  type="checkbox"
+                  ng-model="territoryChoice.createTerritoryGroup"
+                />Check this box to create a new Territory Group for these
+                territories.
+              </label>
+            </div>
+          </div>
+          <div
+            id="CUR-addTerritoryModal-fg-name"
+            class="row form-group"
+            ng-if="territoryChoice.createTerritoryGroup && territoryChoice.selected.code === 'specific'"
+          >
+            <div class="col-xs-12 m-t-20">
+              <label id="CUR-addTerritoryModal-fg-name-label">Name</label>
+              <input
+                id="CUR-addTerritoryModal-fg-name-input"
+                type="text"
+                class="form-control"
+                placeholder="New Territory Group"
+                ng-model="territoryChoice.territoryGroup.name"
+              />
+            </div>
+          </div>
+          <div
+            id="CUR-addTerritoryModal-territory-checkboxes"
+            class="panel-body p-t-15"
+            ng-if="territoryChoice.selected.code === 'specific' ? true : false"
+          >
+            <territory-checkboxes
+              model="territoryChoice.territoryGroup.territories"
+              hide-world="true"
+              hide-territory-group="true"
+              edit="true"
+              hide-non-cisac="true"
+            ></territory-checkboxes>
+          </div>
+          <div id="CUR-addTerritoryModal-row-buttons" class="row">
+            <div
+              id="CUR-addTerritoryModal-row-buttons-div"
+              class="col-xs-12 m-t-20 text-right"
+            >
+              <button
+                id="CUR-addTerritoryModal-row-buttons-div-cancel"
+                type="button"
+                class="btn btn-default m-t-5"
+                data-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                id="CUR-addTerritoryModal-row-buttons-div-save"
+                type="button"
+                class="btn btn-success-green m-t-5"
+                ng-click="addTerritories()"
+              >
+                <i class="fa fa-plus"></i>&nbsp;Add Territory
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

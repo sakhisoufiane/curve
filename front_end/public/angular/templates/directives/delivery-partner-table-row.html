@@ -1,0 +1,39 @@
+<td class="v-align-middle hidden-xs"><input id="contract-select-{{index}}" type="checkbox" class='select-unit' ng-model="dp.selected"></td>
+<td class="v-align-middle">
+	<a href="#/deliverySettings/deliveryPartners/{{ dp._id }}/edit" ng-bind-html="dp.name"></a>
+</td>
+<td class="v-align-middle">{{ dp.createdAt | date : dateFormat : 'UTC' }}</td>
+<td class="v-align-middle">
+	<a href="/#/deliveries/{{dp.lastDeliveryId}}/edit">
+		{{ dp.lastDelivery | date : dateFormat : 'UTC' }}</td>
+	</a>
+<td class="v-align-middle">{{ dp.nextDelivery | date : dateFormat : 'UTC' }}</td>
+<td style="text-align: center;">
+	<span ng-if="dp.status === 'none'">
+		<i 
+			style="font-size: 20px;" 
+			class="fa fa-circle text-secondary"
+			tooltips
+			tooltip-class="tooltips _top _steady _ready"
+			tooltip-side="left"
+			tooltip-template="None"></i>
+	</span>
+    <span ng-if="dp.status === 'active'">
+		<i
+			style="font-size: 20px;" 
+			class="fa fa-circle text-success"
+			tooltips
+			tooltip-class="tooltips _top _steady _ready"
+			tooltip-side="left"
+			tooltip-template="Active"></i>
+	</span>
+    <span ng-if="dp.status === 'inactive'">
+		<i 
+			style="font-size: 20px;" 
+			class="fa fa-circle text-warning"
+			tooltips
+			tooltip-class="tooltips _top _steady _ready"
+			tooltip-side="left"
+			tooltip-template="Set Up"></i>
+	</span>
+</td>

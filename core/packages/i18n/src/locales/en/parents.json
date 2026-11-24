@@ -1,0 +1,14 @@
+{
+  "title": "Parents",
+  "searchPlaceholder": "Search parents",
+  "entityName": "Parent",
+  "entityNameLower": "parent",
+  "emptyState": {
+    "title": "No parents yet",
+    "description": "Get started by creating your first parent."
+  },
+  "noResults": "No parents match your search.",
+  "columns": {
+    "name": "Name"
+  }
+}

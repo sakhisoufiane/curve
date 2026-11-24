@@ -1,0 +1,80 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="panel panel-default bg-gray-l m-l-m-9">
+			<div class="panel-body p-t-15">
+				<div class="row" ng-repeat="condition in escalation.conditions track by $index">
+					<div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+		        <label>Esc. Tracker</label>
+		        <select class="form-control" ng-model="condition.escalationTracker" ng-options="item as item for item in escalationTrackersWithTypes" ng-disabled="edit != true"></select>
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="condition.escalationTracker != 'Sale Date' && condition.escalationTracker != 'Reporting Date'">
+		        <label>Threshold Type</label>
+		        <select class="form-control" ng-model="condition.thresholdType" ng-options="item as item for item in thresholdTypes" ng-disabled="edit != true"></select>
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="condition.escalationTracker != 'Sale Date' && condition.escalationTracker != 'Reporting Date'">
+		        <label>When</label>
+		        <select class="form-control" ng-model="condition.when" ng-options="item as item for item in whenTypes" ng-disabled="edit != true"></select>
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+		        <label>Threshold</label>
+		        <input type="number" class="form-control" ng-model="condition.threshold" ng-if="condition.escalationTracker != 'Sale Date' && condition.escalationTracker != 'Reporting Date'" ng-disabled="edit != true">
+		        <div id="datepicker-component" class="form-group input-group date" ng-if="condition.escalationTracker === 'Sale Date' || condition.escalationTracker === 'Reporting Date'">
+              <input type="text" class="form-control" ng-model="condition.threshold" uib-datepicker-popup="{{dateFormat}}" is-open="condition.dateOpen" ng-model-options="{timezone: 'utc'}" ng-click="openDatePopup($index)" ng-disabled="edit != true">
+              <span class="input-group-addon" ng-click="openDatePopup($index)">
+                <i class="fa fa-calendar"></i>
+              </span>
+            </div>
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-3">
+		        <button class="btn btn-danger row-button m-xs-t-0 m-l-0" ng-show="edit == true" ng-click="deleteCondition(condition)" ng-if="$index != 0" tooltips tooltip-template="Delete Condition">
+			        <i class="fa fa-trash"></i>
+			      </button>
+			      <button class="btn btn-complete row-button m-xs-t-0 m-l-0" ng-show="edit == true" ng-click="addCondition()" ng-if="escalation.conditions.length == $index + 1">+ Condition</button>
+		      </div>
+			  </div>
+			  <div class="row">
+		      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="!mechanical">
+		        <label>Deal Type <i ng-if="salesTypes.indexOf('Net Receipts') > -1" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="How should the deal be calculated?<br/><b>Gross Receipts</b> - Total of Gross Receipts<br/><b>Net Receipts</b> - Total of Net Receipts<br/><b>PPD</b> - PPD prices from catalogue data, multilied by no. of units<br/><b>Unit Price</b> - Unit Price from sales import, multiplied by no. of units<br/><b>Unit Rate</b> - Unit Rate assigned in contract terms, multiplied by no. of units. This is multiplied by rates if specified<br/>"></i></label>
+		        <select class="form-control" ng-model="escalation.type" ng-options="item as item for item in salesTypes" ng-disabled="edit != true"></select>
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="mechanical">
+		        <label>Basis <i class="fa fa-question-circle" tooltips tooltip-side="right" tooltip-class="wider" tooltip-template="How should the mechanical be calculated?<br/><b>Statutory Rate</b> - A rate set against each track, calculated based on duration<br/><b>Unit Rate</b> - Unit Rate assigned in contract terms, multiplied by no. of units. This is multiplied by rates if specified<br/><b>Fixed Unit Rate</b> - Unit Rate assigned in contract terms, multiplied by no. of units. This ignores any shares defined against the track or release<br/><b>Net Receipts</b> - A percentage based on the net receipts<br/><b>PPD</b> - Calculated as a percentage of the PPD set against the release<br/>"></i></label>
+		        <select class="form-control" ng-model="escalation.type" ng-options="item as item for item in mechanicalTypes" ng-disabled="edit != true"></select>
+		      </div>
+					<div class="form-group required col-xs-6 col-sm-4 col-md-1-5"
+						ng-if="clientType != 'Publisher' && escalation.type === 'Statutory Rate'">
+						<label>Rate Basis</label>
+						<select class="form-control" ng-model="escalation.rateBasis" ng-options="item as item for item in ['US', 'CA']"
+							ng-disabled="edit != true"></select>
+					</div>
+		      <div class="form-group required col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher' && (escalation.type === 'Unit Rate' || escalation.type === 'Fixed Unit Rate')">
+		        <label>Unit Rate</label>
+		        <input type="text" class="form-control" ng-model="escalation.unitRate" ng-disabled="edit != true">
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+		        <label>Rate %</label>
+		        <input type="text" class="form-control" ng-model="escalation.rate" ng-disabled="edit != true">
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher' && !deduction && !mechanical">
+		        <label>Multiplier <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is used to run a multiplier before you royalty rate is applied. For example, on some retail-style deals. Leave blank to not apply a multiplier."></i></label>
+		        <input type="text" class="form-control" ng-model="escalation.multiplier" ng-disabled="edit != true">
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="!deduction && !mechanical">
+		        <label>Reduction % <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The multipler to reduce the royalty to. Eg. For Mid Price sales, 75% of the royalty is paid, enter 75 in the box below. Leave blank to not reduce the royalty rate."></i></label>
+		        <input type="text" class="form-control" ng-model="escalation.reductionRate" ng-disabled="edit != true">
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher' && !deduction">
+		        <label>Reserve %</label>
+		        <input type="text" class="form-control" ng-model="escalation.reserve" ng-disabled="edit != true">
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-2">
+		        <button class="btn btn-danger row-button m-xs-t-0 m-l-0" ng-show="edit == true" ng-click="delete({ escalation: escalation })" tooltips tooltip-template="Delete Escalation">
+			        <i class="fa fa-trash"></i>
+			      </button>
+		      </div>
+		      
+		    </div>
+		  </div>
+		</div>
+	</div>
+</div>

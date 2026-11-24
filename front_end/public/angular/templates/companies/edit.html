@@ -1,0 +1,233 @@
+<div id="CUR-xjEsXhzw" class="jumbotron" data-pages="parallax">
+  <div id="CUR-jmzLWqsB" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-EYaEAOov" class="inner">
+      <ul id="CUR-fuimTLEQ" class="breadcrumb">
+        <li id="CUR-GcbzpASb"><a id="CUR-rOFINVmI" href="/#/companies">Companies</a></li>
+        <li id="CUR-ibUFGMWY" ng-show="!company._id"><a id="CUR-pNBArscx" href="" class="active">Create</a></li>
+        <li id="CUR-gtjiKkmT" ng-show="company._id"><a id="CUR-MCDkUIMR" href="/#/companies/{{company._id}}" class="active">{{company.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-IdudgZjB" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-HRXQZaVc" class="row">
+    <div id="CUR-PIDontJP" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-diocpyQF" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
+        ng-show="rights.contracts == 'Edit'"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-BXFBpBDK" class="btn btn-complete" ng-click="save()" ng-show="rights.contracts == 'Edit'"><i
+          class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-NulxVuGg" class="row">
+    <div id="CUR-vawzKAlz" class="col-xs-12 col-sm-6">
+      <div id="CUR-HSONRnJo" class="panel panel-default">
+        <div id="CUR-WaazckNP" class="panel-heading">
+          <div id="CUR-UiMzjAjI" class="panel-title">
+            Overview <documentation link="http://guide.curveroyaltysystems.com/article/companies/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-WspsgJJA" class="panel-body p-t-15">
+          <div id="CUR-YRBmkdTi" class="form-group required">
+            <label id="CUR-yUBLfYYi">Name</label>
+            <input id="CUR-DVETqovT" type="text" class="form-control" ng-model="company.name" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-HjRSKXIA" class="form-group required">
+            <label id="CUR-euTFHyCV">Foreign ID</label>
+            <input id="CUR-AZnbbNRn" type="text" class="form-control" ng-model="company.foreignId"
+              ng-disabled="rights.contracts != 'Edit'">
+          </div>
+        </div>
+      </div>
+      <div id="CUR-JxLmRffu" class="panel panel-default">
+        <div id="CUR-SztUrgCb" class="panel-heading">
+          <div id="CUR-FWAVkZnh" class="panel-title">
+            Logo
+          </div>
+        </div>
+        <div id="CUR-JRPTNybp" class="panel-body p-t-15">
+          <div id="CUR-PjkymUwL" class="client-logo">
+            <img ng-src="{{company.publicLogo}}">
+          </div>
+          <div id="CUR-fsCOUvxu" class="form-group required">
+            <input id="CUR-xdBZvaaM" type="file" ngf-select ngf-max-size="2MB" ngf-max-width="500" ngf-max-height="500"
+            ngf-change="validateImage($file, $invalidFile)" ngf-allow-dir="false" accept="image/*" ng-model="file" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+        </div>
+      </div>
+
+      <div id="CUR-JxLmRffu" class="panel panel-default">
+        <div id="CUR-SztUrgCb" class="panel-heading">
+          <div id="CUR-FWAVkZnh" class="panel-title">Fees Invoice</div>
+        </div>
+        <div id="CUR-rYxUayKv" class="panel-body p-t-15">
+          <div id="CUR-VLayyXdj" class="form-group">
+            <label id="CUR-vaffAWiK">Custom Text <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Appears at the bottom of the Fees Invoice PDF"></i></label>
+            <textarea class="form-control standard-textarea" ng-model="company.feesInvoiceCustomText" ng-disabled="rights.contracts != 'Edit'"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-QOkYBDnF" class="col-xs-12 col-sm-6">
+      <div id="CUR-eRcKVveb" class="panel panel-default">
+        <div id="CUR-vHXSUsRI" class="panel-heading">
+          <div id="CUR-BxujYlSe" class="panel-title">
+            Statement Details
+          </div>
+        </div>
+        <div id="CUR-ycMIOcTa" class="panel-body p-t-15">
+          <form id="CUR-oLpQsFLo" role="form">
+            <div id="CUR-fOIZRXDS" class="form-group required">
+              <label id="CUR-CadLxwGh">Company Name</label>
+              <input id="CUR-ogrboAhX" type="text" class="form-control" ng-model="company.companyName"
+                ng-disabled="rights.contracts != 'Edit'">
+            </div>
+            <div id="CUR-folHYggG" class="form-group">
+              <label id="CUR-iGEhHHpn">Address</label>
+              <textarea class="form-control standard-textarea" ng-model="company.address"
+                ng-disabled="rights.contracts != 'Edit'"></textarea>
+            </div>
+            <div id="CUR-HaBIgqId" class="form-group required">
+              <label id="CUR-WAfuMtWX">Email for Statements</label>
+              <input id="CUR-FTFdALju" type="text" class="form-control" ng-model="company.email" ng-disabled="rights.contracts != 'Edit'">
+            </div>
+            <div id="CUR-ahQeKUEw" class="form-group required">
+              <label id="CUR-fulKkjmz">Statement Custom Text <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                  tooltip-template="Appears at the bottom of the statement PDF"></i></label>
+              <textarea class="form-control standard-textarea" ng-model="company.statementCustomText"
+                ng-disabled="rights.contracts != 'Edit'"></textarea>
+            </div>
+            <div id="CUR-sRlzZAah" class="form-group required">
+              <label id="CUR-HCUFcCjP">Statement of Account Custom Text <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                  tooltip-template="Appears at the bottom of the statement of account PDF"></i></label>
+              <textarea class="form-control standard-textarea" ng-model="company.statementOfAccountCustomText"
+                ng-disabled="rights.contracts != 'Edit'"></textarea>
+            </div>
+            <div id="CUR-QyLTzGzg" class="form-group required">
+              <label id="CUR-eUnPJyfP">Self Billing Tax Text <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                  tooltip-template="What word should be used to describe the tax being taken? Eg. VAT, GST or Sales Tax"></i></label>
+              <input id="CUR-POKzSpms" type="text" class="form-control" ng-model="company.selfBillingTaxText"
+                ng-disabled="rights.contracts != 'Edit'">
+            </div>
+            <div id="CUR-RBwbNoRj" class="form-group required">
+              <label id="CUR-RUoKrYiH">Self Billing Custom Text <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                  tooltip-template="Appears at the bottom of the self billing invoice"></i></label>
+              <textarea class="form-control standard-textarea" ng-model="company.selfBillingTaxCustomText"
+                ng-disabled="rights.contracts != 'Edit'"></textarea>
+            </div>
+            <div id="CUR-jIsiiwFO" class="form-group required">
+              <label id="CUR-FusPBayn">VAT No</label>
+              <input id="CUR-vRYZkaGM" type="text" class="form-control" ng-model="company.vatNo" ng-disabled="rights.contracts != 'Edit'">
+            </div>
+            <div id="CUR-ktZqpbKO" class="form-group">
+              <label id="CUR-KdLvzYYG">Statement Design</label>
+              <ui-select ng-model="company.statementDesign" ng-disabled="rights.contracts != 'Edit'">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-FfHgKhQd" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in statementDesigns | filter: $select.search">
+                  <span id="CUR-rKkaDDqf" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-jXSbyCSD" class="form-group">
+              <label id="CUR-DeSQPqVj">Statement Header Design</label>
+              <ui-select ng-model="company.statementHeaderType" ng-disabled="rights.contracts != 'Edit'">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-ScKwEdCw" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in ['Standard', 'Include Payee Address'] | filter: $select.search">
+                  <span id="CUR-tpSwQCRe" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-muOENfkg" class="form-group" ng-if="internal">
+              <label id="CUR-KCCBzyCp">Sales CSV Design</label>
+              <ui-select ng-model="company.salesReportTemplate" ng-disabled="rights.contracts != 'Edit'">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-vGCJKuMb" ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item._id as item in salesReports | filter: $select.search">
+                  <span id="CUR-sgILauAw" ng-bind="item.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-bDXGJoPM" class="form-group" ng-if="clientType != 'Publisher' && internal">
+              <label id="CUR-boQGTKhK">Costs CSV Design</label>
+              <ui-select ng-model="company.costsReportTemplate" ng-disabled="rights.contracts != 'Edit'">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-jcBgWFKc" ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item._id as item in costsReports | filter: $select.search">
+                  <span id="CUR-FqRUkPfD" ng-bind="item.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-XkqCnTkt" class="form-group">
+              <input id="CUR-TgRbZZey" type="checkbox" value="1" ng-model="company.statementIncludeTotalsRow">
+              <label id="CUR-QYLKGGVd">Include Totals Rows on CSV</label>
+            </div>
+            <div id="CUR-UvzhjqWi" class="form-group">
+              <input id="CUR-jggwxxpE" type="checkbox" value="1" ng-model="company.suppressZeroValueInExport">
+              <label id="CUR-cCPcqZre">Suppress 0 Value Royalties on CSV</label>
+            </div>
+            <div id="CUR-yDldcYWf" class="form-group">
+              <input id="CUR-MEllRKKd" type="checkbox" value="1" ng-model="company.suppressStatementOfAccount">
+              <label id="CUR-jmcGcLRd">Suppress Statement of Account Creation</label>
+            </div>
+            <div id="CUR-hfjEWjwQ" class="form-group">
+              <input id="CUR-fHtqSphH" type="checkbox" value="1" ng-model="company.displaySeparatedDeductions">
+              <label id="CUR-vfyzthNZ">Display Separated Deductions <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                  tooltip-template="This displays deductions separately on PDF statements, allowing you to display deductions and label as a separate line item."></i></label>
+            </div>
+            <div id="CUR-Okwekhco" class="form-group" ng-if="company.displaySeparatedDeductions">
+              <label id="CUR-wFteKXWX">Deduction Name</label>
+              <input id="CUR-PxRymhhw" type="text" class="form-control" ng-model="company.customDeductionName"
+                ng-disabled="rights.contracts != 'Edit'">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-wYoaoVzt" class="row">
+    <div id="CUR-uNmOTivX" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-OfcMdIeo" ng-show="company.updatedAt">Last Updated on {{ company.updatedAt | date : dateFormat : 'UTC' }}.</span> <a
+        href="javascript:;" ng-if="company._id" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+<!--<div id="CUR-hrHdpyxx" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-uYdvUqOy" class="row">
+    <div id="CUR-CuyVKqbE" class="col-sm-12 text-right">
+      <h6>Created By: {{company.createdBy.email}}</h6>
+      <h6>Last Modified By: {{company.lastModifiedBy.email}}</h6>
+    </div>
+  </div>
+</div>-->
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-EmPPdgsC" class="modal-dialog">
+    <div id="CUR-OYxiqyZA" class="modal-content">
+      <div id="CUR-ImioCccI" class="modal-header clearfix text-left">
+        <button id="CUR-wGIBWiQp" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-nIqrOwFn">Delete Company</h5>
+      </div>
+      <div id="CUR-NYzdhRqQ" class="modal-body">
+        <div id="CUR-MRHFzLgi" class="row">
+          <div id="CUR-TFvCYJXL" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this company? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-ebMadjRM" class="row">
+          <div id="CUR-dblEWyGD" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-tAQYFlCV" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-mBbsrDJm" type="button" class="btn btn-danger m-t-5" ng-click="delete()"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<model-history data="company.modelHistory"></model-history>

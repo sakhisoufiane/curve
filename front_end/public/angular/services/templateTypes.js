@@ -1,0 +1,38 @@
+angular.module('Curve')
+  .factory('TemplateTypes', () => {
+    const TemplateTypes = [
+      { name: '', value: '' },
+      { name: 'String', value: 'String' },
+      { name: 'Number', value: 'Number' },
+      { name: 'Number Comma Decimal', value: 'Number Comma Decimal' },
+      { name: 'Number 2 Decimal Places', value: 'Number 2 Decimal Places' },
+      { name: 'Number 5 Decimal Places', value: 'Number 5 Decimal Places' },
+      { name: 'Boolean', value: 'Boolean' },
+      { name: 'Date', value: 'Date' },
+      { name: 'Date: DD/MM/YYYY', value: 'Date: DD/MM/YYYY' },
+      { name: 'Date: MM/DD/YYYY', value: 'Date: MM/DD/YYYY' },
+      { name: 'Date: DD-MM-YYYY', value: 'Date: DD-MM-YYYY' },
+      { name: 'Date: DD-MMM-YYYY', value: 'Date: DD-MMM-YYYY' },
+      { name: 'Date: MM-DD-YYYY', value: 'Date: MM-DD-YYYY' },
+      { name: 'Date: YYYY/MM/DD', value: 'Date: YYYY/MM/DD' },
+      { name: 'Date: YYYY/DD/MM', value: 'Date: YYYY/DD/MM' },
+      { name: 'Date: YYYY-MM-DD', value: 'Date: YYYY-MM-DD' },
+      { name: 'Date: YYYY-DD-MM', value: 'Date: YYYY-DD-MM' },
+      { name: 'Date: YYYYMM', value: 'Date: YYYYMM' },
+      { name: 'Date: MMYY', value: 'Date: MMYY' },
+      { name: 'Date: MM_YYYY', value: 'Date: MM_YYYY' },
+      { name: 'Date: MMYYMMYY', value: 'Date: MMYYMMYY' },
+      { name: 'Date: YYMM', value: 'Date: YYMM' },
+      { name: 'Date: YYMMYYMM', value: 'Date: YYMMYYMM' },
+      { name: 'Date: YYYYMMDD', value: 'Date: YYYYMMDD' },
+      { name: 'Date: YYYY_H', value: 'Date: YYYY_H' },
+      { name: 'Date: YYYYH', value: 'Date: YYYYH' },
+      { name: 'Date: YYYY_Q', value: 'Date: YYYY_Q' },
+      { name: 'Date: YYYYQ', value: 'Date: YYYYQ' },
+      { name: 'Date: YYYY_MM', value: 'Date: YYYY_MM' },
+      { name: 'Date: YYYYMM', value: 'Date: YYYYMM' },
+      { name: 'Date: MMM YY', value: 'Date: MMM YY' },
+      { name: 'Ignore', value: 'ignore' },
+    ];
+    return TemplateTypes;
+  });

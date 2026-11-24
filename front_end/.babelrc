@@ -1,0 +1,20 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "targets": "> 0.25%, not dead"
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "angularjs-annotate",
+      {
+        "explicitOnly": false
+      }
+    ]
+  ],
+  "compact": true
+}

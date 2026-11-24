@@ -1,0 +1,242 @@
+<div id="CUR-eIFKXCUO" class="jumbotron" data-pages="parallax">
+  <div id="CUR-OcLkLkHh" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-dNKTRjNd" class="inner">
+      <ul id="CUR-MgoptEsx" class="breadcrumb">
+        <li id="CUR-fGhRvIbK">
+          <a id="CUR-RQKmTHCm" href="/#/reports">Reports</a>
+        </li>
+        <li id="CUR-nwoMMVve" ng-show="!report._id">
+          <a id="CUR-vLgjdrws" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-xsabMDcO" ng-show="report._id">
+          <a id="CUR-vmUgAJHT" href="/#/reports/{{report._id}}" class="active">{{report.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-IiBPyzFA" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-XSUIbdWV" class="row">
+    <div id="CUR-oRWaRxsE" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-vzYLthvj" ng-if="report._id" class="btn btn-default hidden-xs" ng-click="export()">
+        <i class="fa fa-upload"></i>&nbsp;Export</button>
+      <button id="CUR-UzSNpRbY" ng-if="report._id" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+        <i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-bHJtlJxS" class="btn btn-warning" ng-if="report._id" ng-click="copy()">
+        <i class="fa fa-copy"></i> Copy</button>
+      <button id="CUR-qhZaQVeK" class="btn btn-complete" ng-click="save()">
+        <i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-riEJmBQR" class="row">
+    <div id="CUR-ZQWgmyIz" class="col-xs-12 hidden-sm hidden-md hidden-lg hidden-xl">
+      <div id="CUR-BlqlmLHs" class="panel panel-transparent">
+        <div id="CUR-BnhTYSMx" class="panel-body">
+          <h3 id="CUR-ebrkIAfg">Using Reports</h3>
+          <p>Reports are here to allow you to export your data in any format and based on a set of specific filters,
+            giving you access to your data across multiple periods.</p>
+          <p>Follow the instructions in each box below to set up your report. Once saved, you can export as a CSV, and
+            can return to these saved reports again and again, adjusting the filter each time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-jnUosyIU" class="row">
+    <div id="CUR-gnocYLkE" class="col-xs-12 col-sm-6">
+      <div id="CUR-osWULkBV" class="panel panel-default">
+        <div id="CUR-IHCkzrcP" class="panel-heading">
+          <div id="CUR-WcTMECtb" class="panel-title">
+            Overview <documentation link="http://guide.curveroyaltysystems.com/article/reports/#overview"></documentation>
+          </div>
+        </div>
+        <div id="CUR-aytRcqRu" class="panel-body p-t-15">
+          <p>Give your report a name below. The dataset refers to which data we want to export, Sales or Costs data.
+            Selecting our dataset will give us the available fields we can export in the Fields panel below.</p>
+          <div id="CUR-fYsGnaIH" class="form-group required">
+            <label id="CUR-XzZRseup">Name</label>
+            <input id="CUR-MccEkwsP" type="text" class="form-control" ng-model="report.name">
+          </div>
+          <div id="CUR-tXjQTVOU" class="form-group" ng-if="!(userType == 'payee' && clientType == 'Publisher')">
+            <label id="CUR-LfSwZoGl">Dataset
+              <i ng-if="userType == 'payee' && clientType != 'Publisher'" class="fa fa-question-circle" tooltips
+                tooltip-class="wider"
+                tooltip-template="<b>Sales</b> - This is your sales data, your incoming revenues<br/><b>Costs</b> - This is your costs data, what has been recharged against your account<br/>"></i>
+              <i ng-if="userType != 'payee' && clientType != 'Publisher'" class="fa fa-question-circle" tooltips
+                tooltip-class="wider"
+                tooltip-template="<b>Sales Input</b> - This is your sales data, taken from your uploaded sales files. Use this for analysing your revenues per track or company wide<br/><b>Sales Output</b> - This is your outgoing royalty data. Use this for analysing royalty payments, specific contracts, etc. Note: Calculation Type is available within the filter fields<br/><b>Costs Input</b> - This is your uploaded costs data. Use this for analysing specific costs or company wide<br/><b>Costs Output</b> - This is your charged costs data. Use this for analysing what has been recharged to your contracts<br/>"></i>
+              <i ng-if="userType != 'payee' && clientType == 'Publisher'" class="fa fa-question-circle" tooltips
+                tooltip-class="wider"
+                tooltip-template="<b>Income Data</b> - This is your revenue data, taken from your uploaded files. Use this for analysing your revenues per work or company wide<br/><b>Royalties</b> - This is your outgoing royalty data. Use this for analysing royalty payments, specific contracts, etc."></i>
+
+            </label>
+            <ui-select ng-model="report.table">
+              <ui-select-match allow-clear="false">
+                <span id="CUR-xIWmEzXp" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in (tables | filter: $select.search)">
+                <span id="CUR-UyTLxLso" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+
+          <div id="CUR-tXjQTVOU" class="form-group">
+            <label id="CUR-LfSwZoGl">CSV Format
+              <i class="fa fa-question-circle" tooltips
+                tooltip-class="wider"
+                tooltip-template="Do you prefer this report in a Decimal Comma format (€123,00)
+                 or Decimal Point format ($/£123.00)?"></i>
+            </label>
+            <ui-select ng-model="report.format">
+              <ui-select-match allow-clear="false">
+                <span id="CUR-xIWmEzXp" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in (formats | filter: $select.search)">
+                <span id="CUR-UyTLxLso" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div id="CUR-YTqKOXxh" class="col-sm-6 hidden-xs">
+      <div id="CUR-oEhxDNUm" class="panel panel-transparent">
+        <div id="CUR-YfcuYXqQ" class="panel-body">
+          <h3 id="CUR-YUPazHyU">Using Reports</h3>
+          <p>Reports are here to allow you to export your data in any format and based on a set of specific filters,
+            giving you access to your data across multiple periods.</p>
+          <p>Follow the instructions in each box below to set up your report. Once saved, you can export as a CSV, and
+            can return to these saved reports again and again, adjusting the filter each time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-TYajbYFV" class="row">
+    <div id="CUR-cLUaYDUW" class="col-xs-12 col-lg-12">
+      <analytics-suite pre-populate-filters="filters" analytics-config="analyticsConfig" ignore-graphs="true" ignore-comparison="true" dataset="report.table"></analytics-suite>
+    </div>
+    <div id="CUR-ETJIyIkh" class="col-xs-12 col-lg-12">
+      <div id="CUR-ZHEsPMwo" class="panel panel-default">
+        <div id="CUR-QQefZkNZ" class="panel-heading">
+          <div id="CUR-qEaiZpRn" class="panel-title">
+            Fields <documentation link="http://guide.curveroyaltysystems.com/article/reports/#fields"></documentation>
+          </div>
+        </div>
+        <div id="CUR-NEtlaOOo" class="panel-body p-t-15">
+          <p>Here you can define what data you want to include in your report.</p>
+          <p>Add the columns of data that you are interested by clicking on the + Field button below. You can select the
+            fields you want to include in the top row, and create any custom headers in the second row.</p>
+          <p>For each column you add to the headers, you will receive a line of data for each unique instance of that
+            configuration - eg. If you add Cat No, Territory and Net Amount as headers, you will receive one line for
+            each Territory where a sale occurred for a Cat No. Any numerical columns will be summed up.</p>
+            
+          <div id="CUR-vCqfEXrt" class="table-responsive field-dropdown reports-fields-list">
+            <ul id="CUR-lItzFLqY" ui-sortable="sortableOptions" ng-model="displayFields" class="dragable-list">
+              <li id="CUR-vnRxBcBc" class="field-list" ng-repeat="field in displayFields track by $index">
+                <div id="CUR-ueeQFdbI" class="group">
+                  <div id="CUR-yDYgclrF" class="handle fa fa-ellipsis-h"></div>
+                  <div id="CUR-CqBMGfbt" class="field-name">
+                    <ui-select ng-model="field.field" on-select="onSelected(field, $item)">
+                      <ui-select-match placeholder="Field">
+                        <span id="CUR-eICeTKvZ" ng-bind="$select.selected.header"></span>
+                      </ui-select-match>
+                      <ui-select-choices position="down" repeat="item.field as item in fields | filter: $select.search">
+                        <span id="CUR-RIZJOlOv" ng-bind="item.header"></span>
+                      </ui-select-choices>
+                    </ui-select>
+                  </div>
+                  <div id="CUR-djLFQMMQ" class="field-header">
+                    <input id="CUR-SpkdwQLx" type="text" class="form-control" placeholder="Header" ng-model="field.header">
+                  </div>
+                  <div id="CUR-mlrzdGof" class="field-action">
+                    <button id="CUR-wGDejwSd" class="btn btn-sm btn-danger in-field" ng-click="deleteField(field)"><i
+                        class="fa fa-trash"></i></button>
+                  </div>
+                    <div id="CUR-lBMaXHvQ" class="reports-output-data" ng-repeat="row in reportOutputData[field.field] track by $index">
+                      <span id="CUR-LWMBppaW" ng-if="row.length > maxFieldChars" tooltips tooltip-class="tooltip-full-width" tooltip-side="top" tooltip-template="{{row}}">{{row.substr(0, maxFieldChars)}}...</span>
+                      <span id="CUR-EFmbfqGv" ng-if="row.length < maxFieldChars || row.length == maxFieldChars || !row || row == '' || !row.length">{{row || "&nbsp;" }}</span>
+                    </div>
+                </div>
+              </li>
+              <li id="CUR-fwFeuupR" class="action-li">
+                <div id="CUR-OIEXenzJ" class="group">
+                  <div id="CUR-recmBNEV" class="spacer">&nbsp;</div>
+                  <div id="CUR-sMGwtVyA" class="spacer">&nbsp;</div>
+                  <div id="CUR-hDrbEHSc" class="spacer"><button id="CUR-yiPlZdlL" class="btn btn-complete add-field" ng-click="addField()">+ Field</button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="CUR-zsqqnxEX" class="text-center m-t-20" ng-if="reportOutputTotal > 499">
+            <p>Your report exceeds 500 results. To check your entire report please <a id="CUR-NVdDlUzs" ng-click="export()">export your report</a> as a CSV file.</p>
+          </div>
+          <div id="CUR-MQfPFfDm" ng-if="report._id" class="text-center m-t-30">
+            <button id="CUR-IXMGmLCy" class="btn btn-complete w-xs-100-p m-xs-l-0 m-l-0 m-b-20" ng-click="display()"><i class="fa fa-search"></i>&nbsp;&nbsp;Display Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-XdNcgJtv" class="row">
+    <div id="CUR-MlRIbFUR" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-wEqIJNEY" ng-show="report.updatedAt">Last Updated on {{ report.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-PAiGgIxF" href="javascript:;" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-cGKmXaQN" class="modal-dialog">
+    <div id="CUR-CEKAoJvW" class="modal-content">
+      <div id="CUR-MdJewSax" class="modal-header clearfix text-left">
+        <button id="CUR-SlFMehxD" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-kGCClNRM">Delete Report</h5>
+      </div>
+      <div id="CUR-dtgapSeL" class="modal-body">
+        <div id="CUR-NAGwKAon" class="row">
+          <div id="CUR-aIHpLdau" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this report? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-lLInWNWg" class="row">
+          <div id="CUR-otjQQQCh" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-KaqCNJZO" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-TCrpXiWd" type="button" class="btn btn-danger m-t-5" ng-click="delete()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="changeDatasetModal" data-toggle="modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-changeDataset-modal-dialog" class="modal-dialog">
+    <div id="CUR-changeDataset-modal-content" class="modal-content">
+      <div id="CUR-changeDataset-modal-header" class="modal-header clearfix text-left">
+        <button id="CUR-changeDataset-modal-x" type="button" class="close" ng-click="cancelOnChangeDataset()" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-changeDataset-modal-h5">Change Dataset</h5>
+      </div>
+      <div id="CUR-changeDataset-modal-body" class="modal-body">
+        <div id="CUR-changeDataset-modal-body-row1" class="row">
+          <div id="CUR-changeDataset-modal-body-row1-div" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to change the dataset used? This will reset the filters and fields on this report.</p>
+          </div>
+        </div>
+        <div id="CUR-changeDataset-modal-body-row2" class="row">
+          <div id="CUR-changeDataset-modal-body-row2-div" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-changeDataset-modal-body-row2-btn-cancel" type="button" class="btn btn-default m-t-5" ng-click="cancelOnChangeDataset()" data-dismiss="modal">Cancel</button>
+            <button id="CUR-changeDataset-modal-body-row2-btn-delete" type="button" class="btn btn-danger m-t-5" ng-click="onChangeDataset()">
+              <i class="fa fa-trash"></i>&nbsp;Change Dataset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<model-history data="report.modelHistory"></model-history>

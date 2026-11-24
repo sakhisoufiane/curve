@@ -1,0 +1,73 @@
+<div class="modal fade stick-up" id="modalSuspense" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-suspense-dialog" class="modal-dialog">
+    <div id="CUR-suspense-content" class="modal-content">
+      <div id="CUR-suspense-header" class="modal-header clearfix text-left">
+        <button id="CUR-suspense-close" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+            class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-suspense-heading">Add to Suspense Group</h5>
+      </div>
+      <div id="CUR-suspense-body" class="modal-body">
+        <div id="CUR-suspense-body-row" class="row">
+          <div id="CUR-suspense-body-row-cols" class="col-xs-12 m-t-20">
+            <p id="CUR-suspense-no-lines-selected-error" class="text-error" ng-if="suspenseType === 'selected' && !selectedForSuspense.length">Please select at least one sales line</p>
+            <div ng-show="suspenseType !== 'selected' || selectedForSuspense.length">
+              <p id="CUR-suspense-text">Choose which Suspense Group you would like to add the
+                <strong>{{suspenseType === 'selected' ? selectedForSuspense.length + ' selected' : 'filtered'}}</strong>
+                sales lines to.<br/>
+                Or create a Suspense Group by entering a new name.
+              </p>
+              <div id="CUR-suspense-select">
+                <sales-group-select-field edit="true" value="selectedSuspenseGroup._id" populated="selectedSuspenseGroup" sales-group-type="'suspense'" on-sales-group-create="searchSuspenseGroups()" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-suspense-buttons-row" class="row">
+          <div id="CUR-suspense-buttons-cols" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-suspense-buttons-cancel" type="button" class="btn btn-default m-t-5" data-dismiss="modal" ng-click="cancelAddToSuspense()">Cancel</button>
+            <button id="CUR-suspense-buttons-add" type="button" class="btn btn-complete m-t-5" ng-disabled="!selectedSuspenseGroup._id" ng-click="addToSuspenseGroup()"><i
+              class="fa fa-plus"></i>&nbsp; Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="modalResolved" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-resolved-dialog" class="modal-dialog">
+    <div id="CUR-resolved-content" class="modal-content">
+      <div id="CUR-resolved-header" class="modal-header clearfix text-left">
+        <button id="CUR-resolved-close" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+            class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-resolved-heading">Add to Resolved Group</h5>
+      </div>
+      <div id="CUR-resolved-body" class="modal-body">
+        <div id="CUR-resolved-body-row" class="row">
+          <div id="CUR-resolved-body-row-cols" class="col-xs-12 m-t-20">
+            <p id="CUR-resolved-no-lines-selected-error" class="text-error" ng-if="resolvedType === 'selected' && !selectedForResolved.length">Please select at least one sales line</p>
+            <div ng-show="resolvedType !== 'selected' || selectedForResolved.length">
+              <p id="CUR-resolved-text">Choose which Resolved Group you would like to add the
+                <strong>{{resolvedType === 'selected' ? selectedForResolved.length + ' selected' : 'filtered'}}</strong>
+                sales lines to.<br/>
+                Or create a Resolved Group by entering a new name.
+              </p>
+              <div id="CUR-resolved-select">
+                <sales-group-select-field edit="true" value="selectedResolvedGroup._id" populated="selectedResolvedGroup" sales-group-type="'resolved'"  on-sales-group-create="searchResolvedGroups()" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-resolved-buttons-row" class="row">
+          <div id="CUR-resolved-buttons-cols" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-resolved-buttons-cancel" type="button" class="btn btn-default m-t-5" data-dismiss="modal" ng-click="cancelAddToResolved()">Cancel</button>
+            <button id="CUR-resolved-buttons-add" type="button" class="btn btn-complete m-t-5" ng-disabled="!selectedResolvedGroup._id" ng-click="addToResolvedGroup()"><i
+              class="fa fa-plus"></i>&nbsp; Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

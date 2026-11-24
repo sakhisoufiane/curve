@@ -1,0 +1,13 @@
+{
+  "fileSource": {
+    "type": "GCS",
+    "inputFileBucketLocation": "apache-beam-test-sam",
+    "inputFileName": "simpleMappingTest.tsv"
+  },
+  "fileType": {
+    "type": "xlsx",
+    "startingRow": 100,
+    "startingColumn": 130,
+    "tab": 2
+  }
+}

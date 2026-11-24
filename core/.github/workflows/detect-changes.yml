@@ -1,0 +1,82 @@
+name: 'Detect App and Package Changes'
+
+on:
+  workflow_call:
+    outputs:
+      # apps
+      app_imports_changed:
+        value: ${{ jobs.check-packages.outputs.app_imports }}
+      app_curve_app_changed:
+        value: ${{ jobs.check-packages.outputs.app_curve_app }}
+      # packages
+      package_models_changed:
+        value: ${{ jobs.check-packages.outputs.package_models }}
+      package_logger_changed:
+        value: ${{ jobs.check-packages.outputs.package_logger }}
+      package_bigquery_changed:
+        value: ${{ jobs.check-packages.outputs.package_bigquery }}
+      package_react_ui_library_changed:
+        value: ${{ jobs.check-packages.outputs.package_react_ui_library }}
+
+jobs:
+  check-packages:
+    runs-on: ubuntu-latest
+    env:
+      # The turbo filter here varies depending on if we're using this workflow in a PR or on a push to a branch
+      # For PRs, we want to use `github.event.pull_request.base.sha` to tell turbo to see which packages changed since that SHA
+      # For a branch push/merges, the above sha isn't available, so instead, we reference `github.event.before` to determine the previous `HEAD` of the branch we just pushed onto
+      # See SO answer for more info https://stackoverflow.com/a/61861763/2379922
+      TURBO_REF_FILTER: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+      # apps
+      MODULE_NAME_IMPORTS: '@curveroyaltysystems/imports'
+      MODULE_NAME_CURVE_APP: '@curveroyaltysystems/curve-app'
+      # packages
+      MODULE_NAME_PACKAGE_MODELS: '@curveroyaltysystems/models'
+      MODULE_NAME_PACKAGE_LOGGER: '@curveroyaltysystems/logger'
+      MODULE_NAME_PACKAGE_BIGQUERY: '@curveroyaltysystems/bigquery'
+      MODULE_NAME_REACT_UI_LIBRARY: '@curveroyaltysystems/react-ui-library'
+    outputs:
+      # apps
+      app_imports: ${{ steps.app-imports-changed.outputs.APP_IMPORTS }}
+      app_curve_app: ${{ steps.app-curve-app-changed.outputs.APP_CURVE_APP }}
+      # packages
+      package_models: ${{ steps.package-models-changed.outputs.PACKAGE_MODELS }}
+      package_logger: ${{ steps.package-logger-changed.outputs.PACKAGE_LOGGER }}
+      package_bigquery: ${{ steps.package-bigquery-changed.outputs.PACKAGE_BIGQUERY }}
+      package_react_ui_library: ${{ steps.package-react-ui-library-changed.outputs.PACKAGE_REACT_UI_LIBRARY }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Changeset
+        id: changeset
+        run: |
+          echo RESULT=$(npx turbo run build --dry-run=json --filter="...[${TURBO_REF_FILTER}]") >> $GITHUB_OUTPUT
+
+      # apps
+      - id: app-imports-changed
+        if: contains(fromJSON(steps.changeset.outputs.RESULT).packages, env.MODULE_NAME_IMPORTS)
+        run: echo "APP_IMPORTS=true" >> $GITHUB_OUTPUT
+
+      - id: app-curve-app-changed
+        if: contains(fromJSON(steps.changeset.outputs.RESULT).packages, env.MODULE_NAME_CURVE_APP)
+        run: echo "APP_CURVE_APP=true" >> $GITHUB_OUTPUT
+
+      # packages
+      - id: package-models-changed
+        if: contains(fromJSON(steps.changeset.outputs.RESULT).packages, env.MODULE_NAME_PACKAGE_MODELS)
+        run: echo "PACKAGE_MODELS=true" >> $GITHUB_OUTPUT
+
+      - id: package-logger-changed
+        if: contains(fromJSON(steps.changeset.outputs.RESULT).packages, env.MODULE_NAME_PACKAGE_LOGGER)
+        run: echo "PACKAGE_LOGGER=true" >> $GITHUB_OUTPUT
+
+      - id: package-bigquery-changed
+        if: contains(fromJSON(steps.changeset.outputs.RESULT).packages, env.MODULE_NAME_PACKAGE_BIGQUERY)
+        run: echo "PACKAGE_BIGQUERY=true" >> $GITHUB_OUTPUT
+
+      - id: package-react-ui-library-changed
+        if: contains(fromJSON(steps.changeset.outputs.RESULT).packages, env.MODULE_NAME_REACT_UI_LIBRARY)
+        run: echo "PACKAGE_REACT_UI_LIBRARY=true" >> $GITHUB_OUTPUT

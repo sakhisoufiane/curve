@@ -1,0 +1,403 @@
+{
+  "jsonSecretToken": "RgRjBeB6k5",
+  "testDatabaseUrl": "mongodb://localhost/curve_test",
+  "applicationTokens": [
+    "DrLmNC2q9t", 
+    "ToRm3hYa9A", 
+    "Y7rh3DcpWk", 
+    "DPQg7zTxgV", 
+    "Zk6LX0ZI0D", 
+    "ewkgWuTfBd", 
+    "y5RpwU8bSk", 
+    "qyHEafxC4A", 
+    "wwVJsY7wHQ", 
+    "xaALPWq6qj", 
+    "2vdsD50lUv", 
+    "sVOEXNTgbL", 
+    "NBMwo8xXUl", 
+    "KiEAdBsRTo", 
+    "gqbL9rgoS7", 
+    "K5DuDFvugb", 
+    "5UzXzg7PzC", 
+    "6UjYsg8PzA",
+    "cHib1CUvej",
+    "PoChOYIc54",
+    "BosTu8AY8r",
+    "da3l1rosWi",
+    "fiMuzaSiG7",
+    "hi7hIyId3U",
+    "4ipAtrIV0t",
+    "VEquf5juxL",
+    "NofRahic6o",
+    "ch3xlsWoFr",
+    "bRl3aFacA6",
+    "WipH0wrAWl",
+    "wI1LpoTH4T",
+    "pigufeS3ep",
+    "17utriswOh",
+    "naW2Athur0",
+    "FruSwlt1p7",
+    "hE4oyePHlc",
+    "J5gA9ujasa"
+  ],
+  "exportExcelTemplates": {
+    "Lite": {
+        "Label": {
+            "contract" : "/templates/Lite/Label/Contract.xlsx",
+            "contractPayeeBalances" : "/templates/Lite/Label/PayeeBalances/Contract.xlsx"
+        },
+        "Publisher": {
+            "contract" : "/templates/Lite/Publisher/Contract.xlsx",
+            "contractPayeeBalances" : "/templates/Lite/Publisher/PayeeBalances/Contract.xlsx",
+            "work": "/templates/Lite/Publisher/Work.xlsx"
+        },
+        "Shared": {
+            "release": "/templates/Lite/Shared/Release.xlsx",
+            "track": "/templates/Lite/Shared/Track.xlsx"
+        }
+    },
+    "Professional": {
+        "Label": {
+            "contract" : "/templates/Professional/Label/Contract.xlsx",
+            "contractPayeeBalances" : "/templates/Professional/Label/PayeeBalances/Contract.xlsx"
+        },
+        "Publisher": {
+            "contract" : "/templates/Professional/Publisher/Contract.xlsx",
+            "contractPayeeBalances" : "/templates/Professional/Publisher/PayeeBalances/Contract.xlsx",
+            "work": "/templates/Professional/Publisher/Work.xlsx",
+            "deliveryStatuses": "/templates/Professional/Publisher/Delivery Statuses.xlsx"
+        },
+        "Shared": {
+            "mcpsNegatives": "/templates/Professional/Shared/MCPS Negatives.xlsx",
+            "mcpsRetentions": "/templates/Professional/Shared/MCPS Retentions.xlsx",
+            "mechanicalContract": "/templates/Professional/Shared/Mechanical Contract.xlsx",
+            "mechanicalContractPayeeBalances": "/templates/Professional/Shared/PayeeBalances/Mechanical Contract.xlsx",
+            "releaseCombined": "/templates/Professional/Shared/Release Combined.xlsx",
+            "releaseSeparated": "/templates/Professional/Shared/Release Separated.xlsx",
+            "trackCombined": "/templates/Professional/Shared/Track Combined.xlsx",
+            "trackSeparated": "/templates/Professional/Shared/Track Separated.xlsx"
+          }
+    },
+    "Shared": {
+      "aliasMapping": "/templates/Shared/Alias Mapping.xlsx",
+      "client": "/templates/Shared/Client.xlsx",
+      "composer": "/templates/Shared/Composer.xlsx",
+      "cost": "/templates/Shared/Cost.xlsx",
+      "ignition": "/templates/Shared/Ignition.xlsx",
+      "mechanicalComposer": "/templates/Shared/Mechanical Composer.xlsx",
+      "mechanicalPublisher": "/templates/Shared/Mechanical Publisher.xlsx",
+      "payee": "/templates/Shared/Payee.xlsx",
+      "payeeWithPayeeBalances": "/templates/Shared/PayeeBalances/Payee.xlsx",
+      "payeeTransactions": "/templates/Shared/PayeeBalances/Transactions.xlsx",
+      "payment": "/templates/Shared/Payment.xlsx",
+      "periodStatements": "/templates/Shared/Period Statements.xlsx",
+      "periodStatementsPayeeBalances": "/templates/Shared/PayeeBalances/Period Statements.xlsx",
+      "publisher": "/templates/Shared/Publisher.xlsx",
+      "salesFile": "/templates/Shared/Sale.xlsx",
+      "transaction": "/templates/Shared/Transaction.xlsx",
+      "user": "/templates/Shared/User.xlsx",
+      "workAliasMapping": "/templates/Shared/Work Alias Mapping.xlsx",
+      "work": "/templates/Shared/Work.xlsx",
+      "iswcAcknowledgement": "/templates/Shared/ISWC Acknowledgement.xlsx"
+    }
+  },
+  "importTemplates": {
+    "campaign": [{ "key": "_id" }, { "key": "title" }, { "key": "artist" }, { "key": "identifier" }, { "key": "releaseCatNo" }, { "key": "trackIsrc" }, { "key": "workIdentifer" }],
+    "oldRelease": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "catNo" }, { "key": "barcode" }, { "key": "label" }, { "key": "releaseDate", "type": "Date" }, { "key": "distributionChannel" }, { "key": "format" }, { "key": "priceCategory" }, { "key": "dealerPrice" }, { "key": "mcpsId" }, { "key": "exemptFromMechanicals", "type": "Boolean" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "aliases", "type": "Array", "separator": ";" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }, { "key": "track_id" }, { "key": "track_title" }, { "key": "track_version" }, { "key": "track_artist" }, { "key": "track_isrc" }, { "key": "track_label" }, { "key": "track_pLine" }, { "key": "track_duration" }, { "key": "track_catalogueGroups", "type": "Array", "separator": ";" }, { "key": "track_aliases", "type": "Array", "separator": ";" }, { "key": "track_salesReturnsRightsContractName" }, { "key": "track_salesReturnsRightsPercentage" }, { "key": "track_costsRightsContractName" }, { "key": "track_costsRightsPercentage" }],
+    "release": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "catNo" }, { "key": "barcode" }, { "key": "label" }, { "key": "releaseDate", "type": "Date" }, { "key": "distributionChannel" }, { "key": "format" }, { "key": "priceCategory" }, { "key": "dealerPrice" }, { "key": "mcpsId" }, { "key": "mcpsTvAdvertised", "type": "Boolean" }, { "key": "mechanicalTrackCap" }, { "key": "controlledCompositionClause", "type": "Boolean" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "aliases", "type": "Array", "separator": ";" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }, { "key": "track_id" }, { "key": "track_title" }, { "key": "track_version" }, { "key": "track_artist" }, { "key": "track_foreignId" }, { "key": "track_projectId" }, { "key": "track_isrc" }, { "key": "track_label" }, { "key": "track_pLine" }, { "key": "track_duration" }, { "key": "track_mechanicalCalculationBasis" }, { "key": "track_statutoryRate" }, { "key": "track_canadianStatutoryRate" }, { "key": "track_reportMechanicals", "type": "Boolean" }, { "key": "track_catalogueGroups", "type": "Array", "separator": ";" }, { "key": "track_defaultReleaseDistributionChannel"}, { "key": "track_defaultReleaseCatNo"}, { "key": "track_aliases", "type": "Array", "separator": ";" }, { "key": "track_salesReturnsRightsContractName" }, { "key": "track_salesReturnsRightsPercentage" }, { "key": "track_costsRightsContractName" }, { "key": "track_costsRightsPercentage" }],
+    "releaseMechanicals": [{ "key": "catNo" }, { "key": "distributionChannel" }, { "key": "isrc" }, { "key": "reportMechanicals", "type": "Boolean" }, { "key": "composerName" }, { "key": "publisherName" }, { "key": "contractName" }, { "key": "controlled", "type": "Boolean" }, { "key": "licenseNo" }, { "key": "rate" }, { "key": "share" }, { "key":  "trackCapOverride"}],
+    "releaseReleaseSpecificRights": [{ "key": "isrc" }, { "key": "releaseDistributionChannel" }, { "key": "releaseCatNo" }, { "key": "contract" }, { "key": "contractPercentage" }],
+    "oldTrack": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "isrc" }, { "key": "label" }, { "key": "pLine" }, { "key": "duration" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "aliases", "type": "Array", "separator": ";" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }],
+    "track": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "isrc" }, { "key": "label" }, { "key": "pLine" }, { "key": "duration" }, { "key": "mechanicalCalculationBasis" }, { "key": "statutoryRate" }, { "key": "canadianStatutoryRate" }, { "key": "reportMechanicals", "type": "Boolean" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "defaultReleaseDistributionChannel"}, { "key": "defaultReleaseCatNo"}, { "key": "aliases", "type": "Array", "separator": ";" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }],
+    "trackMechanicals": [{ "key": "isrc" }, { "key": "composerName" }, { "key": "composerCae" }, { "key": "publisherName" }, { "key": "publisherCae" }, { "key": "contractName" }, { "key": "licenseNo" }, { "key": "rate" }, { "key": "share" }],
+    "trackReleaseSpecificRights": [{ "key": "isrc" }, { "key": "releaseDistributionChannel" }, { "key": "releaseCatNo" }, { "key": "contract" }, { "key": "contractPercentage" }],
+    "work": [{ "key": "_id" }, { "key": "title" }, { "key": "composer" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "partyNo", "ignore": true }, { "key": "identifier" }, { "key": "iswc"} , { "key": "tunecode" }, { "key": "copyrightDate", "type": "Date" }, { "key": "labelCopy" }, { "key": "priority", "type": "Boolean" }, { "key": "productionLibrary", "type": "Boolean" }, { "key": "workDescriptionCategory" }, { "key": "workLanguage" }, { "key": "compositeType" }, { "key": "compositeCount" }, { "key": "versionType" }, { "key": "arrangementType" }, { "key": "lyricAdaptionType" }, { "key": "performers", "type": "Array", "separator": ";" }, { "key": "trackIsrcs", "type": "Array", "separator": ";" }, { "key": "territories", "type": "Array", "separator": ";" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "aliases", "type": "Array", "separator": ";" }, { "key": "notes" }],
+    "liteWork": [{ "key": "_id" }, { "key": "title" }, { "key": "composer" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "partyNo", "ignore": true }, { "key": "identifier" }, { "key": "iswc"} , { "key": "tunecode" }, { "key": "copyrightDate", "type": "Date" }, { "key": "labelCopy" }, { "key": "performers", "type": "Array", "separator": ";" }, { "key": "trackIsrcs", "type": "Array", "separator": ";" }, { "key": "territories", "type": "Array", "separator": ";" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "aliases", "type": "Array", "separator": ";" }, { "key": "notes" }],
+    "composer": [{ "key": "_id" }, { "key": "name" }, { "key": "foreignId" }, { "key": "partyNo", "ignore": true }, { "key": "firstName" }, { "key": "middleNames" }, { "key": "surname" }, { "key": "cae" }, { "key": "controlled", "type": "Boolean" }, { "key": "notes" }, { "key": "mainPro" }, { "key": "mainProIdentifier" }, { "key": "mechanicalPro" }, { "key": "mechanicalProIdentifier" }, { "key": "performancePro" }, { "key": "performanceProIdentifier" }, { "key": "syncPro" }, { "key": "syncProIdentifier" }, { "key": "territories", "type": "Array", "separator": ";" }, { "key": "linkedContracts", "type": "Array", "separator": ";" }],
+    "composerMechanical": [{ "key": "_id" }, { "key": "name" }, { "key": "firstName" }, { "key": "middleNames" }, { "key": "surname" }, { "key": "cae" }, { "key": "publisherName" }],
+    "workIpChain": [{"key": "_id"},{"key": "title"},{"key": "identifier"},{"key": "tunecode"},{"key": "territory"},{"key": "participant1Type"},{"key": "participant1Name"},{"key": "participant1FirstName"},{"key": "participant1MiddleName"},{"key": "participant1Surname"},{"key": "participant1CaeNumber"},{"key": "participant1Controlled", "type": "Boolean"},{"key": "participant1MechanicalOwned"},{"key": "participant1MechanicalCollected"},{"key": "participant1PerformanceOwned"},{"key": "participant1PerformanceCollected"},{"key": "participant1Capacity"},{"key": "participant2Type"},{"key": "participant2Name"},{"key": "participant2FirstName"},{"key": "participant2MiddleName"},{"key": "participant2Surname"},{"key": "participant2CaeNumber"},{"key": "participant2Controlled", "type": "Boolean"},{"key": "participant2MechanicalOwned"},{"key": "participant2MechanicalCollected"},{"key": "participant2PerformanceOwned"},{"key": "participant2PerformanceCollected"},{"key": "participant2Capacity"},{"key": "participant3Type"},{"key": "participant3Name"},{"key": "participant3FirstName"},{"key": "participant3MiddleName"},{"key": "participant3Surname"},{"key": "participant3CaeNumber"},{"key": "participant3Controlled", "type": "Boolean"},{"key": "participant3MechanicalOwned"},{"key": "participant3MechanicalCollected"},{"key": "participant3PerformanceOwned"},{"key": "participant3PerformanceCollected"},{"key": "participant3Capacity"},{"key": "participant4Type"},{"key": "participant4Name"},{"key": "participant4FirstName"},{"key": "participant4MiddleName"},{"key": "participant4Surname"},{"key": "participant4CaeNumber"},{"key": "participant4Controlled", "type": "Boolean"},{"key": "participant4MechanicalOwned"},{"key": "participant4MechanicalCollected"},{"key": "participant4PerformanceOwned"},{"key": "participant4PerformanceCollected"},{"key": "participant4Capacity"},{"key": "participant5Type"},{"key": "participant5Name"},{"key": "participant5FirstName"},{"key": "participant5MiddleName"},{"key": "participant5Surname"},{"key": "participant5CaeNumber"},{"key": "participant5Controlled", "type": "Boolean"},{"key": "participant5MechanicalOwned"},{"key": "participant5MechanicalCollected"},{"key": "participant5PerformanceOwned"},{"key": "participant5PerformanceCollected"},{"key": "participant5Capacity"},{"key": "participant6Type"},{"key": "participant6Name"},{"key": "participant6FirstName"},{"key": "participant6MiddleName"},{"key": "participant6Surname"},{"key": "participant6CaeNumber"},{"key": "participant6Controlled", "type": "Boolean"},{"key": "participant6MechanicalOwned"},{"key": "participant6MechanicalCollected"},{"key": "participant6PerformanceOwned"},{"key": "participant6PerformanceCollected"},{"key": "participant6Capacity"},{"key": "participant7Type"},{"key": "participant7Name"},{"key": "participant7FirstName"},{"key": "participant7MiddleName"},{"key": "participant7Surname"},{"key": "participant7CaeNumber"},{"key": "participant7Controlled", "type": "Boolean"},{"key": "participant7MechanicalOwned"},{"key": "participant7MechanicalCollected"},{"key": "participant7PerformanceOwned"},{"key": "participant7PerformanceCollected"},{"key": "participant7Capacity"},{"key": "participant8Type"},{"key": "participant8Name"},{"key": "participant8FirstName"},{"key": "participant8MiddleName"},{"key": "participant8Surname"},{"key": "participant8CaeNumber"},{"key": "participant8Controlled", "type": "Boolean"},{"key": "participant8MechanicalOwned"},{"key": "participant8MechanicalCollected"},{"key": "participant8PerformanceOwned"},{"key": "participant8PerformanceCollected"},{"key": "participant8Capacity"},{"key": "participant9Type"},{"key": "participant9Name"},{"key": "participant9FirstName"},{"key": "participant9MiddleName"},{"key": "participant9Surname"},{"key": "participant9CaeNumber"},{"key": "participant9Controlled", "type": "Boolean"},{"key": "participant9MechanicalOwned"},{"key": "participant9MechanicalCollected"},{"key": "participant9PerformanceOwned"},{"key": "participant9PerformanceCollected"},{"key": "participant9Capacity"},{"key": "participant10Type"},{"key": "participant10Name"},{"key": "participant10FirstName"},{"key": "participant10MiddleName"},{"key": "participant10Surname"},{"key": "participant10CaeNumber"},{"key": "participant10Controlled", "type": "Boolean"},{"key": "participant10MechanicalOwned"},{"key": "participant10MechanicalCollected"},{"key": "participant10PerformanceOwned"},{"key": "participant10PerformanceCollected"},{"key": "participant10Capacity"}],
+    "workSocietyIdentifiers": [{ "key": "_id" }, { "key": "title" }, { "key": "identifier" }, { "key": "tunecode" }, { "key": "society" }, { "key": "societyIdentifier" }],
+    "workSpecificPartitionRates": [{ "key": "_id" }, { "key": "title" }, { "key": "identifier" }, { "key": "tunecode" }, { "key": "contractName" }, { "key": "distributionChannel" }, { "key": "source" }, { "key": "territory" }, { "key": "percentage" }],
+    "workAlternateTitles": [{"key": "_id"},{"key": "title"},{"key": "identifier"},{"key": "tunecode"},{"key": "altTitle"},{"key": "language"}],
+    "workParticipators": [{"key": "_id"},{"key": "title"},{"key": "identifier"},{"key": "tunecode"},{"key": "contractName"},{"key": "percentage"}],
+    "composerIdentifiers": [{ "key": "name" }, { "key": "society" }, { "key": "identifier" }],
+    "publishingIdentifiers": [{ "key": "name" }, { "key": "society" }, { "key": "identifier" }, { "key": "publisherName" }, { "key": "mechanicalPro" }, { "key": "performancePro" }, { "key": "syncPro" }],
+    "publishingAgreements": [{ "key": "name" }, { "key": "publisherName" }, { "key": "agreementType" }, { "key": "territory" }, { "key": "society" }, { "key": "agreementNo" }],
+    "publisher": [{ "key": "_id" }, { "key": "name" }, { "key": "cwrName" }, { "key": "foreignId" }, { "key": "partyNo", "ignore": true }, { "key": "cae" }, { "key": "controlled", "type": "Boolean" }, { "key": "notes" }, { "key": "mainPro" }, { "key": "mainProIdentifier" }, { "key": "mechanicalPro" }, { "key": "mechanicalProIdentifier" }, { "key": "performancePro" }, { "key": "performanceProIdentifier" }, { "key": "syncPro" }, { "key": "syncProIdentifier" }, { "key": "territories", "type": "Array", "separator": ";" }, { "key": "linkedContracts", "type": "Array", "separator": ";" }],
+    "publisherMechanical": [{ "key": "_id" }, { "key": "name" }, { "key": "foreignId" }, { "key": "cae" }, { "key": "linkedContracts", "type": "Array", "separator": ";" }],
+    "payee": [{ "key": "_id" }, { "key": "name" }, { "key": "alternateName" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "payeeCategories", "type": "Array", "separator": ";" }, { "key": "contactEmail" }, { "key": "address" }, { "key": "country" }, { "key": "vatNo" }, { "key": "selfBillingTaxText" }, { "key": "selfBillingTaxRate" }, { "key": "feesInvoiceTaxRate" }, { "key": "withholdingTaxRate" }, { "key": "withholdingTaxWording" }, { "key": "paymentEmail" }, { "key": "paymentCurrency" }, { "key": "bankName" }, { "key": "bankAddress" }, { "key": "accountNo" }, { "key": "sortCode" }, { "key": "iban" }, { "key": "swiftCode" }, { "key": "notes" }],
+    "payeeWithPayeeBalances": [{ "key": "_id" }, { "key": "name" }, { "key": "alternateName" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "payeeCategories", "type": "Array", "separator": ";" }, { "key": "contactEmail" }, { "key": "address" }, { "key": "country" }, { "key": "vatNo" }, { "key": "selfBillingTaxText" }, { "key": "selfBillingTaxRate" }, { "key": "feesInvoiceTaxRate" }, { "key": "withholdingTaxRate" }, { "key": "withholdingTaxWording" }, { "key": "paymentEmail" }, { "key": "payeeBalanceCurrency" }, { "key": "paymentCurrency" }, { "key": "bankName" }, { "key": "bankAddress" }, { "key": "accountNo" }, { "key": "sortCode" }, { "key": "iban" }, { "key": "swiftCode" }, { "key": "notes" }],
+    "contract": [{ "key": "_id", "name": "ID" }, { "key": "name", "name": "Name" }, { "key": "foreignId", "name": "Foreign ID" }, { "key": "projectId", "name": "Project ID" }, { "key": "payeeId", "name": "Payee Name" }, { "key": "active", "name": "Active", "type": "Boolean" }, { "key": "companyId", "name": "Company Name" }, { "key": "accountingPeriod", "name": "Accounting Period" }, { "key": "type", "name": "Contract Type" }, { "key": "currency", "name": "Currency" }, { "key": "profitSharePercentage", "name": "Profit Share Percentage" }, { "key": "startDate", "name": "Contract Start Date", "type": "Date" }, { "key": "endDate", "name": "Contract End Date", "type": "Date" }, { "key": "contractCategories", "name": "Categories", "type": "Array", "separator": ";" }, { "key": "openingBalance", "name": "Opening Balance" }, { "key": "minPayout", "name": "Min Payout" }, { "key": "autoPayment", "name": "Auto Payment", "type": "Boolean" }, { "key": "selfBilling", "name": "Self Billing Invoice", "type": "Boolean" }, { "key": "deductWithholding", "name": "Deduct Withholding Tax", "type": "Boolean" }, { "key": "feesInvoice", "name": "Distribution Fees Invoice", "type": "Boolean" }, { "key": "summaryContractTotals", "name": "Total All Associated Statements", "type": "Boolean" }, { "key": "reserveBasis", "name": "Reserve Basis" }, { "key": "notes", "name": "Notes" }, { "key": "labels", "type": "Array", "separator": ";", "name": "Labels" }, { "key": "aliases", "type": "Array", "separator": ";", "name": "Aliases" }, { "key": "balance", "name": "Balance" }, { "key": "advanceRemaining", "name": "Advance Remaining" }],
+    "mechanicalContract": [{ "key": "_id", "name": "ID" }, { "key": "name", "name": "Name" }, { "key": "foreignId", "name": "Foreign ID" }, { "key": "projectId", "name": "Project ID" }, { "key": "payeeId", "name": "Payee Name" }, { "key": "active", "name": "Active", "type": "Boolean" }, { "key": "companyId", "name": "Company Name" }, { "key": "accountingPeriod", "name": "Accounting Period" }, { "key": "currency", "name": "Currency" }, { "key": "licenseNo", "name": "License No" }, { "key": "startDate", "name": "Contract Start Date", "type": "Date" }, { "key": "endDate", "name": "Contract End Date", "type": "Date" }, { "key": "contractCategories", "name": "Categories", "type": "Array", "separator": ";" }, { "key": "openingBalance", "name": "Opening Balance" }, { "key": "minPayout", "name": "Min Payout" }, { "key": "autoPayment", "name": "Auto Payment", "type": "Boolean" }, { "key": "selfBilling", "name": "Self Billing Invoice", "type": "Boolean" }, { "key": "deductWithholding", "name": "Deduct Withholding Tax", "type": "Boolean" }, { "key": "summaryContractTotals", "name": "Total All Associated Statements", "type": "Boolean" }, { "key": "reserveBasis", "name": "Reserve Basis" }, { "key": "notes", "name": "Notes" }, { "key": "labels", "type": "Array", "separator": ";", "name": "Labels" }, { "key": "balance", "name": "Balance" }],
+    "publisherContract": [{ "key": "_id", "name": "ID" }, { "key": "name", "name": "Name" }, { "key": "foreignId", "name": "Foreign ID" }, { "key": "projectId", "name": "Project ID" }, { "key": "payeeId", "name": "Payee Name" }, { "key": "active", "name": "Active", "type": "Boolean" }, { "key": "companyId", "name": "Company Name" }, { "key": "accountingPeriod", "name": "Accounting Period" }, { "key": "currency", "name": "Currency" }, { "key": "startDate", "name": "Contract Start Date", "type": "Date" }, { "key": "endDate", "name": "Contract End Date", "type": "Date" }, { "key": "contractCategories", "name": "Categories", "type": "Array", "separator": ";" }, { "key": "openingBalance", "name": "Opening Balance" }, { "key": "minPayout", "name": "Min Payout" }, { "key": "autoPayment", "name": "Auto Payment", "type": "Boolean" }, { "key": "selfBilling", "name": "Self Billing Invoice", "type": "Boolean" }, { "key": "deductWithholding", "name": "Deduct Withholding Tax", "type": "Boolean" }, { "key": "summaryContractTotals", "name": "Total All Associated Statements", "type": "Boolean" }, { "key": "notes", "name": "Notes" }, { "key": "aliases", "type": "Array", "separator": ";", "name": "Aliases" }, { "key": "balance", "name": "Balance" }],
+    "publisherSales": [{ "key": "contractName", "name": "Contract Name" }, { "key": "catType", "name": "Cat Type" }, { "key": "catalogueGroup", "name": "Catalogue Group" }, { "key": "territory", "name": "Territory" }, { "key": "channel", "name": "Channel" }, { "key": "configuration", "name": "Configuration" }, { "key": "source", "name": "Source" }, { "key":"escalationTrackers", "name": "Escalation Trackers", "type": "Array", "separator": ";" }, { "key": "type", "name": "Type" }, { "key": "rate", "name": "Rate %" }, { "key": "reductionRate", "name": "Reduction Rate" } ],
+    "liteContract": [{ "key": "_id", "name": "ID" }, { "key": "name", "name": "Name" }, { "key": "foreignId", "name": "Foreign ID" }, { "key": "projectId", "name": "Project ID" }, { "key": "payeeId", "name": "Payee Name" }, { "key": "active", "name": "Active", "type": "Boolean" }, { "key": "accountingPeriod", "name": "Accounting Period" }, { "key": "type", "name": "Contract Type" }, { "key": "profitSharePercentage", "name": "Profit Share Percentage" }, { "key": "startDate", "name": "Contract Start Date", "type": "Date" }, { "key": "endDate", "name": "Contract End Date", "type": "Date" }, { "key": "contractCategories", "name": "Categories", "type": "Array", "separator": ";" }, { "key": "openingBalance", "name": "Opening Balance" }, { "key": "minPayout", "name": "Min Payout" }, { "key": "autoPayment", "name": "Auto Payment", "type": "Boolean" }, { "key": "reserveBasis", "name": "Reserve Basis" }, { "key": "notes", "name": "Notes" }, { "key": "balance", "name": "Balance" }, { "key": "advanceRemaining", "name": "Advance Remaining" }],
+    "liteSale": [{ "key": "contractName", "name": "Contract Name" }, { "key": "catType", "name": "Cat Type" }, { "key": "catalogueGroup", "name": "Catalogue Group" }, { "key": "territory", "name": "Territory" }, { "key": "channel", "name": "Channel" }, { "key": "configuration", "name": "Configuration" }, { "key": "priceCategory", "name": "Price Category" }, { "key": "source", "name": "Source" }, { "key": "type", "name": "Type" }, { "key": "rate", "name": "Rate %" }, { "key": "unitRate", "name": "Unit Rate" }, { "key": "reserve", "name": "Reserve %" }],
+    "litePublisherContract": [{ "key": "_id", "name": "ID" }, { "key": "name", "name": "Name" }, { "key": "foreignId", "name": "Foreign ID" }, { "key": "projectId", "name": "Project ID" }, { "key": "payeeId", "name": "Payee Name" }, { "key": "active", "name": "Active", "type": "Boolean" }, { "key": "accountingPeriod", "name": "Accounting Period" }, { "key": "startDate", "name": "Contract Start Date", "type": "Date" }, { "key": "endDate", "name": "Contract End Date", "type": "Date" }, { "key": "contractCategories", "name": "Categories", "type": "Array", "separator": ";" }, { "key": "openingBalance", "name": "Opening Balance" }, { "key": "minPayout", "name": "Min Payout" }, { "key": "autoPayment", "name": "Auto Payment", "type": "Boolean" }, { "key": "notes", "name": "Notes" }, { "key": "balance", "name": "Balance" }],
+    "litePublisherSales": [{ "key": "contractName", "name": "Contract Name" }, { "key": "catType", "name": "Cat Type" }, { "key": "catalogueGroup", "name": "Catalogue Group" }, { "key": "territory", "name": "Territory" }, { "key": "channel", "name": "Channel" }, { "key": "configuration", "name": "Configuration" }, { "key": "source", "name": "Source" }, { "key":"escalationTrackers", "name": "Escalation Trackers", "type": "Array", "separator": ";" }, { "key": "type", "name": "Type" }, { "key": "rate", "name": "Rate %" }],
+    "sale": [{ "key": "contractName", "name": "Contract Name" }, { "key": "catType", "name": "Cat Type" }, { "key": "catalogueGroup", "name": "Catalogue Group" }, { "key": "territory", "name": "Territory" }, { "key": "channel", "name": "Channel" }, { "key": "configuration", "name": "Configuration" }, { "key": "priceCategory", "name": "Price Category" }, { "key": "source", "name": "Source" }, { "key":"escalationTrackers", "name": "Escalation Trackers", "type": "Array", "separator": ";" }, { "key": "type", "name": "Type" }, { "key": "rate", "name": "Rate %" }, { "key": "multiplier", "name": "Multiplier" }, { "key": "reductionRate", "name": "Reduction Rate" }, { "key": "unitRate", "name": "Unit Rate" }, { "key": "reserve", "name": "Reserve %" }],
+    "publisherDeduction": [{ "key": "contractName", "name": "Contract Name" }, { "key": "catType", "name": "Cat Type" }, { "key": "catalogueGroup", "name": "Catalogue Group" }, { "key": "territory", "name": "Territory" }, { "key": "channel", "name": "Distribution Channel" }, { "key": "configuration", "name": "Configuration" }, { "key": "source", "name": "Source" }, { "key": "deductionBasis", "name": "Basis" }, { "key": "type", "name": "Type" }, { "key": "rate", "name": "Rate %" }, { "key": "unitRate", "name": "Unit Rate" }, { "key":"escalationTrackers", "name": "Escalation Trackers", "type": "Array", "separator": ";" }],
+    "deduction": [{ "key": "contractName", "name": "Contract Name" }, { "key": "catType", "name": "Cat Type" }, { "key": "catalogueGroup", "name": "Catalogue Group" }, { "key": "territory", "name": "Territory" }, { "key": "channel", "name": "Distribution Channel" }, { "key": "configuration", "name": "Configuration" }, { "key": "priceCategory", "name": "Price Category" }, { "key": "source", "name": "Source" }, { "key": "deductionBasis", "name": "Basis" }, { "key": "type", "name": "Type" }, { "key": "rate", "name": "Rate %" }, { "key": "unitRate", "name": "Unit Rate" }, { "key":"escalationTrackers", "name": "Escalation Trackers", "type": "Array", "separator": ";" }],
+    "mechanicalDeduction": [{ "key": "contractName", "name": "Contract Name" }, { "key": "catType", "name": "Cat Type" }, { "key": "catalogueGroup", "name": "Catalogue Group" }, { "key": "territory", "name": "Territory" }, { "key": "channel", "name": "Distribution Channel" }, { "key": "configuration", "name": "Configuration" }, { "key": "priceCategory", "name": "Price Category" }, { "key": "source", "name": "Source" }, {"key": "deductionType", "name": "Deduction Type"},{ "key": "type", "name": "Type" }, { "key": "rateBasis", "name": "Rate Basis" }, { "key": "rate", "name": "Rate %" }, { "key": "unitRate", "name": "Unit Rate" }, { "key": "reserve", "name": "Reserve %" }, { "key": "currency", "name": "Currency" }],
+    "withholdingTaxDeduction": [{ "key": "contractName", "name": "Contract Name" }, { "key": "catType", "name": "Cat Type" }, { "key": "catalogueGroup", "name": "Catalogue Group" }, { "key": "territory", "name": "Territory" }, { "key": "channel", "name": "Distribution Channel" }, { "key": "configuration", "name": "Configuration" }, { "key": "priceCategory", "name": "Price Category" }, { "key": "source", "name": "Source" }, { "key": "deductionBasis", "name": "Basis" }, { "key": "type", "name": "Type" }, { "key": "rate", "name": "Rate %" }, { "key": "unitRate", "name": "Unit Rate" }, { "key":"escalationTrackers", "name": "Escalation Trackers", "type": "Array", "separator": ";" }],
+    "mechanicalTerms": [{ "key": "contractName", "name": "Contract Name" }, { "key": "catType", "name": "Cat Type" }, { "key": "catalogueGroup", "name": "Catalogue Group" }, { "key": "territory", "name": "Territory" }, { "key": "channel", "name": "Distribution Channel" }, { "key": "configuration", "name": "Configuration" }, { "key": "priceCategory", "name": "Price Category" }, { "key": "source", "name": "Source" }, { "key": "type", "name": "Type" }, { "key": "rateBasis", "name": "Rate Basis" }, { "key": "rate", "name": "Rate %" }, { "key": "unitRate", "name": "Unit Rate" }, { "key": "reserve", "name": "Reserve %" }],
+    "contractCost": [{ "key": "contractName", "name": "Contract Name" }, { "key": "territory", "name": "Territory" }, { "key": "type", "name": "Type" }, { "key": "rate", "name": "Rate %" }, { "key":"escalationTrackers", "name": "Escalation Trackers", "type": "Array", "separator": ";" }],
+    "reserve": [{ "key": "contractName", "name": "Contract Name" }, { "key": "rate", "name": "Rate %" }],
+    "cost": [{ "key": "_id" }, { "key": "name" }, { "key": "amount" }, { "key": "currency" }, { "key": "date", "type": "Date" }, { "key": "type" }, { "key": "territory" }, { "key": "targetPeriod" }, { "key": "invoiceNo" }, { "key": "description" }, { "key": "releaseIds" }, { "key": "trackIds" }, { "key": "contractIds" }],
+    "statementCosts": [{ "key": "contractName" }, { "key": "costId" }, { "key": "type" }, { "key": "name" }, { "key": "date" }, { "key": "description" }, { "key": "territory" }, { "key": "releaseTitle" }, { "key": "releaseVersion" }, { "key": "releaseArtist" }, { "key": "catNo" }, { "key": "trackTitle" }, { "key": "trackVersion" }, { "key": "trackArtist" }, { "key": "isrc" }, { "key": "grossAmount" }, { "key": "participationRate" }, { "key": "rechargeRate" }, { "key": "netAmount" }, { "key": "currency" }],
+    "crossContracts":[{"key": "contractName", "name": "Contract Name"}, {"key": "condition", "name": "When"}, {"key": "process", "name": "Process"}, {"key": "linkToContract", "name": "Link To Contract"}, {"key": "whenAutoPaymentTriggered", "name": "Only Run When Auto Payment is Triggered"}, {"key": "percentage", "name": "Percentage"}],
+    "contractPayees": [{"key": "contractName", "name": "Contract Name"}, {"key": "payeeName", "name": "Payee Name"}, {"key": "percentage", "name": "Percentage"}],
+    "autoPaymentConditions":[{"key": "contractName", "name": "Contract Name"}, {"key": "linkToContract", "name": "Link To Contract"}, {"key": "condition", "name": "When"}],
+    "aliases": [{ "key": "identifier" }, { "key": "alias" }],
+    "societyIdentifiers": [{ "key": "identifier" }, { "key": "pro" }, { "key": "alias" }],
+    "transaction": [{ "key": "_id" }, { "key": "name" }, { "key": "amount" }, { "key": "invoiceNo" }, { "key": "type" }, { "key": "date", "type": "Date" }, { "key": "isReserveRelease", "type": "Boolean" }, { "key": "isReserveWithholding", "type": "Boolean" }, { "key": "payeeName" }, { "key": "payeeForeignId" }, { "key": "contractId" }, { "key": "contractForeignId" }, { "key": "contractType" }, { "key": "contractNotes" }],
+    "user": [{ "key": "_id" }, { "key": "email" }, { "key": "payeeNames", "type": "Array", "separator": ";" }, { "key": "status" }],
+    "mcpsNegatives": [{ "key": "_id" }, { "key": "catNo" }, { "key": "year" }, { "key": "accountingPeriod" }, { "key": "territory" }, { "key": "value" }],
+    "mcpsRetentions": [{ "key": "_id" }, { "key": "catNo" }, { "key": "year" }, { "key": "accountingPeriod" }, { "key": "territory" }, { "key": "retention" }, { "key": "tvRetention" }],
+    "payments": [{ "key": "_id" }, { "key": "name" }, { "key": "currency" }, { "key": "amount" }, { "key": "usRevenuePercentage" }, { "key": "contractId" }, { "key": "payeeId" }, { "key": "Self Billing Invoice Number" }, { "key": "Payment Reference" }],
+    "iswcAcknowledgement": [{ "key": "_id", "name": "Work ID" }, { "key": "title", "name": "Title" }, { "key": "composers", "name": "Composers" }, { "key": "mainIdentifier", "name": "Main Identifier" }, { "key": "returnedIswc", "name": "Returned Iswc" }, { "key": "status", "name": "Status" }, { "key": "errors", "name": "Errors" }],
+    "versions": {
+      "v0": {
+        "release": {
+          "releases": {
+            "tab" : 0,
+            "columns": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "catNo" }, { "key": "barcode" }, { "key": "label" }, { "key": "releaseDate", "type": "Date" }, { "key": "distributionChannel" }, { "key": "format" }, { "key": "priceCategory" }, { "key": "dealerPrice" }, { "key": "mcpsId" }, { "key": "exemptFromMechanicals", "type": "Boolean" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "aliases", "type": "Array", "separator": ";" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }, { "key": "track_id" }, { "key": "track_title" }, { "key": "track_version" }, { "key": "track_artist" }, { "key": "track_isrc" }, { "key": "track_label" }, { "key": "track_pLine" }, { "key": "track_duration" }, { "key": "track_catalogueGroups", "type": "Array", "separator": ";" }, { "key": "track_aliases", "type": "Array", "separator": ";" }, { "key": "track_salesReturnsRightsContractName" }, { "key": "track_salesReturnsRightsPercentage" }, { "key": "track_costsRightsContractName" }, { "key": "track_costsRightsPercentage" }]
+          }
+        },
+        "track": {
+          "tracks": {
+            "tab":0,
+            "columns": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "isrc" }, { "key": "label" }, { "key": "pLine" }, { "key": "duration" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "aliases", "type": "Array", "separator": ";" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }]
+          }
+        }
+      },
+      "v1": {
+        "release": {
+          "releases": {
+            "tab": 0,
+            "columns": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "catNo" }, { "key": "barcode" }, { "key": "label" }, { "key": "releaseDate", "type": "Date" }, { "key": "distributionChannel" }, { "key": "format" }, { "key": "priceCategory" }, { "key": "dealerPrice" }, { "key": "mcpsId" }, { "key": "mcpsTvAdvertised", "type": "Boolean" }, { "key": "mechanicalTrackCap" }, { "key": "controlledCompositionClause", "type": "Boolean" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "aliases", "type": "Array", "separator": ";" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }, { "key": "track_id" }, { "key": "track_title" }, { "key": "track_version" }, { "key": "track_artist" }, { "key": "track_foreignId" }, { "key": "track_isrc" }, { "key": "track_label" }, { "key": "track_pLine" }, { "key": "track_duration" }, { "key": "track_mechanicalCalculationBasis" }, { "key": "track_statutoryRate" }, { "key": "track_canadianStatutoryRate" }, { "key": "track_reportMechanicals", "type": "Boolean" }, { "key": "track_catalogueGroups", "type": "Array", "separator": ";" }, { "key": "track_defaultReleaseDistributionChannel"}, { "key": "track_defaultReleaseCatNo"}, { "key": "track_aliases" }, { "key": "track_salesReturnsRightsContractName" }, { "key": "track_salesReturnsRightsPercentage" }, { "key": "track_costsRightsContractName" }, { "key": "track_costsRightsPercentage" }]
+          },
+          "mechanicals": {
+            "tab": 1,
+            "columns": [{ "key": "catNo" }, { "key": "distributionChannel" }, { "key": "isrc" }, { "key": "reportMechanicals", "type": "Boolean" }, { "key": "controlled", "type": "Boolean" }, { "key": "composerName" }, { "key": "publisherName" }, { "key": "contractName" }, { "key": "licenseNo" }, { "key": "rate" }, { "key": "share" }, { "key":  "trackCapOverride"}]
+          }
+        },
+        "track": {
+          "tracks": {
+            "tab": 0,
+            "columns": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "isrc" }, { "key": "label" }, { "key": "pLine" }, { "key": "duration" }, { "key": "mechanicalCalculationBasis" }, { "key": "statutoryRate" }, { "key": "canadianStatutoryRate" }, { "key": "reportMechanicals", "type": "Boolean" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "defaultReleaseDistributionChannel"}, { "key": "defaultReleaseCatNo"}, { "key": "aliases", "type": "Array", "separator": ";" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }]
+          },
+          "mechanicals": {
+            "tab": 1,
+            "columns": [{ "key": "isrc" }, { "key": "composerName" }, { "key": "composerCae" }, { "key": "publisherName" }, { "key": "publisherCae" }, { "key": "contractName" }, { "key": "licenseNo" }, { "key": "rate" }, { "key": "share" }]
+          },
+          "releaseSpecificRights": {
+            "tab": 3,
+            "columns": [{ "key": "isrc" }, { "key": "releaseDistributionChannel" }, { "key": "releaseCatNo" }, { "key": "contract" }, { "key": "contractPercentage" }]
+          }
+        }
+      },
+      "v2": {
+        "release": {
+          "releases": {
+            "tab": 0,
+            "columns": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "catNo" }, { "key": "barcode" }, { "key": "label" }, { "key": "releaseDate", "type": "Date" }, { "key": "distributionChannel" }, { "key": "format" }, { "key": "priceCategory" }, { "key": "dealerPrice" }, { "key": "mcpsId" }, { "key": "mcpsTvAdvertised", "type": "Boolean" }, { "key": "mechanicalTrackCap" }, { "key": "controlledCompositionClause", "type": "Boolean" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "aliases", "type": "Array", "separator": ";" }]
+          },
+          "contracts": {
+            "tab": 1,
+            "columns": [{ "key": "catNo" }, { "key": "distributionChannel" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }]
+          },
+          "tracks": {
+            "tab": 2,
+            "columns": [{ "key": "catNo" }, { "key": "distributionChannel" }, { "key": "isrc" }]
+          },
+          "mechanicals": {
+            "tab": 3,
+            "columns": [{ "key": "catNo" }, { "key": "distributionChannel" }, { "key": "isrc" }, { "key": "reportMechanicals", "type": "Boolean" }, { "key": "composerName" }, { "key": "publisherName" }, { "key": "contractName" }, { "key": "controlled", "type": "Boolean" }, { "key": "licenseNo" }, { "key": "rate" }, { "key": "share" }, { "key":  "trackCapOverride"}]
+          }
+        },
+        "track": {
+          "tracks": {
+            "tab": 0,
+            "columns": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "isrc" }, { "key": "label" }, { "key": "pLine" }, { "key": "duration" }, { "key": "mechanicalCalculationBasis" }, { "key": "statutoryRate" }, { "key": "canadianStatutoryRate" }, { "key": "reportMechanicals", "type": "Boolean" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "defaultReleaseDistributionChannel"}, { "key": "defaultReleaseCatNo"}, { "key": "aliases", "type": "Array", "separator": ";" }]
+          },
+          "contracts": {
+            "tab": 1,
+            "columns": [{ "key": "isrc" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }]
+          },
+          "mechanicals": {
+            "tab": 2,
+            "columns": [{ "key": "isrc" }, { "key": "composerName" }, { "key": "composerCae" }, { "key": "publisherName" }, { "key": "publisherCae" }, { "key": "contractName" }, { "key": "licenseNo" }, { "key": "rate" }, { "key": "share" }]
+          },
+          "releaseSpecificRights": {
+            "tab": 3,
+            "columns": [{ "key": "isrc" }, { "key": "releaseDistributionChannel" }, { "key": "releaseCatNo" }, { "key": "contract" }, { "key": "contractPercentage" }]
+          }
+        }
+      },
+      "lite": {
+        "release": {
+          "releases": {
+            "tab": 0,
+            "columns": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "catNo" }, { "key": "barcode" }, { "key": "label" }, { "key": "releaseDate", "type": "Date" }, { "key": "distributionChannel" }, { "key": "format" }, { "key": "priceCategory" }, { "key": "dealerPrice" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "aliases", "type": "Array", "separator": ";" }]
+          },
+          "contracts": {
+            "tab": 1,
+            "columns": [{ "key": "catNo" }, { "key": "distributionChannel" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }]
+          },
+          "tracks": {
+            "tab": 2,
+            "columns": [{ "key": "catNo" }, { "key": "distributionChannel" }, { "key": "isrc" }]
+          }
+        },
+        "track": {
+          "tracks": {
+            "tab": 0,
+            "columns": [{ "key": "_id" }, { "key": "title" }, { "key": "version" }, { "key": "artist" }, { "key": "foreignId" }, { "key": "projectId" }, { "key": "isrc" }, { "key": "label" }, { "key": "pLine" }, { "key": "duration" }, { "key": "catalogueGroups", "type": "Array", "separator": ";" }, { "key": "defaultReleaseDistributionChannel"}, { "key": "defaultReleaseCatNo"}, { "key": "aliases", "type": "Array", "separator": ";" }]
+          },
+          "contracts": {
+            "tab": 1,
+            "columns": [{ "key": "isrc" }, { "key": "salesReturnsRightsContractName" }, { "key": "salesReturnsRightsPercentage" }, { "key": "costsRightsContractName" }, { "key": "costsRightsPercentage" }]
+          }
+        }
+      }
+    }
+  },
+  "counterpointTemplates": {
+    "contractRoyaltorDatabase" :[{ "key": "royaltorSite" },{ "key": "royaltorCode" },{ "key": "royaltorName" },{ "key": "companyCode" },{ "key": "companyName" },{ "key": "ssTaxID" },{ "key": "currencyCode" },{ "key": "currency" },{ "key": "fixedExchangeRate" },{ "key": "autoPayment" },{ "key": "altCode" },{ "key": "altName" },{ "key": "paymentFrequency" },{ "key": "crossToPayee" },{ "key": "payeeCode" },{ "key": "payee" },{ "key": "contractCode" },{ "key": "contractCombinedCode" },{ "key": "contractName" },{ "key": "allowEscalations" },{ "key": "holdPayment" },{ "key": "fullDisclosure" },{ "key": "recoupExcessMech" },{ "key": "reportingPeriod" },{ "key": "minCheckPayment" },{ "key": "taxRateCode" },{ "key": "taxRate" },{ "key": "holdReserves" },{ "key": "accountingSystemID" },{ "key": "nameOnCheque" },{ "key": "royaltorBankVatNumber" },{ "key": "bankAccountNumber" },{ "key": "branchReference" },{ "key": "bankName" },{ "key": "ibanNumber" },{ "key": "swiftNumber" },{ "key": "paymentNotes" },{ "key": "bankCountry" },{ "key": "bankIsoTerritoryCode" }],
+    "productAkas" : [{ "key": "productCode" },{ "key": "productAkaSite" },{ "key": "productAkaCode" },{ "key": "akaDescription" },{ "key": "primaryAka" },{ "key": "productSite" },{ "key": "productTitle" },{ "key": "productArtist" },{ "key": "configuration" },{ "key": "labelDescription" },{ "key": "companyName" }],
+    "soundRecordings" : [{ "key": "soundRecordingSite" },{ "key": "soundRecordingCode" },{ "key": "songSite" },{ "key": "songCode" },{ "key": "songTitle" },{ "key": "songComposer" },{ "key": "soundRecordingArtist" },{ "key": "soundRecordingSubmix" },{ "key": "soundRecordingISRC" },{ "key": "soundRecordingTime" },{ "key": "labelCatNo" },{ "key": "gridCode" },{ "key": "songShortTitle" },{ "key": "companyCode" },{ "key": "companyName" },{ "key": "projectName" },{ "key": "labelCode" },{ "key": "labelName" },{ "key": "territoryCode" },{ "key": "languageCode" },{ "key": "recordingDate" },{ "key": "soundRecActualRelDate" },{ "key": "ccSoleRecordingTerritory" },{ "key": "ccFinalMixTerritoryCode" },{ "key": "soundRecCommissionTerr" },{ "key": "ccPerformanceTerritoryCode" },{ "key": "ccLevelOfInterest" },{ "key": "soundRecOwenershipDate" },{ "key": "ccOwnershipType" },{ "key": "ccRightsLabelName" },{ "key": "ccHoldingType" },{ "key": "ccRightsAllocationPercentage" },{ "key": "ccRightsEndDate" }],
+    "productManager" : [{ "key": "code" },{ "key": "site" },{ "key": "title" },{ "key": "artist" },{ "key": "priceCategory" },{ "key": "actualReleaseDate" }],
+    "royaltorProducts" : [{ "key": "royaltorSite" },{ "key": "royaltorCode" },{ "key": "royaltorName" },{ "key": "contractSite" },{ "key": "contractCode" },{ "key": "contractName" },{ "key": "contractType" },{ "key": "contractSubcode" },{ "key": "productSite" },{ "key": "productCode" },{ "key": "productTitle" },{ "key": "productArtist" },{ "key": "productConfigCode" },{ "key": "productUPCCode" },{ "key": "part" },{ "key": "soundRecordingSite" },{ "key": "soundRecordingCode" },{ "key": "songTitle" },{ "key": "artistName" },{ "key": "subMix" },{ "key": "soundRecordingIsrcCode" },{ "key": "accountingSystemID" },{ "key": "productCompanyCode" },{ "key": "productCompanyName" },{ "key": "productGridCode" },{ "key": "deductMechanicals" },{ "key": "mechanicalDeductionsPerc" }],
+    "royaltorRates" : [{ "key": "royaltorSite" },{ "key": "royaltorCode" },{ "key": "royaltorName" },{ "key": "contractSite" },{ "key": "contractCode" },{ "key": "contractName" },{ "key": "subContractSite" },{ "key": "subContractCode" },{ "key": "subContractName" },{ "key": "productSite" },{ "key": "productCode" },{ "key": "productTitle" },{ "key": "productArtist" },{ "key": "modelSite" },{ "key": "modelNumber" },{ "key": "modelName" },{ "key": "territoryCode" },{ "key": "distributionChannelCode" },{ "key": "priceCategoryCode" },{ "key": "configurationCode" },{ "key": "rateRecoup" },{ "key": "rateNonRecoup" },{ "key": "salesPercentage" },{ "key": "unitRate" },{ "key": "receiptsRate" },{ "key": "priceType" },{ "key": "unitType" },{ "key": "receiptsType" },{ "key": "accountingSystemID" }],
+    "publishingComposers": [{ "key": "foreignId" }, { "key": "surname" }, { "key": "firstName" }, { "key": "middleNames" }, { "key": "dateOfBirth" }, { "key": "dateOfDeath" }, { "key": "aka" }, { "key": "phone" }, { "key": "unknownComposer" }, { "key": "linkedPublisherCapacity" }, { "key": "controlled" }, { "key": "capacity" }, { "key": "cae" }, { "key": "linkedPublisher" }, { "key": "mainPro" }, { "key": "mechanicalPro" }, { "key": "syncPro" }, { "key": "usPro" }, { "key": "address" }, { "key": "notes" }],
+    "publishingPublishers": [{ "key": "name" }, { "key": "linkedPublisher" }, { "key": "foreignId" }, { "key": "capacity" },{ "key": "mainPro" }, { "key": "mechanicalPro" }, { "key": "cae" }, { "key": "controlled" }, { "key": "unknownPublisher" }, { "key": "website" }, { "key": "address" }, { "key": "contact" }, { "key": "syncPro" }, { "key": "email" }, { "key": "faxNo" }, { "key": "phone" }, { "key": "linkedPublisherCapacity" }, { "key": "notes" }],
+    "onlinePublishingPublishers": [{ "key": "name" }, { "key": "linkedPublisher" }, { "key": "foreignId" }, { "key": "cae" },{ "key": "controlled" }, { "key": "capacity" }, { "key": "mainPro" }, { "key": "performancePro" }, { "key": "unknownPublisher" }]
+  },
+  "scalingGroups": {
+    "processor": "Processor",
+    "mainApp": "MainApp"
+  },
+  "ftpIngestionServicePatterns": {
+    "amazon": {"excludeDirPattern": ["Daily","Weekly","Reports"],"includeFilePattern": [["Monthly","Usage"],["Cloud_Detail"]]},
+    "spotify": {"includeFilePattern": [["-track-"]]},
+    "merlin": {"excludeDirPattern": ["_tocheck","invoices","trends"],"includeFilePattern": "merlin", "excludeFilePattern": ["Consumption_Usage-Report", "market-share", "fraud_report_merlin_"]}
+  },
+  "allowedSalesFileExtensions": [
+    ".txt",
+    ".csv",
+    ".xls",
+    ".xlsx",
+    ".xlsb",
+    ".dat",
+    ".crd",
+    ".tsv",
+    ".020",
+    ".021",
+    ".022",
+    ".200",
+    ".210",
+    ".220",
+    ".axf",
+    ".roy",
+    ".gdf",
+    ".tab"
+  ],
+  "allowedAckExtensions": [
+    ".txt",
+    ".V21",
+    ".V22"
+  ],
+  "billingTiers" : { 
+    "lite": {
+      "Publisher": {
+        "contracts": 15,
+        "catalogue": 300,
+        "prices": {
+          "base": {
+            "USD": 25,
+            "GBP": 20,
+            "EUR": 25
+          },
+          "extra": {
+            "USD": 25,
+            "GBP": 20,
+            "EUR": 25
+          },
+          "increments": {
+            "contracts": 15,
+            "catalogue": 300
+          }
+        }
+      },
+      "Label": {
+        "contracts": 15,
+        "catalogue": 100,
+        "prices": {
+          "base": {
+            "USD": 25,
+            "GBP": 20,
+            "EUR": 25
+          },
+          "extra": {
+            "USD": 25,
+            "GBP": 20,
+            "EUR": 25
+          },
+          "increments": {
+            "contracts": 15,
+            "catalogue": 100
+          }
+        }
+      },
+      "Distributor": {
+        "contracts": 15,
+        "catalogue": 100,
+        "prices": {
+          "base": {
+            "USD": 25,
+            "GBP": 20,
+            "EUR": 25
+          },
+          "extra": {
+            "USD": 25,
+            "GBP": 20,
+            "EUR": 25
+          },
+          "increments": {
+            "contracts": 15,
+            "catalogue": 100
+          }
+        }
+      }
+    },
+    "pro": {
+      "contracts": 150,
+      "catalogue": 1000,
+      "prices": {
+        "base": {
+          "USD": 175,
+          "GBP": 150,
+          "EUR": 175
+        },
+        "extra": {
+          "USD": 25,
+          "GBP": 20,
+          "EUR": 25
+        },
+        "increments": {
+          "contracts": 10,
+          "catalogue": 250
+        }
+      }
+    }
+  },
+  "importCatalogueGroups": [{ "key": "group" }],
+  "importTerritoryGroups": [{ "key": "code" }, { "key": "name" }, { "key": "iso" }],
+  "importOriginalWorksScript": [{ "key": "id" }, { "key": "originalWorkTitle" }, { "key": "originalWorkSource" }],
+  "importMainIdentifiers": [{ "key": "id" }, { "key": "mainIdentifier" }],
+  "importTrackISRCS": [{ "key": "id" }, { "key": "title" }, { "key": "artist" }, { "key": "isrc" }],
+  "importCatNos": [{ "key": "id" }, { "key": "catNo" }],
+  "currencies": [{ "name": "US Dollar", "code": "USD" }, { "name": "Canadian Dollar", "code": "CAD" }, { "name": "Euro", "code": "EUR" }, { "name": "United Arab Emirates Dirham", "code": "AED" }, { "name": "Afghan Afghani", "code": "AFN" }, { "name": "Albanian Lek", "code": "ALL" }, { "name": "Armenian Dram", "code": "AMD" }, { "name": "Argentine Peso", "code": "ARS" }, { "name": "Australian Dollar", "code": "AUD" }, { "name": "Azerbaijani Manat", "code": "AZN" }, { "name": "Bosnia-Herzegovina Convertible Mark", "code": "BAM" }, { "name": "Bangladeshi Taka", "code": "BDT" }, { "name": "Bulgarian Lev", "code": "BGN" }, { "name": "Bahraini Dinar", "code": "BHD" }, { "name": "Burundian Franc", "code": "BIF" }, { "name": "Brunei Dollar", "code": "BND" }, { "name": "Bolivian Boliviano", "code": "BOB" }, { "name": "Brazilian Real", "code": "BRL" }, { "name": "Botswanan Pula", "code": "BWP" }, { "name": "Belarusian Ruble", "code": "BYR" }, { "name": "Belize Dollar", "code": "BZD" }, { "name": "Congolese Franc", "code": "CDF" }, { "name": "Swiss Franc", "code": "CHF" }, { "name": "Chilean Peso", "code": "CLP" }, { "name": "Chinese Yuan", "code": "CNY" }, { "name": "Colombian Peso", "code": "COP" }, { "name": "Costa Rican Colón", "code": "CRC" }, { "name": "Cape Verdean Escudo", "code": "CVE" }, { "name": "Czech Republic Koruna", "code": "CZK" }, { "name": "Djiboutian Franc", "code": "DJF" }, { "name": "Danish Krone", "code": "DKK" }, { "name": "Dominican Peso", "code": "DOP" }, { "name": "Algerian Dinar", "code": "DZD" }, { "name": "Estonian Kroon", "code": "EEK" }, { "name": "Egyptian Pound", "code": "EGP" }, { "name": "Eritrean Nakfa", "code": "ERN" }, { "name": "Ethiopian Birr", "code": "ETB" }, { "name": "British Pound Sterling", "code": "GBP" }, { "name": "Georgian Lari", "code": "GEL" }, { "name": "Ghanaian Cedi", "code": "GHS" }, { "name": "Guinean Franc", "code": "GNF" }, { "name": "Guatemalan Quetzal", "code": "GTQ" }, { "name": "Hong Kong Dollar", "code": "HKD" }, { "name": "Honduran Lempira", "code": "HNL" }, { "name": "Croatian Kuna", "code": "HRK" }, { "name": "Hungarian Forint", "code": "HUF" }, { "name": "Indonesian Rupiah", "code": "IDR" }, { "name": "Israeli New Sheqel", "code": "ILS" }, { "name": "Indian Rupee", "code": "INR" }, { "name": "Iraqi Dinar", "code": "IQD" }, { "name": "Iranian Rial", "code": "IRR" }, { "name": "Icelandic Króna", "code": "ISK" }, { "name": "Jamaican Dollar", "code": "JMD" }, { "name": "Jordanian Dinar", "code": "JOD" }, { "name": "Japanese Yen", "code": "JPY" }, { "name": "Kenyan Shilling", "code": "KES" }, { "name": "Cambodian Riel", "code": "KHR" }, { "name": "Comorian Franc", "code": "KMF" }, { "name": "South Korean Won", "code": "KRW" }, { "name": "Kuwaiti Dinar", "code": "KWD" }, { "name": "Kazakhstani Tenge", "code": "KZT" }, { "name": "Lebanese Pound", "code": "LBP" }, { "name": "Sri Lankan Rupee", "code": "LKR" }, { "name": "Lithuanian Litas", "code": "LTL" }, { "name": "Latvian Lats", "code": "LVL" }, { "name": "Libyan Dinar", "code": "LYD" }, { "name": "Moroccan Dirham", "code": "MAD" }, { "name": "Moldovan Leu", "code": "MDL" }, { "name": "Malagasy Ariary", "code": "MGA" }, { "name": "Macedonian Denar", "code": "MKD" }, { "name": "Myanma Kyat", "code": "MMK" }, { "name": "Macanese Pataca", "code": "MOP" }, { "name": "Mauritian Rupee", "code": "MUR" }, { "name": "Mexican Peso", "code": "MXN" }, { "name": "Malaysian Ringgit", "code": "MYR" }, { "name": "Mozambican Metical", "code": "MZN" }, { "name": "Namibian Dollar", "code": "NAD" }, { "name": "Nigerian Naira", "code": "NGN" }, { "name": "Nicaraguan Córdoba", "code": "NIO" }, { "name": "Norwegian Krone", "code": "NOK" }, { "name": "Nepalese Rupee", "code": "NPR" }, { "name": "New Zealand Dollar", "code": "NZD" }, { "name": "Omani Rial", "code": "OMR" }, { "name": "Panamanian Balboa", "code": "PAB" }, { "name": "Peruvian Nuevo Sol", "code": "PEN" }, { "name": "Philippine Peso", "code": "PHP" }, { "name": "Pakistani Rupee", "code": "PKR" }, { "name": "Polish Zloty", "code": "PLN" }, { "name": "Paraguayan Guarani", "code": "PYG" }, { "name": "Qatari Rial", "code": "QAR" }, { "name": "Romanian Leu", "code": "RON" }, { "name": "Serbian Dinar", "code": "RSD" }, { "name": "Russian Ruble", "code": "RUB" }, { "name": "Rwandan Franc", "code": "RWF" }, { "name": "Saudi Riyal", "code": "SAR" }, { "name": "Sudanese Pound", "code": "SDG" }, { "name": "Swedish Krona", "code": "SEK" }, { "name": "Singapore Dollar", "code": "SGD" }, { "name": "Somali Shilling", "code": "SOS" }, { "name": "Syrian Pound", "code": "SYP" }, { "name": "Thai Baht", "code": "THB" }, { "name": "Tunisian Dinar", "code": "TND" }, { "name": "Tongan Paʻanga", "code": "TOP" }, { "name": "Turkish Lira", "code": "TRY" }, { "name": "Trinidad and Tobago Dollar", "code": "TTD" }, { "name": "New Taiwan Dollar", "code": "TWD" }, { "name": "Tanzanian Shilling", "code": "TZS" }, { "name": "Ukrainian Hryvnia", "code": "UAH" }, { "name": "Ugandan Shilling", "code": "UGX" }, { "name": "Uruguayan Peso", "code": "UYU" }, { "name": "Uzbekistan Som", "code": "UZS" }, { "name": "Venezuelan Bolívar", "code": "VEF" }, { "name": "Vietnamese Dong", "code": "VND" }, { "name": "CFA Franc BEAC", "code": "XAF" }, { "name": "CFA Franc BCEAO", "code": "XOF" }, { "name": "Yemeni Rial", "code": "YER" }, { "name": "South African Rand", "code": "ZAR" }, { "name": "Zambian Kwacha", "code": "ZMK" }]
+
+}

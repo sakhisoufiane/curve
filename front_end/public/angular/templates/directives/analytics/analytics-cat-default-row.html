@@ -1,0 +1,29 @@
+<div ng-if="field && title">
+  <div class="visible-xs col-sm-4">
+    <div class="form-group sm-m-b-0">
+      <label class="sm-p-b-0 sm-m-b-0">Field</label>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-4" data-ng-class="{ 'm-b-10' : inline }">
+    <div class="form-group">
+        <input type="text" class="form-control" data-ng-class="{ 'analytics-base-filter' : inline }" value={{field}} disabled="disabled" />
+    </div>
+  </div>
+  <div class="visible-xs col-sm-4">
+    <div class="form-group sm-m-b-0">
+      <label class="sm-p-b-0 sm-m-b-0">Value</label>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-6" data-ng-class="{ 'm-b-10' : inline }">
+    <div class="form-group sm-b-10">
+        <input type="text" class="form-control" data-ng-class="{ 'analytics-base-filter' : inline }" value={{title}} disabled="disabled" />
+    </div>
+    <div data-ng-if="field === 'Release' && showTracksWithRelease(-1)" class="form-group labelPointers">
+      <div data-ng-if="" class="form-group labelPointers"></div>
+      <input name="includeTracksOnReleases" id="includeTracksOnReleases{{blockIdentifier}}" type="checkbox" value="1"
+      data-ng-model="filterBlock.includeTracksWithRelease">
+    <label for="includeTracksOnReleases{{blockIdentifier}}">Include tracks associated with release</label>
+      </div>
+    </div>
+  </div>
+</div>

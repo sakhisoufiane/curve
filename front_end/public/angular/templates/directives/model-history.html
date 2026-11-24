@@ -1,0 +1,72 @@
+<style type="text/css">
+  .table-header, .table-row {
+    display: flex
+  }
+  .table-header .col{
+    flex: 1;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-family: 'Montserrat';
+    font-size: 13px;
+    padding-top: 14px;
+    padding-left: 16px;
+    padding-bottom: 14px;
+    vertical-align: middle;
+    background: #fff;
+    border-bottom: 1px solid rgba(230, 230, 230, 0.7);
+    color: rgba(44, 44, 44, 0.35);
+  }
+
+  .table-row .col{
+    flex: 1;
+    background: #fff;
+    border-bottom: 1px solid rgba(230, 230, 230, 0.7);
+    border-top: 0px;
+    padding: 20px;
+    font-size: 13.5px;
+  }
+
+  .fields-table {
+    background-color: #c0c0c0;
+    /*padding-left: 20px;*/
+  }
+</style>
+<div class="modal fade stick-up" id="modelHistoryModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header clearfix text-left">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5>Change History</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12 m-t-20">
+            <div class="table-header">
+              <div class="col">Date</div>
+              <div class="col">User</div>
+            </div>
+            <div ng-repeat="row in data track by $index" ng-if="row">
+              <div class="table-row" ng-click="toggleFieldsTable($index)">
+                <div class="col">{{ row.timestamp | date : 'medium' }}</div>
+                <div class="col">{{ row.author.email }}</div>
+              </div>
+              <div ng-if="row.ops" class="fields-table {{$index}} hidden">
+                <div class="table-header">
+                  <div class="col">Field</div>
+                  <div class="col">From</div>
+                  <div class="col">To</div>
+                </div>
+                <div class="table-row" ng-repeat="ops in row.ops track by $index">
+                  <div class="col">{{ makeReadable(ops.path) }}</div>
+                  <div class="col">{{ ops.originalValue }}</div>
+                  <div class="col">{{ formatOps(ops.value, makeReadable(ops.path)) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

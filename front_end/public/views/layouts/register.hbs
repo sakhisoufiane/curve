@@ -1,0 +1,62 @@
+<div id="CUR-HqlCZSHq" class="row">
+  <div id="CUR-MFijFdiE" class="col-xs-12 text-center">
+    <img src="/{{darkLogo}}" alt="logo" class="logo" crossorigin="anonymous">
+  </div>
+</div>
+<div id="CUR-gxukOhiY" class="row">
+  <div id="CUR-oxbBQBeH" class="col-xs-12">
+    <div id="CUR-KJLihSuP" class="wording">
+      <p>You've been invited onto Curve Royalty Platform to view and manage your royalties. Setup your password below and we'll get you going in the system.</p>
+    </div>
+
+    <div id="CUR-FYctMkRP" class="col-xs-12">
+    <form  action="/register" method="POST" id="register-form" class="p-t-15" role="form">
+      <div id="notification"></div>
+      <div id="CUR-NLADDjYu" class="form-group">
+        <label id="CUR-jhIYUuPP">Email</label>
+        <input id="CUR-DVqIyzxH" type="text" name="email" placeholder="Email" class="form-control">
+      </div>
+     <div id="CUR-skyfoHrg" class="form-group">
+          <label id="CUR-QbUymDhR">Password</label>
+          <input type="password" id="password" placeholder="Password" class="form-control">
+          <div id="pass-error">
+            <span id="CUR-KAcvzQSG">Your password must have: </span>
+            <span id="pass-error1" class="block">12 or more characters</span>
+            <span id="pass-error2" class="block">At least one lowercase letter</span>
+            <span id="pass-error3" class="block">At least one Uppercase letter</span>
+            <span id="pass-error4" class="block">At least one number</span>
+            <span id="pass-error5" class="block">At least one symbol</span>
+          </div>
+        </div>
+        <div id="CUR-IQlCVSxC" class="form-group">
+          <label id="CUR-exqqRNKb">Confirm password</label>
+          <input type="password" id="confirm" placeholder="Confirm password" class="form-control">
+          <span id="confirm-error" class="text-error"></span>
+
+        </div>
+      <div id="CUR-sXsdgirz" class="row">
+        <div id="CUR-uOQRuLSN" class="col-md-6 col-md-offset-6 text-right sm-text-center">
+          <a id="CUR-PmXsscuW" href="/login" class="text-info small">Already have an account?</a>
+        </div>
+      </div>
+      <button id="submit" class="btn btn-complete m-t-10 w-xs-100-p m-xs-l-0" type="submit">Sign Up</button>
+    </form>
+
+    </div>
+  </div>
+</div>
+<script>
+  {{#if favicon}}
+    var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = "{{{favicon}}}";
+    link.crossOrigin = 'anonymous';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  {{/if}}
+  {{#if pageTitle}}
+    document.title = "{{pageTitle}}"
+  {{else}}
+    document.title = "Curve"
+  {{/if}}
+</script>

@@ -1,0 +1,95 @@
+<div id="CUR-OrJrNWRG" class="jumbotron" data-pages="parallax">
+  <div id="CUR-dGCZmaSt" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-EBWqhnal" class="inner">
+      <ul id="CUR-nffQMYWw" class="breadcrumb">
+        <li id="CUR-SJoHJluH"><a id="CUR-NnIVQcah" href="/#/periods">Periods</a></li>
+        <li id="CUR-lxNNvXIn" ng-show="!period._id"><a id="CUR-UKddbSie" href="" class="active">Create</a></li>
+        <li id="CUR-beMzrChF" ng-show="period._id"><a id="CUR-sgGdwIvJ" href="/#/periods/{{period._id}}/edit" class="active">{{period.name}}</a></li>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Main Container -->
+<period-new
+  ng-if="period.status != 'Processing' && period.status != 'Errored' && (!period.setupStage || period.setupStage == 'Setup')">
+</period-new>
+<period-included-sales
+  ng-if="period.status != 'Processing' && period.status != 'Errored' && period.setupStage == 'Included Sales'">
+</period-included-sales>
+<period-included-resolved-groups
+  ng-if="period.status != 'Processing' && period.status != 'Errored' && period.setupStage == 'Included Resolved Income'">
+</period-included-resolved-groups>
+<period-included-costs
+  ng-if="period.status != 'Processing' && period.status != 'Errored' && period.setupStage == 'Included Costs'">
+</period-included-costs>
+<period-validation-catalogue
+  ng-if="period.status != 'Processing' && period.status != 'Errored' && period.setupStage == 'Catalogue Validation'">
+</period-validation-catalogue>
+<period-validation-releases-without-contracts
+  ng-if="period.status != 'Processing' && period.status != 'Errored' && period.setupStage == 'Release Validation'">
+</period-validation-releases-without-contracts>
+<period-validation-incomplete-contracts
+  ng-if="period.status != 'Processing' && period.status != 'Errored' && period.setupStage == 'Incomplete Contracts'">
+</period-validation-incomplete-contracts>
+
+<!-- Loading Page -->
+<div id="CUR-jgWhtGop" class="container-fluid container-fixed-lg" ng-if="period.status == 'Processing'">
+  <div id="CUR-PZzRqtag" class="row">
+    <div id="CUR-ehojRBrZ" class="col-xs-12 col-sm-6 col-sm-offset-3">
+      <div id="CUR-PBVFumLQ" class="panel panel-default text-center">
+        <div id="CUR-BJTUbgzE" class="panel-body p-t-15">
+          <h3 id="CUR-AkesVxMP">Period is {{period.status}}...</h3>
+
+          <div id="CUR-ykjLyaPX" class="row">
+            <div id="CUR-Kmydkqyk" class="col-xs-10 col-xs-offset-1 progress-checklist text-left">
+              <ul id="CUR-hhRiyqjT">
+                <li id="CUR-NMdZzvou" ng-repeat="name in processingStatuses track by $index">
+                  <period-processing-status-element name="name" index="$index" current-status="currentStatusIndex"
+                    errored-status="erroredStatusIndex"></period-processing-status-element>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div id="CUR-rDOClkXh" class="row" ng-if="period.calculationStatus == 'Calculating Sales' || period.calculationStatus == 'Creating Statement Files'">
+            <div id="CUR-KVYwiqnN" class="col-xs-10 col-xs-offset-1">
+              {{period.completedCatalogueItems}} out of {{totalCatalogueItems}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Error Page -->
+<div id="CUR-kEsLYuKx" class="container-fluid container-fixed-lg" ng-if="period.status == 'Errored'">
+  <div id="CUR-nPDjWNcf" class="row">
+    <div id="CUR-ASbMTdEN" class="col-xs-12 col-sm-6 col-sm-offset-3">
+      <div id="CUR-skgZRtCb" class="panel panel-default text-center">
+        <div id="CUR-fRkUcEyp" class="panel-body p-t-15">
+          <h3 id="CUR-mDsQLGoE">Period has Errored</h3>
+          <p>Please Contact Support</p>
+          <a id="CUR-AekIMeNu" href="mailto:support@curveroyaltysystems.com" target="_blank">support@curveroyaltysystems.com</a>
+
+          <div id="CUR-yIEIzABy" class="row">
+            <div id="CUR-WCNrJAAy" class="col-xs-10 col-xs-offset-1 progress-checklist text-left">
+              <!-- To be added back in after log has been amended -->
+              <!-- <p>{{period.calculationError}}</p> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<div id="CUR-CcnSqZvD" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-cbeQeIeV" class="row">
+    <div id="CUR-UkgAAHNb" class="col-sm-12 text-right">
+      <h6>Created By: {{period.createdBy.email}}</h6>
+      <h6>Last Modified By: {{period.lastModifiedBy.email}}</h6>
+    </div>
+  </div>
+</div>-->

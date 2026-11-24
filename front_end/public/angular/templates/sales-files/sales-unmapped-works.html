@@ -1,0 +1,306 @@
+<div id="CUR-HunUPlPJ" class="jumbotron" data-pages="parallax">
+  <div id="CUR-RFIpBToS" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-NftXBlGM" class="inner">
+      <ul id="CUR-jMOlxBai" class="breadcrumb">
+        <li id="CUR-VubfGfJE"><a id="CUR-izuBIumL" href="/#/sales">Income</a></li>
+        <li id="CUR-pQekPZXx"><a id="CUR-oRpFcuOU" href="/#/sales/unmapped_works" class="active">Unmapped</a></li>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-ZOwuaTKV" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-XlvhRezS" class="row">
+    <div id="CUR-IDsrfkHG" class="col-sm-12 text-right two-cols-row">
+      <button id="CUR-MdnPHlAs" class="btn btn-default" data-toggle="modal" data-target="#importModal"><i class="fa fa-download"></i>&nbsp;Import Aliases</button>
+      <button id="CUR-ivKvGcQl" class="btn btn-default hidden-xs" ng-click="export()">
+        <i class="fa fa-upload"></i>&nbsp;Export
+      </button>
+    </div>
+  </div>
+  <div id="CUR-sVzTmmoT" class="row">
+    <div id="CUR-SAMWqtXh" class="col-xs-6 col-sm-4 col-md-3">
+      <div id="CUR-yMnqvvOG" class="form-group">
+        <label id="CUR-rWzQLsid">Text <i class="fa fa-question-circle" tooltips tooltip-template="Searches the title, identifiers and parties"></i></label>
+        <input id="CUR-RlPlnaTH" class="form-control" ng-model="filter.text">
+      </div>
+    </div>
+    <div id="CUR-SAMWqtXh" class="col-xs-6 col-sm-4 col-md-3">
+      <div id="CUR-yMnqvvOG" class="form-group">
+        <label id="CUR-rWzQLsid">Parties <i class="fa fa-question-circle" tooltips tooltip-template="Searches the parties"></i></label>
+        <input id="CUR-RlPlnaTH" class="form-control" ng-model="filter.parties">
+      </div>
+    </div>
+    <div id="CUR-SAMWqtXh" class="col-xs-6 col-sm-4 col-md-3">
+      <div id="CUR-yMnqvvOG" class="form-group">
+        <label id="CUR-rWzQLsid">Source <i class="fa fa-question-circle" tooltips tooltip-template="Searches the source"></i></label>
+        <input id="CUR-RlPlnaTH" class="form-control" ng-model="filter.source">
+      </div>
+    </div>
+    <div id="CUR-vHobUzlW" class="col-xs-6 col-sm-4 col-md-3">
+      <div id="CUR-ASpHnBLT" class="form-group">
+        <label id="CUR-xPYHgwUW">Income File</label>
+        <ui-select multiple ng-model="filter.salesFileIds">
+          <ui-select-match>{{$item.name}}</ui-select-match>
+          <ui-select-choices repeat="salesFile._id as salesFile in salesFiles | filter: $select.search">
+            <span id="CUR-PHOYmrDk" ng-bind="salesFile.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div id="CUR-XoRIRFIv" class="col-xs-12 col-sm-4 col-md-3">
+      <div id="CUR-NeuTuJVg" class="form-group">
+        <label id="CUR-MFUoWHxn">Status</label>
+        <ui-select ng-model="filter.status">
+          <ui-select-match allow-clear="true">
+            <span id="CUR-KxYCXRtA" ng-bind="$select.selected"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item in ['Incomplete', 'Complete'] | filter: $select.search">
+            <span id="CUR-ErpvrYyz" ng-bind="item"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-hctsgLSa" class="row">
+    <div id="CUR-nGHMpAen" class="col-xs-12 center two-cols-row">
+      <button id="CUR-iQNLETqh" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i>&nbsp;Filter</button>
+    </div>
+  </div>
+  <div id="CUR-emPKICoU" class="row">
+    <div id="CUR-oqsCFkkU" class="col-xs-12">
+      <div id="CUR-VbvZHrws" class="panel panel-default">
+          <div id="CUR-OggWRuTz" class="panel-heading">  
+            <div id="CUR-bwqkZfGW" class="panel-title">
+              Unmapped Works <documentation link="http://guide.curveroyaltysystems.com/article/income-unmapped/"></documentation>
+            </div>
+          </div>
+          <div id="CUR-cclGMQVl" class="panel-body p-t-15">
+            <div id="CUR-QsDmWdtB" class="row">
+              <div id="CUR-PZhrYtmZ" class="col-xs-12 text-right">
+                <i class="fa fa-refresh cursor refresh-unmapped-works inline" tooltips tooltip-side="bottom" tooltip-template="Refresh" ng-click="search()"></i>
+                <h5 id="CUR-PwyGDnNM" class="inline">Total: {{total}}</h5>
+              </div>
+            </div>
+            <div id="CUR-mRUXwFwJ" class="row">
+              <div id="CUR-MFOkRbcW" class="col-xs-12 text-right">
+                <div id="CUR-MLsxbMDH" class="btn-group dropdown-default">
+                  <a id="bulk-create-works" class="btn btn-complete dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-plus"></i>&nbsp;Bulk Create <span id="CUR-wNRkCpxU" class="caret"></span>
+                  </a>
+                  <ul id="CUR-KTcJdLTW" class="dropdown-menu w-xs-100-p">
+                    <li id="CUR-EwbjeLDy" >
+                      <a id="bulk-create-works-selected" class="pointer" data-toggle="modal" data-target="#createWorksModal">Selected</a>
+                    </li>
+                    <li id="CUR-zONGjSMy" >
+                      <a id="bulk-create-works-all" class="pointer" data-toggle="modal" data-target="#createWorksAllModal">All</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div id="CUR-clxnsXmw">
+              <table id="CUR-CBKKdtHR" class="table table-condensed dataTable no-footer sales-table sales-table-with-checkbox minimal-padding unmapped-works-table">
+                <thead>
+                  <tr id="CUR-EkZPQKgp">
+                    <th class="table-checkbox hidden-xs"><input id="select-all-works" type="checkbox" ng-checked="selectAllChecked" ng-click="selectAll()"></th>
+                    <th ng-click="getSortedData('salesFileId')" ng-class="whatClassIsIt('salesFileId')">SalesFile ID</th>
+                    <th ng-click="getSortedData('title')" ng-class="whatClassIsIt('title')">Title</th>
+                    <th ng-click="getSortedData('source')" ng-class="whatClassIsIt('source')">Source</th>
+                    <th ng-click="" ng-class="">Codes</th>
+                    <th ng-click="" ng-class="">Parties</th>
+                    <th ng-click="getSortedData('netValue')" ng-class="whatClassIsIt('netValue')">Net Value</th>
+                    <th class="col-xs-3">Mapped To</th>
+                  </tr>
+                </thead>
+                <tbody id="CUR-rtsmvjLb">
+                  <tr unmapped-work ng-repeat="unmappedWork in unmappedWorks track by $index" index="{{$index}}" work="unmappedWorks[$index]" create-work="createWork(work, {identifier: work._id.identifier, society: work._id.source})"></tr>
+                </tbody>
+              </table>
+              <div id="CUR-ATJCoCrC" class="row">
+                <div id="CUR-fHMdmdrb" class="col-xs-12 text-center">
+                  <pagination id="CUR-SnhIcQvB" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-OswaiKpe" class="modal-dialog">
+    <div id="CUR-KViBvjla" class="modal-content">
+      <div id="CUR-yDfNSBKl" class="modal-header clearfix text-left">
+        <button id="CUR-MXqmikZh" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-SwdXbMKH">Import Aliases</h5>
+      </div>
+      <div id="CUR-aFgwqJON" class="modal-body">
+        <p>To import aliases for mapping, select an import type and a file to upload. For works you can import Aliases or Society Identifiers.</p>
+        <p>For more information please see <a target="_blank" href="https://help.curveroyaltysystems.com/article/175-adding-aliases-society-identifiers">Adding Aliases & Society Identifiers</a></p>
+        <div id="CUR-sUMRfEUO" class="row">
+          <div id="CUR-DiJuiefO" class="col-xs-12 m-t-20">
+            <form id="CUR-klHFHGww">
+              <div id="CUR-SDiyeFUq" class="form-group">
+                <label id="CUR-OHVbVIgR">Type</label>
+                <ui-select ng-model="uploader.catalogueType" ng-change="onImportCatTypeChange()">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-HvsYuHng" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in importCatTypes">
+                    <span id="CUR-hRAMgWJD" ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div ng-show="uploader.catalogueType == 'Work'" id="CUR-importTemplate-select" class="form-group">
+                <label id="CUR-importTemplate-label">Template</label>
+                <ui-select ng-model="uploader.templateType">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-importTemplate-select-value" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in importTemplateTypes">
+                    <span ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-aEZOnxBS" class="form-group">
+                <label id="CUR-VDnZzpXo" for="email">File</label>
+                <input id="CUR-aWUGzlMd" type="file" ng-model="uploader.file" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-pqJVXMUA" class="row" ng-if="importErrors">
+          <div id="CUR-NoXqiaqS" class="col-sm-12">
+            <ul id="CUR-NXPWbEbC">
+              <li ng-repeat="error in importErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-qDmHtBVw" class="row">
+          <div id="CUR-icNLVgPR" class="col-xs-12 m-t-20 text-right">
+            <a id="CUR-fSZlaScP" class="btn btn-success m-t-5" ng-click="downloadTemplate()">Download Template</a>
+            <button id="CUR-RDgtlkTP" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-VPsVpvzg" type="button" class="btn btn-complete m-t-5" ng-click="import()"><i class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade slide-right" id="createWorkModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-mDgxNzJD" class="modal-dialog modal-lg">
+    <div id="CUR-wIvsQgbN" class="modal-content">
+      <div id="CUR-RpQfTpyV" class="modal-header clearfix text-left">
+        <button id="CUR-NuxxVDFK" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h4 id="CUR-QmXlNykf">Create Work</h4>
+      </div>
+      <div id="CUR-yjKOSqTT" class="modal-body">
+        <div id="CUR-tKJBPQMQ" class="panel panel-transparent">
+          <div id="CUR-otzzjdmk" class="form-group required">
+            <label id="CUR-qieeGHRD">Title</label>
+            <input id="CUR-NepFZbEZ" type="text" class="form-control" ng-model="work.title" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-dNhrOVMk" class="form-group required">
+            <label id="CUR-HjrRPfAG">Composer</label>
+            <input id="CUR-ciAmVawn" type="text" class="form-control" ng-model="work.composer" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-GxoMMLxJ" class="form-group required">
+            <label id="CUR-QjhuPgBQ">Foreign ID <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Used for integrating into other systems, such as accounting systems"></i></label>
+            <input id="CUR-oultQZYA" type="text" class="form-control" ng-model="work.foreignId" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-create-work-projectId" class="form-group required">
+            <label id="CUR-create-work-projectId-label">Project ID</label>
+            <input id="CUR-create-work-projectId-input" type="text" class="form-control" ng-model="work.projectId" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-RXqPJPfw" class="form-group required">
+            <label id="CUR-UEKqFobo">Main Identifier</label>
+            <input id="CUR-xbitUFLs" type="text" class="form-control" ng-model="work.identifier" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-InxQTTao" class="form-group required">
+            <label id="CUR-kyOeITCq">ISWC</label>
+            <input id="CUR-obqXevvh" type="text" class="form-control" ng-model="work.iswc" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-ScFGOMyz" class="form-group required">
+            <label id="CUR-hEJVvHoj">Tunecode</label>
+            <input id="CUR-yErofuQy" type="text" class="form-control" ng-model="work.tunecode" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+        </div>
+        <div id="CUR-ovvfNaSB" class="panel panel-transparent">
+          <h5 id="CUR-QVEAoTML">Participation Rates</h5>
+          <work-participator ng-repeat="contract in work.salesReturnsRightsDisplay" edit="rights.catalogue == 'Edit'" contract="contract" contracts="contracts" delete="deleteSalesReturnsRights(contract)" index="$index"></work-participator>
+            <button id="CUR-EkkvJTsH" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addSalesReturnsRights()">+ Contract</button>
+        </div>
+        <div id="CUR-CDRAKoHp" class="row">
+          <div id="CUR-efFaVRjW" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-irhFfYPX" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-dCfzztqd" type="button" class="btn btn-complete m-t-5" ng-click="saveWork()">+ Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createWorksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-TunkUgSU" class="modal-dialog">
+    <div id="CUR-NHDrjfsU" class="modal-content">
+      <div id="CUR-NfsgfDJB" class="modal-header clearfix text-left">
+        <button id="CUR-unAvUjPl" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-ORVQtdKF" >Create Selected Works</h5>
+      </div>
+      <div id="CUR-oqeNMtho" class="modal-body">
+        <div id="CUR-SAOhTmsD" ng-show="selectedWorks > 0" class="row">
+          <div id="CUR-nRneFAkU" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{selectedWorks}} work{{(selectedWorks > 1) ? 's' : ''}}? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-grQLeyta" ng-show="selectedWorks === 0" class="row">
+          <div id="CUR-LsRtDMmN" class="col-xs-12 m-t-20">
+            <p>You have selected no works to create.</p>
+          </div>
+        </div>
+        <div id="CUR-exdtaGkU" class="row">
+          <div id="CUR-UOEKiTJj" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-uDRPeNBo" ng-show="selectedWorks === 0" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Close</button>
+            <button id="CUR-qQiOrybH" ng-show="selectedWorks > 0" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-EvHQTXUj" ng-show="selectedWorks > 0" type="button" class="btn btn-complete m-t-5" ng-click="createWorks('selected')">+&nbsp;Create {{selectedWorks}} Work{{(selectedWorks > 1) ? 's' : ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createWorksAllModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-sPosGkqM" class="modal-dialog">
+    <div id="CUR-ygPamoSm" class="modal-content">
+      <div id="CUR-YPwfExMx" class="modal-header clearfix text-left">
+        <button id="CUR-EZOEnvha" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-CenBdlHn" >Create All Works</h5>
+      </div>
+      <div id="CUR-BGHxEFxM" class="modal-body">
+        <div id="CUR-uUbNwlNv" class="row">
+          <div id="CUR-xKFrAVaT" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{unmappedWorks.length}} work{{(unmappedWorks.length > 1) ? 's' : ''}}? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-NJkktnzD" class="row">
+          <div id="CUR-lgiNLRXJ" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-OfFNfRys" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-EjFhyBcv" type="button" class="btn btn-complete m-t-5" ng-click="createWorks('all')">+&nbsp;Create {{unmappedWorks.length}} Work{{(unmappedWorks.length > 1) ? 's' : ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

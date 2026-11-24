@@ -1,0 +1,484 @@
+<div id="CUR-uTRHunUPlPJ" class="jumbotron" data-pages="parallax">
+  <div id="CUR-uTRRFIpBToS" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-uTRNftXBlGM" class="inner">
+      <ul id="CUR-uTRjMOlxBai" class="breadcrumb">
+        <li id="CUR-uTRVubfGfJE"><a id="CUR-uTRizuBIumL" href="/#/sales">Sales</a></li>
+        <li id="CUR-uTRpQertZXx"><a id="CUR-uTRoRpFcuOU" href="/#/sales/unmapped">Unmapped</a></li>
+        <li id="CUR-uTRpQujjZXx" ng-if="activeTab==='tracks'"><a id="CUR-uTRoRpFcuOU" class="active">Tracks</a></li>
+        <li id="CUR-uTRpQfReZXx" ng-if="activeTab==='releases'"><a id="CUR-uTRoRpFcuOU" class="active">Releases</a></li>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-uTRZOwuaTKV" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-uTRXlvhRezS" class="row">
+    <div id="CUR-uTRIDsrfkHG" class="col-sm-12 text-right two-cols-row">
+      <button id="CUR-uTRMdnPHlAs" class="btn btn-default" data-toggle="modal" data-target="#importModal"><i class="fa fa-download"></i>&nbsp;Import Aliases</button>
+      <button id="CUR-ivKvGcQl" class="btn btn-default hidden-xs" ng-click="export()">
+        <i class="fa fa-upload"></i>&nbsp;Export
+      </button>
+    </div>
+  </div>
+  <div id="CUR-uTRsVzTmmoT" class="row">
+    <div id="CUR-uTRSAMWqtXh" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-uTRyMnqvvOG" class="form-group">
+        <label id="CUR-uTRrWzQLsid">Text <i class="fa fa-question-circle" tooltips tooltip-template="Searches the title, isrc, cat no, and barcode"></i></label>
+        <input id="CUR-uTRRlPlnaTH" class="form-control" ng-model="filter.text">
+      </div>
+    </div>
+    <div id="CUR-uTRvHobUzlW" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-uTRASpHnBLT" class="form-group">
+        <label id="CUR-uTRxPYHgwUW">Sales File</label>
+        <ui-select multiple ng-model="filter.salesFileIds">
+          <ui-select-match>{{$item.name}}</ui-select-match>
+          <ui-select-choices repeat="salesFile._id as salesFile in salesFiles | filter: $select.search">
+            <span id="CUR-uTRPHOYmrDk" ng-bind="salesFile.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div id="CUR-uTRXoRIRFIv" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-uTRNeuTuJVg" class="form-group">
+        <label id="CUR-uTRMFUoWHxn">Status</label>
+        <ui-select ng-model="filter.status">
+          <ui-select-match allow-clear="true">
+            <span id="CUR-uTRKxYCXRtA" ng-bind="$select.selected"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item in ['Incomplete', 'Complete'] | filter: $select.search">
+            <span id="CUR-uTRErpvrYyz" ng-bind="item"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-uTRhctsgLSa" class="row">
+    <div id="CUR-uTRnGHMpAen" class="col-xs-12 center two-cols-row">
+      <button id="CUR-uTRiQNLETqh" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i>&nbsp;Filter</button>
+    </div>
+  </div>
+  <div id="CUR-uTRgJgfmwiV" class="row">
+    <div id="CUR-uTRYyKUnIEk" class="panel panel-transparent hidden-xs">
+      <ul id="CUR-uTRFMjqIpEd" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-uTRDwijuWUQ" class="active" ng-click="setTab('tracks')">
+          <a id="CUR-uTRXAwELSfi" data-toggle="tab" aria-expanded="true"><span id="CUR-uTRrnuyFjUE">Tracks</span></a>
+        </li>
+        <li id="CUR-uTRtqxRHyMu" ng-click="setTab('releases')">
+          <a id="CUR-uTRrfhSOGGB" data-toggle="tab" aria-expanded="false"><span id="CUR-uTRzfwLctsq">Releases</span></a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-uTRHzhwlfsO" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-uTRwuDelRqn" ng-show="activeTab === 'tracks'" ng-include="'tracks-tab.html'"></div>
+        <div id="CUR-uTRyRiFRUsk" ng-show="activeTab === 'releases'" ng-include="'releases-tab.html'"></div>
+      </div>
+    </div>
+    <div id="CUR-uTRrVWKBXrH" class="col-xs-12 visible-xs p-l-20 p-r-20" ng-if="showAccordions">
+      <uib-accordion close-others="true"
+        ng-init="status1.open = true; status2.open = false;">
+        <div id="CUR-uTRlFmTrwOj" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>
+            Tracks <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-uTRaWsEgUAo" ng-include="'tracks-tab.html'"></div>
+        </div>
+        <div id="CUR-uTRswzwSRSY" uib-accordion-group class="panel-default" is-open="status2.open">
+          <uib-accordion-heading>
+            Releases <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-uTRblVfpzbN" ng-include="'releases-tab.html'"></div>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+  <script type="text/ng-template" id="tracks-tab.html">
+  <div id="CUR-uTemPKICoU" class="row">
+    <div id="CUR-uToqsCFkkU" class="col-xs-12">
+      <div id="CUR-uTVbvZHrws" class="panel panel-default">
+          <div id="CUR-uTOggWRuTz" class="panel-heading">  
+            <div id="CUR-uTbwqkZfGW" class="panel-title">
+              Unmapped Tracks <documentation link="http://guide.curveroyaltysystems.com/article/income-unmapped/"></documentation>
+            </div>
+          </div>
+          <div id="CUR-uTcclGMQVl" class="panel-body p-t-15">
+            <div id="CUR-uTQsDmWdtB" class="row">
+              <div id="CUR-uTPZhrYtmZ" class="col-xs-12 text-right">
+                <i class="fa fa-refresh cursor refresh-unmapped-works inline" tooltips tooltip-side="bottom" tooltip-template="Refresh" ng-click="search()"></i>
+                <h5 id="CUR-uTPwyGDnNM" class="inline">Total: {{totalTracks}}</h5>
+              </div>
+            </div>
+            <div id="CUR-uTmRUXwFwJ" class="row">
+              <div id="CUR-uTMFOkRbcW" class="col-xs-12 text-right">
+                <div id="CUR-uTMLsxbMDH" class="btn-group dropdown-default">
+                  <a id="bulk-create-tracks" class="btn btn-complete dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-plus"></i>&nbsp;Bulk Create <span id="CUR-uTwNRkCpxU" class="caret"></span>
+                  </a>
+                  <ul id="CUR-uTKTcJdLTW" class="dropdown-menu w-xs-100-p">
+                    <li id="CUR-uTEwbjeLDy" >
+                      <a id="bulk-create-tracks-selected" class="pointer" data-toggle="modal" data-target="#createTracksModal">Selected</a>
+                    </li>
+                    <li id="CUR-uTzONGjSMy" >
+                      <a id="bulk-create-tracks-all" class="pointer" data-toggle="modal" data-target="#createTracksAllModal">All</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div id="CUR-uTclxnsXmw">
+              <table id="CUR-uTCBKKdtHR" class="table table-condensed dataTable no-footer sales-table sales-table-with-checkbox minimal-padding unmapped-works-table">
+                <thead>
+                  <tr id="CUR-uTEkZPQKgp">
+                    <th class="table-checkbox hidden-xs"><input id="select-all-tracks" type="checkbox" ng-checked="selectAllTracksChecked" ng-click="selectAllTracks()"></th>
+                    <th ng-click="getSortedData('salesFileId')" ng-class="whatClassIsIt('salesFileId')">SalesFile ID</th>
+                    <th ng-click="getSortedData('title')" ng-class="whatClassIsIt('title')">Title</th>
+                    <th ng-click="getSortedData('artist')" ng-class="whatClassIsIt('artist')">Artist</th>
+                    <th ng-click="getSortedData('isrc')" ng-class="whatClassIsIt('isrc')">ISRC</th>
+                    <th class="col-xs-3">Mapped To</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="CUR-uTrtsmvjLb">
+                  <tr unmapped-track ng-repeat="unmappedTrack in unmappedTracks track by $index" index="{{$index}}" track="unmappedTracks[$index]" create-track="createTrack(track)"></tr>
+                </tbody>
+              </table>
+              <div id="CUR-uTATJCoCrC" class="row">
+                <div id="CUR-uTfHMdmdrb" class="col-xs-12 text-center">
+                  <pagination id="CUR-uTSnhIcQvB" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </script>
+  <script type="text/ng-template" id="releases-tab.html">
+    <div id="CUR-uRemPKICoU" class="row">
+      <div id="CUR-uRoqsCFkkU" class="col-xs-12">
+        <div id="CUR-uRVbvZHrws" class="panel panel-default">
+            <div id="CUR-uROggWRuTz" class="panel-heading">  
+              <div id="CUR-uRbwqkZfGW" class="panel-title">
+                Unmapped Releases <documentation link="http://guide.curveroyaltysystems.com/article/income-unmapped/"></documentation>
+              </div>
+            </div>
+            <div id="CUR-uRcclGMQVl" class="panel-body p-t-15">
+              <div id="CUR-uRQsDmWdtB" class="row">
+                <div id="CUR-uRPZhrYtmZ" class="col-xs-12 text-right">
+                  <i class="fa fa-refresh cursor refresh-unmapped-works inline" tooltips tooltip-side="bottom" tooltip-template="Refresh" ng-click="setTab('releases')"></i>
+                  <h5 id="CUR-uRPwyGDnNM" class="inline">Total: {{totalReleases}}</h5>
+                </div>
+              </div>
+              <div id="CUR-uRmRUXwFwJ" class="row">
+                <div id="CUR-uRMFOkRbcW" class="col-xs-12 text-right">
+                  <div id="CUR-uRMLsxbMDH" class="btn-group dropdown-default">
+                    <a id="bulk-create-releases" class="btn btn-complete dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false">
+                      <i class="fa fa-plus"></i>&nbsp;Bulk Create <span id="CUR-uRwNRkCpxU" class="caret"></span>
+                    </a>
+                    <ul id="CUR-uRKTcJdLTW" class="dropdown-menu w-xs-100-p">
+                      <li id="CUR-uREwbjeLDy" >
+                        <a id="bulk-create-releases-selected" class="pointer" data-toggle="modal" data-target="#createReleasesModal">Selected</a>
+                      </li>
+                      <li id="CUR-uRzONGjSMy" >
+                        <a id="bulk-create-releases-all" class="pointer" data-toggle="modal" data-target="#createReleasesAllModal">All</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div id="CUR-uRclxnsXmw">
+                <table id="CUR-uRCBKKdtHR" class="table table-condensed dataTable no-footer sales-table sales-table-with-checkbox minimal-padding unmapped-works-table">
+                  <thead>
+                    <tr id="CUR-uREkZPQKgp">
+                      <th class="table-checkbox hidden-xs"><input id="select-all-releases" type="checkbox" ng-checked="selectAllReleasesChecked" ng-click="selectAllReleases()"></th>
+                      <th ng-click="getSortedData('salesFileId')" ng-class="whatClassIsIt('salesFileId')">SalesFile ID</th>
+                      <th ng-click="getSortedData('title')" ng-class="whatClassIsIt('title')">Title</th>
+                      <th ng-click="getSortedData('artist')" ng-class="whatClassIsIt('artist')">Artist</th>
+                      <th ng-click="getSortedData('catNo')" ng-class="whatClassIsIt('catNo')">Cat No</th>
+                      <th ng-click="getSortedData('barcode')" ng-class="whatClassIsIt('barcode')">Barcode</th>
+                      <th class="col-xs-3">Mapped To</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="CUR-uRrtsmvjLb">
+                    <tr unmapped-release ng-repeat="unmappedRelease in unmappedReleases track by $index" index="{{$index}}" release="unmappedReleases[$index]" create-release="createRelease(release)"></tr>
+                  </tbody>
+                </table>
+                <div id="CUR-uRATJCoCrC" class="row">
+                  <div id="CUR-uRfHMdmdrb" class="col-xs-12 text-center">
+                    <pagination id="CUR-uRSnhIcQvB" pages="pagesReleases" total="totalPagesReleases" current="currentPageReleases" change-page="changePageReleases(page)"></pagination>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </script>
+</div>
+
+<div class="modal fade stick-up" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-uTROswaiKpe" class="modal-dialog">
+    <div id="CUR-uTRKViBvjla" class="modal-content">
+      <div id="CUR-uTRyDfNSBKl" class="modal-header clearfix text-left">
+        <button id="CUR-uTRMXqmikZh" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-uTRSwdXbMKH">Import Aliases</h5>
+      </div>
+      <div id="CUR-uTRaFgwqJON" class="modal-body">
+        <p>To import aliases for mapping, select an import type and a file to upload.</p>
+        <p>For more information please see <a target="_blank" href="https://help.curveroyaltysystems.com/article/175-adding-aliases-society-identifiers">Adding Aliases & Society Identifiers</a></p>
+        <div id="CUR-uTRsUMRfEUO" class="row">
+          <div id="CUR-uTRDiJuiefO" class="col-xs-12 m-t-20">
+            <form id="CUR-uTRklHFHGww">
+              <div id="CUR-uTRSDiyeFUq" class="form-group">
+                <label id="CUR-uTROHVbVIgR">Type</label>
+                <ui-select ng-model="uploader.catalogueType">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-uTRHvsYuHng" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in importCatTypes">
+                    <span id="CUR-uTRhRAMgWJD" ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div ng-show="uploader.catalogueType === 'Track' || uploader.catalogueType === 'Release'" id="CUR-uTRimportTemplate-select" class="form-group">
+                <label id="CUR-uTRimportTemplate-label">Template</label>
+                <ui-select ng-model="uploader.templateType">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-uTRimportTemplate-select-value" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in importTemplateTypes">
+                    <span ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-uTRaEZOnxBS" class="form-group">
+                <label id="CUR-uTRVDnZzpXo" for="email">File</label>
+                <input id="CUR-uTRaWUGzlMd" type="file" ng-model="uploader.file" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-uTRpqJVXMUA" class="row" ng-if="importErrors">
+          <div id="CUR-uTRNoXqiaqS" class="col-sm-12">
+            <ul id="CUR-uTRNXPWbEbC">
+              <li ng-repeat="error in importErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-uTRqDmHtBVw" class="row">
+          <div id="CUR-uTRicNLVgPR" class="col-xs-12 m-t-20 text-right">
+            <a id="CUR-uTRfSZlaScP" class="btn btn-success m-t-5" ng-click="downloadTemplate()">Download Template</a>
+            <button id="CUR-uTRRDgtlkTP" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-uTRVPsVpvzg" type="button" class="btn btn-complete m-t-5" ng-click="import()"><i class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade slide-right" id="createTrackModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-uTRgGrUjgiy" class="modal-dialog modal-lg">
+    <div id="CUR-uTRZciKTjbO" class="modal-content">
+      <div id="CUR-uTRRekjoktl" class="modal-header clearfix text-left">
+        <button id="CUR-uTRxjulMnrM" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h4 id="CUR-uTRnXTqJjXt">Create Track</h4>
+      </div>
+      <div id="CUR-uTREzrBXeyo" class="modal-body">
+        <div id="CUR-uTRqXaArsEc" class="panel panel-transparent">
+          <div id="CUR-uTRpSEvdUNO" class="form-group required">
+            <label id="CUR-uTRQIpUlfIG">Title</label>
+            <input id="CUR-uTRvMDhGKhU" type="text" class="form-control" ng-model="track.title" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-uTRuBMgmoeE" class="form-group required">
+            <label id="CUR-uTRELgppSql">Artist</label>
+            <input id="CUR-uTRYHHwuQuk" type="text" class="form-control" ng-model="track.artist" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-uTRCmKnjmbC" class="form-group required">
+            <label id="CUR-uTRGMsGcknT">ISRC</label>
+            <input id="CUR-uTRokdXhahE" type="text" class="form-control" ng-model="track.isrc" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+        </div>
+        <div id="CUR-uTRAwaQhKmx" class="panel panel-transparent">
+          <h5 id="CUR-uTRgrOoyEie">Sales &amp; Costs Contracts</h5>
+          <contract-row ng-repeat="contract in track.salesReturnsRightsDisplay track by $index" index="$index" contract-type="'Artist'" contract="contract" contracts="contracts" edit="rights.catalogue == 'Edit'" delete="deleteSalesReturnsRights(contract)"></contract-row>
+          <button id="CUR-uTRJaqrfSbS" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addSalesReturnsRights()">+ Contract</button>
+        </div>
+        <div id="CUR-uTRyKLFTvra" class="row">
+          <div id="CUR-uTRmxSgfppf" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-uTRFgFDaoyG" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-uTRuRimtRRH" type="button" class="btn btn-complete m-t-5" ng-click="saveTrack()">+ Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade slide-right" id="createReleaseModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-uTRvQhndhen" class="modal-dialog modal-lg">
+    <div id="CUR-uTRnKlhjvaJ" class="modal-content">
+      <div id="CUR-uTRqKSHyyJH" class="modal-header clearfix text-left">
+        <button id="CUR-uTReybcjZio" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h4 id="CUR-uTRMqqxemSz">Create Release</h4>
+      </div>
+      <div id="CUR-uTRPpCrYsUY" class="modal-body">
+        <div id="CUR-uTRQFeoZAPj" class="panel panel-transparent">
+          <div id="CUR-uTRZLEaTkXQ" class="form-group required">
+            <label id="CUR-uTRwlpjUMuG">Title</label>
+            <input id="CUR-uTRsbwEyfms" type="text" class="form-control" ng-model="release.title" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-uTRKgZXeeSA" class="form-group required">
+            <label id="CUR-uTRduDTeZHf">Artist</label>
+            <input id="CUR-uTRAONHFJLl" type="text" class="form-control" ng-model="release.artist" ng-disabled="rights.catalogue != 'Edit'"it'">
+          </div>
+          <div id="CUR-uTRbirpnpGV" class="form-group required">
+            <label id="CUR-uTRseIcJCaT">Cat No</label>
+            <input id="CUR-uTRIszLYnDI" type="text" class="form-control" ng-model="release.catNo" ng-disabled="rights.catalogue != 'Edit'"it'">
+          </div>
+          <div id="CUR-uTRNqlQsDrS" class="form-group required">
+            <label id="CUR-uTRetGenuff">Barcode</label>
+            <input id="CUR-uTRDEWgRSbk" type="text" class="form-control" ng-model="release.barcode" ng-disabled="rights.catalogue != 'Edit'"it'">
+          </div>
+        </div>
+        <div id="CUR-uTRAJfgVPMj" class="panel panel-transparent">
+          <h5 id="CUR-uTRmAMHWYOX">Sales &amp; Costs Contracts</h5>
+          <contract-row ng-repeat="contract in release.salesReturnsRightsDisplay track by $index" index="$index" contract-type="'Artist'" contract="contract" contracts="contracts" delete="deleteReleaseSalesReturnsRights(contract)" index="$index" edit="rights.catalogue == 'Edit'"></contract-row>
+          <button id="CUR-uTRAFKJPqyE" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addReleaseSalesReturnsRights()">+ Contract</button>
+        </div>
+        <div id="CUR-uTRBVzTGsQL" class="row">
+          <div id="CUR-uTRfcbhhLDX" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-uTRXFwFIPTX" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-uTROOkOSXUN" type="button" class="btn btn-complete m-t-5" ng-click="saveRelease()">+ Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createReleasesModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-uTRyTBTwBqr" class="modal-dialog">
+    <div id="CUR-uTRByvMSOgZ" class="modal-content">
+      <div id="CUR-uTRzQfJkgbq" class="modal-header clearfix text-left">
+        <button id="CUR-uTRktBDogag" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-uTRbKzRoXSN">Create Selected Releases</h5>
+      </div>
+      <div id="CUR-uTRsAHsdufg" class="modal-body">
+        <div id="CUR-uTRAANoJlIn" ng-show="selectedReleases > 0" class="row">
+          <div id="CUR-uTRHZcnOQzl" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{selectedReleases}} release{{(selectedReleases > 1) ? 's' : ''}}? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-uTRTcmEIKFq" ng-show="selectedReleases === 0" class="row">
+          <div id="CUR-uTRcHbBdRos" class="col-xs-12 m-t-20">
+            <p>You have selected no releases to create.</p>
+          </div>
+        </div>
+        <div id="CUR-uTRddywRdit" class="row">
+          <div id="CUR-uTRMPORENxu" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-uTRnrUMvkbm" ng-show="selectedReleases === 0" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Close</button>
+            <button id="CUR-uTRBhfkZKUL" ng-show="selectedReleases > 0" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-uTRnZRODbKx" ng-show="selectedReleases > 0" type="button" class="btn btn-complete m-t-5" ng-click="createReleases('selected')">+&nbsp;Create {{selectedReleases}} Release{{(selectedReleases > 1) ? 's' : ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createReleasesAllModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-uTRsGUrOSVC" class="modal-dialog">
+    <div id="CUR-uTRmMBaXXhv" class="modal-content">
+      <div id="CUR-uTRZkFJbXMw" class="modal-header clearfix text-left">
+        <button id="CUR-uTRngfugUsx" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-uTRHubYVcDZ" >Create All Releases</h5>
+      </div>
+      <div id="CUR-uTRkLQiUrAv" class="modal-body">
+        <div id="CUR-uTRupCyiICZ" class="row">
+          <div id="CUR-uTRuBdhwAdm" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{unmappedReleases.length}} release{{(unmappedReleases.length > 1) ? 's' : ''}}? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-uTRTkdJLpqq" class="row">
+          <div id="CUR-uTRkdfsyYwS" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-uTRnHXtKHLQ" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-uTRQYlZGxyc" type="button" class="btn btn-complete m-t-5" ng-click="createReleases('all')">+&nbsp;Create {{unmappedReleases.length}} Release{{(unmappedReleases.length > 1) ? 's' : ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createTracksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-uTRjngBTHQc" class="modal-dialog">
+    <div id="CUR-uTRrwtyoNym" class="modal-content">
+      <div id="CUR-uTRnLfUoThO" class="modal-header clearfix text-left">
+        <button id="CUR-uTRMeZXagLg" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-uTRTlHCiNCp" >Create Selected Tracks</h5>
+      </div>
+      <div id="CUR-uTRqHkztEjY" class="modal-body">
+        <div id="CUR-uTRDtDdTQJT" ng-show="selectedTracks > 0" class="row">
+          <div id="CUR-uTRwUchKqAz" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{selectedTracks}} track{{(selectedTracks > 1) ? 's' : ''}}? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-uTRebazlfAJ" ng-show="selectedTracks === 0" class="row">
+          <div id="CUR-uTRsmfRlRvy" class="col-xs-12 m-t-20">
+            <p>You have selected no tracks to create.</p>
+          </div>
+        </div>
+        <div id="CUR-uTRHfVOgAWp" class="row">
+          <div id="CUR-uTRFcjOMxhF" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-uTRAPiBCJeJ" ng-show="selectedTracks === 0" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Close</button>
+            <button id="CUR-uTRseZxPUTn" ng-show="selectedTracks > 0" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-uTRzVakjTZZ" ng-show="selectedTracks > 0" type="button" class="btn btn-complete m-t-5" ng-click="createTracks('selected')">+&nbsp;Create {{selectedTracks}} Track{{(selectedTracks > 1) ? 's' : ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createTracksAllModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-uTREGmzwRfR" class="modal-dialog">
+    <div id="CUR-uTRSTNrKbml" class="modal-content">
+      <div id="CUR-uTRJigMvYXf" class="modal-header clearfix text-left">
+        <button id="CUR-uTRJyUSxcBN" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-uTRDFhzgdRF" >Create All Tracks</h5>
+      </div>
+      <div id="CUR-uTRacgtfCSo" class="modal-body">
+        <div id="CUR-uTRxQoJmsAC" class="row">
+          <div id="CUR-uTRGmPoVYGA" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{unmappedTracks.length}} track{{(unmappedTracks.length > 1) ? 's' : ''}}? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-uTRtfXrpYKy" class="row">
+          <div id="CUR-uTRaGpKGQzD" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-uTRyRjbrhui" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-uTRqLmNJXCy"  type="button" class="btn btn-complete m-t-5" ng-click="createTracks('all')">+&nbsp;Create {{unmappedTracks.length}} Track{{(unmappedTracks.length > 1) ? 's' : ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

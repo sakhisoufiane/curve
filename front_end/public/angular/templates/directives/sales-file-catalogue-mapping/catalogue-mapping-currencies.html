@@ -1,0 +1,52 @@
+<div class="row catalogue-mapping-wrapper">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <h4>Currencies</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-info">
+          <p>Below are all currencies that did not get matched to the currencies in our set</p>
+          <p>Match the values on the right using the dropdowns on the left. These will all be remembered and saved to the template for future mapping.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row m-b-20">
+      <div class="col-xs-12">
+        <h5 class="pull-right">Total: {{salesFile.invalidFields.currencyCodes.length}}</h5>
+      </div>
+    </div>
+    <div class="row m-b-20" ng-repeat="currencyCode in salesFile.invalidFields.currencyCodes | limitTo: 25: currencyCodeMappingIndex track by $index">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <input type="text" class="form-control" ng-model="currencyCode" readonly>
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <ui-select ng-model="selectedCurrencyCodes[$index + currencyCodeMappingIndex]">
+          <ui-select-match allow-clear="true">
+            <span ng-bind="$select.selected.code"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+            <span ng-bind-html="currency.code"></span>
+            <span> &nbsp; - &nbsp; </span>
+            <span ng-bind-html="currency.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div class="row m-b-20" ng-if="salesFile.invalidFields.currencyCodes && salesFile.invalidFields.currencyCodes.length > 25">
+      <div class="col-xs-4">
+        Showing {{currencyCodeMappingIndex + 1}} to {{lowestValue(currencyCodeMappingIndex + 25, salesFile.invalidFields.currencyCodes.length)}} of {{salesFile.invalidFields.currencyCodes.length}}
+      </div>
+      <div class="col-xs-4 text-center">
+        <div class="btn-group">
+          <button ng-disabled="!(currencyCodeMappingIndex > 0)" type="button" class="btn btn-default" ng-click="minusFromIndex('currencyCodeMappingIndex', 25)"><</button>
+          <button ng-disabled="!(salesFile.invalidFields.currencyCodes.length > currencyCodeMappingIndex + 25)" type="button" class="btn btn-default" ng-click="addToIndex('currencyCodeMappingIndex', 25)">></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

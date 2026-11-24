@@ -1,0 +1,1777 @@
+<div id="CUR-VhZkNZwH" class="jumbotron" data-pages="parallax">
+  <div
+    id="CUR-CqagngLG"
+    class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20"
+  >
+    <div id="CUR-bxkuVjPb" class="inner">
+      <ul id="CUR-dFuJEWkc" class="breadcrumb">
+        <li id="CUR-zUiMHZJq">
+          <a id="CUR-oOdualDT" href="/#/works">Works</a>
+        </li>
+        <li id="CUR-GRWhVVoj" ng-show="!work._id">
+          <a id="CUR-eCncWFAJ" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-oYViBlzV" ng-show="work._id">
+          <a id="CUR-akEIpKvg" href="/#/works/{{work._id}}/edit" class="active"
+            >{{work.title}}</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div
+  id="CUR-aunhQZNU"
+  class="container-fluid container-fixed-lg works-edit-container"
+>
+  <div
+    id="CUR-JaPOAmeLk"
+    ng-show="significantPartnerChainsUpdateChanges.length > 0"
+    class="alert alert-warning"
+  >
+    <p id="CUR-LKSpeAolV">
+      <b>
+        The Partner {{ significantPartnerChainsUpdateChanges.length > 1 ?
+        'Chains' : 'Chain' }} below {{
+        significantPartnerChainsUpdateChanges.length > 1 ? 'have' : 'has' }}
+        been updated since the last Delivery. You will need to create a Delivery
+        for {{ significantPartnerChainsUpdateChanges.length > 1 ? 'these' :
+        'this' }} {{ significantPartnerChainsUpdateChanges.length > 1 ?
+        'Partners' : 'Partner' }}, otherwise create a Scheduled Delivery.
+      </b>
+    </p>
+    <ul id="CUR-KPLskRAoP">
+      <li ng-repeat="deliveryPartner in significantPartnerChainsUpdateChanges">
+        <a
+          href="/#/deliverySettings/deliveryPartners/{{deliveryPartner._id}}/edit"
+          >{{ deliveryPartner.name }}</a
+        >
+      </li>
+    </ul>
+  </div>
+  <div id="CUR-pnxFkSxy" class="row">
+    <div
+      ng-if="featureAccess('deliveries')"
+      id="CUR-WElwotKs"
+      class="col-12 col-md-2 two-cols-row sm-p-l-20 sm-p-r-20"
+      style="padding-left: 0px"
+    >
+      <span
+        id="CUR-PyyEtfFt"
+        class="label label-sm label-grey label-tag"
+        ng-if="work.onHold"
+        >On Hold</span
+      ><br ng-if="work.onHold" />
+      <span
+        id="CUR-fOoiVxgS"
+        class="label label-sm label-warning label-tag"
+        ng-if="work.valid && !work.approvedDate"
+        >Ready for Approval</span
+      >
+      <span
+        id="CUR-IzcFXItq"
+        class="label label-sm label-danger label-tag"
+        ng-if="!work.valid"
+        >Invalid for Delivery</span
+      >
+      <span
+        id="CUR-BBfgtzql"
+        class="label label-sm label-green label-tag"
+        ng-if="work.valid && work.approvedDate"
+        >Approved</span
+      >
+    </div>
+    <!-- When deliveries is off, adding in a palceholder element to keep the buttons aligned -->
+    <div
+      ng-if="features && !features.deliveries"
+      id="CUR-WElwotKs"
+      class="col-12 col-md-2 two-cols-row sm-p-l-20 sm-p-r-20"
+      style="padding-top: 7px"
+    >
+      <span id="CUR-fOoiVxgS"></span>
+    </div>
+    <!-- When deliveries is off, adding in a palceholder element to keep the buttons aligned -->
+    <div
+      ng-if="features && !features.deliveries"
+      id="CUR-WElwotKs"
+      class="col-12 col-md-2 two-cols-row sm-p-l-20 sm-p-r-20"
+      style="padding-top: 7px"
+    >
+      <span id="CUR-fOoiVxgS"></span>
+    </div>
+    <div
+      id="CUR-risTbUes"
+      class="col-12 col-md-10 text-right two-cols-row sm-p-l-20 sm-p-r-20"
+    >
+      <button
+        ng-if="featureAccess('deliveries') && work._id"
+        id="CUR-kzDgNIqq"
+        class="btn"
+        ng-class="{ true: 'btn-success-green', false: 'btn-disabled' }[work.valid && !work.approvedDate]"
+        ng-disabled="!work.valid || work.approvedDate"
+        ng-click="approve()"
+        ng-show="rights.catalogue == 'Edit'"
+      >
+        Approve
+      </button>
+      <button
+        ng-if="featureAccess('deliveries') && work._id"
+        id="CUR-ffoRertT"
+        class="btn btn-info"
+        ng-click="toggleHold()"
+        ng-show="rights.catalogue == 'Edit'"
+      >
+        <i ng-show="work.onHold !== true" class="fa fa-pause"></i
+        ><i ng-show="work.onHold === true" class="fa fa-play"></i>{{work.onHold
+        === true ? '&nbsp;Resume' : '&nbsp;Hold'}}
+      </button>
+      <button
+        id="CUR-XJkFoQlq"
+        class="btn btn-danger"
+        ng-show="rights.catalogue == 'Edit'"
+        data-toggle="modal"
+        data-target="#deleteModal"
+        ng-show="work._id"
+      >
+        <i class="fa fa-trash"></i>&nbsp;Delete
+      </button>
+      <button
+        id="CUR-iRaFdRnb"
+        class="btn btn-warning"
+        ng-show="rights.catalogue == 'Edit'"
+        ng-click="copy()"
+        ng-show="work._id"
+      >
+        <i class="fa fa-copy"></i> Copy
+      </button>
+      <button
+        id="CUR-krbtirMF"
+        class="btn btn-complete"
+        ng-show="rights.catalogue == 'Edit'"
+        ng-click="dueToFlushContracts = false; save()"
+      >
+        <i class="fa fa-check"></i> Save
+      </button>
+    </div>
+  </div>
+
+  <div id="CUR-FfoLgyXp" ng-show="deletionError" class="alert alert-danger">
+    <div id="CUR-tJeRfFgE" ng-show="deletionError.sales">
+      <p>The following Sales Files need to be deleted first:</p>
+      <p
+        id="CUR-LWXtIIep"
+        ng-repeat="error in deletionError.sales track by $index"
+      >
+        <a id="CUR-PAiKNxRI" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-ZCOAaaEY" ng-show="deletionError.costs">
+      <p>The following Costs need to be deleted first:</p>
+      <p
+        id="CUR-rnFEkBUW"
+        ng-repeat="error in deletionError.costs track by $index"
+      >
+        <a id="CUR-AvWmMLkx" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-ZTRfvcCG" ng-show="deletionError.clients">
+      <p>
+        There are Duplicate Identifiers associated with this work, click
+        <a id="CUR-bDMGXpAT" href="#/{{deletionError.clients[0].link}}">here</a>
+        to go to the settings page
+      </p>
+    </div>
+  </div>
+
+  <div
+    ng-if="featureAccess('deliveries')"
+    id="CUR-RhDtuEIA"
+    ng-show="work.validationErrors && work.validationErrors.length !== 0 "
+    class="alert alert-danger"
+  >
+    <p><b>The following validation errors occurred:</b></p>
+    <ul id="CUR-zKWcoivz">
+      <li
+        id="CUR-yFLMJTrb"
+        ng-repeat="error in work.validationErrors track by $index"
+      >
+        {{error}}
+      </li>
+    </ul>
+  </div>
+
+  <div id="CUR-WHKLQBDZ" class="row">
+    <div id="CUR-EAtvNNHq" class="panel panel-transparent hidden-xs">
+      <!-- Nav tabs -->
+      <ul
+        id="CUR-QvZBYELK"
+        class="nav nav-tabs"
+        data-init-reponsive-tabs="dropdownfx"
+      >
+        <li id="CUR-oXdmmClP" class="active" ng-click="setTab('overview')">
+          <a id="CUR-rLmyvJFq" data-toggle="tab" aria-expanded="true"
+            ><span id="CUR-SGzRXkER">Overview</span></a
+          >
+        </li>
+        <li id="CUR-RPfKpBzL" ng-click="setTab('territories')">
+          <a id="CUR-SPzJsnTC" data-toggle="tab" aria-expanded="true"
+            ><span id="CUR-fNRPquyE">Territories</span></a
+          >
+        </li>
+        <li id="CUR-RroOvXaT" ng-click="setTab('ipChain')">
+          <a id="CUR-vFyhSuAx" data-toggle="tab" aria-expanded="true"
+            ><span id="CUR-gsehYTpY">IP Chain</span></a
+          >
+        </li>
+        <li id="CUR-PIdRsTPu" ng-click="setTab('rights')">
+          <a id="CUR-OBFawVNU" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-GgIbObuD">Rights</span></a
+          >
+        </li>
+        <li id="CUR-LNGxixmQ" ng-click="setTab('aliases')">
+          <a id="CUR-JfnPfyOr" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-XhaCOEhN">Aliases</span></a
+          >
+        </li>
+        <li
+          ng-if="featureAccess('deliveries')"
+          id="CUR-KKhOiczB"
+          ng-click="setTab('deliveries')"
+        >
+          <a id="CUR-JoVrHFYx" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-gKfOzctv">Deliveries</span></a
+          >
+        </li>
+        <li id="CUR-gvQynyGV" ng-click="setTab('analytics')">
+          <a id="CUR-htrpABgU" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-QgdgsLCo">Analytics</span></a
+          >
+        </li>
+      </ul>
+      <div id="CUR-JGwdcqua" class="tab-content" ng-if="!showAccordions">
+        <div
+          id="CUR-NTbQGoDB"
+          ng-show="activeTab === 'overview'"
+          ng-include="'overview-tab.html'"
+        ></div>
+        <div
+          id="CUR-cUoEghKn"
+          ng-show="activeTab === 'territories'"
+          ng-include="'territories-tab.html'"
+        ></div>
+        <div
+          id="CUR-sptwHgPq"
+          ng-show="activeTab === 'ipChain'"
+          ng-include="'ip-chain-tab.html'"
+        ></div>
+        <div
+          id="CUR-KDwAMDKV"
+          ng-show="activeTab === 'rights'"
+          ng-include="'rights-tab.html'"
+        ></div>
+        <div
+          id="CUR-zaNKtPgj"
+          ng-show="activeTab === 'aliases'"
+          ng-include="'aliases-tab.html'"
+        ></div>
+        <div
+          id="CUR-ygEezJKt"
+          ng-show="activeTab === 'deliveries'"
+          ng-include="'deliveries-tab.html'"
+        ></div>
+        <div id="CUR-jgTPhxwV" ng-show="activeTab === 'analytics'">
+          <analytics-suite analytics-config="analyticsConfig"></analytics-suite>
+        </div>
+      </div>
+    </div>
+    <div
+      id="CUR-ZCCOjSMG"
+      class="col-xs-12 visible-xs p-l-20 p-r-20"
+      ng-if="showAccordions"
+    >
+      <uib-accordion close-others="true" ng-init="status1.open = true;">
+        <div
+          id="CUR-ZHFHJxuq"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status1.open"
+        >
+          <uib-accordion-heading>
+            Overview
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-vDtIfTBC" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-rVokjaVT"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status2.open"
+        >
+          <uib-accordion-heading>
+            Territories
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-vysUOHiY" ng-include="'territories-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-FJOLyxFs"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status3.open"
+        >
+          <uib-accordion-heading>
+            IP Chain
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-GcIzszEM" ng-include="'ip-chain-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-GJQSNjhy"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status4.open"
+        >
+          <uib-accordion-heading>
+            Rights
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status4.open, 'glyphicon-chevron-right': !status4.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-wyjbqaEL" ng-include="'rights-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-iUHMLSwV"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status5.open"
+        >
+          <uib-accordion-heading>
+            Aliases
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status5.open, 'glyphicon-chevron-right': !status5.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-SqXicHSf" ng-include="'aliases-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-oQWiRaNO"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status6.open"
+        >
+          <uib-accordion-heading>
+            Deliveries
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status6.open, 'glyphicon-chevron-right': !status6.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-gJKIGOOA" ng-include="'deliveries-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-qePqKrvQ"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status7.open"
+        >
+          <uib-accordion-heading>
+            Analytics
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status7.open, 'glyphicon-chevron-right': !status7.open}"
+            ></i>
+          </uib-accordion-heading>
+          <analytics-suite
+            analytics-config="analyticsConfig"
+            analytics-mobile-sections="true"
+          ></analytics-suite>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+
+  <div id="CUR-DefPuObQ" class="row">
+    <div id="CUR-jyvacLTy" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-pUxtAWdq" ng-show="work.updatedAt"
+        >Last Updated on {{ work.updatedAt | date : dateFormat : 'UTC' }}.</span
+      >
+      <a
+        href="javascript:;"
+        ng-if="work._id"
+        ng-click="modelHistory()"
+        ng-show="rights.catalogue == 'Edit'"
+        >See Full History</a
+      >
+    </div>
+  </div>
+</div>
+
+<!--<div id="CUR-cFtYdJPa" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-GZkGcESB" class="row">
+    <div id="CUR-dKeplYsa" class="col-sm-12 text-right">
+      <h6>Created By: {{work.createdBy.email}}</h6>
+      <h6>Last Modified By: {{work.lastModifiedBy.email}}</h6>
+    </div>
+  </div>
+</div>-->
+
+<div
+  class="modal fade stick-up"
+  id="deleteModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div id="CUR-uJHfqjzX" class="modal-dialog">
+    <div id="CUR-dpexwpmR" class="modal-content">
+      <div id="CUR-kQfQnnOi" class="modal-header clearfix text-left">
+        <button
+          id="CUR-LTSPFozm"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-MbufgMrs">Delete Work</h5>
+      </div>
+      <div id="CUR-QWFgjrEt" class="modal-body">
+        <div id="CUR-MUrxYPRU" class="row">
+          <div id="CUR-ynLtjIhp" class="col-xs-12 m-t-20">
+            <p>
+              Are you sure you want to delete this work? This cannot be undone.
+            </p>
+          </div>
+        </div>
+        <div id="CUR-QTuenfce" class="row">
+          <div id="CUR-QhAEVGlR" class="col-xs-12 m-t-20 text-right">
+            <button
+              id="CUR-SwaWIatM"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-AzjXhskq"
+              type="button"
+              class="btn btn-danger m-t-5"
+              ng-click="delete()"
+            >
+              <i class="fa fa-trash"></i>&nbsp;Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="overview-tab.html">
+  <div id="CUR-PAWnEFtt" class="row">
+    <div id="CUR-JpBTqEAS" class="col-xs-12 col-md-6">
+      <div id="CUR-qDAyinhd" class="panel panel-default">
+        <div id="CUR-OfnVXxaq" class="panel-heading">
+          <div id="CUR-tByuPpij" class="panel-title">
+            Overview <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-works/#overview"></documentation>
+          </div>
+        </div>
+        <div id="CUR-iOZmFxrV" class="panel-body p-t-15">
+          <div id="CUR-StAMxtoZ" class="form-group">
+            <label id="CUR-XueBvUCo">Party ID <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The unique identifier assigned by Curve for use within CWR deliveries"></i></label>
+            <input id="CUR-MkpSOcxW" type="text" class="form-control" ng-model="work.partyNo" disabled>
+          </div>
+          <div id="CUR-yfSbxWFw" class="form-group required">
+            <label id="CUR-AwjzFfxt">Title</label>
+            <input id="CUR-lsTRMbuJ" type="text" class="form-control" ng-model="work.title" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-lHDrAyON" class="form-group required">
+            <div id="CUR-ocYjSLVg" class="row">
+              <div id="CUR-UtFIMKXw" class="col-xs-6">
+                <label id="CUR-vLICvQZe">Alternate Title</label>
+              </div>
+              <div id="CUR-RxtebbJz" class="col-xs-4" ng-if="work.alternateTitles.length > 0">
+                <label id="CUR-sWfTWOUN">Language</label>
+              </div>
+            </div>
+            <alternate-title-row ng-repeat="title in work.alternateTitles track by $index" title="title" delete="deleteAlternateTitle(title)" languages="languages" edit="rights.catalogue == 'Edit'"></alternate-title-row>
+            <div id="CUR-ZBRwujWT" class="row">
+              <div id="CUR-OOjjhWlE" class="col-xs-12">
+                <div id="CUR-wGoqSewa" class="two-cols-row">
+                <button id="CUR-qxneCfJR" class="btn btn-complete" ng-click="addAlternateTitle()" ng-if="rights.catalogue == 'Edit'">+ Title</button>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div id="CUR-iyewYlSE" class="form-group required">
+            <label id="CUR-IXJLhbsn">Composer</label>
+            <input id="CUR-VJwHBmur" type="text" class="form-control" ng-model="work.composer" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-BttMxQhC" class="form-group required">
+            <label id="CUR-xzLguMJX">Foreign ID <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Used for integrating into other systems, such as accounting systems"></i></label>
+            <input id="CUR-dxyDcLit" type="text" class="form-control" ng-model="work.foreignId" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-projectId" class="form-group required">
+            <label id="CUR-projectId-label">Project ID</label>
+            <input id="CUR-projectId-input" type="text" class="form-control" ng-model="work.projectId" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-FobzudcB" class="form-group required">
+            <label id="CUR-oFqOTpNE">Main Identifier</label>
+            <input id="CUR-rgfRlRyx" type="text" class="form-control" ng-model="work.identifier" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-FQJvkpZd" class="form-group required">
+            <label id="CUR-NNyemDWc">ISWC</label>
+            <input id="CUR-nXHdjIIM" type="text" class="form-control" ng-model="work.iswc" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-toAQcNRu" class="form-group required">
+            <label id="CUR-CZsdsGCn">Tunecode</label>
+            <input id="CUR-qPZMALXT" type="text" class="form-control" ng-model="work.tunecode" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-OfzFtzal" class="form-group required">
+            <label id="CUR-OBJzFCId">Copyright Date <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The date this work was first registered"></i></label>
+            <div id="datepicker-component" class="form-group input-group date">
+                <input id="CUR-uledeJqA" type="text" class="form-control" ng-model="work.copyrightDate" ng-model-options="{timezone: 'utc'}" uib-datepicker-popup="{{dateFormat}}" is-open="copyrightDatePopup.opened" ng-click="openCopyrightDatePopup()" ng-disabled="rights.catalogue != 'Edit'">
+                <span id="CUR-rwfsKnuM" class="input-group-addon" ng-click="openCopyrightDatePopup()">
+                  <i class="fa fa-calendar"></i>
+                </span>
+              </div>
+          </div>
+          <div id="CUR-WoNibqtb" class="form-group required">
+            <label id="CUR-LRjJmvzB">Label Copy <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The ownership line of the work, eg. listing publishers and collection societies"></i></label>
+            <input id="CUR-sutvPwvD" type="text" class="form-control" ng-model="work.labelCopy" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+
+          <div id="CUR-WoNibqub" class="form-group required">
+            <label id="CUR-LRjJmwzB">Source <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The import source history of the work"></i></label>
+            <div class="file-image" ng-if="work.source && work.source.length > 0" ng-click="openSource()" style="margin:0; display: inline-block; width: 24px; height: 24px">
+              <div style="width: 24px; height: 24px; margin-left: 10px; margin-top: 6px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-IMVZDnpL" class="panel panel-default sm-m-b-5">
+        <div id="CUR-MlAgdDGj" class="panel-heading">
+          <div id="CUR-HvTeDUmX" class="panel-title">
+            Notes
+          </div>
+        </div>
+        <div id="CUR-PwAtlnCp" class="panel-body p-t-15">
+          <textarea class="form-control standard-textarea" ng-model="work.notes" ng-disabled="rights.catalogue != 'Edit'"></textarea>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-fJhXEQPa" class="col-xs-12 col-md-6">
+      <div ng-if="featureAccess('deliveries')" id="CUR-CRNlgDSW" class="panel panel-default">
+        <div id="CUR-owenwRCo" class="panel-heading">
+          <div id="CUR-azHuMKKB" class="panel-title">
+            Configuration <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-works/#configurations"></documentation>
+          </div>
+        </div>
+        <div id="CUR-TLgHvblz" class="panel-body p-t-15">
+          <div id="CUR-OhEKckfd" class="form-group">
+            <input id="CUR-tqUrMpoj" ng-disabled="rights.catalogue != 'Edit'" type="checkbox" value="1" ng-model="work.priority">
+            <label id="CUR-UfraPPRI">Priority <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Flags work as a priority in CWR output"></i></label>
+          </div>
+          <div id="CUR-cogUIONj" class="form-group">
+            <input id="CUR-mUNsBIzL" ng-disabled="rights.catalogue != 'Edit'" type="checkbox" value="1" ng-model="work.productionLibrary">
+            <label id="CUR-wuXFphXE">Production Library <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Is this work part of a production library? Should it be classified as such at your PRO?"></i></label>
+          </div>
+          <div ng-if="work.productionLibrary" id="CUR-CRNlgDSW">
+            <div id="CUR-yfSbxWFw" class="form-group required">
+              <label id="CUR-AwjzFfxt">Production Title</label>
+              <input id="CUR-lsTRMbuJ" type="text" class="form-control" ng-model="work.productionTitle" ng-disabled="rights.catalogue != 'Edit'">
+            </div>
+            <div id="CUR-yfSbxWFw" class="form-group required">
+              <label id="CUR-AwjzFfxt">CD Identifier</label>
+              <input id="CUR-lsTRMbuJ" type="text" class="form-control" ng-model="work.cdIdentifier" ng-disabled="rights.catalogue != 'Edit'">
+            </div>
+            <div id="CUR-yfSbxWFw" class="form-group required">
+              <label id="CUR-AwjzFfxt">Cut Number</label>
+              <input id="CUR-lsTRMbuJ" type="text" class="form-control" ng-model="work.cutNo" ng-disabled="rights.catalogue != 'Edit'">
+            </div>
+            <div id="CUR-yfSbxWFw" class="form-group required">
+              <label id="CUR-AwjzFfxt">Library Title</label>
+              <input id="CUR-lsTRMbuJ" type="text" class="form-control" ng-model="work.libraryTitle" ng-disabled="rights.catalogue != 'Edit'">
+            </div>
+          </div>
+          <div id="CUR-UZAtFjrI" class="form-group required">
+            <label id="CUR-FamUVQWa">Category</label>
+            <select ng-disabled="rights.catalogue != 'Edit'" class="form-control" ng-model="work.workDescriptionCategory" ng-options="item as item for item in ['', 'Pop', 'Jazz', 'Classical', 'Undefined']"></select>
+          </div>
+          <div id="CUR-fhXAVIbZ" class="form-group required">
+            <label id="CUR-ekpzyKQr">Language</label>
+            <ui-select ng-disabled="rights.catalogue != 'Edit'" ng-model="work.workLanguage">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-QaKIswQg" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in languages | filter: $select.search">
+                <span id="CUR-qLoefOVU" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-FfzdVYfJ" class="form-group required">
+            <label id="CUR-ISpsJBCk">Composite Type <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Is this work a made up of multiple of works?<br/><br/><b>Composite of Samples</b> - A composite work containing new material and one or more samples of pre-existing recorded works<br/><b>Medley</b> - A continuous combination of existing works<br/><b>Potpourri</b> - A composite work with the addition of original material which have been combined to form a new work, that has been published and printed<br/><b>Unspecified Composite</b> - Works known to be a composite but where the type of composite is unknown."></i></label>
+            <select ng-disabled="rights.catalogue != 'Edit'" class="form-control" ng-model="work.compositeType" ng-options="item as item for item in compositeTypes"></select>
+          </div>
+          <div id="CUR-dRxfhYpM" class="form-group required" ng-if="work.compositeType && work.compositeType != 'None'">
+            <div id="" ng-repeat="compositeWork in work.compositeWorks track by $index" class="row form-group">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-10">
+                    <label id="">Title</label>
+                    <input id="" type="text" class="form-control" ng-model="compositeWork.title">
+                  </div>
+                  <div class="col-md-2">
+                    <button class="btn btn-danger row-button" ng-click="removeCompositeWork($index)"><i class="fa fa-trash"></i></button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-10">
+                    <label id="">Original Work Source <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="What was the original work's source?"></i></label>
+                    <input id="" type="text" class="form-control" ng-model="compositeWork.source" class="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button id="" class="btn btn-complete" ng-click="addCompositeWork()">+ Work</button>
+          </div>
+        </div>
+      </div>
+      <div ng-if="featureAccess('deliveries')" id="CUR-ULknapJH" class="panel panel-default">
+        <div id="CUR-PTNQTcRz" class="panel-heading">
+          <div id="CUR-vhyJILoO" class="panel-title">
+            Modification
+          </div>
+        </div>
+        <div id="CUR-fNeqQWDy" class="panel-body p-t-15">
+          <div id="CUR-bWxomjQp" class="form-group required">
+            <label id="CUR-ljxFbnWk">Work Version <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Is this an original or a modification of a previous work?"></i></label>
+            <select ng-disabled="rights.catalogue != 'Edit'" class="form-control" ng-model="work.versionType" ng-options="item as item for item in ['', 'Original Work', 'Modification']"></select>
+          </div>
+          <div id="CUR-LSAgnLtO" class="form-group required" ng-if="work.versionType == 'Modification'">
+            <label id="CUR-ayZtfmLK">Arrangement Type <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Where the arrangement has changed, how has it been altered?"></i></label>
+            <select ng-disabled="rights.catalogue != 'Edit'" class="form-control" ng-model="work.arrangementType" ng-options="item as item for item in ['', 'Original', 'New Music Added', 'Arrangement', 'Addition of Music to Text', 'Unspecified']"></select>
+          </div>
+          <div id="CUR-tZLyBFiE" class="form-group required" ng-if="work.versionType == 'Modification'">
+            <label id="CUR-SlpVQsqw">Lyric Adaption <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Where the lyrics have changed, how has they been altered?"></i></label>
+            <select ng-disabled="rights.catalogue != 'Edit'" class="form-control" ng-model="work.lyricAdaptionType" ng-options="item as item for item in ['', 'Original', 'None', 'New Lyrics Added', 'Modification', 'Replaced', 'Addition of Lyrics to Music', 'Translation', 'Unspecified']"></select>
+          </div>
+          <div id="CUR-pwMAdKpZ" class="form-group required" ng-if="work.versionType == 'Modification'">
+            <label id="CUR-KvNAskxD">Original Work Title <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="What was the original work's title?"></i></label>
+            <input id="CUR-DKemxKkk" ng-disabled="rights.catalogue != 'Edit'" type="text" class="form-control" ng-model="work.originalWorkTitle" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-QAgOiAmA" class="form-group required" ng-if="work.versionType == 'Modification'">
+            <label id="CUR-GkBtpOxD">Original Work ISWC</label>
+            <input id="CUR-KurEAWvK" ng-disabled="rights.catalogue != 'Edit'" type="text" class="form-control" ng-model="work.originalIswc" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-ImErgbrO" class="form-group required" ng-if="work.versionType == 'Modification'">
+            <label id="CUR-GloLyZcR">Original Work Source <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Where was the work obtained to be modified? Eg. is this traditional or public domain, or acquired from a third party to be modified?"></i></label>
+            <input id="CUR-hbDYiyhh" ng-disabled="rights.catalogue != 'Edit'" type="text" class="form-control" ng-model="work.originalWorkSource" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-kjoOKvaa" class="form-group required" ng-if="work.versionType == 'Modification'">
+            <label id="CUR-EJhsTlwP">Original Writer Last Name</label>
+            <input id="CUR-lvmwtYnS" ng-disabled="rights.catalogue != 'Edit'" type="text" class="form-control" ng-model="work.originalWorkWriterLastName" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-oYGofoIa" class="form-group required" ng-if="work.versionType == 'Modification'">
+            <label id="CUR-wmDThOTo">Original Writer First Name</label>
+            <input id="CUR-kpDrkOiF" ng-disabled="rights.catalogue != 'Edit'" type="text" class="form-control" ng-model="work.originalWorkWriterFirstName" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+        </div>
+      </div>
+      <div id="CUR-TAzcfcHc" class="panel panel-default sm-m-b-5">
+        <div id="CUR-LtbglzbO" class="panel-heading">
+          <div id="CUR-ySPXtFMJ" class="panel-title">
+            Catalogue Groups <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-works/#catgroups"></documentation>
+          </div>
+        </div>
+        <div id="CUR-ZyKZmAwG" class="panel-body p-t-15">
+          <ui-select ng-disabled="rights.catalogue != 'Edit'" multiple ng-model="work.catalogueGroups" close-on-select="true">
+            <ui-select-match>{{$item}}</ui-select-match>
+            <ui-select-choices repeat="group in catalogueGroups | filter:$select.search">
+              {{group}}
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+
+      <div id="CUR-TJAeQMDg" class="panel panel-default">
+        <div id="CUR-YzaNHcEr" class="panel-heading">
+          <div id="CUR-VYwEZAjP" class="panel-title">
+            Performers
+          </div>
+        </div>
+        <div id="CUR-ptNokRsI" class="panel-body p-t-15">
+          <div id="CUR-yUxnHDpl" class="form-group">
+            <div id="CUR-TwuMfisw" class="row" ng-repeat="performer in displayPerformers">
+              <div id="CUR-eDssUAJp" class="col-xs-8">
+                <input id="CUR-tKPkwkCG" type="text" class="form-control" ng-model="performer.name" ng-disabled="rights.catalogue != 'Edit'">
+              </div>
+              <div id="CUR-kNLrSgIW" class="col-xs-4">
+                <button id="CUR-JPKWXYsV" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-show="rights.catalogue == 'Edit'" ng-click="deleteAssociation(displayPerformers, performer)"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+          <button id="CUR-fxkwFcoo" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addAssociation(displayPerformers)">+ Performer</button>
+        </div>
+      </div>
+
+      <div id="CUR-qUZEvIJv" class="panel panel-default">
+        <div id="CUR-rXvmCzdW" class="panel-heading">
+          <div id="CUR-vrOaTEaB" class="panel-title">
+            Track Associations <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-works/#trackassociations"></documentation>
+          </div>
+        </div>
+        <div id="CUR-fJtwXZbR" class="panel-body p-t-15">
+          <div id="CUR-vqpcUGxD" class="form-group">
+            <label id="CUR-SEJPurhw">Tracks</label>
+            <div id="CUR-bKfpJMUI" class="row" ng-repeat="track in displayAssociatedTracks">
+              <div id="CUR-BbZrkIkw" class="col-xs-8">
+                <track-select-field value="track.name" edit="rights.catalogue == 'Edit'"></track-select-field>
+              </div>
+              <div id="CUR-jkxArgJM" class="col-xs-4">
+                <button id="CUR-WagrdcXH" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-show="rights.catalogue == 'Edit'" ng-click="deleteAssociation(displayAssociatedTracks, track)"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+          <button id="CUR-gkLAXzRq" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addAssociation(displayAssociatedTracks)">+ Track</button>
+          <button id="CUR-dasroqdV" class="btn btn-primary" ng-show="rights.catalogue == 'Edit'" ng-click="createTrack()">+ Create Track</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="territories-tab.html">
+  <div id="CUR-hAsGjJQW" class="row">
+    <div id="CUR-ZRmaRrrT" class="col-xs-12 col-lg-12">
+      <div id="CUR-qiCPrltq" class="panel panel-default">
+        <div id="CUR-ZEOxjOmC" class="panel-heading">
+          <div id="CUR-xhqhrNoY" class="panel-title">
+            Territories <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-works/#territories"></documentation>
+          </div>
+        </div>
+        <div id="CUR-JCWMaejo" class="panel-body p-t-15">
+          <territory-checkboxes model="work.territories" edit="rights.catalogue == 'Edit'" hide-non-cisac="true"></territory-checkboxes>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="rights-tab.html">
+  <div id="CUR-eBsmaDKV" class="tab-inner-content">
+    <div id="CUR-irKzBgFZ" class="row">
+      <div id="CUR-qtGHJBtq" class="col-xs-12">
+        <div id="CUR-nVWEabiW" class="panel panel-transparent">
+          <div id="CUR-RwZlDRJE" class="panel-body">
+            <h3 id="CUR-MeNmQplX">Participation Rates <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-works/#rights"></documentation></h3>
+            <p>Participation Rates are used to associate a contract with a catalogue item, and set the percentage of revenue that flows through to the contract. You can assign multiple contracts to an item for each of the different composers or rights holders.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-KJnazxXK" class="row">
+      <div id="CUR-kLXLWxIH" class="col-xs-12">
+        <div id="CUR-PkBpszAD" class="panel panel-default sm-m-b-5">
+          <div id="CUR-awZOazuT" class="panel-body p-t-15">
+            <work-participator ng-repeat="contract in work.salesReturnsRightsDisplay" edit="rights.catalogue == 'Edit'" contract="contract" contracts="contracts" delete="deleteSalesReturnsRights(contract)" index="$index"></work-participator>
+            <button id="CUR-ZHChZZPz" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addSalesReturnsRights()">+ Contract</button>
+            <button id="CUR-HsJetwZb" class="btn btn-info" ng-click="flushContractsSave()">Flush Contracts To Work</button>
+          </div>
+        </div>
+        <div id="CUR-SrMMGZoK" class="panel panel-default sm-m-b-5">
+          <div id="CUR-XgniVwND" class="panel-heading">
+            <div id="CUR-OZmdZsom" class="panel-title">
+              Specific Participation Rates
+            </div>
+          </div>
+          <div id="CUR-klTPIUXR" class="panel-body p-t-15">
+            <p>Use the Specific Participation Rates to set a different rate for a specific channel, source or territory, or any combination of the three - for instance when a composer is not affiliated with a society, and their performance share will be paid directly to the publisher. Use these specific rates to override the general rates above. Do note, a general rate is required in order for a specific rate for calculate.</p>
+            <div class="form-group" ng-if="enhancedParticipationRates" style="display: flex; align-items: center; gap: 10px; margin-top: 15px;">
+              <input ng-disabled="rights.catalogue != 'Edit'" type="checkbox" ng-model="work.enablePublisherMapping" style="margin: 0;">
+              <label style="margin: 0;">Enable Mapping Publishers</label>
+            </div>
+            <channel-specific-participation-rates-row ng-repeat="contract in work.channelSpecificSalesReturnsRights track by $index" edit="rights.catalogue == 'Edit'" contract="contract" contracts="contracts" territories="rightsChainTerritories" delete="deleteChannelSpecificParticipationRates(contract)" index="$index" enable-publisher-mapping="work.enablePublisherMapping && enhancedParticipationRates"></channel-specific-participation-rates-row>
+            <button id="CUR-udOHiZkn" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addChannelSpecificParticipationRates()">+ Contract</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="aliases-tab.html">
+  <div id="CUR-pMhKfoGX" class="row">
+    <div id="CUR-yiXgUBPh" class="col-xs-12 col-md-6">
+      <div id="CUR-eQnXdzZa" class="panel panel-default">
+        <div id="CUR-wUktKpST" class="panel-heading">
+          <div id="CUR-WpXGvtEX" class="panel-title">
+            Society Identifiers <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-works/#aliases"></documentation>
+          </div>
+        </div>
+        <div id="CUR-VENJrwXZ" class="panel-body p-t-15">
+          <p>
+            Set the identifiers here for each society. These will be used in the mapping process when mapping income against the work.
+          </p>
+          <society-identifier-row ng-repeat="identifier in work.societyIdentifiers" edit="rights.catalogue == 'Edit'" index="$index" identifier="identifier" societies="societies" delete="deleteIdentifier(identifier)"></society-identifier-row>
+          <button id="CUR-NoVvHnsF" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addIdentifier()">+ Identifier</button>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-LRxkuFZo" class="col-xs-12 col-md-6">
+      <div id="CUR-SGQCbnEE" class="panel panel-default">
+        <div id="CUR-XTeIsAZt" class="panel-heading">
+          <div id="CUR-xDwBWXqI" class="panel-title">
+            Aliases
+          </div>
+        </div>
+        <div id="CUR-LSVnRHWu" class="panel-body p-t-15">
+          <p id="CUR-IXCtatDT" class="m-b-35">
+            Set any mappings from outside of societies, such as a sub-publisher's own identifiers, which will used to map down the income against the work.
+          </p>
+          <alias-row ng-repeat="alias in displayAliases track by $index" alias="alias" index="$index" delete="deleteAssociation(displayAliases, alias)" edit="rights.catalogue == 'Edit'"></alias-row>
+          <button id="CUR-ATDJmTdE" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addAssociation(displayAliases)">+ Alias</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="ip-chain-tab.html">
+  <div id="CUR-GCJBDLaG" class="tab-inner-content" ng-if="activeTab === 'ipChain'">
+    <div id="CUR-MOdXPbSq" class="row">
+      <div id="CUR-rasAoxrL" class="col-xs-12">
+        <div id="CUR-kNFokKFR" class="panel panel-transparent">
+          <div id="CUR-SSBRyAZo" class="panel-body">
+            <h3 id="CUR-CYyWoGPs">IP Chain <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-works/#ipchain"></documentation></h3>
+            <p>Use the Default IP Chain to describe the default publisher and composers ownership of the work.</p>
+            <p>Use Partner IP Chains to override the publisher and composers ownership of the work for a specific Delivery Partner and Territory combination.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-GsKIXLzG" class="row">
+      <div id="CUR-YhBXBjCX" class="col-xs-12">
+        <ul id="CUR-QvZBYELK" class="nav nav-tabs mb-5" data-init-reponsive-tabs="dropdownfx">
+          <li id="CUR-oXdmmClP" class="active" ng-click="setSubTab('default')">
+            <a id="CUR-rLmyvJFq" data-toggle="tab" aria-expanded="true"><span id="CUR-SGzRXkER">Default</span></a>
+          </li>
+          <li id="CUR-RPfKpBzL" ng-click="setSubTab('partners')" ng-if="partnerChains">
+            <a id="CUR-SPzJsnTC" data-toggle="tab" aria-expanded="true"><span id="CUR-fNRPquyE">Partners</span></a>
+          </li>
+        </ul>
+        <div id="CUR-sptwHgPq" ng-show="subTab === 'default'" ng-include="'ip-chain-tab-overview.html'"></div>
+        <div id="CUR-sptwHgPq" ng-show="subTab === 'partners'" ng-include="'ip-chain-tab-partners.html'"></div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="deliveries-tab.html">
+  <div id="CUR-bqOJQXHJ" class="row">
+    <div id="CUR-lTBuQJmI" class="col-xs-12">
+      <div id="CUR-LipwiTCG" class="panel panel-default">
+        <div id="CUR-RRRbWXcz" class="panel-heading">
+          <div id="CUR-WKJwTLaL" class="panel-title">
+            Deliveries <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-works/#deliveries"></documentation>
+          </div>
+        </div>
+        <div id="CUR-EZQKTLdY" class="panel-body p-t-15">
+          <div id="CUR-kIgnGRIb" class="table-responsive">
+            <table id="CUR-wOqznKGq" class="table table-hover dataTable no-footer custom-responsive" ng-class="{'table-selectable': selectable}">
+              <thead>
+                <tr id="CUR-EUIWogGC">
+                  <th class="table-checkbox">
+                    <input id="CUR-yjgnVbsQ" type="checkbox" class="select-all" ng-click="selectAllDeliveries()" ng-checked="selectAllChecked" ng-show="rights.catalogue == 'Edit'">
+                  </th>
+                  <th>Partner</th>
+                  <th style="text-align: center; padding-left: 8px">ID</th>
+                  <th style="text-align: center; padding-left: 8px">Original<br>Delivery</th>
+                  <th style="text-align: center; padding-left: 8px">Last<br>Update</th>
+                  <th style="text-align: center; padding-left: 8px">Last Ack</th>
+                  <th style="text-align: center; padding-left: 8px">History</th>
+                  <th style="text-align: center; padding-left: 8px">Status</th>
+                  <th style="padding: 12px">
+                    <select ng-disabled="rights.catalogue != 'Edit'" class="form-control" ng-model="bulkUpdate.status" ng-change="bulkUpdateDeliveryStatus()" ng-options="item as item for item in deliveryStatuses">
+                    <option value="" disabled selected>Bulk Update</option>
+                  </select>
+                </th>
+                </tr>
+              </thead>
+              <tbody id="CUR-QEEcGaST">
+                <tr id="CUR-TZGDjseo" ng-repeat="delivery in deliveries">
+                  <td class="v-align-middle hidden-xs"><input type="checkbox" ng-model="delivery.selected"></td>
+                  <td>
+                    <span ng-if="delivery.deliveryPartner && delivery.deliveryPartner.name && delivery.deliveryPartner.name.length > 40"
+                          tooltips tooltip-template="{{delivery.deliveryPartner.name}}">
+                          <a href="/#/deliverySettings/deliveryPartners/{{delivery.deliveryPartner._id}}/edit">
+                            {{ delivery.deliveryPartner.name.length > 40 ? delivery.deliveryPartner.name.substring(0, 40) + '...' : delivery.deliveryPartner.name }}
+                          </a>
+                    </span>
+                    <span ng-if="delivery.deliveryPartner && delivery.deliveryPartner.name && delivery.deliveryPartner.name.length <= 40">
+                          <a href="/#/deliverySettings/deliveryPartners/{{delivery.deliveryPartner._id}}/edit">
+                            {{delivery.deliveryPartner.name}}
+                          </a>
+                    </span>
+                  </td>
+                  <td style="text-align: center">{{delivery.identifier}}</td>
+                  <td style="text-align: center">{{delivery.originalDelivery | date :dateFormat : 'UTC'}}</td>
+                  <td style="text-align: center">{{delivery.lastUpdate | date :dateFormat : 'UTC'}}</td>
+                  <td style="text-align: center">
+                    <a ng-if="delivery.cwrAcknowledgementId" href="#/cwrAcknowledgements/{{delivery.cwrAcknowledgementId}}/edit">{{delivery.lastAcknowledgment | date :dateFormat : 'UTC'}}</a>
+                    <span ng-if="!delivery.cwrAcknowledgementId">{{delivery.lastAcknowledgment | date :dateFormat : 'UTC'}}</span>
+                  </td>
+                  <td style="text-align: center;" >
+                    <div class="file-image" ng-if="delivery.logs.length" ng-click="openDeliveryHistory(delivery.logs)" style="margin:0;display: inline-block;">
+                      <div style="width: 24px; height: 24px;"/>
+                    </div>
+                  </td>
+                  <td style="text-align: center;">
+                    <div ng-if="delivery.status === 'Accepted'"class="successCircle" style="background-color: #10CFBD"  tooltips tooltip-side="top" tooltip-template="Accepted">A</div>
+                    <div ng-if="delivery.status === 'Rejected'"class="successCircle" style="background-color: #F55753" tooltips tooltip-side="top" tooltip-class="wider" tooltip-template="{{delivery.messages}}">R</div>
+                    <div ng-if="delivery.status === 'Delivered'"class="successCircle" style="background-color: #6D5CAE" tooltips tooltip-side="top" tooltip-template="Delivered">D</div>
+                    <div ng-if="delivery.status === 'Queued'"class="successCircle" style="background-color: #FFCCCC" tooltips tooltip-side="top" tooltip-template="Queued">Q</div>
+                    <div ng-if="delivery.status === 'On Hold'"class="successCircle" style="background-color: #5E5E5E" tooltips tooltip-side="top" tooltip-template="On Hold">H</div>
+                    <div ng-if="delivery.status === 'Other'"class="successCircle" style="background-color: #97BBCD" tooltips tooltip-side="top" tooltip-template="Other">O</div>
+                    <div ng-if="delivery.status === 'Undelivered'"class="successCircle" style="background-color: #FFFFFF; color: #000000; border: 1px #000 solid;" tooltips tooltip-side="top" tooltip-template="Undelivered">U</div>
+                  </td>
+                  <div ng-repeat="delivery in deliveries">
+                    <td style="padding: 12px">
+                      <select ng-disabled="rights.catalogue != 'Edit'"
+                        class="form-control"
+                        ng-model="delivery.newStatus"
+                        ng-change="updateSingleDeliveryStatus(delivery)"
+                        ng-options="item as item for item in deliveryStatusFilter(delivery)">
+                        <option value="" disabled selected>Update Status</option>
+                      </select>
+                    </td>
+                  </div>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-bqOJQXHJ" class="row">
+    <div id="CUR-lTBuQJmI" class="col-xs-12">
+      <div id="CUR-LipwiTCG" class="panel panel-default">
+        <div id="CUR-RRRbWXcz" class="panel-heading">
+          <div id="CUR-WKJwTLaL" class="panel-title">
+            Deliveries From Merged Works
+          </div>
+        </div>
+        <div class="panel-body p-t-15">
+          <p>This list shows Deliveries of Works that have been merged into this Work, after using the Catalogue > Manage Duplicates feature.</p>
+          <div class="table-responsive">
+            <table class="table table-hover dataTable no-footer custom-responsive">
+              <thead>
+                <tr>
+                  <th style="width:15%;">Merged Work Title</th>
+                  <th>Merged Work Identifier</th>
+                  <th>Delivery Partner</th>
+                  <th>Receiving Party</th>
+                  <th>Delivery Date</th>
+                  <th>Last Updated</th>
+                  <th>Ack</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="deliveredWork in mergedWorkDeliveries">
+                  <td>{{ deliveredWork.title }}</td>
+                  <td>{{ deliveredWork.identifier }}</td>
+                  <td>
+                    <a href="/#/deliverySettings/deliveryPartners/{{ deliveredWork.deliveryPartnerId }}/edit">{{ deliveredWork.deliveryPartnerName }}</a>
+                  </td>
+                  <td>{{ deliveredWork.receivingParty }}</td>
+                  <td>{{ deliveredWork.deliveryDate | date :dateFormat : 'UTC' }}</td>
+                  <td>{{ deliveredWork.updatedAt | date :dateFormat : 'UTC' }}</td>
+                  <td>
+                    <a href="#/cwrAcknowledgements/{{ deliveredWork.cwrAcknowledgementId }}/edit">
+                      <div class="file-image" style="margin:0;display: inline-block;">
+                        <div style="width: 24px; height: 24px;"/>
+                      </div>
+                    </a>
+                  </td>
+                  <td>
+                    <div ng-if="deliveredWork.status === 'Accepted'"class="successCircle" style="background-color: #10CFBD"  tooltips tooltip-side="top" tooltip-template="Accepted">A</div>
+                    <div ng-if="deliveredWork.status === 'Rejected'"class="successCircle" style="background-color: #F55753" tooltips tooltip-side="top" tooltip-class="wider" tooltip-template="{{deliveredWork.messages}}">R</div>
+                    <div ng-if="deliveredWork.status === 'Delivered'"class="successCircle" style="background-color: #6D5CAE" tooltips tooltip-side="top" tooltip-template="Delivered">D</div>
+                    <div ng-if="deliveredWork.status === 'Queued'"class="successCircle" style="background-color: #FFCCCC" tooltips tooltip-side="top" tooltip-template="Queued">Q</div>
+                    <div ng-if="deliveredWork.status === 'On Hold'"class="successCircle" style="background-color: #5E5E5E" tooltips tooltip-side="top" tooltip-template="On Hold">H</div>
+                    <div ng-if="deliveredWork.status === 'Other'"class="successCircle" style="background-color: #97BBCD" tooltips tooltip-side="top" tooltip-template="Other">O</div>
+                    <div ng-if="deliveredWork.status === 'Undelivered'"class="successCircle" style="background-color: #FFFFFF; color: #000000; border: 1px #000 solid;" tooltips tooltip-side="top" tooltip-template="Undelivered">U</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="ip-chain-tab-overview.html">
+  <div id="CUR-JOVXbMpd" class="panel panel-default sm-m-b-5 m-t-20">
+    <div id="CUR-JGwdcqua" class="tab-content">
+      <div id="CUR-iudiqUJH" class="panel-body p-t-15">
+        <ip-chain ng-repeat="rightsChain in work.rightsChain" ip-number="ipNumber" rights-chain="rightsChain" edit="rights.catalogue == 'Edit'" territories="rightsChainTerritories" delete="deleteRightsChain(rightsChain)" on-change="enableLinkedContractsInIpChain ? setContractsByIpChain : null" edit-territory="editTerritory(rightsChain)" duplicate-chain="duplicateChain" index="$index" ng-if="shouldHideItem($index)" is-default-chain="true" work-rights-chain-length="work.rightsChain.length" can-duplicate="true"></ip-chain>
+        <button id="CUR-lqArpuyZ" class="btn btn-complete hidden-xs" ng-show="rights.catalogue == 'Edit'" data-toggle="modal" data-target="#addTerritoryModal" ng-click="addDefaultChainTerritory()">+ Territory</button>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="ip-chain-tab-partners.html">
+  <!-- Existing Partner Chains -->
+  <div ng-repeat="partnerChain in work.partnerRightsChains track by $index" ng-init="partnerChainIndex = $index">
+    <div id="CUR-JOVXbMpd" class="panel panel-default sm-m-b-5 m-t-20">
+      <div id="CUR-JGwdcqua" class="tab-content">
+        <div id="CUR-iudiqUJH" class="panel-body p-t-15">
+          <div class="row contract-row-layout">
+            <div id="CUR-aZiHAHjd" class="form-group required col-xs-4">
+                <label id="CUR-FvVSACYr">Delivery Partner</label>
+                <delivery-partner-name-field delivery-partner-id="partnerChain.deliveryPartnerId" ng-click="showPartnerModal(partnerChain)" />
+            </div>
+            <div class="form-group col-xs-3 action-btn" ng-show="rights.catalogue === 'Edit'">
+              <button class="btn btn-warning row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-click="revertToDefaultChain(partnerChainIndex)" tooltips tooltip-template="Revert to Default Chain">
+                <i class="fa fa-undo"></i>
+                <span style="margin-left:3px;">Revert to Default</span>
+              </button>
+              <button class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-click="deletePartnerChain(partnerChainIndex)" tooltips tooltip-template="Delete Partner Chain"><i class="fa fa-trash"></i></button>
+            </div>
+          </div>
+          <div class="inline-block">
+            <ip-chain
+              ng-repeat="rightsChain in partnerChain.rightsChain"
+              ip-number="ipNumber"
+              rights-chain="rightsChain"
+              edit="rights.catalogue == 'Edit'"
+              territories="rightsChainTerritories"
+              delete="deletePartnerRightsChain(partnerChain, $index)"
+              edit-territory="editTerritory(partnerChain, false, $index)"
+              index="$index"
+              ng-if="shouldHideItem($index)"
+              is-default-chain="false"
+              partner-chain-index="partnerChainIndex"
+              duplicate-chain="duplicateChain"
+              can-duplicate="true"
+              work-rights-chain-length="work.partnerRightsChains[partnerChainIndex].rightsChain.length"
+            ></ip-chain>
+            <button id="CUR-lqArpuyZ" class="btn btn-complete hidden-xs" ng-show="rights.catalogue == 'Edit'" data-toggle="modal" data-target="#addTerritoryModal" ng-click="addPartnerChainTerritory(partnerChainIndex, $index)">+ Territory</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- New Parter Chain -->
+  <div id="CUR-JOVXbMpd" class="panel panel-default sm-m-b-5 m-t-20">
+    <div id="CUR-JGwdcqua" class="tab-content">
+      <div id="CUR-iudiqUJH" class="panel-body">
+        <button id="CUR-lqArpuyZ" class="btn btn-complete hidden-xs" ng-show="rights.catalogue == 'Edit'" data-toggle="modal" data-target="#addPartnerChainModal">+ Partner Chain</button>
+      </div>
+    </div>
+  </div>
+</script>
+
+<model-history
+  data="work.modelHistory"
+  delivery-partner-data="deliveryPartnerObject"
+></model-history>
+
+<div
+  class="modal fade slide-right"
+  id="newTrackModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div id="CUR-CiNvaqyh" class="modal-dialog modal-lg">
+    <div id="CUR-wWWaEjGl" class="modal-content">
+      <div id="CUR-dGcadKEq" class="modal-header clearfix text-left">
+        <button
+          id="CUR-NFjoAmWL"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h4 id="CUR-SinhMDNy">Create Track</h4>
+      </div>
+      <div id="CUR-tcNDSYAy" class="modal-body">
+        <div id="CUR-JvnNMwxU" class="panel panel-transparent">
+          <div id="CUR-TyyvvkmD" class="form-group required">
+            <label id="CUR-EgdGPUMa">Title</label>
+            <input
+              id="CUR-wsselkFN"
+              type="text"
+              class="form-control"
+              ng-model="track.title"
+              ng-disabled="rights.catalogue != 'Edit'"
+            />
+          </div>
+          <div id="CUR-fNjonhtU" class="form-group required">
+            <label id="CUR-lVrXcSrz">Version</label>
+            <input
+              id="CUR-xLFAqKcu"
+              type="text"
+              class="form-control"
+              ng-model="track.version"
+              ng-disabled="rights.catalogue != 'Edit'"
+            />
+          </div>
+          <div id="CUR-zeQlQrPd" class="form-group required">
+            <label id="CUR-DrkcayMX">Artist</label>
+            <input
+              id="CUR-wuJDWSKl"
+              type="text"
+              class="form-control"
+              ng-model="track.artist"
+              ng-disabled="rights.catalogue != 'Edit'"
+            />
+          </div>
+          <div id="CUR-oHzTqKnn" class="form-group required">
+            <label id="CUR-nMOEVizu"
+              >Foreign ID
+              <i
+                class="fa fa-question-circle"
+                tooltips
+                tooltip-class="wider"
+                tooltip-template="Used for integrating into other systems, such as accounting systems"
+              ></i
+            ></label>
+            <input
+              id="CUR-pXzRueWL"
+              type="text"
+              class="form-control"
+              ng-model="track.foreignId"
+              ng-disabled="rights.catalogue != 'Edit'"
+            />
+          </div>
+          <div id="CUR-create-track-projectId" class="form-group required">
+            <label id="CUR-create-track-projectId-label">Project ID</label>
+            <input
+              id="CUR-create-track-projectId-input"
+              type="text"
+              class="form-control"
+              ng-model="track.projectId"
+              ng-disabled="rights.catalogue != 'Edit'"
+            />
+          </div>
+          <div id="CUR-YkgnkViD" class="form-group required">
+            <label id="CUR-XpjFsSSq">ISRC</label>
+            <input
+              id="CUR-RQrQPMPg"
+              type="text"
+              class="form-control"
+              ng-model="track.isrc"
+              ng-disabled="rights.catalogue != 'Edit'"
+            />
+          </div>
+        </div>
+        <div id="CUR-kwYdAYYG" class="row">
+          <div id="CUR-zEWKNEgu" class="col-xs-12 m-t-20 text-right">
+            <button
+              id="CUR-wBKxRJrH"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-kQZYMKLd"
+              type="button"
+              class="btn btn-complete m-t-5"
+              ng-click="saveTrack()"
+            >
+              + Create
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="significantUpdateModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div id="CUR-PqtXkazq" class="modal-dialog">
+    <div id="CUR-EQGLJABr" class="modal-content">
+      <div id="CUR-qMrclXjG" class="modal-header clearfix text-left">
+        <button
+          id="CUR-UgJzLsDU"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-TGqwDCtk">Significant Update to Work</h5>
+      </div>
+      <div id="CUR-hGvlMNgk" class="modal-body">
+        <div id="CUR-ZOUPwftY" class="row">
+          <div id="CUR-EXFKpGug" class="col-xs-12 m-t-20">
+            <p>
+              Editing the field(s) {{significantUpdateChanges.join(', ')}} is a
+              <b>"Significant Update"</b>, which will trigger re-delivery of
+              this Work if you have active Delivery Schedules set up.<br /><br />
+              If you have no Delivery Schedules set up, then you can create a
+              new delivery using the 'Newly Approved, Updated and Manually
+              Queued' Smart Filter and these works will be picked up, ready to
+              deliver.
+            </p>
+          </div>
+        </div>
+        <div id="CUR-CPQjOOCW" class="row">
+          <div id="CUR-nHeoPiqP" class="col-xs-12 m-t-20 text-right">
+            <button
+              id="CUR-UdkUwdAD"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-zsjwsTMB"
+              type="button"
+              class="btn btn-success-green m-t-5"
+              ng-click="significantUpdateSave()"
+            >
+              Ok
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="addTerritoryModal"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div
+    id="CUR-addTerritoryModal-dialog"
+    class="modal-dialog"
+    ng-style="{'width': territoryChoice.selected.code === 'specific' ? '75%' : '30%'}"
+  >
+    <div id="CUR-addTerritoryModal-content" class="modal-content">
+      <div
+        id="CUR-addTerritoryModal-header"
+        class="modal-header clearfix text-left"
+      >
+        <button
+          id="CUR-addTerritoryModal-button"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-addTerritoryModal-h5">Add Territory</h5>
+      </div>
+      <div id="CUR-addTerritoryModal-body" class="modal-body">
+        <div id="CUR-addTerritoryModal-body-territoryChoice" class="row">
+          <div class="col-xs-12 m-t-20">
+            <label id="CUR-addTerritoryModal-body-territoryChoice-label"
+              >Territory</label
+            >
+            <ui-select class="full-width" ng-model="territoryChoice.selected">
+              <ui-select-match allow-clear="true">
+                <span ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices
+                group-by="groupFind"
+                repeat="country as country in territoryChoices | filter: $select.search"
+                refresh="searchTerritoryGroups($select)"
+                refresh-delay="50"
+              >
+                <span class="country" ng-bind="country.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div
+          id="CUR-addTerritoryModal-fg-checkbox"
+          class="row"
+          ng-if="territoryChoice.selected.code === 'specific' ? true : false"
+        >
+          <div class="col-xs-12 m-t-20">
+            <label>
+              <input
+                type="checkbox"
+                ng-model="territoryChoice.createTerritoryGroup"
+              />Check this box to create a new Territory Group for these
+              territories.
+            </label>
+          </div>
+        </div>
+        <div
+          id="CUR-addTerritoryModal-fg-name"
+          class="row form-group"
+          ng-if="territoryChoice.createTerritoryGroup && territoryChoice.selected.code === 'specific'"
+        >
+          <div class="col-xs-12 m-t-20">
+            <label id="CUR-addTerritoryModal-fg-name-label">Name</label>
+            <input
+              id="CUR-addTerritoryModal-fg-name-input"
+              type="text"
+              class="form-control"
+              placeholder="New Territory Group"
+              ng-model="territoryChoice.territoryGroup.name"
+            />
+          </div>
+        </div>
+        <div
+          id="CUR-addTerritoryModal-territory-checkboxes"
+          class="panel-body p-t-15"
+          ng-if="territoryChoice.selected.code === 'specific' ? true : false"
+        >
+          <territory-checkboxes
+            model="territoryChoice.territoryGroup.territories"
+            hide-world="true"
+            hide-territory-group="true"
+            edit="rights.catalogue == 'Edit'"
+            hide-non-cisac="true"
+          ></territory-checkboxes>
+        </div>
+        <div id="CUR-addTerritoryModal-row-buttons" class="row">
+          <div
+            id="CUR-addTerritoryModal-row-buttons-div"
+            class="col-xs-12 m-t-20 text-right"
+          >
+            <button
+              id="CUR-addTerritoryModal-row-buttons-div-cancel"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-addTerritoryModal-row-buttons-div-save"
+              type="button"
+              class="btn btn-success-green m-t-5"
+              ng-click="addRightsChain(territoryChoice.selected.code, territoryChoice.createTerritoryGroup)"
+            >
+              <i class="fa fa-plus"></i>&nbsp;Add Territory
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="editTerritoryModal"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div
+    id="CUR-editTerritoryModal-dialog"
+    class="modal-dialog"
+    ng-style="{'width': territoryChoice.selected.code === 'specific' ? '75%' : '30%'}"
+  >
+    <div id="CUR-editTerritoryModal-content" class="modal-content">
+      <div
+        id="CUR-editTerritoryModal-header"
+        class="modal-header clearfix text-left"
+      >
+        <button
+          id="CUR-editTerritoryModal-button"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-editTerritoryModal-h5">Edit Territory</h5>
+        <div id="CUR-editTerritoryModal-h3">
+          *Existing groups should be maintained using territory groups page.
+        </div>
+      </div>
+      <div id="CUR-editTerritoryModal-body" class="modal-body">
+        <div id="CUR-editTerritoryModal-body-territoryChoice" class="row">
+          <div class="col-xs-12 m-t-20">
+            <label id="CUR-editTerritoryModal-body-territoryChoice-label"
+              >Territory</label
+            >
+            <ui-select class="full-width" ng-model="territoryChoice.selected">
+              <ui-select-match allow-clear="true">
+                <span ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices
+                group-by="groupFind"
+                repeat="country as country in territoryChoices | filter: $select.search"
+                refresh="searchTerritoryGroups($select)"
+                refresh-delay="50"
+              >
+                <span class="country" ng-bind="country.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div
+          id="CUR-editTerritoryModal-fg-checkbox"
+          class="row"
+          ng-if="territoryChoice.selected.code === 'specific' ? true : false"
+        >
+          <div class="col-xs-12 m-t-20">
+            <label>
+              <input
+                type="checkbox"
+                ng-model="territoryChoice.createTerritoryGroup"
+              />Check this box to create a new Territory Group for these
+              territories.
+            </label>
+          </div>
+        </div>
+        <div
+          id="CUR-editTerritoryModal-fg-name"
+          class="row form-group"
+          ng-if="territoryChoice.createTerritoryGroup && territoryChoice.selected.code === 'specific'"
+        >
+          <div class="col-xs-12 m-t-20">
+            <label id="CUR-editTerritoryModal-fg-name-label">Name</label>
+            <input
+              id="CUR-editTerritoryModal-fg-name-input"
+              type="text"
+              class="form-control"
+              placeholder="New Territory Group"
+              ng-model="territoryChoice.territoryGroup.name"
+            />
+          </div>
+        </div>
+        <div
+          id="CUR-editTerritoryModal-territory-checkboxes"
+          class="panel-body p-t-15"
+          ng-if="territoryChoice.selected.code === 'specific' ? true : false"
+        >
+          <territory-checkboxes
+            model="territoryChoice.territoryGroup.territories"
+            hide-world="true"
+            hide-territory-group="true"
+            edit="rights.catalogue == 'Edit'"
+            hide-non-cisac="true"
+          ></territory-checkboxes>
+        </div>
+        <div id="CUR-editTerritoryModal-row-buttons" class="row">
+          <div
+            id="CUR-editTerritoryModal-row-buttons-div"
+            class="col-xs-12 m-t-20 text-right"
+          >
+            <button
+              id="CUR-editTerritoryModal-row-buttons-div-cancel"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-editTerritoryModal-row-buttons-div-save"
+              type="button"
+              class="btn btn-success-green m-t-5"
+              ng-click="editRightsChain(territoryChoice.selected.code, territoryChoice.createTerritoryGroup)"
+            >
+              <i class="fa fa-plus"></i>&nbsp;Update Territory
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="modalDeliveryWorkStatusHistory"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header clearfix text-left">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5>Delivery Status History</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <table class="table table-hover table-condensed no-footer">
+            <thead>
+              <tr>
+                <th class="col-xs-3">Date</th>
+                <th class="col-xs-6">Delivery/Acknowledgment</th>
+                <th class="col-xs-2">Status</th>
+                <th class="col-xs-2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="log in deliveryLogsTable">
+                <td class="v-align-middle">
+                  {{log.date | date:'MMM d, y h:mm:ss a'}}
+                </td>
+                <td td class="v-align-middle">
+                  <span ng-if="!log.cwrDeliveryId && !log.acknowledgementId"
+                    >N/A</span
+                  >
+                  <button
+                    ng-if="log.cwrDeliveryId"
+                    class="button-link v-align-middle"
+                    ng-click="navLink('/deliveries/' + log.cwrDeliveryId + '/edit')"
+                    style="text-align: left"
+                  >
+                    {{log.cwrDeliveryName}}
+                  </button>
+                  <button
+                    ng-if="log.acknowledgementId"
+                    class="button-link v-align-middle"
+                    ng-click="navLink('/cwrAcknowledgements/' + log.acknowledgementId + '/edit')"
+                    style="text-align: left"
+                  >
+                    {{log.acknowledgementName}}
+                  </button>
+                </td>
+                <td class="v-align-middle">{{log.status}}</td>
+                <td class="v-align-middle">{{log.action}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="modalWorkSourceHistory"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header clearfix text-left">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5>Work Source History</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <table class="table table-hover table-condensed no-footer">
+            <thead>
+              <tr>
+                <th class="col-xs-4">Import</th>
+                <th class="col-xs-4">Import Partner</th>
+                <th class="col-xs-2">Action</th>
+                <th class="col-xs-2">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="sourceRow in source">
+                <td class="v-align-middle">{{sourceRow.importName}}</td>
+                <td td class="v-align-middle">
+                  {{sourceRow.importPartnerName}}
+                </td>
+                <td class="v-align-middle">{{sourceRow.action}}</td>
+                <td class="v-align-middle">
+                  {{sourceRow.date | date : dateFormat : 'UTC' }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="addPartnerChainModal"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div id="CUR-addPartnerChainModal-dialog" class="modal-dialog">
+    <div id="CUR-addPartnerChainModal-content" class="modal-content">
+      <div
+        id="CUR-addPartnerChainModal-header"
+        class="modal-header clearfix text-left"
+      >
+        <button
+          id="CUR-addPartnerChainModal-button"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-addPartnerChainModal-h5">Add Partner Chain</h5>
+      </div>
+      <div id="CUR-addPartnerChainModal-body" class="modal-body">
+        <div id="CUR-addPartnerChainModal-body-territoryChoice" class="row">
+          <div class="col-xs-12 m-t-20">
+            <label id="CUR-addPartnerChainModal-body-territoryChoice-label"
+              >Delivery Partner</label
+            >
+            <ui-select
+              class="full-width"
+              ng-model="newPartnerChain.deliveryPartnerId"
+            >
+              <ui-select-match allow-clear="true">
+                <span ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices
+                repeat="partner.id as partner in deliveryPartnerObject | filter: $select.search track by $index"
+              >
+                <span class="country" ng-bind="partner.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div id="CUR-addPartnerChainModal-row-buttons" class="row">
+          <div
+            id="CUR-addPartnerChainModal-row-buttons-div"
+            class="col-xs-12 m-t-20 text-right"
+          >
+            <button
+              id="CUR-addPartnerChainModal-row-buttons-div-cancel"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-addPartnerChainModal-row-buttons-div-save"
+              type="button"
+              class="btn btn-success-green m-t-5"
+              ng-click="addPartnerChain()"
+            >
+              <i class="fa fa-plus"></i>&nbsp;Add Partner Chain
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="editPartnerModal"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div id="CUR-editPartnerModal-dialog" class="modal-dialog">
+    <div id="CUR-editPartnerModal-content" class="modal-content">
+      <div
+        id="CUR-editPartnerModal-header"
+        class="modal-header clearfix text-left"
+      >
+        <button
+          id="CUR-editPartnerModal-button"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-editPartnerModal-h5">Change Delivery Partner</h5>
+      </div>
+      <div id="CUR-editPartnerModal-body" class="modal-body">
+        <div id="CUR-editPartnerModal-body-territoryChoice" class="row">
+          <div class="col-xs-12 m-t-20">
+            <label id="CUR-editPartnerModal-body-territoryChoice-label"
+              >Delivery Partner</label
+            >
+            <ui-select
+              class="full-width"
+              ng-model="editPartnerChain.deliveryPartnerId"
+            >
+              <ui-select-match allow-clear="true">
+                <span ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices
+                repeat="partner.id as partner in deliveryPartnerObject | filter: $select.search track by $index"
+              >
+                <span class="country" ng-bind="partner.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div id="CUR-editPartnerModal-row-buttons" class="row">
+          <div
+            id="CUR-editPartnerModal-row-buttons-div"
+            class="col-xs-12 m-t-20 text-right"
+          >
+            <button
+              id="CUR-editPartnerModal-row-buttons-div-cancel"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-editPartnerModal-row-buttons-div-save"
+              type="button"
+              class="btn btn-success-green m-t-5"
+              ng-click="updatePartnerChain()"
+            >
+              <i class="fa fa-plus"></i>&nbsp;Update Chain
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

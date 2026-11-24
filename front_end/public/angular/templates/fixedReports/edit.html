@@ -1,0 +1,84 @@
+<div id="CUR-tpWEfGcr" class="jumbotron" data-pages="parallax">
+  <div id="CUR-dKPkrAeE" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-IfSCIhkU" class="inner">
+      <ul id="CUR-LOLCJZjK" class="breadcrumb">
+        <li id="CUR-pAWHacTb"><a id="CUR-mchYnTvi" href="/#/fixedReports">Fixed Reports</a></li>
+        <li id="CUR-dHdUTuEJ"><a id="CUR-hJaSinuo" href="/#/fixedReports/{{fixedReport._id}}" class="active">{{fixedReport.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-urHGBbYR" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-XokuVfMc" class="row">
+    <div id="CUR-aDDbjQCp" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-jOAZMCSW" class="btn btn-complete" ng-click="save()"><i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-UjGBgaDf" class="row">
+    <div id="CUR-qlRkPxTv" class="col-xs-12 col-sm-6">
+      <div id="CUR-mmlrcwJT" class="panel panel-default">
+        <div id="CUR-XbxEhXyE" class="panel-heading">
+          <div id="CUR-foVKXVah" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-UJZNFWRk" class="panel-body p-t-15">
+          <div id="CUR-jFDjTmVQ" class="form-group required">
+            <label id="CUR-iuDndcuF">Name</label>
+            <input id="CUR-edBQiwda" type="text" class="form-control" ng-model="fixedReport.name">
+          </div>
+          <div id="CUR-GcXbbDFJ" class="form-group">
+            <label id="CUR-lLpXdTQl">
+              <input id="CUR-grGXeUFI" type="checkbox" value="1" ng-model="fixedReport.label">
+              Label
+            </label>
+          </div>
+          <div id="CUR-GcXbbDFJ" class="form-group">
+            <label id="CUR-lLpXdTQl">
+              <input id="CUR-grGXeUFI" type="checkbox" value="1" ng-model="fixedReport.publisher">
+              Publisher
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-nWvDjVuO" class="col-xs-12 col-sm-6">
+      <div id="CUR-umUWVmWu" class="panel panel-default" ng-if="internalUser">
+        <div id="CUR-JTYaudZq" class="panel-heading">
+          <div id="CUR-zbRnmwZP" class="panel-title">
+            Specific Access
+          </div>
+        </div>
+        <div id="CUR-FLRFuVKB" class="panel-body p-t-15">
+          <div id="CUR-UGpikDDg" class="form-group">
+            <label id="CUR-KdLvzYYG">Who Should Have Specific Access</label>
+            <ui-select ng-model="fixedReport.specificAccess">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-FfHgKhQd" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in specificAccessItems | filter: $select.search">
+                <span id="CUR-rKkaDDqf" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-UGpikDDg" class="form-group" ng-show="fixedReport.specificAccess == 'Client'">
+            <label id="CUR-KdLvzYYG">Select Clients</label>
+            <ui-select multiple ng-model="fixedReport.clientIds" theme="bootstrap" ng-disabled="false">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-KrFabuQq" style="vertical-align:middle;">{{$item.name}}</span>
+                <span id="client-select-field-match" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices 
+                repeat="client._id as client in clients | filter:$select.search" 
+                refresh="loadClients()" 
+                refresh-delay="500"
+              >
+                <span id="client-select-field-select" ng-bind="client.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

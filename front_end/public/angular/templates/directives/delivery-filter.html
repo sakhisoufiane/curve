@@ -1,0 +1,351 @@
+<div id="CUR-rPBKWRKx" ng-if="!delivery.deliveryProfileId" class="row">
+  <div id="CUR-DsjDKxxQ" class="col-xs-12 col-lg-12">
+    <div id="CUR-jNrimFIV" class="panel panel-default">
+      <div id="CUR-CmApsfkL" class="panel-heading">
+        <div id="CUR-hfDGBJwO" class="panel-title">
+          Filter
+        </div>
+      </div>
+      <div id="CUR-NcAZWFvX" class="panel-body p-t-15">
+        <div ng-if="composersAndPublishersIntegrity" class="alert alert-danger ng-scope">Your Filter contains Publishers or Composers that were previously deleted. Please remove them.  </div>
+
+        <!-- Row 1 -->
+        <div id="first-delivery-filter-row" class="row delivery-filter-row">
+          <div id="delivery-filter-composer-col" class="col-sm-3">
+            <div id="delivery-filter-composer-form" class="form-group">
+              <label id="delivery-filter-composer-form-label">Composers</label>
+              <ui-select multiple ng-model="filter.composerIds" theme="bootstrap" ng-disabled="edit">
+                <ui-select-match>{{$item.name}}</ui-select-match>
+                <ui-select-choices repeat="composer._id as composer in composers | filter:$select.search"
+                  refresh="searchComposers($select)" refresh-delay="500">
+                  {{composer.name}}
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div id="delivery-filter-publisher-col" class="col-sm-3">
+            <div id="delivery-filter-publisher-form" class="form-group">
+              <label id="delivery-filter-publisher-form-label">Publishers</label>
+              <ui-select multiple ng-model="filter.publisherIds" theme="bootstrap" ng-disabled="edit">
+                <ui-select-match>{{$item.name}}</ui-select-match>
+                <ui-select-choices repeat="publisher._id as publisher in publishers | filter:$select.search"
+                  refresh="searchPublishers($select)" refresh-delay="500">
+                  {{publisher.name}}
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div id="delivery-filter-inclCatGrp-col" class="col-sm-3">
+            <div id="delivery-filter-inclCatGrp-form" class="form-group">
+              <label id="delivery-filter-inclCatGrp-form-label">Include Catalogue Group</label>
+              <ui-select multiple ng-model="filter.catalogueGroups" close-on-select="true" ng-disabled="edit">
+                <ui-select-match>{{$item}}</ui-select-match>
+                <ui-select-choices repeat="group in catalogueGroups | filter:$select.search">
+                  {{group}}
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div id="delivery-filter-exlCatGrp-col" class="col-sm-3">
+            <div id="delivery-filter-exlCatGrp-form" class="form-group">
+              <label id="delivery-filter-exlCatGrp-form-label">Exclude Catalogue Group</label>
+              <ui-select multiple ng-model="filter.excludeCatalogueGroups" close-on-select="true" ng-disabled="edit">
+                <ui-select-match>{{$item}}</ui-select-match>
+                <ui-select-choices repeat="group in catalogueGroups | filter:$select.search">
+                  {{group}}
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+        </div>
+        <div ng-if="showAdvanceFilters" id="delivery-filter-row-1-line" class="customHr">.</div>
+
+        <!-- Row 2 -->
+        <div class="row delivery-filter-row" ng-if="showAdvanceFilters && filtertype !== 'manuallyAdded'">
+          <div id="delivery-filter-status-col" class="col-sm-offset-5 col-sm-2">
+            <div id="delivery-filter-status-form" class="form-group">
+              <label id="delivery-filter-status-form-label">Delivery Status</label>
+              <ui-select ng-model="filter.deliveryStatus" ng-disabled="edit">
+                <ui-select-match allow-clear="true">
+                  <span id="delivery-filter-status-form-select" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in (['Undelivered', 'Accepted', 'Rejected', 'Other'] | filter: $select.search)">
+                  <span id="delivery-filter-status-form-item" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+        </div>
+        <div ng-if="showAdvanceFilters && filtertype !== 'manuallyAdded'" id="delivery-filter-row-2-line" class="customHr">.</div>
+
+        <!-- Row 3 -->
+        <div class="row delivery-filter-row" ng-if="showAdvanceFilters">
+          <div id="delivery-filter-inclTerr-col" class="col-sm-3">
+            <div id="delivery-filter-inclTerr-form" class="form-group">
+              <label id="delivery-filter-inclTerr-form-label">Includes Territory</label>
+              <ui-select ng-model="filter.territory" ng-disabled="edit">
+                <ui-select-match allow-clear="true">
+                  <span id="delivery-filter-inclTerr-form-select" ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices group-by="groupFind"
+                  repeat="country.code as country in territories | filter: $select.search track by $index">
+                  <span id="delivery-filter-inclTerr-form-select-country-name" class="country" ng-bind="country.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div id="delivery-filter-approvedLast-col" class="col-sm-2">
+            <div id="delivery-filter-approvedLast-form" class="form-group">
+              <label id="delivery-filter-approvedLast-form-label">Approved in Last</label>
+              <input id="delivery-filter-approvedLast-form-input" type="text" class="form-control" ng-model="filter.approvedInLast" ng-disabled="edit">
+            </div>
+          </div>
+          <div id="delivery-filter-dayMonths1-col" class="col-sm-2">
+            <div id="delivery-filter-dayMonths1-form" class="form-group">
+              <label id="delivery-filter-dayMonths1-form-label">Days/Months</label>
+              <ui-select ng-model="filter.approvedInLastPeriod" ng-disabled="edit">
+                <ui-select-match allow-clear="true">
+                  <span id="delivery-filter-dayMonths1-form-select" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in (['Days','Months'] | filter: $select.search)">
+                  <span id="delivery-filter-dayMonths1-form-select-item" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div style="width: 4%;" id="delivery-filter-or1-col" class="col-sm-1">
+            <div id="delivery-filter-or1-col-form" class="form-group">
+              <label id="delivery-filter-or1-col-form"></label>
+              <p id="delivery-filter-or1-col-form-spacer"></p>
+              <p style="font-weight: bold;" id="delivery-filter-or1-col-form-tag">OR</p>
+            </div>
+          </div>
+          <div id="delivery-filter-approvedAfter-col" class="col-sm-2">
+            <div id="delivery-filter-approvedAfter-form" class="form-group">
+              <label id="delivery-filter-approvedAfter-form-label">Approved After</label>
+              <div id="datepicker-component" class="form-group input-group date">
+                <input id="delivery-filter-approvedAfter-form-input" type="text" class="form-control" ng-model="filter.approvedAfter"
+                  uib-datepicker-popup="{{dateformat}}" ng-model-options="{timezone: 'utc'}" is-open="approvedAfterPopup.opened"
+                  ng-click="openApprovedAfterPopup()" ng-disabled="edit">
+                <span id="delivery-filter-approvedAfter-form-icon" class="input-group-addon" ng-click="openApprovedAfterPopup()">
+                  <i class="fa fa-calendar" ng-disabled="edit"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div id="delivery-filter-approvedBefore-col" class="col-sm-2">
+            <div id="delivery-filter-approvedBefore-form" class="form-group">
+              <label id="delivery-filter-approvedBefore-form-label">Approved Before</label>
+              <div id="datepicker-component" class="form-group input-group date">
+                <input id="delivery-filter-approvedBefore-form-input" type="text" class="form-control" ng-model="filter.approvedBefore"
+                  uib-datepicker-popup="{{dateformat}}" ng-model-options="{timezone: 'utc'}" is-open="approvedBeforePopup.opened"
+                  ng-click="openApprovedBeforePopup()" ng-disabled="edit">
+                <span id="delivery-filter-approvedBefore-form-icon" class="input-group-addon" ng-click="openApprovedBeforePopup()" ng-disabled="edit">
+                  <i class="fa fa-calendar"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-if="showAdvanceFilters" id="delivery-filter-row-3-line" class="customHr">.</div>
+
+        <!-- Row 4 -->
+        <div style="display: flex; justify-content: space-between;" class="row delivery-filter-sub-row" ng-if="showAdvanceFilters">
+          <div id="delivery-filter-createdLast-col">
+            <div id="delivery-filter-createdLast-form" class="form-group">
+              <label id="delivery-filter-createdLast-form-label">Created In Last</label>
+              <input id="delivery-filter-createdLast-form-input" type="text" class="form-control" ng-model="filter.workCreatedNo" ng-disabled="edit">
+            </div>
+          </div>
+          <div style="width: 145px;" id="delivery-filter-daysMonths2-col">
+            <div id="delivery-filter-daysMonths2-form" class="form-group">
+              <label id="delivery-filter-daysMonths2-form-label">Days/Months</label>
+              <ui-select ng-model="filter.workCreatedPeriod" ng-disabled="edit">
+                <ui-select-match allow-clear="true">
+                  <span id="delivery-filter-daysMonths2-form-select" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in (['Days','Months'] | filter: $select.search)">
+                  <span id="delivery-filter-daysMonths2-form-item" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div id="delivery-filter-or2-col">
+            <div id="delivery-filter-or2-form" class="form-group">
+              <label id="delivery-filter-or2-form-label"></label>
+              <p id="delivery-filter-or2-form-space"></p>
+              <p style="font-weight: bold;" id="delivery-filter-or2-form-tag">OR</p>
+            </div>
+          </div>
+          <div id="delivery-filter-createdAfter-col">
+            <div id="delivery-filter-createdAfter-form" class="form-group">
+              <label id="delivery-filter-createdAfter-form-label">Created After</label>
+              <div id="datepicker-component" class="form-group input-group date">
+                <input id="delivery-filter-createdAfter-form-label" type="text" class="form-control" ng-model="filter.createdAfter"
+                  uib-datepicker-popup="{{dateformat}}" ng-model-options="{timezone: 'utc'}" is-open="createdAfterPopup.opened"
+                  ng-click="openCreatedAfterPopup()" ng-disabled="edit">
+                <span id="delivery-filter-createdAfter-form-icon" class="input-group-addon" ng-click="openCreatedAfterPopup()" ng-disabled="edit">
+                  <i class="fa fa-calendar"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div id="delivery-filter-createdBefore-col">
+            <div id="delivery-filter-createdBefore-form" class="form-group">
+              <label id="delivery-filter-createdBefore-form-label">Created Before</label>
+              <div id="datepicker-component" class="form-group input-group date">
+                <input id="delivery-filter-createdBefore-form-input" type="text" class="form-control" ng-model="filter.createdBefore"
+                  uib-datepicker-popup="{{dateformat}}" ng-model-options="{timezone: 'utc'}" is-open="createdBeforePopup.opened"
+                  ng-click="openCreatedBeforePopup()" ng-disabled="edit">
+                <span id="delivery-filter-createdBefore-form-icon" class="input-group-addon" ng-click="openCreatedBeforePopup()" ng-disabled="edit">
+                  <i class="fa fa-calendar"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-if="showAdvanceFilters" id="delivery-filter-row-4-line" class="customHr">.</div>
+
+        <!-- Row 5 -->
+        <div style="display: flex; justify-content: space-between;" class="row delivery-filter-sub-row" ng-if="showAdvanceFilters">
+          <div id="delivery-filter-modifiedLast-col">
+            <div id="delivery-filter-modifiedLast-form" class="form-group">
+              <label id="delivery-filter-modifiedLast-form-label">Modified In Last</label>
+              <input id="delivery-filter-modifiedLast-form-input" type="text" class="form-control" ng-model="filter.modifiedInLast" ng-disabled="edit">
+            </div>
+          </div>
+          <div style="width: 145px;" id="delivery-filter-daysMonths3-col">
+            <div id="delivery-filter-daysMonths3-form" class="form-group">
+              <label id="delivery-filter-daysMonths3-form-label">Days/Months</label>
+              <ui-select ng-model="filter.modifiedInLastPeriod" ng-disabled="edit">
+                <ui-select-match allow-clear="true">
+                  <span id="delivery-filter-daysMonths3-form-select" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in (['Days','Months'] | filter: $select.search)">
+                  <span id="delivery-filter-daysMonths3-form-item" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div id="delivery-filter-or3-col">
+            <div id="delivery-filter-or3-form" class="form-group">
+              <label id="delivery-filter-or3-form-label"></label>
+              <p id="delivery-filter-or3-form-space"></p>
+              <p style="font-weight: bold;" id="delivery-filter-or3-form-tag">OR</p>
+            </div>
+          </div>
+          <div id="delivery-filter-modifiedAfter-col">
+            <div id="delivery-filter-modifiedAfter-form" class="form-group">
+              <label id="delivery-filter-modifiedAfter-form-label">Modified After</label>
+              <div id="datepicker-component" class="form-group input-group date">
+                <input id="delivery-filter-modifiedAfter-form-input" type="text" class="form-control" ng-model="filter.modifiedAfter"
+                  uib-datepicker-popup="{{dateformat}}" ng-model-options="{timezone: 'utc'}" is-open="modifiedAfterPopup.opened"
+                  ng-click="openModifiedAfterPopup()" ng-disabled="edit">
+                <span id="delivery-filter-modifiedAfter-form-icon" class="input-group-addon" ng-click="openModifiedAfterPopup()" ng-disabled="edit">
+                  <i class="fa fa-calendar"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div id="delivery-filter-modifiedBefore-col">
+            <div id="delivery-filter-modifiedBefore-form" class="form-group">
+              <label id="delivery-filter-modifiedBefore-form-label">Modified Before</label>
+              <div id="datepicker-component" class="form-group input-group date">
+                <input id="delivery-filter-modifiedBefore-form-input" type="text" class="form-control" ng-model="filter.modifiedBefore"
+                  uib-datepicker-popup="{{dateformat}}" ng-model-options="{timezone: 'utc'}" is-open="modifiedBeforePopup.opened"
+                  ng-click="openModifiedBeforePopup()" ng-disabled="edit">
+                <span id="delivery-filter-modifiedBefore-form-icon" class="input-group-addon" ng-click="openModifiedBeforePopup()" ng-disabled="edit">
+                  <i class="fa fa-calendar"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-if="showAdvanceFilters" id="delivery-filter-row5-line" class="customHr">.</div>
+        <!-- Row 6 -->
+        <div ng-if="showAdvanceFilters" class="row delivery-filter-row">
+          <div id="delivery-filter-exclComps-col" class="col-sm-3">
+            <div id="delivery-filter-exclComps-form" class="form-group">
+              <label id="delivery-filter-exclComps-form-label">Exclude Composers</label>
+              <ui-select multiple ng-model="filter.excludeComposers" theme="bootstrap" ng-disabled="edit">
+                <ui-select-match>{{$item.name}}</ui-select-match>
+                <ui-select-choices repeat="composer._id as composer in excludeComposers | filter:$select.search"
+                  refresh="searchExcludeComposers($select)" refresh-delay="500">
+                  {{composer.name}}
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div id="delivery-filter-exclPubs-col" class="col-sm-3">
+            <div id="delivery-filter-exclPubs-form" class="form-group">
+              <label id="delivery-filter-exclPubs-form-label">Exclude Publishers</label>
+              <ui-select multiple ng-model="filter.excludePublishers" theme="bootstrap" ng-disabled="edit">
+                <ui-select-match>{{$item.name}}</ui-select-match>
+                <ui-select-choices repeat="publisher._id as publisher in excludePublishers | filter:$select.search"
+                  refresh="searchExcludePublishers($select)" refresh-delay="500">
+                  {{publisher.name}}
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 6 -->
+        <div ng-if="showAdvanceFilters" id="CUR-ONzcRZid" class="row" style="margin-top: 20px;">
+          <div id="delivery-filter-inclProdLib-col" class="col-sm-3">
+            <div id="delivery-filter-inclProdLib-form" class="form-group" ng-class="{'disabled': filter.excludeProductionLibrary}"></i>
+              <input type="checkbox" value="1" ng-model="filter.includeProductionLibrary" id="includeProductionLibrary" ng-disabled="filter.excludeProductionLibrary || edit">
+              <label id="delivery-filter-inclProdLib-form-label" for="includeProductionLibrary">Include Production Library</label>
+            </div>
+          </div>
+          <div id="delivery-filter-exclProdLib-col" class="col-sm-3">
+            <div id="delivery-filter-exclProdLib-form" class="form-group" ng-class="{'disabled': filter.includeProductionLibrary}"></i>
+              <input type="checkbox" value="1" ng-model="filter.excludeProductionLibrary" id="excludeProductionLibrary" ng-disabled="filter.includeProductionLibrary || edit">
+              <label id="delivery-filter-exclProdLib-form-label" for="excludeProductionLibrary">Exclude Production Library</label>
+            </div>
+          </div>
+        </div>        
+        <div ng-if="showAdvanceFilters && filter.workIds && filter.workIds.length > 0" id="delivery-filter-row6-line" class="customHr">.</div>
+
+        <!-- Row 7 -->
+        <div class="row" ng-if="showAdvanceFilters && filter.workIds && filter.workIds.length > 0">
+          <div id="delivery-filter-inclSpecWork-col" class="col-sm-4">
+            <div id="delivery-filter-inclSpecWork-form" class="form-group">
+              <label id="delivery-filter-inclSpecWork-form-label">Include Specific Works</label>
+              <ui-select multiple ng-model="filter.workIds" theme="bootstrap" ng-disabled="edit">
+                <ui-select-match>{{$item.title}}</ui-select-match>
+                <ui-select-choices repeat="work._id as work in works | filter:$select.search"
+                  refresh="searchWorks($select)" refresh-delay="500">
+                  {{work.title}}
+                </ui-select-choices>
+              </ui-select>
+              <button id="delivery-filter-inclSpecWork-form-btn" class="btn btn-default hidden-xs m-t-10" data-toggle="modal" data-target="#worksBulkModal" ng-disabled="edit"><i
+                  class="fa fa-plus"></i>&nbsp;Bulk</button>
+            </div>
+          </div>
+          <div id="delivery-filter-exclSpecWork-col" class="col-sm-4">
+            <div id="delivery-filter-exclSpecWork-form" class="form-group">
+              <label id="delivery-filter-exclSpecWork-form-label">Exclude Specific Works</label>
+              <ui-select multiple ng-model="deliveryProfile.excludeWorkIds" theme="bootstrap" ng-disabled="edit">
+                <ui-select-match>{{$item.title}}</ui-select-match>
+                <ui-select-choices repeat="work._id as work in works | filter:$select.search"
+                  refresh="searchWorks($select)" refresh-delay="500">
+                  {{work.title}}
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Button -->
+        <div style="display: flex; align-items: center; justify-content: center; margin-top: 25px;">
+          <button id="CUR-lqyqHcFC" class="btn btn-complete" ng-click="showAdvanceFilters = !showAdvanceFilters">
+            <i class="{{showAdvanceFilters ? 'fa fa-minus-square' : 'fa fa-filter'}}"></i> 
+            {{showAdvanceFilters ? 'Close' : 'Advanced'}}
+            <div style="margin-left: 10px;" class="badge badge-danger" ng-if="count > 0 && !showAdvanceFilters">{{count}}
+            </div>
+          </button>
+        </div>
+    </div>
+  </div>
+</div>

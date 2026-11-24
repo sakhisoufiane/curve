@@ -1,0 +1,17 @@
+<td class="v-align-middle hidden-xs">
+  <input id="release-select-{{index}}" type="checkbox" ng-model="release.selected">
+</td>
+<td><a id="release-link-{{index}}" href="#/sales/{{release.salesFileId}}/edit">{{release.salesFileId}}</a></td>
+<td>{{release.title}}</td>
+<td>{{release.artist}}</td>
+<td>{{release.catNo}}</td>
+<td>{{release.barcode}}</td>
+<td>
+  <release-select-field allow-clear="true" value="release.releaseId" edit="true"></release-select-field>
+</td>
+<td class="w-20">
+  <i class="fa fa-check text-success" ng-if="release.complete"></i>
+</td>
+<td class="w-20">
+  <button id="create-release-{{index}}" class="btn btn-complete" ng-click="createRelease({ release: release })">+ Create</button>
+</td>

@@ -1,0 +1,67 @@
+<div class="row contract-row-layout" ng-if="!index">
+  <div class="form-group required hidden-xs hidden-sm col-md-3">
+    <label ng-if="!index">Contract</label>
+  </div>
+  <div class="form-group required hidden-xs hidden-sm col-md-2">
+    <label ng-if="!index">Distribution Channel</label>
+  </div>
+  <div class="form-group required hidden-xs hidden-sm col-md-2">
+    <label ng-if="!index">Source</label>
+  </div>
+  <div class="form-group required hidden-xs hidden-sm col-md-2">
+    <label ng-if="!index">Territory</label>
+  </div>
+  <div class="form-group hidden-xs hidden-sm col-md-2">
+    <label ng-if="!index">Rate</label>
+  </div>
+  <div class="form-group hidden-xs hidden-sm col-md-1 action-btn">
+  </div>
+</div>
+<div class="row contract-row-layout">
+  <div class="form-group required col-xs-5 col-md-3">
+    <label class="hidden-md hidden-lg hidden-xl">Contract</label>
+    <contract-select-field value="contract.contractId" populated="contract.contract" edit="edit"></contract-select-field>
+  </div>
+  <div class="form-group required col-xs-5 col-md-2">
+    <label class="hidden-md hidden-lg hidden-xl">Channel</label>
+    <select ng-if="edit" class="form-control" ng-model="contract.distributionChannel" ng-options="item as item for item in distributionChannels"></select>
+    <read-only-field ng-if="!edit" parent-field="contract" field="'distributionChannel'"></read-only-field>
+  </div>
+  <div class="form-group required col-xs-5 col-md-2">
+    <label class="hidden-md hidden-lg hidden-xl">Source</label>
+    <input ng-if="edit" type="text" class="form-control" ng-model="contract.source">
+    <read-only-field ng-if="!edit" parent-field="contract" field="'source'"></read-only-field>
+  </div>
+  <div class="form-group required col-xs-5 col-md-2">
+    <label class="hidden-md hidden-lg hidden-xl">Territory</label>
+    <ui-select ng-model="contract.territory" ng-if="edit">
+      <ui-select-match allow-clear="true">
+          <span ng-bind="$select.selected.name"></span>
+      </ui-select-match>
+      <ui-select-choices group-by="groupFind" repeat="country.code as country in territories | filter: $select.search">
+          <span class="country" ng-bind="country.name"></span>
+      </ui-select-choices>
+    </ui-select>
+    <read-only-field ng-if="!edit" parent-field="contract" field="'territory'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-5 col-md-2">
+    <label class="hidden-md hidden-lg hidden-xl">Rate</label>
+    <input type="number" class="form-control sm-p-l-5 sm-p-r-5" ng-model="contract.percentage" ng-if="edit" />
+    <read-only-field ng-if="!edit" parent-field="contract" field="'percentage'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-2 col-md-1 action-btn">
+    <button class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-show="edit == true" ng-click="delete({ contract: contract })"><i class="fa fa-trash"></i></button>
+  </div>
+</div>
+<div ng-if="enablePublisherMapping">
+  <div class="row contract-row-layout" ng-repeat="idx in getPublisherRows()">
+    <div class="form-group col-xs-10 col-md-6">
+      <label>Publisher</label>
+      <publisher-select-field value="contract.publishers[idx]" edit="edit"></publisher-select-field>
+    </div>
+    <div class="form-group col-xs-2 col-md-1 action-btn" style="margin-top: 25px;">
+      <button class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-show="edit == true" ng-click="removePublisher(idx)"><i class="fa fa-trash"></i></button>
+    </div>
+  </div>
+  <button class="btn btn-complete" ng-show="edit == true" ng-click="addPublisher()">+ Add Publisher</button>
+</div>

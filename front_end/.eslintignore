@@ -1,0 +1,10 @@
+node_modules
+public/assets
+public/app.js
+public/angularWithLibraries.js
+public/angular/libraries
+public/angular/angular.min.js
+public/angular/ui-bootstrap-tpls.min.js
+public/index.html
+public/swagger-ui
+

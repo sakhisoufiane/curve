@@ -1,0 +1,42 @@
+<div id="CUR-NfDsrrrI" class="row">
+  <div id="CUR-aDOffhRf" class="col-xs-12 text-center">
+    <img src="{{darkLogo}}" alt="logo" class="logo" crossorigin="anonymous">
+  </div>
+</div>
+<div id="CUR-bCzfSXAK" class="row">
+  <div id="CUR-rNHPdPzR" class="col-xs-12">
+    <div id="CUR-epDXmRLI" class="wording">
+      <p>Forgot your password? No problem, enter your email below and we'll send you a reset link to get you back into the system.</p>
+    </div>
+    <div id="CUR-kdBtwWKX" class="col-xs-12 reset-container">
+      <form id="reset-form" class="p-t-15" role="form">
+        <div id="notification"></div>
+        <div id="CUR-iuRmlHzs" class="form-group">
+          <label id="CUR-NvmiDsZA">Enter your email address</label>
+          <input id="CUR-RiOykXlz" type="text" name="email" placeholder="Email" class="form-control">
+        </div>
+        <button id="CUR-wlxizefS" type="submit" class="btn btn-complete m-t-10 w-xs-100-p m-xs-l-0">Send</button>
+      </form>
+    </div>
+    <div id="CUR-bgpunnoj" class="col-xs-12 notification-container hidden">
+      <div id="CUR-pbkjnaVF" class="text-notification">An email has been sent to that account if it exists within the system, please check your email for a link to reset your password</div>
+      <a id="CUR-tZujUblP" href="/login" class="btn btn-complete m-t-10 w-xs-100-p m-xs-l-0">Reset</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  {{#if favicon}}
+    var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = "{{{favicon}}}";
+    link.crossOrigin = 'anonymous';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  {{/if}}
+  {{#if pageTitle}}
+    document.title = "{{pageTitle}}"
+  {{else}}
+    document.title = "Curve"
+  {{/if}}
+</script>

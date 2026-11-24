@@ -1,0 +1,43 @@
+<div class="form-group m-t-20 m-b-20">
+  <label for="{{ fieldKey }}" class="control-label">{{ fieldName }}</label>
+  <!-- <p class="text-muted small">
+    Select the correct {{ fieldName }} from the list of unique values, found
+    across the selected Composers.
+  </p> -->
+  <div style="width: 50%">
+    <ui-select
+      ng-model="mergedFields[fieldKey]"
+      ng-disabled="mergedComposer[fieldKey].length <= 1"
+      ng-if="!isDateTime"
+    >
+      <ui-select-match>
+        <span ng-bind="mergedFields[fieldKey]"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="value in mergedComposer[fieldKey]">
+        <span ng-bind="value"></span>
+      </ui-select-choices>
+    </ui-select>
+    <div
+      id="datepicker-component"
+      class="form-group input-group date"
+      ng-if="isDateTime"
+      ng-init="open = false"
+    >
+      <input
+        id="CUR-uledeJqA"
+        type="text"
+        class="form-control"
+        ng-model="dateValue"
+        ng-model-options="{timezone: 'utc'}"
+        uib-datepicker-popup="{{dateFormat}}"
+        is-open="open"
+        ng-click="open = !open"
+        ng-disabled="false"
+        ng-change="onDateChange(dateValue)"
+      />
+      <span id="CUR-rwfsKnuM" class="input-group-addon" ng-click="open = !open">
+        <i class="fa fa-calendar"></i>
+      </span>
+    </div>
+  </div>
+</div>

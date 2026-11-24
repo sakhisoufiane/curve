@@ -1,0 +1,128 @@
+<div class="row">
+  <div class="panel panel-default bg-gray-l">
+    <div class="panel-body p-t-25">
+
+      <div data-ng-if="!!server.error && !server.initialisedDate" class="col-sm-12 alert alert-danger p-l-10 p-r-10">
+        <p>This server could not be initialised. Please check the details provided and make any necessary corrections.</p>
+        <p>- <i>{{server.error}}</i></p>
+        <p>Servers which are marked as 'Active' are checked regularly and when a connection can be established, the
+          account administrator will be notified that the server has been initialised and Curve will attempt to ingest sales files.
+        </p>
+      </div>
+      <div data-ng-if="!!server.error && !!server.initialisedDate" class="col-sm-12 alert alert-danger p-l-10 p-r-10">
+        <p>There was an error the last time Curve scanned this server. Please check the details provided and make any necessary corrections.</p>
+        <p>- <i>{{server.error}}</i></p>
+        <p>If all the settings below appear correct then this may have been a temporary connection issue. Provided the server is marked as 'Active' 
+          Curve will attempt to
+          scan the server again in due course and if the issue is resolved, no further action is required.
+        </p>
+      </div>
+      <div data-ng-if="!server.error && !server.initialisedDate" class="col-sm-12 alert alert-warning p-l-10 p-r-10">
+        <p>Pending Initialisation. Curve will check this server within 15 minutes of being saved. Confirmation of setup or any errors encountered will be displayed here.</p>
+      </div>
+      <div class="col-sm-6">
+          <div class="form-group">
+              <label>Name  <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is for your reference to identify different ftp servers."></i></label>
+              <input type="text" class="form-control" ng-model="server.name">
+          </div>
+          <div class="form-group">
+              <label>Type <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="SFTP offers secure data transfer and is recommended when available."></i></label>
+              <ui-select ng-model="server.protocol">
+                  <ui-select-match allow-clear="false">
+                      <span ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="protocol as protocol in serverProtocols | filter: $select.search">
+                      <span ng-bind="protocol"></span>
+                  </ui-select-choices>
+              </ui-select>
+          </div>
+          <div class="form-group">
+              <label>Host <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Typically this will begin with 'ftp.' and should not contain 'http://'.<br /><br />Once initialised this can not be changed.<br /><br />Note: Port number should be included in the Port field, not on the host."></i></label>
+              <input type="text" class="form-control" ng-model="server.host" data-ng-disabled="!!server.initialisedDate">
+          </div>
+          <div class="form-group">
+              <label>Username</label>
+              <input type="text" class="form-control" ng-model="server.username">
+          </div>
+
+          <div id="CUR-efnaySOz" class="form-group" ng-if="server.protocol == 'SFTP'">
+            <label id="CUR-KtmycNOB">Authentication Type</label>
+            <ui-select ng-model="server.authenticationType" data-ng-disabled="!!server.initialisedDate" ng-init="server.authenticationType = server.authenticationType || authenticationTypes[0]">
+              <ui-select-match allow-clear="false">
+                <span id="CUR-peBhwAAP" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in authenticationTypes | filter: $select.search">
+                <span id="CUR-Qqvvxhpo" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+
+          <div class="form-group" ng-if="clientAdminUser && (server.authenticationType == 'Password' || server.protocol != 'SFTP')">
+              <label>Password</label>
+              <input type="password" class="form-control" ng-model="server.password">
+          </div>
+
+          <div id="CUR-XEYAREwj" class="form-group" ng-if="server.protocol == 'SFTP' && server.authenticationType == 'Key File'">
+            <label id="CUR-dqJueWNm">Key File <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Key File authentication requires a private key or PEM file and does not support PPK files. If required a PPK file can be converted to a PEM file, please contact support for further information"></i></label>
+            <div ng-if="!!server.fileKey" style="margin-bottom: 10px;">Key file uploaded</div>
+            <div ng-if="server.newConnection" style="margin-bottom: 10px;">Please save before uploading key file</div>
+            <input id="CUR-bvLoxCzx" ng-if="!server.newConnection" type="file" ng-model="server.importFile" ngf-select aria-invalid="false" ng-change="uploadFile(server, server.importFile)" ngf-max-size="2MB" ngf-allow-dir="false">
+          </div>
+      </div>
+      <div class="col-sm-6">
+          <div class="form-group">
+              <label>Root Directory <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Where should the system look for files once connected. Leave blank for server root.<br /><br />Directory should begin with a ‘/' and NOT end with a '/’.<br /><br />Once initialised this can not be changed."></i></label>
+              <input type="text" class="form-control" ng-model="server.directory" data-ng-disabled="!!server.initialisedDate">
+          </div>
+          <div class="form-group">
+              <label>Port <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Provide the Port for the FTP server."></i></label>
+              <input type="number" class="form-control" ng-model="server.port">
+          </div>
+          <div class="form-group m-t-20"><!-- m-t-40-->
+            <label>
+              <input type="checkbox" value="1" ng-model="server.recursive" data-ng-disabled="!!server.initialisedDate">
+              Ingest from Sub-Folders 
+              <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Specify whether the system should retrieve files stored in subdirectories of the root directory.<br /><br />Once initialised this can not be changed."></i>
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" value="1" ng-model="server.active">
+              Active 
+              <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Set this server as active or inactive. Inactive servers will not be scanned."></i>
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" value="1" data-ng-checked="!!server.initialisedDate" disabled="disabled">
+              Server Initialised 
+              <i data-ng-if="!server.initialisedDate" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Once Curve has succesfully connected to this server it will be marked as initialised. If active it will be scanned frequently for new sales files."></i>
+              <span data-ng-if="server.initialisedDate"> : {{server.initialisedDate | date : 'dd/MM/yyyy HH:mm:ss' : 'UTC' }}</span>
+              <span class="label label-danger" data-ng-if="!!server.error && !server.initialisedDate">Error</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" value="1" data-ng-checked="!!server.lastSuccessfulCheck" disabled="disabled">
+              Last successful scan : 
+              <!--<span class="label label-danger" data-ng-if="!!server.error && !!server.lastSuccessfulCheck">{{server.lastSuccessfulCheck | date : 'dd/MM/yyyy HH:mm:ss' : 'UTC' }}</span>-->
+              <i data-ng-if="!server.lastSuccessfulCheck" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Once Curve has scanned this server for changes, the last scanned date will appear here."></i>
+              <span data-ng-if="server.lastSuccessfulCheck">{{server.lastSuccessfulCheck | date : 'dd/MM/yyyy HH:mm:ss' : 'UTC' }}</span>
+              <!--class="label label-success"-->
+            </label>
+          </div>
+      </div>
+      <div class="col-sm-12 m-t-15">
+          <div class="form-group col-xs-12 col-md-2 two-cols-row p-l-0 p-r-0">
+              <button class="btn btn-danger m-xs-t-5 m-l-0 m-r-0" ng-click="delete({ server: server })"><i class="fa fa-trash"></i></button>
+              <button
+              id="CUR-div-panel-body-verify-connection-btn"
+              class="btn btn-confirm"
+              style="margin-left: 10px;"
+              ng-click="verifyFtp(server)"
+            >Verify connection</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

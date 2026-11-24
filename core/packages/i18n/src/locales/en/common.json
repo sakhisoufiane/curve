@@ -1,0 +1,19 @@
+{
+  "termsAndConditions": {
+    "title": "Terms and Conditions",
+    "accept": "Accept"
+  },
+  "loggedInAs": "Logged in as {{name}}",
+  "notifications": "Notifications",
+  "noNotifications": "No notifications",
+  "clearAll": "Clear All",
+  "markAllAsRead": "Mark all as read",
+  "darkMode": "Dark Mode",
+  "signOut": "Sign Out",
+  "help": "Help",
+  "launchTour": "Launch Tour",
+  "search": "Search",
+  "language": "Language",
+  "errors": "Errors",
+  "links": "Links"
+}

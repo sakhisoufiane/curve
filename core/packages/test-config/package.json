@@ -1,0 +1,16 @@
+{
+  "name": "@curveroyaltysystems/test-config",
+  "version": "1.0.0",
+  "private": true,
+  "main": "jest-preset.js",
+  "dependencies": {
+    "jest-environment-jsdom": "30.4.1",
+    "ts-jest": "29.4.9"
+  },
+  "devDependencies": {
+    "@curveroyaltysystems/prettier-config": "*",
+    "@jest/globals": "30.3.0",
+    "@types/jest": "29.5.14"
+  },
+  "prettier": "@curveroyaltysystems/prettier-config"
+}

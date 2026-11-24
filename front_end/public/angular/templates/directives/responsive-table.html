@@ -1,0 +1,131 @@
+<div class="table-responsive">
+  <table class="table table-hover dataTable no-footer custom-responsive" ng-class="{'table-selectable': selectable}">
+    <thead>
+      <tr>
+        <th ng-if="selectable" class="table-checkbox hidden-xs">
+          <input type="checkbox" class="select-all" ng-checked="selectAllChecked" ng-click="selectAll(data)">
+        </th>
+        <th ng-style="header.title === 'Status' && { 'text-align': 'center' } || header.title === 'Participation' && { 'text-align': 'center' } || header.title === 'Ownership' && { 'text-align': 'center' }" ng-click="sortByHeader(header)" class="{{whatClassIsIt(header)}}" ng-class="{'hidden-xs': !header.required}" ng-repeat="header in headers">{{header.title}}</th>
+      </tr>
+    </thead>    
+    <tbody>
+      <tr ng-repeat="row in data track by $index" ng-if="row" ng-init="itemIndex = $index">
+        <td ng-if="selectable" class="v-align-middle hidden-xs">
+          <input id="item-select-{{itemIndex}}" type="checkbox" class='select-unit' ng-model="row.selected">
+        </td>
+        <td ng-style="header.title === 'Status' && { 'text-align': 'center' } || header.title === 'Participation' && { 'text-align': 'center' } || header.title === 'Ownership' && { 'text-align': 'center' }" class="v-align-middle" ng-repeat="header in headers" ng-class="{'hidden-xs': !header.required}">
+          <a id="item-cell-{{itemIndex}}" ng-if="!header.type && header.onCellClick" href="javascript:void(0)" ng-bind-html="row[header.name]" ng-click="header.onCellClick(row._id)"></a>
+          <a id="item-link-{{itemIndex}}" ng-if="!header.type && header.link" href="{{header.link.split('/[id]')[0]}}/{{row._id}}{{header.link.split('/[id]')[1]}}" ng-bind-html="row[header.name]"></a>
+          <a id="item-link-{{itemIndex}}" ng-if="header.type === 'reportLink' && header.link" href="{{header.link.split('/[id]')[0]}}/{{row._id}}{{header.link.split('/[id]')[1]}}{{row.reportType === 'Fixed' ? 'fixedReportEdit' : 'edit'}}" ng-bind-html="row[header.name]"></a>
+          <span ng-if="!header.type && !header.onCellClick && !header.link">{{row[header.name]}}</span>
+          <span ng-if="header.type === 'date'">{{row[header.name] | date : dateFormat : 'UTC'}}</span>
+          <span ng-if="header.type === 'currency'">{{currencySymbol ? currencySymbol : '£'}}{{row[header.name]}}</span>
+          <span ng-if="header.type === 'acceptedTotal' && row[header.name] > 0">
+            <div class="successCircle m-l-20" ng-style="row[header.name] > 100 ? {'width': '25px', 'height': '25px'} : {}">{{formatNumber(row[header.name])}}</div>
+          </span>
+          <span ng-if="header.type === 'rejectedTotal' && row[header.name] > 0">
+            <div class="dangerCircle m-l-20" ng-style="row[header.name] > 100 ? {'width': '25px', 'height': '25px'} : {}">{{formatNumber(row[header.name])}}</div>
+          </span>
+          <span ng-if="header.type === 'otherTotal' && row[header.name] > 0">
+            <div class="disabledCircle m-l-15" ng-style="row[header.name] > 100 ? {'width': '25px', 'height': '25px'} : {}">{{formatNumber(row[header.name])}}</div>
+          </span>
+          <span class="m-l-20" ng-if="header.type === 'ingestion'">
+            <i ng-if="row[header.name] === 'Complete'" class="fa fa-circle text-success" style="font-size: 22px;" tooltips tooltip-side="left" tooltip-template="Complete"></i>
+            <i ng-if="row[header.name] === 'Errored'" class="fa fa-circle text-danger" style="font-size: 22px;" tooltips tooltip-side="left" tooltip-template="Errored"></i>
+            <i ng-if="row[header.name] === 'In Progress'" class="fa fa-refresh text-warning" style="font-size: 22px;" tooltips tooltip-side="left" tooltip-template="In Progress"></i>
+            <i ng-if="row[header.name] === 'Pending'" class="fa fa-refresh" style="font-size: 22px;" tooltips tooltip-side="left" tooltip-template="Pending"></i>
+            <i ng-if="row[header.name] === 'Queued'" class="fa fa-clock-o" style="font-size: 22px;" tooltips tooltip-side="left" tooltip-template="Queued"></i>
+          </span>
+          <span ng-if="header.type === 'deliveryStatus'">
+            <i ng-if="row[header.name] === 'In Progress'" class="fa fa-clock-o m-l-5; text-align: center;"
+              style="font-size: 22px;" tooltips tooltip-side="left" tooltip-template="In Progress"></i>
+            <i ng-if="row[header.name] === 'Delivered'" class="fa fa-circle text-success m-l-5; text-align: center;"
+              style="font-size: 22px;" tooltips tooltip-side="left" tooltip-template="Delivered"></i>
+            <i ng-if="row[header.name] === 'Errored'" class="fa fa-circle text-danger m-l-5; text-align: center;"
+              style="font-size: 22px;" tooltips tooltip-side="left" tooltip-template="Errored"></i>
+            <i ng-if="row[header.name] === 'Pending' || !row[header.name]"
+              class="fa fa-circle text-secondary; text-align: center;" style="font-size: 22px;" tooltips
+              tooltip-side="left" tooltip-class="fit-text" tooltip-template="Pending"></i>
+          </span>
+          <span ng-if="header.type === 'partnerName'">{{row[header.name].name}}</span>
+          <span ng-if="header.type === 'invoice_total'">{{row.usage.currencyToChargeSymbol ? row.usage.currencyToChargeSymbol : ''}}{{row.usage ? row.usage.amount + row.usage.vat : 0}}</span>
+          <button ng-if="header.type === 'action' && !row.added" class="btn btn-sm btn-complete" ng-click="header.onCellClick(row)">
+            <i class="fa fa-plus"></i>
+          </button>
+          <button ng-if="header.type === 'action' && row.added" class="btn btn-sm btn-success" disabled="true">
+            <i class="fa fa-check"></i>
+          </button>
+          <span ng-if="header.type === 'iteration'" ng-repeat="item in row[header.name] track by $index">
+            {{ item[header.displayField] }} &nbsp;
+          </span>
+          <a ng-if="header.type === 'download'" class="btn btn-sm" href="{{row[header.name]}}" target="blank">
+            <i class="fa fa-download"></i>
+          </a>
+          <custom-cell ng-if="header.type === 'custom'" on-rendered="header.callback(event)" row="row"></custom-cell>
+
+          <span ng-if="header.showValid && row.valid && !hideValidation">
+            <i 
+            style="font-size: 22px;" 
+            class="fa fa-circle text-success m-l-5"
+            tooltips 
+            tooltip-class="fit-text" 
+            tooltip-side="left" 
+            tooltip-template="Valid"></i>
+          </span>
+          <span ng-if="header.showValid && !row.valid && !hideValidation">
+            <i 
+            style="font-size: 22px;" 
+            class="fa fa-circle text-danger m-l-5" 
+            tooltips 
+            tooltip-class="fit-text" 
+            tooltip-side="left"
+            tooltip-template="Incomplete, check the {{ header.tooltip }}'s page for details"></i>
+          </span>
+          <span ng-if="header.showStatus && row.approvalStatus === 'Ready for Approval' && !hideValidation">
+            <span class="icon-container m-l-10"
+              tooltips 
+              tooltip-class="fit-text" 
+              tooltip-side="left"
+              tooltip-template="Ready for Approval {{ row.onHold ? '(On Hold)' : '' }}">
+              <i ng-if="row.onHold" class="fa fa-circle" style="font-size: 22px;"></i>
+              <i ng-if="!row.onHold" class="fa fa-circle text-warning" style="font-size: 22px;"></i>
+              <i ng-if="row.onHold" class="fa fa-circle text-warning" style="font-size: 10px;"></i>
+            </span>
+          </span>
+          <span ng-if="header.showStatus && row.approvalStatus === 'Approved' && !hideValidation">
+            <span class="icon-container m-l-10"
+              tooltips 
+              tooltip-class="fit-text" 
+              tooltip-side="left"
+              tooltip-template="Approved {{ row.onHold ? '(On Hold)' : '' }}">
+              <i ng-if="row.onHold" class="fa fa-circle" style="font-size: 22px;"></i>
+              <i ng-if="!row.onHold" class="fa fa-circle text-success" style="font-size: 22px;"></i>
+              <i ng-if="row.onHold" class="fa fa-circle text-success" style="font-size: 10px;"></i>
+            </span>
+          </span>
+          <span ng-if="header.showStatus && !row.valid && !hideValidation">
+            <span class="icon-container m-l-10"
+              tooltips 
+              tooltip-class="fit-text" 
+              tooltip-side="left"
+              tooltip-template="Invalid{{ row.onHold ? ' (On Hold)' : '' }}, check the {{ header.tooltip }}'s page for details">
+              <i ng-if="row.onHold" class="fa fa-circle" style="font-size: 22px;"></i>
+              <i ng-if="!row.onHold" class="fa fa-circle text-danger" style="font-size: 22px;"></i>
+              <i ng-if="row.onHold" class="fa fa-circle text-danger" style="font-size: 10px;"></i>
+            </span>
+          </span>
+          <span ng-if="header.type === 'nested' && header.showAsLabel">
+            <span ng-if="row[header.name][header.field] == 0" class="label label-danger">{{row[header.name][header.field]}}</span>
+            <span ng-if="(row[header.name][header.field] > 0 && row[header.name][header.field] < 99.94) || row[header.name][header.field] > 100.06" class="label label-warning">{{row[header.name][header.field]}}</span>
+            <span ng-if="row[header.name][header.field] >= 99.94 && row[header.name][header.field] <= 100.06" class="label label-success">{{row[header.name][header.field]}}</span>
+          </span>
+          <span ng-if="header.type === 'participation' && header.showAsLabel">
+            <span ng-if="row[header.name] == 0" class="label label-danger">{{row[header.name]}}</span>
+            <span ng-if="(row[header.name] > 0 && row[header.name] < 100) || row[header.name] > 100" class="label label-warning">{{row[header.name]}}</span>
+            <span ng-if="row[header.name] == 100" class="label label-success">{{row[header.name]}}</span>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Curve API</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: #e6e6e6;
+      text-align: center;
+      min-height: 100dvh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 8rem 2rem 2rem;
+      background: linear-gradient(135deg, rgb(86, 130, 190) 8%, rgb(148, 85, 166));
+      position: relative;
+      overflow: hidden;
+    }
+    
+    main {
+      max-width: 500px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .dots {
+      position: absolute;
+      top: 18%;
+      left: -55%;
+      width: 250px;
+      height: 111px;
+      opacity: 0.07;
+      background: radial-gradient(circle, white 3.5px, transparent 3.5px) 0 0/14px 14px;
+      pointer-events: none;
+    }
+    
+    .swoosh {
+      position: absolute;
+      bottom: -18%;
+      right: -45%;
+      width: 38%;
+      height: 38%;
+      opacity: 0.08;
+      transform: rotate(-15deg);
+      pointer-events: none;
+    }
+    
+    h1 { 
+      margin: 0 0 40px; 
+      font-size: 140px;
+      font-weight: 500;
+      color: white;
+    }
+    
+    .whoops {
+      font-size: 44px;
+      font-weight: 500;
+      color: white;
+      margin: 40px auto;
+    }
+
+    p { 
+      margin: 30px 0; 
+      line-height: 1.5; 
+    }
+    
+    a {
+      color: #e6e6e6;
+    }
+    
+    .button {
+      display: inline-block;
+      padding: 12px 25px;
+      background: #5695e7;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+      font-size: 14px;
+      margin-top: 30px;
+      text-transform: uppercase;
+      transition: opacity 0.3s;
+    }
+    
+    .button:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>404</h1>
+    <h3 class="whoops">Our API documentation has moved!</h3>
+    <p>You can now find them under 'API Docs' at the bottom of the left navigation menu after <a href="{{FRONTEND_URL}}">logging in to your account.</a></p>
+    <p>If you're having trouble accessing the docs, please reach out to us at <a href="mailto:support@curveroyaltysystems.com">support@curveroyaltysystems.com</a>.</p>
+    <a href="https://www.curveroyaltysystems.com/" class="button">Back to Homepage</a>
+
+    <div class="dots"></div>
+    <img src="/white-symbol-big-p-1080-min.png" alt="" class="swoosh">
+  </main>
+</body>
+</html>
+</content>
+</invoke>

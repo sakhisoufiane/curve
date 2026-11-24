@@ -1,0 +1,79 @@
+{
+    "loginAgreement": "By logging in, you agree to our <termsLink>Terms of Use</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
+    "signUpAgreement": "By signing up, you agree to our <termsLink>Terms of Use</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
+    "signUp": {
+        "title": "Sign Up",
+        "subtitle": "Sign up for Curve Lite to start your free 14 day trial",
+        "successMessage": "Please confirm your account by clicking the link we've sent you by email.",
+        "submitButton": "Sign Up",
+        "submittingButton": "Signing Up...",
+        "loginLink": "Already have an account? Login",
+        "fields": {
+            "companyName": {
+                "label": "Company Name",
+                "placeholder": "Enter your company name"
+            },
+            "companyType": {
+                "label": "Company Type",
+                "placeholder": "Select client type",
+                "label_label": "Label",
+                "publisher": "Publisher",
+                "distributor": "Distributor"
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "Enter your email address"
+            },
+            "password": {
+                "label": "Password",
+                "placeholder": "Create a password"
+            },
+            "confirmPassword": {
+                "label": "Confirm Password",
+                "placeholder": "Confirm your password"
+            },
+            "marketingEmails": {
+                "label": "Marketing emails",
+                "description": "Receive emails about new products, features, and more."
+            }
+        },
+        "validation": {
+            "nameRequired": "Your name is required",
+            "companyTypeRequired": "Please select a company type",
+            "emailInvalid": "Please enter a valid email",
+            "passwordRequired": "Password is required",
+            "confirmPasswordRequired": "Please confirm your password",
+            "passwordsDontMatch": "Passwords don't match",
+            "captchaRequired": "Please complete the captcha"
+        },
+        "passwordRequirements": {
+            "title": "Password Requirements:",
+            "minLength": "At least 12 characters",
+            "hasLowercase": "Contains lowercase letter",
+            "hasUppercase": "Contains uppercase letter",
+            "hasNumber": "Contains number",
+            "hasSymbol": "Contains special character",
+            "passwordsMatch": "Passwords match"
+        },
+        "passwordErrors": {
+            "minLength": "Password must be at least 12 characters",
+            "lowercase": "Password must contain at least one lowercase letter",
+            "uppercase": "Password must contain at least one uppercase letter",
+            "number": "Password must contain at least one number",
+            "specialCharacter": "Password must contain at least one special character"
+        }
+    },
+    "expiredPassword": {
+        "validation": {
+            "currentPasswordRequired": "Current password is required",
+            "confirmPasswordRequired": "Please confirm your password",
+            "passwordsDontMatch": "Passwords don't match"
+        }
+    },
+    "resetPassword": {
+        "validation": {
+            "confirmPasswordRequired": "Please confirm your password",
+            "passwordsDontMatch": "Passwords don't match"
+        }
+    }
+}

@@ -1,0 +1,16 @@
+<div class="panel panel-default sm-m-b-5">
+  <div class="panel-heading">
+    <div class="panel-title">Select Graphs</div>
+  </div>
+  <div class="panel-body p-t-15">
+    <div class="row">
+      <div class="col-xs-6 col-sm-4 col-md-3 sm-p-r-0 sm-p-b-10 analytics-graph-selection" data-ng-repeat="option in graphOptions track by $index" data-ng-if="option">
+        <div>
+          <label>
+            <input type="checkbox" data-ng-model="option.selected">{{option.name}}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

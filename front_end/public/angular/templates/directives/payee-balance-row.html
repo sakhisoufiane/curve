@@ -1,0 +1,24 @@
+<div class="row border-bottom-dashed m-b-10 sm-m-b-15 p-r-10 p-l-10">
+
+  <div class="form-group col-xs-6 col-md-6">
+    <label ng-if="payees.length > 1">Payee {{index + 1}}</label>
+    <label ng-if="payees.length === 1">Payee</label>
+    <payee-select-field
+      edit="edit"
+      value="payee.payeeId" 
+      populated="payee.payee"
+      current-payees="currentPayees"
+      >
+    </payee-select-field>
+  </div>
+
+  <div class="form-group col-xs-6 col-md-4">
+    <label>%</label>
+    <input type="text" class="form-control" ng-model="payee.percentage" ng-if="edit">
+    <read-only-field ng-if="!edit" parent-field="payee" field="'percentage'"></read-only-field>
+  </div>
+
+  <div class="form-group col-xs-12 col-md-2 two-cols-row">
+    <button ng-show="edit == true" class="btn btn-danger row-button m-xs-t-0" ng-click="delete({ payee: payee })"><i class="fa fa-trash"></i></button>
+  </div>
+</div>

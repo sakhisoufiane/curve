@@ -1,0 +1,229 @@
+<div id="CUR-OIgwywMw" class="jumbotron" data-pages="parallax">
+  <div
+    id="CUR-HBvSMJQl"
+    class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20"
+  >
+    <div id="CUR-cccYyPbF" class="inner">
+      <ul id="CUR-tiStsRrQ" class="breadcrumb">
+        <li id="CUR-YirbsKen">
+          <a id="CUR-YExCYWsi" href="/#/deliverySettings">Delivery Settings</a>
+        </li>
+        <li id="CUR-rYYDhPvS" ng-show="!deliveryProfile._id">
+          <a id="CUR-gZmhQtjK" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-nhikzzxq" ng-show="deliveryProfile._id">
+          <a
+            id="CUR-unEzYrzl"
+            href="/#/deliverySettings/deliveryProfiles/{{deliveryProfile._id}}/edit"
+            class="active"
+            >{{deliveryProfile.name}}</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div
+  id="CUR-vqVyjcyC"
+  class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5"
+>
+  <div id="CUR-FmjtKsNL" class="row">
+    <div id="CUR-bEPAoUMh" class="col-xs-12 col-sm-6">
+      <label
+        class="label label-sm label-danger"
+        style="white-space: normal; display: inline-block"
+      >
+        Editing this Delivery Profile will affect any current delivery you have
+        set up that has not been sent yet
+      </label>
+    </div>
+    <div id="CUR-tBBjpXLM" class="col-xs-12 col-sm-6 text-right two-cols-row">
+      <button
+        id="CUR-WVvqWxkv"
+        ng-if="deliveryProfile._id"
+        class="btn btn-danger"
+        data-toggle="modal"
+        data-target="#deleteModal"
+        ng-show="rights.catalogue == 'Edit'"
+      >
+        <i class="fa fa-trash"></i>&nbsp;Delete
+      </button>
+      <button
+        id="CUR-EnnVtuIf"
+        ng-if="deliveryProfile._id"
+        class="btn btn-warning"
+        ng-click="copy()"
+        ng-show="rights.catalogue == 'Edit'"
+      >
+        <i class="fa fa-copy"></i> Copy
+      </button>
+      <button
+        id="CUR-yVAAPMrJ"
+        class="btn btn-complete"
+        ng-click="save()"
+        ng-show="rights.catalogue == 'Edit'"
+      >
+        <i class="fa fa-check"></i> Save
+      </button>
+    </div>
+  </div>
+  <div id="CUR-IFitHjcj" class="row">
+    <div id="CUR-rRPrlvaS" class="col-xs-12 col-sm-6">
+      <div id="CUR-qSPMWUHD" class="panel panel-default">
+        <div id="CUR-EbyYsWFr" class="panel-heading">
+          <div id="CUR-EPXcmHWs" class="panel-title">Overview</div>
+        </div>
+        <div id="CUR-PJKcGKiA" class="panel-body p-t-15">
+          <div id="CUR-hIzkKfDJ" class="form-group required">
+            <label id="CUR-biBRJhzj">Name</label>
+            <input
+              id="CUR-SRapVQYv"
+              type="text"
+              class="form-control"
+              ng-model="deliveryProfile.name"
+              ng-disabled="rights.catalogue != 'Edit'"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <delivery-filter
+    id="deliveryFilterRef"
+    ng-if="controllerCompleted"
+    edit="rights.catalogue != 'Edit'"
+    filter="deliveryProfile"
+    dateformat="dateFormat"
+    count="filterCount"
+    composers-and-publishers-integrity="composersAndPublishersIntegrity"
+    composers="allComposers"
+    exclude-composers="deliveryProfile.excludeComposers"
+    publishers="allPublishers"
+    exclude-publishers="deliveryProfile.excludePublishers"
+  ></delivery-filter>
+
+  <div
+    class="modal fade stick-up"
+    id="deleteModal"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+  >
+    <div id="CUR-nqFibWjF" class="modal-dialog">
+      <div id="CUR-AHamDhQZ" class="modal-content">
+        <div id="CUR-vjBbUShU" class="modal-header clearfix text-left">
+          <button
+            id="CUR-gtIeeNxt"
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+          >
+            <i class="pg-close fs-14"></i>
+          </button>
+          <h5 id="CUR-dVNEbJtA">Delete Delivery</h5>
+        </div>
+        <div id="CUR-CqLLtymu" class="modal-body">
+          <div id="CUR-FCNTGNec" class="row">
+            <div id="CUR-QqLGHaTR" class="col-xs-12 m-t-20">
+              <p>
+                Are you sure you want to delete this delivery? This cannot be
+                undone.
+              </p>
+            </div>
+          </div>
+          <div id="CUR-DdBOhTib" class="row">
+            <div id="CUR-hJARifFr" class="col-xs-12 m-t-20 text-right">
+              <button
+                id="CUR-HiqsmiVd"
+                type="button"
+                class="btn btn-default m-t-5"
+                data-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                id="CUR-YnzmwskP"
+                type="button"
+                class="btn btn-danger m-t-5"
+                ng-click="delete()"
+              >
+                <i class="fa fa-trash"></i>&nbsp;Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade stick-up"
+    id="worksBulkModal"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+  >
+    <div id="CUR-tgzOblHB" class="modal-dialog">
+      <div id="CUR-RQBKjISx" class="modal-content">
+        <div id="CUR-zwzazrEp" class="modal-header clearfix text-left">
+          <button
+            id="CUR-PQYsRsLu"
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+          >
+            <i class="pg-close fs-14"></i>
+          </button>
+          <h5 id="CUR-VsDzuvlP">Include Specific Works</h5>
+        </div>
+        <div id="CUR-YBzmVFFO" class="modal-body">
+          <div id="CUR-oopLAQII" class="row">
+            <div id="CUR-kIjmFXBJ" class="col-xs-12">
+              <small
+                ><b>Please ensure that there is only one ID per line.</b></small
+              >
+            </div>
+          </div>
+          <div id="CUR-ILbfaWul" class="row">
+            <div id="CUR-zaBUxLNJ" class="col-xs-12 m-t-20">
+              <form id="CUR-MuhHVizs">
+                <div id="CUR-ooWMUJZx" class="form-group">
+                  <label id="CUR-XXfqGbXt">Works IDs</label>
+                  <textarea
+                    class="form-control standard-textarea"
+                    ng-model="bulkIncludeIds"
+                  ></textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div id="CUR-EqYjKqiS" class="row">
+            <div id="CUR-lSGfZUUr" class="col-xs-12 m-t-20 text-right">
+              <button
+                id="CUR-eVccZLli"
+                type="button"
+                class="btn btn-default m-t-5"
+                data-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                id="CUR-hzFFiZwO"
+                type="button"
+                class="btn btn-complete m-t-5"
+                ng-click="includeBulkWorks()"
+              >
+                <i class="fa fa-plus"></i>&nbsp;Include
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <model-history data="delivery.modelHistory"></model-history>
+</div>

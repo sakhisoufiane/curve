@@ -1,0 +1,699 @@
+openapi: 3.0.3
+info:
+  title: Output Sales API
+  version: '1.0.0'
+  description: |
+    API for managing output sales data in the system.
+    Supports operations for recording, retrieving, and analyzing sales data.
+    Includes support for filtering, aggregation, and reporting.
+    
+    Access Control:
+    - Read access requires sales data read permissions
+    - Write access requires sales data write permissions
+    - Client users can access all data
+    - Payee users can only access data for their associated contracts
+
+paths:
+  /outputSales:
+    get:
+      tags:
+        - "Output Sales"
+      summary: Retrieve output sales data
+      description: Returns a list of output sales data with pagination and filtering. Access varies based on user type - client users can access all data, while payees can only access data for contracts they are associated with.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number to return
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 50
+          description: Number of items to return per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+            default: releaseId
+          description: Column to order by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: ASC
+          description: Order direction
+        - in: query
+          name: periodId
+          schema:
+            type: string
+          description: Filter by period ID
+        - in: query
+          name: contractId
+          schema:
+            type: string
+          description: Filter by contract ID (required for payee access)
+        - in: query
+          name: contractPartitionNo
+          schema:
+            type: integer
+          description: Filter by contract partition number
+        - in: query
+          name: salesFileId
+          schema:
+            type: string
+          description: Filter by sales file ID
+        - in: query
+          name: catType
+          schema:
+            type: string
+          description: Filter by catalogue type
+        - in: query
+          name: releaseIds
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by release IDs
+        - in: query
+          name: trackIds
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by track IDs
+        - in: query
+          name: workIds
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by work IDs
+        - in: query
+          name: distributionChannels
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by distribution channels
+        - in: query
+          name: configurations
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by configurations
+        - in: query
+          name: territories
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by territories (can include continent codes like 'Africa', 'Americas', 'Asia', 'Europe', 'Oceania', or 'WW' for worldwide. Continent codes will be automatically expanded to include all countries in that continent)
+        - in: query
+          name: trackTitle
+          schema:
+            type: string
+          description: Filter by track title
+        - in: query
+          name: trackArtist
+          schema:
+            type: string
+          description: Filter by track artist
+        - in: query
+          name: releaseArtist
+          schema:
+            type: string
+          description: Filter by release artist
+        - in: query
+          name: releaseTitle
+          schema:
+            type: string
+          description: Filter by release title
+        - in: query
+          name: barcode
+          schema:
+            type: string
+          description: Filter by barcode
+        - in: query
+          name: catNo
+          schema:
+            type: string
+          description: Filter by catalogue number
+        - in: query
+          name: isrc
+          schema:
+            type: string
+          description: Filter by ISRC
+        - in: query
+          name: identifier
+          schema:
+            type: string
+          description: Filter by identifier
+        - in: query
+          name: territory
+          schema:
+            type: string
+          description: Filter by individual territory (single territory code)
+        - in: query
+          name: distributionChannel
+          schema:
+            type: string
+          description: Filter by individual distribution channel
+        - in: query
+          name: configuration
+          schema:
+            type: string
+          description: Filter by individual configuration
+        - in: query
+          name: source
+          schema:
+            type: string
+          description: Filter by source
+        - in: query
+          name: subSource
+          schema:
+            type: string
+          description: Filter by sub-source
+      responses:
+        200:
+          description: Successfully retrieved output sales data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sales:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OutputSale'
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        description: Total number of records
+                        example: 1250
+                      totalPages:
+                        type: integer
+                        description: Total number of pages
+                        example: 25
+                      currentPage:
+                        type: integer
+                        description: Current page number
+                        example: 1
+              example:
+                sales:
+                  - id: "OS123456789"
+                    releaseId: "REL123456"
+                    trackId: "TRK789012"
+                    workId: "WRK345678"
+                    contractId: "CNT901234"
+                    periodId: "PER567890"
+                    contractPartitionNo: 1
+                    salesFileId: "SF456789"
+                    catalogueReleaseTitle: "Greatest Hits"
+                    catalogueReleaseArtist: "Famous Artist"
+                    catalogueTrackTitle: "Hit Song"
+                    catalogueTrackArtist: "Famous Artist"
+                    catalogueWorkTitle: "Hit Song (Composition)"
+                    catalogueWorkComposer: "Songwriter Name"
+                    catalogueIdentifier: "SONG001"
+                    catalogueBarcode: "0602547924926"
+                    catalogueCatNo: "EMI-001"
+                    catalogueIsrc: "GBUM71507609"
+                    catalogueIswc: "T-345.678.901-2"
+                    barcode: "0602547924926"
+                    catNo: "EMI-001"
+                    isrc: "GBUM71507609"
+                    identifier: "SONG001"
+                    territory: "US"
+                    distributionChannel: "Digital"
+                    source: "Spotify"
+                    subSource: "Premium"
+                    configuration: "Single"
+                    catType: "Recording"
+                    priceCategory: "Full Price"
+                    units: 1000
+                    grossAmount: 500.00
+                    netAmount: 400.00
+                    homeCurrencyGrossAmount: 500.00
+                    homeCurrencyNetAmount: 400.00
+                    calculationInput: 400.00
+                    calculationOutput: 200.00
+                    originalCurrency: "USD"
+                    exchangeRate: 1.0
+                    saleDate: "2024-01-15"
+                    transactionDate: "2024-01-20"
+                    dateFrom: "2024-01-01"
+                    dateTo: "2024-01-31"
+                    production: "Studio Album"
+                    episode: null
+                meta:
+                  total: 1250
+                  totalPages: 25
+                  currentPage: 1
+        403:
+          description: Forbidden, the user does not have sufficient rights or payee is accessing data without required contractId
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Client or payee not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Client not found"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /outputSales/totals:
+    get:
+      tags:
+        - "Output Sales"
+      summary: Retrieve output sales totals
+      description: Returns aggregated totals for output sales data based on filtering criteria. Access varies based on user type - client users can access all data, while payees can only access data for contracts they are associated with.
+      parameters:
+        - in: query
+          name: periodId
+          schema:
+            type: string
+          description: Filter by period ID
+        - in: query
+          name: contractId
+          schema:
+            type: string
+          description: Filter by contract ID (required for payee access)
+        - in: query
+          name: contractPartitionNo
+          schema:
+            type: integer
+          description: Filter by contract partition number
+        - in: query
+          name: salesFileId
+          schema:
+            type: string
+          description: Filter by sales file ID
+        - in: query
+          name: catType
+          schema:
+            type: string
+          description: Filter by catalogue type
+        - in: query
+          name: releaseIds
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by release IDs
+        - in: query
+          name: trackIds
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by track IDs
+        - in: query
+          name: workIds
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by work IDs
+        - in: query
+          name: distributionChannels
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by distribution channels
+        - in: query
+          name: configurations
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by configurations
+        - in: query
+          name: territories
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by territories (can include continent codes like 'Africa', 'Americas', 'Asia', 'Europe', 'Oceania', or 'WW' for worldwide. Continent codes will be automatically expanded to include all countries in that continent)
+        - in: query
+          name: trackTitle
+          schema:
+            type: string
+          description: Filter by track title
+        - in: query
+          name: trackArtist
+          schema:
+            type: string
+          description: Filter by track artist
+        - in: query
+          name: releaseArtist
+          schema:
+            type: string
+          description: Filter by release artist
+        - in: query
+          name: releaseTitle
+          schema:
+            type: string
+          description: Filter by release title
+        - in: query
+          name: barcode
+          schema:
+            type: string
+          description: Filter by barcode
+        - in: query
+          name: catNo
+          schema:
+            type: string
+          description: Filter by catalogue number
+        - in: query
+          name: isrc
+          schema:
+            type: string
+          description: Filter by ISRC
+        - in: query
+          name: identifier
+          schema:
+            type: string
+          description: Filter by identifier
+        - in: query
+          name: territory
+          schema:
+            type: string
+          description: Filter by individual territory (single territory code)
+        - in: query
+          name: distributionChannel
+          schema:
+            type: string
+          description: Filter by individual distribution channel
+        - in: query
+          name: configuration
+          schema:
+            type: string
+          description: Filter by individual configuration
+        - in: query
+          name: source
+          schema:
+            type: string
+          description: Filter by source
+        - in: query
+          name: subSource
+          schema:
+            type: string
+          description: Filter by sub-source
+      responses:
+        200:
+          description: Successfully retrieved output sales totals
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  outputTotals:
+                    type: object
+                    properties:
+                      units:
+                        type: number
+                        description: Total number of units sold
+                        example: 125000
+                      homeCurrencyGrossAmount:
+                        type: number
+                        description: Total gross amount in home currency
+                        example: 62500.00
+                      homeCurrencyNetAmount:
+                        type: number
+                        description: Total net amount in home currency
+                        example: 50000.00
+                      calculationOutput:
+                        type: number
+                        description: Total calculated output amount
+                        example: 25000.00
+              example:
+                outputTotals:
+                  units: 125000
+                  homeCurrencyGrossAmount: 62500.00
+                  homeCurrencyNetAmount: 50000.00
+                  calculationOutput: 25000.00
+        403:
+          description: Forbidden, the user does not have sufficient rights or payee is accessing data without required contractId
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Client or payee not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Client not found"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /outputSales/{id}:
+    get:
+      tags:
+        - "Output Sales"
+      summary: Retrieve a specific output sale (DEPRECATED)
+      description: "**DEPRECATED**: Returns details for a specific output sale by ID. This route is marked as a 'dead route' in the code and is not actively used by the frontend. Consider using the main /outputSales endpoint with appropriate filters instead."
+      deprecated: true
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Output sale ID
+      responses:
+        200:
+          description: Successfully retrieved output sale
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  outputSales:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OutputSale'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Client not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Client not found"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+components:
+  schemas:
+    OutputSale:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the output sale record
+        catalogueBarcode:
+          type: string
+          description: Barcode from the catalogue
+        catalogueCatNo:
+          type: string
+          description: Catalogue number from the catalogue
+        barcode:
+          type: string
+          description: Product barcode
+        catNo:
+          type: string
+          description: Catalogue number
+        isrc:
+          type: string
+          description: International Standard Recording Code
+        identifier:
+          type: string
+          description: Unique identifier for the item
+        catType:
+          type: string
+          description: Catalogue type
+        configuration:
+          type: string
+          description: Configuration
+        distributionChannel:
+          type: string
+          description: Distribution channel
+        exchangeRate:
+          type: number
+          description: Exchange rate
+        homeCurrencyNetAmount:
+          type: number
+          description: Net amount in home currency
+        catalogueIsrc:
+          type: string
+          description: ISRC from the catalogue
+        netAmount:
+          type: number
+          description: Net amount
+        originalCurrency:
+          type: string
+          description: Original currency
+        priceCategory:
+          type: string
+          description: Price category
+        releaseId:
+          type: string
+          description: Release ID
+        saleDate:
+          type: string
+          format: date
+          description: Sale date
+        source:
+          type: string
+          description: Source
+        subSource:
+          type: string
+          description: Sub-source
+        territory:
+          type: string
+          description: Territory
+        trackId:
+          type: string
+          description: Track ID
+        units:
+          type: number
+          description: Number of units
+        transactionDate:
+          type: string
+          format: date
+          description: Transaction date
+        grossAmount:
+          type: number
+          description: Gross amount
+        homeCurrencyGrossAmount:
+          type: number
+          description: Gross amount in home currency
+        calculationInput:
+          type: number
+          description: Input amount for calculation
+        calculationOutput:
+          type: number
+          description: Output amount from calculation
+        catalogueReleaseTitle:
+          type: string
+          description: Release title from the catalogue
+        catalogueReleaseArtist:
+          type: string
+          description: Release artist from the catalogue
+        catalogueTrackTitle:
+          type: string
+          description: Track title from the catalogue
+        catalogueTrackArtist:
+          type: string
+          description: Track artist from the catalogue
+        catalogueWorkTitle:
+          type: string
+          description: Work title from the catalogue
+        catalogueWorkComposer:
+          type: string
+          description: Work composer from the catalogue
+        catalogueIdentifier:
+          type: string
+          description: Identifier from the catalogue
+        catalogueWorkForeignId:
+          type: string
+          description: Work foreign ID from the catalogue
+        catalogueIswc:
+          type: string
+          description: ISWC from the catalogue
+        catalogueTunecode:
+          type: string
+          description: Tunecode from the catalogue
+        production:
+          type: string
+          description: Production
+        episode:
+          type: string
+          description: Episode
+        dateFrom:
+          type: string
+          format: date
+          description: Date from
+        dateTo:
+          type: string
+          format: date
+          description: Date to
+        periodId:
+          type: string
+          description: Period ID
+        contractId:
+          type: string
+          description: Contract ID
+        contractPartitionNo:
+          type: integer
+          description: Contract partition number
+        workId:
+          type: string
+          description: Work ID
+        salesFileId:
+          type: string
+          description: Sales file ID that this record originated from

@@ -1,0 +1,8 @@
+<td class="v-align-middle hidden-xs"><input id="import-select-{{index}}" type="checkbox" ng-model="import.selected"></td>
+<td class="v-align-middle"><a id="import-{{index}}" href="#/imports/{{ import._id }}/edit">{{ import.name }}</a></td>
+<td class="v-align-middle">{{ import.createdAt | date : dateFormat : 'UTC' }}</td>
+<td class="v-align-middle">
+	<span ng-if="import.status === 'Setup'" class="label label-warning">{{ import.status }}</span>
+	<span ng-if="import.status === 'Complete'" class="label label-success">{{ import.status }}</span>
+	<span ng-if="import.status === 'Importing'" class="label label-info">{{ import.status }}</span>
+</td>

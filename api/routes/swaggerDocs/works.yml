@@ -1,0 +1,1804 @@
+openapi: 3.1.0
+info:
+  title: Works API
+  version: 1.10.0
+
+paths:
+  /works:
+    get:
+      tags:
+        - Works
+      summary: Retrieve a list of works
+      description: Retrieve works based on provided filters and pagination settings.
+      parameters:
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Search term for work titles or other relevant information.
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page.
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by.
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sorting direction.
+        - in: query
+          name: createdAfter
+          schema:
+            type: string
+            format: date
+          description: Filter works created on or after this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: createdBefore
+          schema:
+            type: string
+            format: date
+          description: Filter works created on or before this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: updatedAfter
+          schema:
+            type: string
+            format: date
+          description: Filter works updated on or after this date (inclusive, YYYY-MM-DD format)
+        - in: query
+          name: updatedBefore
+          schema:
+            type: string
+            format: date
+          description: Filter works updated on or before this date (inclusive, YYYY-MM-DD format)
+      responses:
+        '200':
+          description: Successfully retrieved the list of Works.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  works:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Work'
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to retrieve the Work.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    post:
+      tags:
+        - Works
+      summary: Create a new work
+      description: Add a new work to the catalogue.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Work'
+            examples:
+              newWork:
+                summary: Example of a new work
+                value:
+                  title: "New Work Title"
+                  composer: "Composer Name"
+      responses:
+        '200':
+          description: Work successfully created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+        '400':
+          description: Bad request. The request was badly formatted or had an error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Work not found, no Work exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to create the Work.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    delete:
+      tags:
+        - Works
+      summary: Delete one or multiple Works
+      description: This route allows for the deletion of one or multiple Works, specified by their IDs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+                  description: Deletion type, it can be 'multi'. Defaults to 'multi' if not specified.
+      responses:
+        '200':
+          description: Work successfully deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deletedCount:
+                    type: integer
+                    example: 1
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Work not found, no Work exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to delete the Work.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/get_works:
+    post:
+      tags:
+        - Works
+      summary: Retrieve a paginated list of works with filters
+      description: Retrieve works using filter criteria and pagination. Supports filtering by identifiers (including large arrays) and full-text search.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  default: 1
+                  description: Page number for pagination.
+                limit:
+                  type: integer
+                  default: 25
+                  description: Number of items per page.
+                orderBy:
+                  type: string
+                  default: title
+                  description: Field to sort by.
+                orderDir:
+                  type: string
+                  enum: [asc, desc]
+                  description: Sorting direction.
+                text:
+                  type: string
+                  description: Full-text search term. When provided, uses Atlas Search instead of standard filters.
+                identifiers:
+                  type: array
+                  items:
+                    type: string
+                  description: Filter works by main identifiers.
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Filter works by their IDs.
+                catalogueGroups:
+                  type: array
+                  items:
+                    type: string
+                  description: Filter by catalogue groups.
+                composerIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Filter by composer IDs.
+                contractIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Filter by contract IDs.
+                publisherIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Filter by publisher IDs.
+                approvalStatus:
+                  type: string
+                  description: Filter by approval status.
+                onHold:
+                  type: boolean
+                  description: Filter works that are on hold.
+                createdAfter:
+                  type: string
+                  format: date
+                  description: Filter works created on or after this date (inclusive, YYYY-MM-DD format).
+                createdBefore:
+                  type: string
+                  format: date
+                  description: Filter works created on or before this date (inclusive, YYYY-MM-DD format).
+                updatedAfter:
+                  type: string
+                  format: date
+                  description: Filter works updated on or after this date (inclusive, YYYY-MM-DD format).
+                updatedBefore:
+                  type: string
+                  format: date
+                  description: Filter works updated on or before this date (inclusive, YYYY-MM-DD format).
+      responses:
+        '200':
+          description: Successfully retrieved the list of Works.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  works:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Work'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while retrieving works.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/deliveryStatuses:
+    get:
+      tags:
+        - Works
+      summary: Retrieve delivery statuses for works
+      description: Get delivery status information for works with pagination and filtering options.
+      responses:
+        '200':
+          description: Successfully retrieved delivery statuses.
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while retrieving delivery statuses.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/exportDeliveryStatuses:
+    post:
+      tags:
+        - Works
+      summary: Export delivery statuses
+      description: Export delivery status information and send via email.
+      responses:
+        '200':
+          description: Export process started successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while exporting delivery statuses.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/export:
+    post:
+      tags:
+        - Works
+      summary: Export works data
+      description: Export works data to Excel or CSV format and send via email.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of work IDs to export.
+                filter:
+                  type: object
+                  description: Filter criteria for selecting works to export.
+      responses:
+        '200':
+          description: Export process started successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Your report will be sent to you via email shortly"
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while exporting works.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/export_validation_errors:
+    post:
+      tags:
+        - Works
+      summary: Export validation errors
+      description: Export validation errors for works and send via email.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of work IDs to export validation errors for.
+                filter:
+                  type: object
+                  description: Filter criteria for selecting works to export validation errors for.
+      responses:
+        '200':
+          description: Validation errors export process started successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Your report will be sent to you via email shortly"
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while exporting validation errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/create_delivery:
+    post:
+      tags:
+        - Works
+      summary: Create delivery for works
+      description: Create a delivery for specified works or works matching filter criteria.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of work IDs to create delivery for.
+                filter:
+                  type: object
+                  description: Filter criteria for selecting works to create delivery for.
+      responses:
+        '200':
+          description: Delivery created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while creating delivery.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/create_many:
+    post:
+      tags:
+        - Works
+      summary: Create multiple works
+      description: Create multiple works in a single operation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                works:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Work'
+                  description: Array of work objects to create.
+      responses:
+        '200':
+          description: Works created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while creating works.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/flushContracts:
+    post:
+      tags:
+        - Works
+      summary: Flush contracts to works
+      description: Create a background task to flush contracts to works based on IDs or filter criteria.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of work IDs to flush contracts for.
+                filter:
+                  type: object
+                  description: Filter criteria for selecting works to flush contracts for.
+      responses:
+        '200':
+          description: Contract flushing task created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Flushing contracts from Ip Chains, you will be notified when this is complete."
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while creating flush contracts task.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/approve_many:
+    post:
+      tags:
+        - Works
+      summary: Approve multiple works
+      description: Approve multiple works specified by their IDs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of work IDs to approve.
+      responses:
+        '200':
+          description: Works approval process completed.
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while approving works.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/hold_many:
+    post:
+      tags:
+        - Works
+      summary: Put multiple works on hold
+      description: Put multiple works on hold specified by their IDs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of work IDs to put on hold.
+      responses:
+        '200':
+          description: Works hold process completed.
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while putting works on hold.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/resume_many:
+    post:
+      tags:
+        - Works
+      summary: Resume multiple works from hold
+      description: Resume multiple works from hold status specified by their IDs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of work IDs to resume from hold.
+      responses:
+        '200':
+          description: Works resume process completed.
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while resuming works from hold.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/import:
+    post:
+      tags:
+        - Works
+      summary: Import works from Excel file
+      description: Import works from an uploaded Excel file with optional overwrite settings.
+      parameters:
+        - in: query
+          name: overwriteBlanks
+          schema:
+            type: boolean
+            default: false
+          description: Whether to overwrite blank fields during import.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Excel file containing works data to import.
+      responses:
+        '200':
+          description: Import process started successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Works are importing, and a report will be sent to you shortly."
+        '400':
+          description: Bad request, file is required.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while importing works.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/bulk_include:
+    post:
+      tags:
+        - Works
+      summary: Bulk include works by IDs
+      description: Retrieve works by their IDs for bulk operations.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of work IDs to include.
+      responses:
+        '200':
+          description: Works retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '500':
+          description: Internal server error occurred while retrieving works.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/bulk_update_deliveries:
+    post:
+      tags:
+        - Works
+      summary: Bulk update delivery statuses
+      description: Update delivery statuses for multiple works and delivery partners.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - deliveryPartnerIds
+                - deliveryStatus
+              properties:
+                deliveryPartnerIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of delivery partner IDs.
+                deliveryStatus:
+                  type: string
+                  description: New delivery status to set.
+      responses:
+        '200':
+          description: Delivery statuses updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Updated status successfully"
+        '500':
+          description: Internal server error occurred while updating delivery statuses.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/redeliver_workids:
+    post:
+      tags:
+        - Works
+      summary: Redeliver specific work IDs
+      description: Redeliver works to a specific delivery partner.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - workIds
+                - deliveryPartnerId
+              properties:
+                workIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of work IDs to redeliver.
+                deliveryPartnerId:
+                  type: string
+                  description: ID of the delivery partner to redeliver to.
+      responses:
+        '200':
+          description: Redelivery process completed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Updated status successfully"
+        '500':
+          description: Internal server error occurred while redelivering works.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/update_works_with_filter:
+    post:
+      tags:
+        - Works
+      summary: Update works using filter criteria
+      description: Update works based on filter criteria and delivery partner.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - deliveryPartnerId
+              properties:
+                deliveryPartnerId:
+                  type: string
+                  description: ID of the delivery partner for the update.
+                filter:
+                  type: object
+                  description: Filter criteria for selecting works to update.
+      responses:
+        '200':
+          description: Update process started successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Update in progress"
+        '500':
+          description: Internal server error occurred while updating works.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/{id}/history:
+    get:
+      tags:
+        - Works
+      summary: Retrieve work modification history
+      description: Get the modification history for a specific work including all patches and changes.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the work to retrieve history for.
+      responses:
+        '200':
+          description: Successfully retrieved work history.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        ref:
+                          type: string
+                        author:
+                          type: object
+                          properties:
+                            email:
+                              type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+                        patches:
+                          type: array
+                          items:
+                            type: object
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Work not found, no Work exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while retrieving work history.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/{id}/deliveries:
+    get:
+      tags:
+        - Works
+      summary: Retrieve work deliveries
+      description: Get delivery information for a specific work including delivery partners and logs.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the work to retrieve deliveries for.
+        - in: query
+          name: showLogs
+          schema:
+            type: boolean
+            default: false
+          description: Whether to include delivery logs in the response.
+      responses:
+        '200':
+          description: Successfully retrieved work deliveries.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deliveries:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        deliveryPartner:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                        status:
+                          type: string
+                        deliveredAt:
+                          type: string
+                          format: date-time
+                        logs:
+                          type: array
+                          items:
+                            type: object
+                          description: Delivery logs (only included if showLogs=true).
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Work not found, no Work exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while retrieving work deliveries.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/{id}/approve:
+    put:
+      tags:
+        - Works
+      summary: Approve a specific work
+      description: Approve a work for delivery by changing its approval status.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the work to approve.
+      responses:
+        '200':
+          description: Work approved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Work Approved"
+                  approvedDate:
+                    type: string
+                    format: date-time
+                  approvalStatus:
+                    type: string
+                    example: "Approved"
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Work not found, no Work exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while approving work.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/{id}/update_deliveries:
+    put:
+      tags:
+        - Works
+      summary: Update delivery status for a work
+      description: Update the delivery status for a specific work and delivery partner.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the work to update deliveries for.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - deliveryPartnerId
+                - deliveryStatus
+              properties:
+                deliveryPartnerId:
+                  type: string
+                  description: ID of the delivery partner.
+                deliveryStatus:
+                  type: string
+                  description: New delivery status to set.
+      responses:
+        '200':
+          description: Delivery status updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Updated status successfully"
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Work not found, no Work exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while updating delivery status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/{id}/toggle_hold:
+    put:
+      tags:
+        - Works
+      summary: Toggle hold status for a work
+      description: Toggle the hold status of a specific work between on hold and not on hold.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the work to toggle hold status for.
+      responses:
+        '200':
+          description: Hold status toggled successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Work put on hold"
+                  onHold:
+                    type: boolean
+                    description: Current hold status after toggle.
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Work not found, no Work exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while toggling hold status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/{id}/source:
+    get:
+      tags:
+        - Works
+      summary: Retrieve work source information
+      description: Get source information for a specific work including original source details.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the work to retrieve source information for.
+      responses:
+        '200':
+          description: Successfully retrieved work source information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  source:
+                    type: object
+                    description: Source information for the work.
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Work not found, no Work exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while retrieving work source information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /works/{id}:
+    get:
+      tags:
+        - Works
+      summary: Retrieve a specific work by ID
+      description: Get details of a specific work by its unique identifier.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the work to retrieve.
+      responses:
+        '200':
+          description: Successfully retrieved the Work.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Work'
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Work not found, no Work exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to retrieve the Work.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    put:
+      tags:
+        - Works
+      summary: Update a specific work
+      description: Update the details of a specific work by its unique identifier.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the work to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Work'
+      responses:
+        '200':
+          description: Work successfully updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+        '400':
+          description: Bad request. The request was badly formatted or had an error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Work not found, no Work exists with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while trying to update the Work.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    IpChain:
+      type: object
+      properties:
+        composerId:
+          type: string
+        publisherId:
+          type: string
+        contractType:
+          type: string
+        controlled:
+          type: boolean
+        mechanicalOwnership:
+          type: number
+        mechanicalCollection:
+          type: number
+        performanceOwnership:
+          type: number
+        performanceCollection:
+          type: number
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/IpChain'
+    Work:
+      type: object
+      properties:
+        clientId:
+          type: string
+        campaignIds:
+          type: array
+          items:
+            type: string
+        title:
+          type: string
+          required: true
+        alternateTitles:
+          type: array
+          items:
+            properties:
+              title:
+                type: string
+              language:
+                type: string
+                enum: ['', 'English', 'Arabic', 'Assamese', 'Aymara', 'Azerbaijani', 'Bashkir', 'Basque', 'Bengali', 'Bhutani', 'Bihari', 'Bislama', 'Breton', 'Bulgarian', 'Burmese', 'Byelorussian', 'Cambodian', 'Catalan', 'Chinese', 'Corsican', 'Croatian', 'Czech', 'Danish', 'Dutch', 'Esperanto', 'Estonian', 'Faeroese', 'Farsi', 'Fiji', 'Finnish', 'French', 'Frisian', 'Galician', 'Georgian', 'German', 'Greek', 'Greenlandic', 'Guarani', 'Gujarati', 'Hausa', 'Hawaii', 'Hebrew', 'Hindi', 'Hungarian', 'Icelandic', 'Indonesian', 'Interlingua', 'Interlingue', 'Inupiak', 'Irish', 'Italian', 'Japanese', 'Javanese', 'Kannada', 'Kashmiri', 'Kazakh', 'Kinyarwanda', 'Kirghiz', 'Kirundi', 'Korean', 'Kurdish', 'Laothian', 'Latin', 'Latvian', 'Lingala', 'Lithuanian', 'Macedonian', 'Malagasy', 'Malay', 'Malayalam', 'Maltese', 'Maori', 'Marathi', 'Moldavian', 'Mongolian', 'Nauru', 'Ndebele', 'Nepali', 'North Sotho', 'Norwegian', 'Occitan', 'Oriya', 'Oromo', 'Papiamento', 'Pashto', 'Polish', 'Portuguese', 'Punjabi', 'Quechua', 'Rhaeto-Romance', 'Romanian', 'Russian', 'Samoan', 'Sangro', 'Sanskrit', 'Scots Gaelic', 'Serbian', 'Serbo-Croatian', 'Sesotho', 'Setswana', 'Shona', 'Sindhi', 'Singhalese', 'Siswati', 'Slovak', 'Slovenian', 'Somali', 'Spanish', 'Sudanese', 'Swahili', 'Swedish', 'Tagalog', 'Tajik', 'Tamil', 'Tatar', 'Telugu', 'Thai', 'Tibetan', 'Tigrinya', 'Tonga', 'Tsonga', 'Turkish', 'Turkmen', 'Twi', 'Ukranian', 'Urdu', 'Uzbek', 'Venda', 'Vietnamese', 'Volapuk', 'Welsh', 'Wolof', 'Xhosa', 'Yiddish', 'Yoruba', 'Zulu']
+        composer:
+          type: string
+        foreignId:
+          type: string
+        projectId:
+          type: string
+        identifier:
+          type: string
+        partyNo:
+          type: number
+        tunecode:
+          type: string
+        iswc:
+          type: string
+        notes:
+          type: string
+        trackIds:
+          type: array
+          description: Should match a track that exists
+          items:
+            type: string
+        salesReturnsRights:
+          type: array
+          items:
+            type: object
+            properties:
+              contractId:
+                type: string
+              percentage:
+                type: number
+        salesReturnsRightsDisplay:
+          type: array
+        channelSpecificSalesReturnsRights:
+          type: array
+          items:
+            type: object
+            properties:
+              channel:
+                type: string
+              territory:
+                type: string
+              source:
+                type: string
+              contractId:
+                type: string
+              percentage:
+                type: number
+        costsRights:
+          type: array
+          items:
+            type: object
+            properties:
+              contractId:
+                type: string
+              percentage:
+                type: number
+        aliases:
+          type: array
+          items:
+            type: string
+        societyIdentifiers:
+          type: array
+          items:
+            properties:
+              society:
+                type: string
+              identifier:
+                type: number
+        contractValidation:
+          type: string
+        duplicatedFrom:
+          type: string
+        territories:
+          type: array
+          items:
+            type: string
+        rightsChain:
+          type: array
+          items:
+            properties:
+              territory:
+                type: string
+              children:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IpChain'
+              totalMechanicalOwnership:
+                type: number
+              totalPerformanceOwnership:
+                type: number
+              totalMechanicalCollection:
+                type: number
+              totalPerformanceCollection:
+                type: number
+              territoryCodes:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  codes:
+                    type: array
+                    items:
+                      type: string
+        usedComposerIds:
+          type: array
+          items:
+            type: string
+        usedPublisherIds:
+          type: array
+          items:
+            type: string
+        catalogueGroups:
+          type: array
+          items:
+            type: string
+        grandRights:
+          type: boolean
+        priority:
+          type: boolean
+        productionLibrary:
+          type: boolean
+        workLanguage:
+          type: string
+        workDescriptionCategory:
+          type: string
+        duration:
+          type: number
+          description: In seconds
+        compositeType:
+          type: string
+          enum: ['', 'None', 'Composite of Samples', 'Medley', 'Potpourri', 'Unspecified']
+        compositeCount:
+          type: number
+        versionType:
+          type: string
+          enum: ['', 'Original Work', 'Modification']
+        arrangementType:
+          type: string
+          enum: ['', 'Original', 'New Music Added', 'Arrangement', 'Addition of Music to Text', 'Unspecified']
+        lyricAdaptionType:
+          type: string
+          enum: ['', 'Original', 'None', 'New Lyrics Added', 'Modification', 'Replaced', 'Addition of Lyrics to Music', 'Translation', 'Unspecified']
+        originalWorkTitle:
+          type: string
+        originalIswc:
+          type: string
+        originalWorkWriterLastName:
+          type: string
+        originalWorkWriterFirstName:
+          type: string
+        originalWorkSource:
+          type: string
+        performers:
+          type: array
+          description: List of names of performers
+          items:
+            type: string
+        submitterWorkNos:
+          type: object
+        valid:
+          type: boolean
+          default: false
+        validationErrors:
+          type: array
+          items:
+            type: string
+        approvalStatus:
+          type: string
+          default: 'Invalid'
+        approvedDate:
+          type: string
+          format: date-time
+        onHold:
+          type: boolean
+          default: false
+        totalCollection:
+          type: object
+          description: 'Auto-generated based on detail in Rights Chain'
+          properties:
+            totalOwnedMechanical:
+              type: number
+              default: 0
+            totalOwnedPerformance:
+              type: number
+              default: 0
+        totalParticipation:
+          description: 'Auto-generated based on detail in Rights Chain'
+          type: number
+          default: 0
+        createdBy:
+          type: string
+          format: uuid
+        lastModifiedBy:
+          type: string
+          format: uuid
+        identifierNo:
+          type: number
+        copyrightDate:
+          type: string
+          format: date-time
+        labelCopy:
+          type: string
+        significantUpdateDate:
+          type: string
+          description: 'Auto-generated based on changes of Work'
+          format: date
+        deliveredTo:
+          type: array
+          items:
+            type: object
+            properties:
+              deliveryPartnerId:
+                type: string
+                format: uuid
+              deliveredAt:
+                type: string
+                format: date-time
+        forceRedelivery:
+          type: array
+          items:
+            type: string
+            format: uuid
+        holdRedelivery:
+          type: array
+          items:
+            type: string
+            format: uuid
+        inFutureDelivery:
+          type: array
+          items:
+            type: string
+            format: uuid

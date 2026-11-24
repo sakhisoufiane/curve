@@ -1,0 +1,137 @@
+<div class="row border-bottom-dashed m-b-10 sm-m-b-15 contract-terms">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+        <label>Cat Type</label>
+        <select class="form-control" ng-model="sale.catType" ng-options="item as item for item in catTypes" ng-disabled="edit != true"></select>
+      </div>
+      <div ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-1-5', false: 'form-group col-xs-6 col-sm-4 col-md-2' }[clientType != 'Publisher']">
+        <label>Cat Group</label>
+        <select class="form-control" ng-model="sale.catalogueGroup" ng-options="item as item for item in catalogueGroups" ng-disabled="edit != true"></select>
+      </div>
+      <div ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-1-5', false: 'form-group col-xs-6 col-sm-4 col-md-2' }[clientType != 'Publisher']">
+        <label>Territory</label>
+        <ui-select ng-model="sale.territory" ng-disabled="edit != true">
+          <ui-select-match>
+              <span ng-bind="$select.selected.name"></span>
+          </ui-select-match>
+          <ui-select-choices group-by="groupFind" repeat="country.code as country in countries | filter: $select.search">
+              <span class="country" ng-bind="country.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-1-5', false: 'form-group col-xs-6 col-sm-4 col-md-2' }[clientType != 'Publisher']">
+        <label>Channel</label>
+        <select class="form-control" ng-model="sale.channel" ng-options="item.value as item.name for item in channels" ng-disabled="edit != true"></select>
+      </div>
+      <div ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-1-5', false: 'form-group col-xs-6 col-sm-4 col-md-2' }[clientType != 'Publisher']">
+        <label>Config</label>
+        <select class="form-control" ng-model="sale.configuration" ng-options="item.value as item.name for item in configurations" ng-disabled="edit != true"></select>
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher'">
+        <label>Price Cat</label>
+        <select class="form-control" ng-model="sale.priceCategory" ng-options="item.value as item.name for item in priceCategories" ng-disabled="edit != true"></select>
+      </div>
+      <div ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-1-5', false: 'form-group col-xs-6 col-sm-4 col-md-1-5' }[clientType != 'Publisher']">
+        <label>Source</label>
+        <select class="form-control" ng-model="sale.source" ng-options="item.value as item.name for item in sources" ng-disabled="edit != true"></select>
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="escalationTrackers && escalationTrackers.length > 0 && termType === 'sale'">
+        <label>Esc. Trackers <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-side="left" tooltip-template="By selecting an escalation tracker, any sales that match this term will be added to the tracking values"></i></label>
+        <ui-select multiple ng-model="sale.escalationTrackers" theme="bootstrap" ng-disabled="edit != true">
+          <ui-select-match>
+            <span style="vertical-align:middle;">{{$item.name}}</span>
+          </ui-select-match>
+          <ui-select-choices repeat="item.name as item in escalationTrackers | filter: $select.search">
+            <span ng-bind="item.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="filterOnly">
+        <button ng-show="edit == true" class="btn btn-danger row-button m-xs-t-0 m-l-0" ng-click="delete({ sale: sale })"><i class="fa fa-trash"></i></button>
+      </div>
+    </div>
+    <div class="row" ng-if="!filterOnly && !generalLedger">
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="deduction">
+        <label ng-if="clientType != 'Publisher'">Basis <i class="fa fa-question-circle" tooltips tooltip-side="right" tooltip-class="wider" tooltip-template="
+          How should the deduction be calculated?<br/>
+          <b>Sales Input</b> - The input defined in the sales term<br/>
+          <b>Gross Receipts</b> - Total of Gross Receipts<br/>
+          <b>Net Receipts</b> - Total of Net Receipts<br/>
+          <b>PPD</b> - PPD prices from catalogue data, multiplied by no. of units<br/>
+          <b>Unit Price</b> - Per Unit Rate from sales import, multiplied by no. of units<br/>
+          <b>Retail Price</b> - Retail Price from sales import, multiplied by no. of units<br/>
+          <b>Unit Rate</b> - Unit Rate assigned in contract terms, multiplied by no. of units, and participation rate on the item. This is multiplied by rates if specified<br/>
+          <b>Fixed Unit Rate</b> - Unit Rate assigned in contract terms, multiplied by no. of units, but not multiplied by participation rate. This is multiplied by rates if specified<br/>
+          "></i></label>
+        <label ng-if="clientType === 'Publisher'">Basis <i class="fa fa-question-circle" tooltips tooltip-side="right" tooltip-class="wider" tooltip-template="
+          How should the deduction be calculated?<br/>
+          <b>Sales Input</b> - The input defined in the sales term<br/>
+          <b>Gross Receipts</b> - Total of Gross Receipts<br/>
+          <b>Net Receipts</b> - Total of Net Receipts<br/>
+          <b>Unit Rate</b> - Unit Rate assigned in contract terms, multiplied by no. of units, and participation rate on the item. This is multiplied by rates if specified<br/>
+          <b>Fixed Unit Rate</b> - Unit Rate assigned in contract terms, multiplied by no. of units, but not multiplied by participation rate. This is multiplied by rates if specified<br/>
+          "></i></label>
+        <select class="form-control" ng-model="sale.deductionBasis" ng-options="item as item for item in deductionBasises" ng-disabled="edit != true"></select>
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="withholding">
+        <label>Basis</label>
+        <select class="form-control" ng-model="sale.deductionBasis" ng-options="item as item for item in deductionBasises"
+          ng-disabled="edit != true"></select>
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+        <label ng-if="!deduction">Deal Type <i ng-if="clientType != 'Publisher' && !deduction && !withholding" class="fa fa-question-circle" tooltips tooltip-side="right" tooltip-class="wider" tooltip-template="How should the deal be calculated?<br/><b>Gross Receipts</b> - Total of Gross Receipts<br/><b>Net Receipts</b> - Total of Net Receipts<br/><b>PPD</b> - PPD prices from catalogue data, multiplied by no. of units<br/><b>Unit Price</b> - Per Unit Rate from sales import, multiplied by no. of units<br/><b>Retail Price</b> - Retail Price from sales import, multiplied by no. of units<br/><b>Unit Rate</b> - Unit Rate assigned in contract terms, multiplied by no. of units, and participation rate on the item. This is multiplied by rates if specified<br/><b>Fixed Unit Rate</b> - Unit Rate assigned in contract terms, multiplied by no. of units, but not multiplied by participation rate. This is multiplied by rates if specified"></i></label>
+        <label ng-if="deduction">Deduction Type <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="When should the deduction be made?<br/><b>Pre-Calculation</b> - The deduction is made before the royalty rate is run<br/><b>Post-Calculation</b> - The deduction is made from the calculated royalty"></i></label>
+        <select class="form-control" ng-model="sale.type" ng-options="item as item for item in salesTypes" ng-disabled="edit != true"></select>
+      </div>
+      <div class="form-group required col-xs-6 col-sm-4 col-md-1-5" ng-if="(sale.type === 'Unit Rate' || sale.type === 'Fixed Unit Rate' || sale.deductionBasis === 'Unit Rate' || sale.deductionBasis === 'Fixed Unit Rate')">
+        <label>Unit Rate</label>
+        <input type="text" class="form-control" ng-model="sale.unitRate" ng-disabled="edit != true">
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+        <label>Rate %</label>
+        <input type="text" class="form-control" ng-model="sale.rate" ng-disabled="edit != true">
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher' && !deduction && !withholding && features && features.complexSalesTerms">
+        <label>Multiplier <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is used to run a multiplier before you royalty rate is applied. For example, on some retail-style deals. Leave blank to not apply a multiplier."></i></label>
+        <input type="text" class="form-control" ng-model="sale.multiplier" ng-disabled="edit != true">
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="!deduction && !withholding && features && features.complexSalesTerms">
+        <label>Reduction % <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The multipler to reduce the royalty to. Eg. For Mid Price sales, 75% of the royalty is paid, enter 75 in the box below. Leave blank to not reduce the royalty rate."></i></label>
+        <input type="text" class="form-control" ng-model="sale.reductionRate" ng-disabled="edit != true">
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher' && !deduction && !withholding">
+        <label>Reserve %</label>
+        <input type="text" class="form-control" ng-model="sale.reserve" ng-disabled="edit != true">
+      </div>
+      <div class="form-group col-xs-12 col-sm-12 col-md-2 two-cols-row">
+        <button ng-show="edit == true" class="btn btn-danger row-button m-xs-t-0 m-l-0" ng-click="delete({ sale: sale })"><i class="fa fa-trash"></i></button>
+      </div>
+    </div>
+    <div class="row" ng-if="generalLedger">
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+        <label>GL Code</label>
+        <input type="text" class="form-control" ng-model="sale.code">
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+        <label>Cost Centre</label>
+        <input type="text" class="form-control" ng-model="sale.costCentre">
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+        <label>Profit Centre</label>
+        <input type="text" class="form-control" ng-model="sale.profitCentre">
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+        <label>Type</label>
+        <select class="form-control" ng-model="sale.glType" ng-options="item as item for item in ['Gross Amount', 'Net Amount', 'Distribution Fee', 'Royalty']" ng-disabled="edit != true"></select>
+      </div>
+      <div class="form-group col-xs-12 col-sm-12 col-md-2 two-cols-row">
+        <button ng-show="edit == true" class="btn btn-danger row-button m-xs-t-0 m-l-0" ng-click="delete({ sale: sale })"><i class="fa fa-trash"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12" ng-if="!filterOnly && !generalLedger && termType === 'sale' && features && features.escalations">
+    <contract-sales-escalation-row edit="edit" ng-repeat="escalation in sale.escalations track by $index" escalation="escalation" index="$index" sales-types="salesTypes" sale="sale" escalation-trackers="escalationTrackers" client-type="clientType" delete="deleteEscalation(escalation)"></contract-sales-escalation-row>
+    <button ng-show="edit && features && features.escalations" class="btn btn-primary w-xs-100-p m-xs-l-0 m-l-m-9" ng-click="addEscalation()">+ Escalation</button>
+  </div>
+</div>

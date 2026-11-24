@@ -1,0 +1,640 @@
+openapi: 3.0.3
+info:
+  title: Library Templates API
+  version: 1.0.0
+  description: API for managing library templates
+paths:
+  /libraryTemplates:
+    get:
+      tags:
+        - Library Templates
+      summary: Retrieve library templates
+      description: Returns a list of library templates with pagination.
+      parameters:
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Filter on supplied text string
+        - in: query
+          name: clientType
+          schema:
+            type: string
+          description: Filter by client type
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number to return
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items to return per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Column to order by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Order direction
+      responses:
+        '200':
+          description: Successfully retrieved library templates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  libraryTemplates:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        source:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+                        published:
+                          type: boolean
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - Library Templates
+      summary: Create a library template
+      description: Creates a new library template. Only internal users can create library templates.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryTemplateInput'
+      responses:
+        '200':
+          description: Successfully created library template
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LibraryTemplate'
+        '403':
+          description: Forbidden, only internal users can create library templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /libraryTemplates/{id}:
+    get:
+      tags:
+        - Library Templates
+      summary: Retrieve a specific library template
+      description: Returns details for a specific library template by ID. Only internal users can access library templates.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Library template ID
+      responses:
+        '200':
+          description: Successfully retrieved library template
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/LibraryTemplate'
+        '403':
+          description: Forbidden, only internal users can access library templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Library template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - Library Templates
+      summary: Update a library template
+      description: Updates a library template by ID. Only internal users can update library templates.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Library template ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryTemplateInput'
+      responses:
+        '200':
+          description: Successfully updated library template
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LibraryTemplate'
+        '403':
+          description: Forbidden, only internal users can update library templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Library template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Library Templates
+      summary: Delete a library template
+      description: Deletes a library template by ID. Only internal users can delete library templates.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Library template ID
+      responses:
+        '200':
+          description: Successfully deleted library template
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LibraryTemplate'
+        '403':
+          description: Forbidden, only internal users can delete library templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Library template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /libraryTemplates/{id}/history:
+    get:
+      tags:
+        - Library Templates
+      summary: Retrieve history for a library template
+      description: Returns the update history for a specific library template. Only internal users can access library template history.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Library template ID
+      responses:
+        '200':
+          description: Successfully retrieved library template history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ops:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              op:
+                                type: string
+                              path:
+                                type: string
+                              value:
+                                type: string
+                        _id:
+                          type: string
+                        ref:
+                          type: string
+                        author:
+                          type: object
+                          nullable: true
+                        timestamp:
+                          type: string
+                          format: date-time
+        '403':
+          description: Forbidden, only internal users can access library template history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Library template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /libraryTemplates/{id}/get_upload_credentials:
+    put:
+      tags:
+        - Library Templates
+      summary: Get upload credentials for a sales data file
+      description: Returns credentials for uploading a sales data file to S3. Only internal users can get upload credentials.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Library template ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  description: Filename of file to upload
+                type:
+                  type: string
+                  description: Type of file
+                lastModifiedBy:
+                  type: string
+                  description: User ID
+              required:
+                - filename
+                - type
+      responses:
+        '200':
+          description: Successfully retrieved upload credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  completePath:
+                    type: string
+                    example: /libraryTemplates/5fff0b3f35c54f483cf1test/upload_complete
+                  credentials:
+                    type: object
+                    description: S3 paths and credentials
+                  path:
+                    type: string
+                    example: /libraryTemplates/5fff0b3f35c54f483cf1test/sales_file_name.xls
+        '400':
+          description: Bad request, file is missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        '403':
+          description: Forbidden, only internal users can get upload credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Library template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /libraryTemplates/{id}/upload_complete:
+    put:
+      tags:
+        - Library Templates
+      summary: Add uploaded sales file path to library template
+      description: Adds the path of an uploaded sales file to a library template and extracts example lines. Only internal users can complete uploads.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Library template ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key:
+                  type: string
+                  description: Path to S3 upload destination
+              required:
+                - key
+      responses:
+        '200':
+          description: Successfully added file path to library template
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LibraryTemplate'
+        '400':
+          description: Bad request, file is missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        '403':
+          description: Forbidden, only internal users can complete uploads
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Library template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    LibraryTemplate:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the library template
+        published:
+          type: boolean
+          description: Whether the library template is published
+        name:
+          type: string
+          description: Name of the library template
+        fileType:
+          type: string
+          description: File type
+        identification:
+          type: array
+          items:
+            type: object
+            properties:
+              totalTabs:
+                type: integer
+              a1:
+                type: string
+              topRows:
+                type: array
+                items:
+                  type: string
+              salesFileId:
+                type: string
+              salesFileName:
+                type: string
+          description: Identification details
+        source:
+          type: string
+          description: Source of the library template
+        salesAccountName:
+          type: string
+          description: Sales account name
+        headerRow:
+          type: integer
+          description: Header row
+        startingLine:
+          type: integer
+          description: Line number where data starts in the file
+        startingLeft:
+          type: integer
+          description: Starting left column
+        tab:
+          type: integer
+          description: Tab number
+        delimiter:
+          type: string
+          description: Delimiter used in the file
+        encoding:
+          type: string
+          description: File encoding
+        file:
+          type: string
+          description: Path to the template file in S3
+        exampleLines:
+          type: array
+          items:
+            type: object
+          description: Example lines extracted from the file
+        overwriteFields:
+          type: object
+          properties:
+            source:
+              type: string
+            subSource:
+              type: string
+            originalTerritory:
+              type: string
+            originalDistributionChannel:
+              type: string
+            originalConfiguration:
+              type: string
+            originalPriceCategory:
+              type: string
+            originalCurrency:
+              type: string
+            multiplier:
+              type: number
+            overwriteConfigWithCatalogue:
+              type: boolean
+            overwriteDistributionChannelWithCatalogue:
+              type: boolean
+            overwritePriceCategoryWithCatalogue:
+              type: boolean
+            overwriteTrackPriceCategoryWithCatalogue:
+              type: boolean
+          description: Overwrite fields
+        overwriteFieldTargetCells:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              type:
+                type: string
+              cell:
+                type: string
+          description: Overwrite field target cells
+        fields:
+          type: array
+          items:
+            type: object
+          description: Fields
+        territories:
+          type: array
+          items:
+            type: object
+          description: Territories
+        distributionChannels:
+          type: array
+          items:
+            type: object
+          description: Distribution channels
+        configurations:
+          type: array
+          items:
+            type: object
+          description: Configurations
+        priceCategories:
+          type: array
+          items:
+            type: object
+          description: Price categories
+        positiveNegatives:
+          type: array
+          items:
+            type: object
+          description: Positive/Negative values
+        sources:
+          type: array
+          items:
+            type: object
+          description: Sources
+        subSources:
+          type: array
+          items:
+            type: object
+          description: Sub sources
+        currencies:
+          type: array
+          items:
+            type: object
+          description: Currencies
+        copyFields:
+          type: array
+          items:
+            type: object
+          description: Copy fields
+        calculation:
+          type: array
+          items:
+            type: object
+          description: Calculation fields
+        clientType:
+          type: string
+          description: Type of client the template is for
+        createdBy:
+          type: string
+          description: ID of the user who created the template
+        lastModifiedBy:
+          type: string
+          description: ID of the user who last modified the template
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the template was created
+    LibraryTemplateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the library template
+        source:
+          type: string
+          description: Source of the library template
+        published:
+          type: boolean
+          description: Whether the library template is published
+        clientType:
+          type: string
+          description: Type of client the template is for
+        startingLine:
+          type: number
+          description: Line number where data starts in the file
+        delimiter:
+          type: string
+          description: Delimiter used in the file
+      required:
+        - name
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+      required:
+        - message

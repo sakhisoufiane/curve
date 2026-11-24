@@ -1,0 +1,23 @@
+<div class="row contract-row-layout border-bottom-dashed m-b-15 p-t-5 p-b-5 ">
+  <!--<div class="row border-bottom-dashed m-b-10 sm-m-b-15 contract-terms"-->
+  <div class="form-group required col-xs-12 col-sm-3">
+    <label>Date</label>
+    <div id="datepicker-component" class="form-group input-group date">
+      <input type="text" class="form-control" ng-model="statRate.startDate" ng-model-options="{timezone: 'utc'}" uib-datepicker-popup="{{dateFormat}}" is-open="statRateDatePopup" ng-click="openStatRateDatePopup()" ng-disabled="edit != true">
+      <span class="input-group-addon" ng-click="openStatRateDatePopup()">
+        <i class="fa fa-calendar"></i>
+      </span>
+    </div>
+  </div>
+  <div class="form-group col-xs-6 col-sm-4">
+    <label>Minimum Amount</label>
+    <input type="number" class="form-control sm-p-l-5 sm-p-r-5" ng-model="statRate.minAmount" ng-disabled="edit != true">
+  </div>
+  <div class="form-group col-xs-6 col-sm-4">
+    <label>Per Minute Rate</label>
+    <input type="number" class="form-control sm-p-l-5 sm-p-r-5" ng-model="statRate.perMinuteRate" ng-disabled="edit != true">
+  </div>
+  <div class="form-group col-xs-12 col-sm-1 action-btn">
+    <button class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-show="edit == true" ng-click="delete({ statRate: statRate })"><i class="fa fa-trash"></i></button>
+  </div> 
+</div>

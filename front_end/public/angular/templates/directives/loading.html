@@ -1,0 +1,16 @@
+<div class="spinner-overlay spinner-active" ng-show="isLoading()">
+	<div class="spinner-block" layout="row" layout-sm="column" layout-align="space-around">
+		<md-progress-circular md-diameter="95"></md-progress-circular>
+	</div>
+</div>
+
+<div class="spinner-overlay spinner-active" ng-show="isFileLoading()">
+	<div class="spinner-block" layout="row" layout-sm="column" layout-align="space-around">
+		<md-progress-circular md-diameter="95"></md-progress-circular>
+	</div>
+	<div class="percentage-block" ng-if="uploadFile.file.progress">
+		<h3 ng-if="uploadFile.file.progress == 100">File is Processing...</h3>
+		<h3 ng-if="uploadFile.file.progress != 100">File is Uploading...</h3>
+		<h3 ng-if="uploadFile.file.progress != 100">{{ uploadFile.file.progress }}%</h3>
+	</div>
+</div>

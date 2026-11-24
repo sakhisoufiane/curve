@@ -1,0 +1,98 @@
+<div class="row catalogue-mapping-wrapper">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <h4>Setup</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-info">
+          <p>Fix any issues with the sales file and data here. This includes anything that is missing from your data, such as Exchange Rates or Target Periods.</p>
+        </div>
+      </div>
+    </div>
+    <div class="form-group alert alert-error p-b-15" ng-if="salesFile.invalidFields.customAdditionalFile && ['Apple Music', 'iTunes', 'iTunes Match', 'Beats', 'Apple DJ', 'Facebook'].includes(currentTemplate.fileType)">
+      <p class="p-b-15">The Financial File for this Sales File is missing. Please upload it below.</p>
+      <label>Financial File <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-apple-sales-files/"></documentation></label>  
+      <input type="file" class="m-t-10" ngf-select ngf-allow-dir="false" ng-model="files[0]">
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" class="form-control" ng-model="salesFile.name">
+        </div>
+      </div>
+      <div class="col-xs-12" ng-if="originalCurrencyMissing">
+        <div class="form-group">
+          <label>Currency</label>
+          <ui-select ng-model="salesFile.overwriteFields.originalCurrency">
+            <ui-select-match allow-clear="true">
+              <span ng-bind="$select.selected.code"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search track by $index">
+              <span ng-bind-html="currency.code"></span>
+              <span> &nbsp; - &nbsp; </span>
+              <span ng-bind-html="currency.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label>Target Period</label>
+          <input type="text" class="form-control" ng-model="salesFile.targetPeriod">
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label>Invoice No</label>
+          <input type="text" class="form-control" ng-model="salesFile.invoiceNo">
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div class="form-group">
+        <label ng-if="clientType">
+          {{ clientType === 'Publisher' ? 'Income File Foreign ID' : 'Sales File Foreign ID' }}
+        </label>
+          <input type="text" class="form-control" ng-model="salesFile.foreignId">
+        </div>
+      </div>
+      <div class="col-xs-12" ng-if="salesFile.netAmount == 0">
+        <div class="form-group">
+          <label>Pro Rata Amount</label>
+          <input type="text" class="form-control" ng-model="salesFile.proRataAmount">
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Source</label>
+      <ui-select class="full-width" ng-model="salesFile.salesAccountName">
+        <ui-select-match allow-clear="true">
+          <span ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in templateSources | filter: $select.search track by $index">
+          <span ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div class="form-group">
+      <label>Template</label>
+      <ui-select class="full-width" ng-model="currentTemplate.name" on-select="onSelectedTemplate($item)">
+        <ui-select-match allow-clear="true">
+          <span ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item.name as item in templates | orderBy: 'name' | filter: { name: $select.search, source: salesFile.salesAccountName}">
+          <span ng-bind="item.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div class="form-group m-t-20" ng-if="['Apple Music', 'iTunes', 'iTunes Match', 'Beats', 'Apple DJ', 'Facebook'].includes(currentTemplate.fileType)">
+      <label>Financial File <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-apple-sales-files/"></documentation></label>  
+      <input type="file" class="m-t-10" ngf-select ngf-allow-dir="false" ng-model="files[0]">
+    </div>
+  </div>
+</div>

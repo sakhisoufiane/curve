@@ -1,0 +1,57 @@
+# Javascript Node CircleCI 2.1 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2.1
+orbs:
+  slack: circleci/slack@4.4.2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      #- image: cimg/node:14.18.3 doesn't exist on hub - only for debian:stretch
+      #- image: curveroyaltysystems/curvebase:0.1.4 our image requires curl and sudo to be installed for build workflow
+      #  That will likely add further vulnerabilities - not necessary
+      # https://circleci.com/developer/images/image/cimg/node
+      - image: cimg/node:16.15.1
+        auth:
+          username: curveroyaltysystems
+          password: $DOCKERHUB_PASSWORD
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: npm config set '//registry.npmjs.org/:_authToken' "$NPM_TOKEN"
+      - run: npm i
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run linter
+      - run: npm run lint:quiet
+
+      # notify result to slack channel
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
+workflows:
+  build-workflow:
+    jobs:
+      - build:
+          context: slack-integration
+          filters:
+            branches:
+              ignore: 
+                - main
+                - develop

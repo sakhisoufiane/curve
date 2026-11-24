@@ -1,0 +1,110 @@
+<div id="CUR-XUGFDfAX" class="jumbotron" data-pages="parallax">
+  <div id="CUR-ymsmIwux" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-sAdbNgCR" class="inner">
+      <ul id="CUR-mfIHrzlP" class="breadcrumb">
+        <li id="CUR-WfxeLsFS"><a id="CUR-WyHWKrGI" href="/#/libraryTemplates" class="active">Library Templates</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-UVKunqgN" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-OgcEgeaB" class="row m-b-20">
+    <div id="CUR-RevOLhgJ" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-LrTeqaCJ" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-xMmEneeZ" class="input-group transparent">
+          <input id="CUR-CpZXDyZM" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-XjZbChWG" class="input-group-addon pointer search-button" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-OGZmjzss" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-BVaqsgPL" class="sm-p-l-15 sm-p-r-15">
+        <!--       <button id="CUR-DfwsnnqM" class="btn btn-default" data-toggle="modal" data-target="#exportModal"><i class="fa fa-download"></i>&nbsp;Export</button>
+      <button id="CUR-XecUfNmL" class="btn btn-default" data-toggle="modal" data-target="#importModal"><i class="fa fa-upload"></i>&nbsp;Import</button> -->
+        <button id="CUR-knafBbTC" class="btn btn-danger hidden-xs" data-toggle="modal" data-target="#deleteModal"><i
+            class="fa fa-trash"></i>&nbsp;Delete</button>
+        <a id="CUR-JguAFSgm" href="#/libraryTemplates/new" ng-if="!demoMode">
+          <button id="CUR-cYnxDNpZ" class="btn btn-complete w-xs-100-p m-xs-l-0"><i class="fa fa-plus"></i>&nbsp;Create</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-nipAHtaP" class="row">
+    <div id="CUR-juQTzuiW" class="form-group col-sm-offset-4 col-sm-4">
+      <label id="CUR-oNEtBEfc">Client Type</label>
+      <ui-select ng-model="filter.clientType">
+        <ui-select-match  allow-clear="true">
+          <span id="CUR-bFXlArqK" ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in ['Label', 'Publisher']">
+          <span id="CUR-xMMRXONG" ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+  <div id="CUR-GqtIOZcK" class="row">
+    <div id="CUR-gyyPSbVl" class="col-sm-12 text-center">
+      <button id="CUR-HilJRIPb" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i> Filter</button>
+    </div>
+  </div>
+  <div id="CUR-KglfiGKY" class="col-sm-12">
+    <h5 id="CUR-VMKwLoUK" class="pull-right">Total: {{total? total : 0}}</h5>
+  </div>
+  <div id="CUR-wJVwNBLP" class="row">
+    <div id="CUR-yIWcmRTx" class="col-xs-12">
+      <div id="CUR-RoteJBWN" class="panel panel-default">
+        <div id="CUR-BoMhGeTf" class="panel-heading">
+          <div id="CUR-UhOfCbIJ" class="panel-title">
+            Library Templates
+          </div>
+        </div>
+        <div id="CUR-HQRcghal" class="panel-body">
+          <responsive-table headers="headers" data="libraryTemplate" order-by="filter.orderBy" selectable="true"
+            sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-SjSHfzDl" class="col-sm-12">
+    <div id="CUR-eKROgCFf" class="pull-right">
+      <span id="CUR-UHgMwAlB" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <a id="CUR-qfNOPjVh" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-LakkfjvI" ng-if="!isShowingAll" class="row">
+    <div id="CUR-dnjUTJNM" class="col-xs-12 text-center">
+      <pagination id="CUR-CCcgLiCU" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-FdOKFQqN" class="modal-dialog">
+    <div id="CUR-WfbrfsEV" class="modal-content">
+      <div id="CUR-LoBATkpj" class="modal-header clearfix text-left">
+        <button id="CUR-ktQWalYy" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-GeZvyXAk">Delete Templates</h5>
+      </div>
+      <div id="CUR-maVLcCdU" class="modal-body">
+        <div id="CUR-tDOBaGsr" class="row">
+          <div id="CUR-HmSAnEgv" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected templates? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-PqcmpCMe" class="row">
+          <div id="CUR-InYidLHX" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-SrPvMShy" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-hjcUznys" type="button" class="btn btn-danger m-t-5" ng-click="deleteSelected()"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

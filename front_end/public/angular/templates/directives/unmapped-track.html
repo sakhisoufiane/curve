@@ -1,0 +1,16 @@
+<td class="v-align-middle hidden-xs">
+  <input id="track-select-{{index}}" type="checkbox" ng-model="track.selected">
+</td>
+<td><a id="track-link-{{index}}" href="#/sales/{{track.salesFileId}}/edit">{{track.salesFileId}}</a></td>
+<td>{{track.title}}</td>
+<td>{{track.artist}}</td>
+<td>{{track.isrc}}</td>
+<td>
+  <track-select-field allow-clear="true" value="track.trackId" edit="true"></track-select-field>
+</td>
+<td class="w-20">
+  <i class="fa fa-check text-success" ng-if="track.complete"></i>
+</td>
+<td class="w-20">
+  <button id="create-track-{{index}}" class="btn btn-complete" ng-click="createTrack({ track: track })">+ Create</button>
+</td>

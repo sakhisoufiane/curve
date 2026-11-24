@@ -1,0 +1,57 @@
+<div class="row contract-row-layout"
+  ng-if="removePercentage != 'true' && !removePercentage && includeRelease != 'true' && !includeRelease">
+  <div class="form-group required col-xs-6 col-sm-7">
+    <label ng-if="!index">Contract</label>
+    <contract-select-field type="contractType" value="contract.contractId" edit="edit" populated="contract.contract">
+    </contract-select-field>
+  </div>
+  <div class="form-group col-xs-3">
+    <label ng-if="!index">Rate</label>
+    <input type="number" class="form-control sm-p-l-5 sm-p-r-5" ng-model="contract.percentage" ng-if="edit">
+    <read-only-field ng-if="!edit" parent-field="contract" field="'percentage'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-3 col-sm-2 action-btn" ng-if="!hideDeleteButton">
+    <button class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-show="edit"
+      ng-click="delete({ contract: contract })" ng-if="!index"><i class="fa fa-trash"></i></button>
+    <button class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-show="edit" ng-click="delete({ contract: contract })"
+      ng-if="index"><i class="fa fa-trash"></i></button>
+  </div>
+</div>
+
+<div class="row contract-row-layout" ng-if="removePercentage === 'true' || removePercentage">
+  <div class="form-group required col-xs-9">
+    <label ng-if="!index">Contract</label>
+    <contract-select-field type="contractType" value="contract.contractId" edit="edit" populated="contract.contract">
+    </contract-select-field>
+  </div>
+  <div class="form-group col-xs-3 col-sm-2 action-btn" ng-if="!hideDeleteButton">
+    <button class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-click="delete({ contract: contract })"
+      ng-show="edit" ng-if="!index"><i class="fa fa-trash"></i></button>
+    <button class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="delete({ contract: contract })" ng-show="edit"
+      ng-if="index"><i class="fa fa-trash"></i></button>
+  </div>
+</div>
+
+<div class="row contract-row-layout" ng-if="includeRelease === 'true' || includeRelease">
+  <div class="form-group required col-xs-4 col-sm-4">
+    <label ng-if="!index">Release</label>
+    <release-select-field edit="edit" value="contract.releaseId"></release-select-field>
+  </div>
+  <div class="form-group required col-xs-4 col-sm-4">
+    <label ng-if="!index">Contract</label>
+    <contract-select-field type="contractType" value="contract.contractId" edit="edit" populated="contract.contract">
+    </contract-select-field>
+  </div>
+  <div class="form-group col-xs-2">
+    <label ng-if="!index">Rate</label>
+    <input type="number" class="form-control number-control sm-p-l-5 sm-p-r-5" ng-model="contract.percentage"
+      ng-if="edit">
+    <read-only-field ng-if="!edit" parent-field="contract" field="'percentage'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-2 col-sm-2 action-btn" ng-if="!hideDeleteButton">
+    <button class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-show="edit"
+      ng-click="delete({ contract: contract })" ng-if="!index"><i class="fa fa-trash"></i></button>
+    <button class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="delete({ contract: contract })" ng-show="edit"
+      ng-if="index"><i class="fa fa-trash"></i></button>
+  </div>
+</div>

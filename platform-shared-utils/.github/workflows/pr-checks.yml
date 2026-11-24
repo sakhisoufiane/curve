@@ -1,0 +1,53 @@
+name: PR Pipeline
+
+on:
+  pull_request:
+    branches: ["develop", "main"]
+
+concurrency:
+  group: pr-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.NPM_PSU_TOKEN }}
+
+      - name: Lint
+        run: npm run lint
+
+  Test:
+    needs: Lint
+    runs-on: ubuntu-latest
+    env:
+      BQ_PRIVATE_KEY: ${{ secrets.BQ_DEV_PRIVATE_KEY }}
+      BQ_PROJECT_ID: ${{ secrets.BQ_DEV_PROJECT_ID }}
+      BQ_CLIENT_EMAIL: ${{ secrets.BQ_DEV_CLIENT_EMAIL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.NPM_PSU_TOKEN }}
+
+      - name: Set Environment Variables
+        run: |
+          echo "BQ_private_key=${BQ_PRIVATE_KEY}" >> $GITHUB_ENV
+          echo "BQ_project_id=${BQ_PROJECT_ID}" >> $GITHUB_ENV
+          echo "BQ_client_email=${BQ_CLIENT_EMAIL}" >> $GITHUB_ENV
+
+      # Run tests through coverage action (prevents tests being ran twice)
+      - name: Test & Coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          annotations: none
+          test-script: npm run test

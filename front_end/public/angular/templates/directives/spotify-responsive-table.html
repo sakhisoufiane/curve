@@ -1,0 +1,23 @@
+<div class="spotify-responsive-table">
+  <table class="table table-hover dataTable no-footer custom-responsive" ng-class="{'table-selectable': selectable}">
+    <thead>
+      <tr>
+        <th class="table-checkbox hidden-xs" ng-if="selectable"><input type="checkbox" class="select-all" ng-checked="selectAllChecked" ng-click="selectAll(data)"></th>
+        <th ng-repeat="header in headers">{{header.title}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in data track by $index" ng-if="item" ng-init="itemIndex = $index">
+        <td class="v-align-middle hidden-xs" ng-if="selectable"><input id="item-select-{{itemIndex}}" type="checkbox" class='select-unit' ng-model="item.selected"></td>
+        <td class="v-align-middle hidden-xs" ng-repeat="header in headers">
+          <a href="{{item.image}}" ng-if="header.name === 'image'" target="_blank"><img src="{{item.image}}" width="70" alt=""></a>
+          <a class="fa fa-spotify fa-2x" style="color: #1ed760;" target="_blank" ng-if="header.name === 'spotify_url'" href="{{item.spotify_url}}"></a>
+          <span ng-if="header.name === 'duration'">{{convertDuration(item.duration)}}</span>
+          <span ng-if="header.name === 'upc'">{{item.upc}}</span>
+          <span ng-if="header.name === 'release_date'">{{item.release_date | date : dateFormat : 'UTC'}}</span>
+          <span ng-if="header.name !== 'image' && header.name !== 'spotify_url' && header.name !== 'duration' && header.name !== 'upc' && header.name !== 'release_date'">{{item[header.name]}}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

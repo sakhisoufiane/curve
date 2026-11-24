@@ -1,0 +1,1078 @@
+<!-- Navbar -->
+<div id="CUR-gpEsJQjX" class="jumbotron" data-pages="parallax">
+  <div
+    id="CUR-zcOIxElv"
+    class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20"
+  >
+    <div id="CUR-przujmKh" class="inner">
+      <ul id="CUR-nETHzyNz" class="breadcrumb">
+        <li id="CUR-kmfZCDyI">
+          <a id="CUR-NGqqjbFT" ng-click="backToIndex()">Manage Catalogue</a>
+        </li>
+        <li>
+          <a ng-click="backToIndex()">{{ type }}s</a>
+        </li>
+        <li>
+          <a class="active"
+            >{{ allSelectedEntities[0].name || allSelectedEntities[0].title
+            }}</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container-fluid container-fixed-lg">
+  <!-- Action Buttons -->
+  <div class="row">
+    <div class="col-md-12 text-right">
+      <button class="btn btn-default" ng-click="backToIndex()">
+        <i class="fa fa-arrow-left"></i> Back to Index
+      </button>
+      <button type="submit" class="btn btn-complete" ng-click="mergeEntities()">
+        Continue
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">
+            Potential Duplicate {{ getMultiEntityName() }}
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-12">
+              <p class="text-muted">
+                Below are the {{ getMultiEntityName() }} flagged as potential
+                duplicates. Select the primary {{ getEntityName() }} (<i
+                  class="fa fa-star text-warning"
+                ></i
+                >), and uncheck any that are not duplicates. Make sure to
+                carefully review this list.
+              </p>
+              <p class="text-muted m-b-40">
+                Review or update the merged {{ getEntityName() }} details in the
+                forms below the table.
+              </p>
+              <table
+                class="table table-striped table-bordered table-sm narrow-table"
+              >
+                <thead ng-if="type !== 'work'">
+                  <tr>
+                    <th style="width: 15%">
+                      <input
+                        type="checkbox"
+                        ng-model="mergeAllSelected"
+                        ng-click="selectAll()"
+                      />
+                      <span
+                        class="m-l-2"
+                        ng-click="selectAll()"
+                        style="cursor: pointer"
+                        >Include In Merge</span
+                      >
+                    </th>
+                    <th>Name</th>
+                    <th>CAE</th>
+                    <th colspan="2" class="text-center" style="width: 20%">
+                      No. of Works
+                    </th>
+                    <th class="text-center">Primary {{ getEntityName() }}</th>
+                    <th>Output</th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th class="text-center">Controlled</th>
+                    <th class="text-center">Uncontrolled</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <thead ng-if="type === 'work'">
+                  <tr>
+                    <th style="width: 15%">
+                      <input
+                        type="checkbox"
+                        ng-model="mergeAllSelected"
+                        ng-click="selectAll()"
+                      />
+                      <span
+                        class="m-l-2"
+                        ng-click="selectAll()"
+                        style="cursor: pointer"
+                        >Include In Merge</span
+                      >
+                    </th>
+                    <th>Title</th>
+                    <th>Composer</th>
+                    <th class="text-center">Main Identifier</th>
+                    <th class="text-center">Primary {{ getEntityName() }}</th>
+                    <th>Output</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="entity in allSelectedEntities">
+                    <!-- Select Entity -->
+                    <td
+                      class="text-center"
+                      ng-click="selectEntityToMerge(entity)"
+                      style="cursor: pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        ng-model="entity.selected"
+                        ng-disabled="entity.isPrimary"
+                      />
+                    </td>
+
+                    <td ng-if="type !== 'work'">
+                      <a href="{{ getEntityLink(entity._id) }}" target="_blank">
+                        {{ entity.name }}
+                        <i
+                          class="fa fa-external-link m-l-5"
+                          style="font-size: 12px"
+                        ></i>
+                      </a>
+                    </td>
+                    <td ng-if="type !== 'work'">{{ entity.cae }}</td>
+                    <td ng-if="type !== 'work'">
+                      <i
+                        class="fa fa-check-circle text-success"
+                        style="display: inline-block"
+                      ></i>
+                      <span>{{ entity.worksCount.controlled }}</span>
+                    </td>
+                    <td ng-if="type !== 'work'">
+                      <i
+                        class="fa fa-times-circle"
+                        style="display: inline-block"
+                      ></i>
+                      <span>{{ entity.worksCount.unControlled }}</span>
+                    </td>
+
+                    <td ng-if="type === 'work'">
+                      <a href="{{ getEntityLink(entity._id) }}" target="_blank">
+                        {{ entity.title }}
+                        <i
+                          class="fa fa-external-link m-l-5"
+                          style="font-size: 12px"
+                        ></i>
+                      </a>
+                    </td>
+                    <td ng-if="type === 'work'">{{ entity.composer }}</td>
+                    <td ng-if="type === 'work'">{{ entity.identifier }}</td>
+
+                    <!-- Primary Selection -->
+                    <td
+                      class="text-center"
+                      style="cursor: pointer"
+                      ng-click="setPrimaryEntity(entity._id)"
+                    >
+                      <i
+                        class="fa text-warning"
+                        ng-class="{'fa-star': entity.isPrimary, 'fa-star-o': !entity.isPrimary}"
+                        tooltips
+                        tooltip-class="wider"
+                        tooltip-template="Select the primary {{ getEntityName() }}. This will become the main {{ getEntityName() }} and everything else will be deleted or ignored."
+                      ></i>
+                    </td>
+                    <td style="width: 25%">
+                      <span
+                        ng-if="entity.selected && entity.isPrimary"
+                        style="
+                          background: rgba(255, 193, 7, 0.2);
+                          padding: 2px 4px;
+                          border-radius: 4px;
+                        "
+                      >
+                        Becomes the primary {{ getEntityName() }}
+                      </span>
+                      <span
+                        ng-if="entity.selected && !entity.isPrimary"
+                        style="
+                          background: rgb(255 121 121 / 20%);
+                          padding: 2px 4px;
+                          border-radius: 4px;
+                        "
+                      >
+                        Will be deleted
+                      </span>
+                      <span ng-if="!entity.selected">
+                        <i class="fa fa-flag"></i> Not a duplicate
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- Merge Preview -->
+      <duplicate-merge-panel title="Merge Preview">
+        <div class="row">
+          <!-- LEFT: Overview Section -->
+          <div class="col-md-6">
+            <form>
+              <p>
+                {{ getEntityName() }}
+                <a
+                  href="{{ getEntityLink(selectedEntities[0]._id) }}"
+                  target="_blank"
+                  >{{ selectedEntities[0].name || selectedEntities[0].title }}
+                  <i class="fa fa-external-link"></i
+                ></a>
+                has been identified with {{ allSelectedEntities.length - 1 }}
+                potential duplicate(s).
+              </p>
+              <p>
+                This panel displays a preview of the final merged {{
+                getEntityName() }} record. Each field is editable via a dropdown
+                containing distinct values from the selected duplicate records.
+                If a field is not editable, no alternate values exist for that
+                field across the duplicates.
+              </p>
+              <p>
+                The values selected here will be applied to the primary {{
+                getEntityName() }} upon merge.
+              </p>
+
+              <!-- Entity Fields -->
+              <div ng-if="type !== 'work'">
+                <composer-merge-field
+                  field-name="Name"
+                  field-key="name"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+                <composer-merge-field
+                  ng-if="type === 'publisher'"
+                  field-name="CWR Name"
+                  field-key="cwrName"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+                <composer-merge-field
+                  field-name="Foreign ID"
+                  field-key="foreignId"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+                <composer-merge-field
+                  ng-if="type === 'composer'"
+                  field-name="First Name"
+                  field-key="firstName"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+                <composer-merge-field
+                  ng-if="type === 'composer'"
+                  field-name="Middle Name(s)"
+                  field-key="middleNames"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+                <composer-merge-field
+                  ng-if="type === 'composer'"
+                  field-name="Surname"
+                  field-key="surname"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+                <composer-merge-field
+                  field-name="CAE Number"
+                  field-key="cae"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+              </div>
+              <div ng-if="type === 'work'">
+                <composer-merge-field
+                  field-name="Title"
+                  field-key="title"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+                <!-- Alternate Titles -->
+                <div class="form-group m-t-20 m-b-20">
+                  <div>
+                    <div class="row">
+                      <div class="col-md-7">
+                        <label class="control-label">Alternate Title</label>
+                      </div>
+                      <div
+                        class="col-md-3"
+                        ng-show="mergedFields.alternateTitles.length > 0"
+                      >
+                        <label class="control-label">Language</label>
+                      </div>
+                    </div>
+                    <div
+                      class="form-group"
+                      ng-repeat="title in mergedFields.alternateTitles track by $index"
+                    >
+                      <div class="row align-items-center">
+                        <!-- Title -->
+                        <div class="col-md-7">
+                          <input
+                            type="text"
+                            class="form-control"
+                            ng-model="title.title"
+                          />
+                        </div>
+                        <!-- Language -->
+                        <div class="col-md-3">
+                          <ui-select ng-model="title.language">
+                            <ui-select-match allow-clear="true">
+                              <span ng-bind="$select.selected"></span>
+                            </ui-select-match>
+                            <ui-select-choices
+                              repeat="item in languages | filter: $select.search"
+                            >
+                              <span ng-bind="item"></span>
+                            </ui-select-choices>
+                          </ui-select>
+                        </div>
+                        <!-- Delete Button -->
+                        <div class="col-md-1">
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-danger"
+                            ng-click="mergedFields.alternateTitles.splice($index, 1)"
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </div>
+                        <!-- Added From Duplicate Icon -->
+                        <div class="col-md-1">
+                          <i
+                            ng-if="title.fromDuplicateTitle"
+                            class="fa fa-question-circle"
+                            tooltips
+                            tooltip-class="wider"
+                            tooltip-template="This entry is suggested because it is a title of a potential duplicate Work that will be deleted. Please review and remove if not relevant."
+                            style="
+                              position: relative;
+                              top: 6px;
+                              margin-left: 8px;
+                            "
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="two-cols-row">
+                          <button
+                            class="btn btn-complete"
+                            ng-click="addAlternateTitle()"
+                            ng-if="true"
+                          >
+                            + Title
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <composer-merge-field
+                  field-name="Composer"
+                  field-key="composer"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+                <composer-merge-field
+                  field-name="Foreign ID"
+                  field-key="foreignId"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+                <composer-merge-field
+                  field-name="Project ID"
+                  field-key="projectId"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+                <composer-merge-field
+                  field-name="Main Identifier"
+                  field-key="identifier"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+                <composer-merge-field
+                  field-name="ISWC"
+                  field-key="iswc"
+                  merged-fields="mergedFields"
+                  merged-composer="mergedEntity"
+                ></composer-merge-field>
+              </div>
+            </form>
+          </div>
+
+          <!-- RIGHT: Societies Section -->
+          <div class="col-md-6" ng-if="type !== 'work'">
+            <!-- Subsection Header -->
+            <div class="form-group m-b-40">
+              <label class="control-label">Societies</label>
+              <p>
+                Select the correct societies & identifiers below. Each dropdown
+                is a list of unique values from the duplicate {{
+                getMultiEntityName() }}.
+              </p>
+            </div>
+            <div>
+              <!-- Societies Fields -->
+              <composer-merge-society-field
+                label="Main Society"
+                pro-key="mainPro"
+                pro-identifier-key="mainProIdentifier"
+                merged-fields="mergedFields"
+                merged-composer="mergedEntity"
+              ></composer-merge-society-field>
+              <composer-merge-society-field
+                label="Mechanical Society"
+                pro-key="mechanicalPro"
+                pro-identifier-key="mechanicalProIdentifier"
+                merged-fields="mergedFields"
+                merged-composer="mergedEntity"
+              ></composer-merge-society-field>
+              <composer-merge-society-field
+                label="Performance Society"
+                pro-key="performancePro"
+                pro-identifier-key="performanceProIdentifier"
+                merged-fields="mergedFields"
+                merged-composer="mergedEntity"
+              ></composer-merge-society-field>
+              <composer-merge-society-field
+                label="Sync Society"
+                pro-key="syncPro"
+                pro-identifier-key="syncProIdentifier"
+                merged-fields="mergedFields"
+                merged-composer="mergedEntity"
+              ></composer-merge-society-field>
+            </div>
+          </div>
+
+          <!-- RIGHT: Works - Other Fields -->
+          <div class="col-md-6" ng-if="type === 'work'">
+            <!-- Catalogue Groups -->
+            <div class="form-group m-b-20">
+              <composer-merge-field
+                field-name="Tunecode"
+                field-key="tunecode"
+                merged-fields="mergedFields"
+                merged-composer="mergedEntity"
+              ></composer-merge-field>
+              <composer-merge-field
+                field-name="Copyright Date"
+                field-key="copyrightDate"
+                merged-fields="mergedFields"
+                merged-composer="mergedEntity"
+                is-date-time="true"
+              ></composer-merge-field>
+              <composer-merge-field
+                field-name="Label Copy"
+                field-key="labelCopy"
+                merged-fields="mergedFields"
+                merged-composer="mergedEntity"
+              ></composer-merge-field>
+              <!-- Catalogue Groups -->
+              <label class="control-label">Catalogue Groups</label>
+              <ui-select
+                multiple
+                ng-model="mergedFields.catalogueGroups"
+                close-on-select="true"
+              >
+                <ui-select-match>{{ $item }}</ui-select-match>
+                <ui-select-choices
+                  repeat="group in catalogueGroups | filter: $select.search"
+                >
+                  {{group}}
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <!-- Performers -->
+            <div class="form-group m-b-40">
+              <div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <label class="control-label">Performers</label>
+                  </div>
+                </div>
+                <div
+                  class="form-group"
+                  ng-repeat="performer in mergedFields.performers track by $index"
+                >
+                  <div class="row align-items-center">
+                    <div class="col-md-7">
+                      <input
+                        type="text"
+                        class="form-control"
+                        ng-model="performer.value"
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-danger"
+                        ng-click="mergedFields.performers.splice($index, 1)"
+                      >
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="two-cols-row">
+                      <button
+                        class="btn btn-complete"
+                        ng-click="addPerformer()"
+                        ng-if="true"
+                      >
+                        + Performer
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Track Associations -->
+            <div class="form-group m-b-40">
+              <div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <label class="control-label">Track Associations</label>
+                  </div>
+                </div>
+                <div
+                  class="form-group"
+                  ng-repeat="track in mergedFields.trackIds track by $index"
+                >
+                  <div class="row align-items-center">
+                    <div class="col-md-7">
+                      <track-select-field
+                        value="track.value"
+                        edit="true"
+                      ></track-select-field>
+                    </div>
+                    <div class="col-md-2">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-danger"
+                        ng-click="mergedFields.trackIds.splice($index, 1)"
+                      >
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="two-cols-row">
+                      <button
+                        class="btn btn-complete"
+                        ng-click="addTrack()"
+                        ng-if="true"
+                      >
+                        + Track
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </duplicate-merge-panel>
+
+      <!-- Composers/Publishers - Linked Contracts -->
+      <duplicate-merge-panel title="Linked Contracts" ng-if="type !== 'work'">
+        <div class="form-group" ng-show="!contractsHidden">
+          <p>
+            Select which Contracts should remain linked to the primary {{
+            getEntityName() }}. Unselected Contracts will not be deleted.
+          </p>
+          <ui-select
+            multiple
+            ng-model="mergedFields.linkedContracts"
+            theme="bootstrap"
+          >
+            <ui-select-match placeholder="Select contracts...">
+              <span id="CUR-vBuXbmVs"
+                >{{ $item.contractName }} - {{ type === 'composer' ?
+                $item.composerName : $item.publisherName }}
+                <a
+                  href="/#/contracts/{{ $item.contractId }}/edit"
+                  target="_blank"
+                >
+                  <i
+                    class="fa fa-external-link m-l-5"
+                    style="font-size: 12px"
+                  ></i
+                ></a>
+              </span>
+            </ui-select-match>
+            <ui-select-choices
+              repeat="contract in mergedEntity.linkedContracts | filter:$select.search"
+            >
+              {{ contract.contractName }} - {{ type === 'composer' ?
+              contract.composerName : contract.publisherName }}
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </duplicate-merge-panel>
+
+      <!-- Composers/Publishers - Identifiers -->
+      <duplicate-merge-panel title="Identifiers" ng-if="type !== 'work'">
+        <!-- IDENTIFIERS -->
+        <p>
+          Select the Societies that should be kept for the primary {{
+          getEntityName() }}, or add new ones.
+        </p>
+        <!-- MAIN -->
+        <div class="panel-body">
+          <territory-society-identifier-row
+            edit="true"
+            ng-repeat="identifier in mergedFields.societies track by $index"
+            identifier="identifier"
+            territories="territories"
+            societies="pros"
+            delete="deleteTerritorySocietyIdentifier($index)"
+            index="$index"
+            include-name="type === 'publisher'"
+          ></territory-society-identifier-row>
+          <button
+            class="btn btn-complete"
+            ng-click="addTerritorySocietyIdentifier()"
+          >
+            + Society
+          </button>
+        </div>
+      </duplicate-merge-panel>
+
+      <!-- Composers/Publishers - Agreements -->
+      <duplicate-merge-panel
+        title="{{ type === 'composer' ? 'Publisher' : 'Sub-Publisher' }} Agreements"
+        ng-if="type !== 'work'"
+      >
+        <!-- AGREEMENTS -->
+        <p>
+          Select the {{ type === 'composer' ? 'Publisher' : 'Sub-Publisher' }}
+          Agreements that should be kept for the primary {{ getEntityName() }},
+          or add new ones.
+        </p>
+        <!-- MAIN -->
+        <div class="panel-body">
+          <publisher-agreement-row
+            ng-repeat="agreement in mergedFields.publisherAgreements track by $index"
+            agreement="agreement"
+            territories="territories"
+            societies="pros"
+            agreement-types="agreementTypes"
+            delete="deletePublisherAgreement($index)"
+            index="$index"
+            edit="true"
+          ></publisher-agreement-row>
+          <button
+            class="btn btn-complete m-xs-l-0 m-l-m-9"
+            ng-click="addPublisherAgreement()"
+          >
+            + Agreement
+          </button>
+        </div>
+      </duplicate-merge-panel>
+
+      <!-- Works - Territories -->
+      <duplicate-merge-panel title="Territories" ng-if="type === 'work'">
+        <div
+          ng-if="mergedFields.territories && mergedFields.territories.length === 0"
+        >
+          No Territories found across the Works. Please add Territories once the
+          merge is complete.
+        </div>
+        <div
+          ng-if="mergedFields.territories && mergedFields.territories.length > 0"
+        >
+          <p>
+            Select which Territories should remain linked to the primary {{
+            getEntityName() }}. You can select from a unique list of Territories
+            found across all duplicate Works.
+          </p>
+          <p>
+            Territories can be updated from the Work after the merge is
+            complete.
+          </p>
+          <div class="row">
+            <div class="form-group m-t-20 m-b-20 col-md-3">
+              <label for="territories" class="control-label"
+                >Use Territories From Work:</label
+              >
+              <div>
+                <ui-select
+                  ng-model="selectedTerritory"
+                  ng-disabled="!mergedFields.territories || mergedFields.territories.length <= 1"
+                  ng-change="onTerritorySelected(selectedTerritory)"
+                >
+                  <ui-select-match placeholder="Select Work">
+                    {{ $select.selected.workTitle }}
+                  </ui-select-match>
+
+                  <ui-select-choices
+                    repeat="territory in mergedFields.territories"
+                  >
+                    <div ng-bind="territory.workTitle"></div>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+          </div>
+          <div id="CUR-qiCPrltq" class="panel panel-default">
+            <div class="panel-body p-t-15 duplicate-works-territories-disabled">
+              <territory-checkboxes
+                model="selectedTerritory.value"
+                edit="false"
+                hide-non-cisac="true"
+                hide-territory-group="true"
+                hide-cisac-text="true"
+              ></territory-checkboxes>
+            </div>
+          </div>
+        </div>
+      </duplicate-merge-panel>
+
+      <!-- Works - Default Rights Chains -->
+      <duplicate-merge-panel title="Default IP Chain" ng-if="type === 'work'">
+        <div
+          ng-if="mergedFields.rightsChain && mergedFields.rightsChain.length === 0"
+        >
+          No IP Chains found across the Works. Please add an IP Chain once the
+          merge is complete.
+        </div>
+        <div
+          ng-if="mergedFields.rightsChain && mergedFields.rightsChain.length > 0"
+        >
+          <p>
+            Select which default IP Chain should remain linked to the primary {{
+            getEntityName() }}. You can select from a unique list of default IP
+            Chains found across all duplicate Works.
+          </p>
+          <p>
+            The default IP Chain can be updated from the Work after the merge is
+            complete.
+          </p>
+          <div class="row">
+            <div class="form-group m-t-20 m-b-20 col-md-3">
+              <label for="rightsChain" class="control-label"
+                >Use IP Chain From Work:</label
+              >
+              <div>
+                <ui-select
+                  ng-model="selectedChain"
+                  ng-disabled="!mergedFields.rightsChain || mergedFields.rightsChain.length <= 1"
+                  ng-change="onChainSelected(selectedChain)"
+                >
+                  <ui-select-match placeholder="Select Work">
+                    {{ $select.selected.workTitle }}
+                  </ui-select-match>
+
+                  <ui-select-choices
+                    repeat="rightsChain in mergedFields.rightsChain"
+                  >
+                    <div ng-bind="rightsChain.workTitle"></div>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+          </div>
+          <div id="CUR-qiCPrltq" class="panel panel-default">
+            <div class="panel-body p-t-15">
+              <ip-chain
+                ng-repeat="rightsChain in selectedChain.value"
+                ip-number="ipNumber"
+                rights-chain="rightsChain"
+                edit="false"
+                territories="territoriesWithGroups"
+                delete=""
+                edit-territory=""
+                index="$index"
+              ></ip-chain>
+            </div>
+          </div>
+        </div>
+      </duplicate-merge-panel>
+
+      <!-- Works - Partner Rights Chains -->
+      <duplicate-merge-panel title="Partner IP Chains" ng-if="type === 'work'">
+        <div
+          ng-if="mergedFields.partnerRightsChains && mergedFields.partnerRightsChains.length === 0"
+        >
+          No Partner IP Chains found across the Works. Please add Partner IP
+          Chains once the merge is complete.
+        </div>
+        <div
+          ng-if="mergedFields.partnerRightsChains && mergedFields.partnerRightsChains.length > 0"
+        >
+          <p>
+            Select which Partner IP Chains should remain linked to the primary
+            {{ getEntityName() }}. You can select from a unique list of Partner
+            IP Chains found across all duplicate Works.
+          </p>
+          <p>
+            Partner IP Chains can be updated from the Work after the merge is
+            complete.
+          </p>
+          <div class="row">
+            <div class="form-group m-t-20 m-b-20 col-md-3">
+              <label for="partnerRightsChains" class="control-label"
+                >Use Partner IP Chains From Work:</label
+              >
+              <div>
+                <ui-select
+                  ng-model="selectedPartnerChains"
+                  ng-disabled="!mergedFields.partnerRightsChains || mergedFields.partnerRightsChains.length <= 1"
+                  ng-change="onPartnerChainsSelected(selectedPartnerChains)"
+                >
+                  <ui-select-match placeholder="Select Work">
+                    {{ $select.selected.workTitle }}
+                  </ui-select-match>
+
+                  <ui-select-choices
+                    repeat="partnerChain in mergedFields.partnerRightsChains"
+                  >
+                    <div ng-bind="partnerChain.workTitle"></div>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-body p-t-15">
+              <div ng-repeat="partnerChain in selectedPartnerChains.value">
+                <div class="row contract-row-layout">
+                  <div class="form-group required col-xs-4">
+                    <label>Delivery Partner</label>
+                    <delivery-partner-name-field
+                      delivery-partner-id="partnerChain.deliveryPartnerId"
+                    />
+                  </div>
+                </div>
+                <div class="inline-block">
+                  <ip-chain
+                    ng-repeat="rightsChain in partnerChain.rightsChain"
+                    ip-number="ipNumber"
+                    rights-chain="rightsChain"
+                    edit="false"
+                    territories="territoriesWithGroups"
+                    delete=""
+                    edit-territory=""
+                    is-default-chain="false"
+                    index="$index"
+                  ></ip-chain>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </duplicate-merge-panel>
+
+      <!-- Works - Participation Rates -->
+      <duplicate-merge-panel
+        title="Participation Rates"
+        ng-if="type === 'work'"
+      >
+        <p>
+          Select which Participation Rates should remain linked to the primary
+          {{ getEntityName() }}. You can select from a unique list of
+          Participation Rates found across all duplicate Works, or add new
+          rates.
+        </p>
+        <work-participator
+          ng-repeat="contract in mergedFields.salesReturnsRights"
+          edit="true"
+          contract="contract"
+          contracts="contracts"
+          delete="deleteParticipationRate($index)"
+          index="$index"
+        ></work-participator>
+        <button
+          class="btn btn-complete"
+          ng-show="true"
+          ng-click="addParticipationRate()"
+        >
+          + Contract
+        </button>
+      </duplicate-merge-panel>
+
+      <!-- Works - Specific Participation Rates -->
+      <duplicate-merge-panel
+        title="Specific Participation Rates"
+        ng-if="type === 'work'"
+      >
+        <p>
+          Select which Specific Participation Rates should remain linked to the
+          primary {{ getEntityName() }}. You can select from a unique list of
+          Specific Participation Rates found across all duplicate Works, or add
+          new rates.
+        </p>
+        <channel-specific-participation-rates-row
+          ng-repeat="contract in mergedFields.channelSpecificSalesReturnsRights track by $index"
+          edit="true"
+          contract="contract"
+          contracts="contracts"
+          territories="territoriesWithGroups"
+          delete="deleteSpecificParticipationRate($index)"
+          index="$index"
+        ></channel-specific-participation-rates-row>
+        <button
+          class="btn btn-complete"
+          ng-show="true"
+          ng-click="addSpecificParticipationRate()"
+        >
+          + Contract
+        </button>
+      </duplicate-merge-panel>
+
+      <!-- Works - Society Identifiers -->
+      <duplicate-merge-panel
+        title="Society Identifiers"
+        ng-if="type === 'work'"
+      >
+        <p>
+          Select which Society Identifiers should remain linked to the primary
+          Work. You can select from a unique list of Society Identifiers found
+          across the Works, or add new ones.
+        </p>
+        <society-identifier-row
+          ng-repeat="identifier in mergedFields.societyIdentifiers"
+          edit="true"
+          index="$index"
+          identifier="identifier"
+          societies="pros"
+          delete="deleteSocietyIdentifier($index)"
+        ></society-identifier-row>
+        <button class="btn btn-complete" ng-click="addSocietyIdentifier()">
+          + Identifier
+        </button>
+      </duplicate-merge-panel>
+
+      <!-- Works - Aliases -->
+      <duplicate-merge-panel title="Aliases" ng-if="type === 'work'">
+        <p>
+          Select which Aliases should remain linked to the primary Work. You can
+          select from a unique list of Aliases found across the Works, or add
+          new ones.
+        </p>
+        <div
+          class="row"
+          ng-repeat="alias in mergedFields.aliases track by $index"
+        >
+          <div class="form-group col-xs-8 col-sm-10">
+            <input type="text" class="form-control" ng-model="alias.value" />
+          </div>
+          <div class="form-group col-xs-4 col-sm-2">
+            <button class="btn btn-danger" ng-click="deleteAlias($index)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-complete" ng-click="addAlias()">+ Alias</button>
+      </duplicate-merge-panel>
+
+      <!-- Confirm Changes Modal -->
+      <div
+        class="modal fade stick-up"
+        id="confirmModal"
+        tabindex="-1"
+        role="dialog"
+        aria-hidden="true"
+      >
+        <div id="CUR-AexRwZpI" class="modal-dialog">
+          <div id="CUR-qjFwiZhb" class="modal-content">
+            <div id="CUR-DpqAqQcd" class="modal-header clearfix text-left">
+              <button
+                id="CUR-hRrlHmmG"
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                <i class="pg-close fs-14"></i>
+              </button>
+              <h5 ng-if="merge.flagAll">
+                Confirm: No Duplicate {{ getMultiEntityName() }}
+              </h5>
+              <h5 ng-if="!merge.flagAll">
+                Confirm: Merge {{ getMultiEntityName() }}
+              </h5>
+            </div>
+            <div id="CUR-iYgwgUoK" class="modal-body">
+              <div id="CUR-ymApUyOT" class="row">
+                <div id="CUR-iPvyZrHe" class="col-xs-12 m-t-20">
+                  <div>
+                    <p>
+                      By clicking "Confirm", the following action will take
+                      place:
+                    </p>
+                    <p class="p-t-20">
+                      {{ getMultiEntityName() }} to be deleted:
+                      <b>{{ merge.toDelete }}</b>
+                    </p>
+                    <p class="p-t-5">
+                      {{ getMultiEntityName() }} marked as not duplicates:
+                      <b>{{ merge.unselected.length }}</b>
+                    </p>
+                    <p class="p-t-5">
+                      New primary {{ getEntityName() }}:
+                      <a
+                        href="{{ getEntityLink(merge.master._id) }}"
+                        target="_blank"
+                        >{{ merge.master.name || merge.master.title }}
+                        <i class="fa fa-external-link"></i
+                      ></a>
+                    </p>
+                  </div>
+                  <p class="p-t-20">
+                    This action cannot be undone. Please review your changes
+                    carefully.
+                  </p>
+                </div>
+              </div>
+              <div id="CUR-evzNmoqB" class="row">
+                <div id="CUR-FwyNsjrh" class="col-xs-12 m-t-20 text-right">
+                  <button
+                    id="CUR-yxZJaNoE"
+                    type="button"
+                    class="btn btn-default m-t-5"
+                    data-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    id="CUR-XzraYyAZ"
+                    type="button"
+                    class="btn btn-complete m-t-5"
+                    ng-click="confirmMerge()"
+                  >
+                    <i class="fa fa-check"></i> Confirm
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

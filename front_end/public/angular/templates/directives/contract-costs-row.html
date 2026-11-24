@@ -1,0 +1,40 @@
+<div class="row border-bottom-dashed m-b-10 sm-m-b-15">
+  <div class="form-group col-xs-4 col-md-2">
+    <label>Territory</label>
+    <ui-select ng-model="cost.territory" ng-disabled="edit != true">
+      <ui-select-match>
+          <span ng-bind="$select.selected.name"></span>
+      </ui-select-match>
+      <ui-select-choices group-by="groupFind" repeat="country.code as country in countries | filter: $select.search">
+          <span class="country" ng-bind="country.name"></span>
+      </ui-select-choices>
+    </ui-select>
+  </div>
+  <div class="form-group col-xs-4 col-md-2">
+    <label>Type</label>
+    <select class="form-control" ng-model="cost.type" ng-options="item.value as item.name for item in costTypes" ng-disabled="edit != true"></select>
+  </div>
+  <div class="form-group col-xs-4 col-md-1">
+    <label>Rate %</label>
+    <input type="text" class="form-control" ng-model="cost.rate" ng-disabled="edit != true">
+  </div>
+  <div class="form-group col-xs-6 col-sm-4 col-md-3" ng-if="escalationTrackers && escalationTrackers.length > 0">
+    <label>Escalation Trackers <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-side="left" tooltip-template="By selecting an escalation tracker, any costs that match this term will be added to the tracking values"></i></label>
+    <ui-select multiple ng-model="cost.escalationTrackers" theme="bootstrap" ng-disabled="edit != true">
+      <ui-select-match>
+        <span style="vertical-align:middle;">{{$item.name}}</span>
+      </ui-select-match>
+      <ui-select-choices repeat="item.name as item in escalationTrackers | filter: $select.search">
+        <span ng-bind="item.name"></span>
+      </ui-select-choices>
+    </ui-select>
+  </div>
+  <div class="form-group col-xs-12 col-md-3 two-cols-row">
+    <button class="btn btn-danger row-button m-xs-t-0 m-l-0" ng-show="edit == true" ng-click="delete({ cost: cost })"><i class="fa fa-trash"></i></button>
+    <button class="btn btn-primary row-button m-xs-t-0 m-l-0" ng-show="edit == true" ng-if="(!cost.escalations || cost.escalations.length == 0) && features && features.escalations" ng-click="addEscalation()">+ Escalation</button>
+  </div>
+  <div class="col-xs-12" ng-if="features && features.escalations">
+    <contract-costs-escalation-row edit="edit" ng-repeat="escalation in cost.escalations track by $index" escalation="escalation" index="$index" cost-types="costsTypes" cost="cost" escalation-trackers="escalationTrackers" client-type="clientType" delete="deleteEscalation(escalation)"></contract-costs-escalation-row>
+    <button ng-show="edit == true" class="btn btn-primary w-xs-100-p m-xs-l-0 m-l-m-9" ng-if="cost.escalations && cost.escalations.length > 0" ng-click="addEscalation()">+ Escalation</button>
+  </div>
+</div>

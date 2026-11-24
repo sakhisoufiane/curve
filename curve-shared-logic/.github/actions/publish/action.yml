@@ -1,0 +1,16 @@
+name: Publish
+description: Publish the package to NPM and use tag if the branch is develop
+
+inputs:
+  token:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Publish
+      shell: bash
+      env:
+        tag: ${{ github.ref == 'refs/heads/develop' && '--tag develop' || '' }}
+        NODE_AUTH_TOKEN: ${{ inputs.token }}
+      run: npm publish $tag

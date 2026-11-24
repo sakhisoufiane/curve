@@ -1,0 +1,191 @@
+<div id="CUR-ftlqfzYU" class="jumbotron" data-pages="parallax">
+  <div id="CUR-CLDonHXX" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-DwNFgYnI" class="inner">
+      <ul id="CUR-jWeFPWAW" class="breadcrumb">
+        <li id="CUR-ehslyZdZ">
+          <a id="CUR-YwTyLgHv" href="/#/deliveries">Delivery Schedules</a>
+        </li>
+        <li id="CUR-vzVgHVti" ng-show="!deliverySchedule._id">
+          <a id="CUR-gSKFpUSW" href="" class="active">Create</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="CUR-sQniZlNp" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-intervalNoteRow" class="row">
+    <div id="CUR-intervalNoteCol" class="col-xs-10">
+      <div id="CUR-intervalNoteMessage" class="alert alert-warning" role="alert" style="display: inline-block;">Note: Curve scans for Works matching Delivery Schedules every 2 hours, so relevant Works do not display instantly in the Index</div>
+    </div>
+  </div>
+  <div id="CUR-ZLVBZehW" class="row">
+    <div id="CUR-tYCNsWGv" class="col-xs-12 text-right two-cols-row">      
+      <button id="CUR-PeaeheDb" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" 
+        ng-show="rights.catalogue == 'Edit'"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-FKSatVxZ" class="btn btn-complete" ng-click="save();" ng-show="rights.catalogue == 'Edit'"><i
+        class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+
+  <div id="CUR-KoYeDeox" ng-show="deliverySchedule._id && !deliverySchedule.deliveryPartnerId" class="alert alert-warning">
+    <p id="CUR-GCyl912DN">
+      <b>A Delivery Partner needs to be selected to create a Delivery Schedule. You can do this later, but the Delivery Schedule will not be active until selected</b>
+    </p>
+  </div>
+
+  <div id="CUR-YMfeFQCU" class="row">
+    <div id="CUR-xJcQflXB" class="col-xs-12 col-sm-6">
+      <div id="CUR-jQmsjxNu" class="panel panel-default">
+        <div id="CUR-WyiLyzHk" class="panel-heading">
+          <div id="CUR-NwbAfoMf" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-Cpfdkrkx" class="panel-body p-t-15">
+          <div id="CUR-fMwRMONU" class="form-group required">
+            <label id="CUR-YsXTOWkW">Name</label>
+            <input id="CUR-DVfNyuym" type="text" class="form-control" ng-model="deliverySchedule.name" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-csYbOIhs" class="form-group required">
+            <label id="CUR-TkZPSWrZ">Delivery Partner</label>
+              <ui-select ng-model="deliverySchedule.deliveryPartnerId" ng-change="changeDeliveryPartner()">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-CmeflJbN" ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item._id as item in deliveryPartners | filter: $select.search track by $index">
+                  <span id="CUR-TpWfFyOG" ng-bind="item.name"></span>
+                </ui-select-choices>
+              </ui-select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-RrOmQIwR" class="col-xs-12 col-sm-6">
+      <div id="CUR-JBQnwIRl" class="panel panel-default">
+        <div id="CUR-uMfmJtJn" class="panel-heading">
+          <div id="CUR-oNPDNiey" class="panel-title">
+            Schedule
+          </div>
+        </div>
+        <div id="CUR-XnAiLFTR" class="panel-body p-t-15">
+          <div id="CUR-zNWWAfdj" class="form-group required">
+            <label id="CUR-eJQhQWIs">Deliver every</label>
+            <ui-select ng-model="deliverySchedule.scheduleType" ng-change="clearScheduleDay()" ng-disabled="rights.catalogue != 'Edit'">
+              <ui-select-match placeholder="Week/Month" allow-clear="true">
+                <span id="CUR-IcJNPAYd" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in (['Week','Month'] | filter: $select.search)">
+                <span id="CUR-lVACQshD" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-DeLUApPK" class="form-group required">
+            <label id="CUR-jtyrmVZV">On</label>
+            <ui-select ng-model="deliverySchedule.scheduleDay" ng-disabled="rights.catalogue != 'Edit' || !deliverySchedule.scheduleType">
+              <ui-select-match placeholder="{{(deliverySchedule.scheduleType == 'Week' ? 'Monday, Tuesday..' : '1st, 2nd, 3rd..')}}" allow-clear="true">
+                <span id="CUR-zSdcfRPU" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in ((deliverySchedule.scheduleType == 'Month' ? monthDays : weekDays) | filter: $select.search)">
+                <span id="CUR-byhYXwZC" ng-bind="item.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div id="CUR-WMSFKdjA" class="panel-body p-t-15">
+          <div id="CUR-QfoaqqPQ" class="form-group" ng-if="clientType == 'Publisher'">
+            <input id="CUR-jnPKJeVU" type="checkbox" value="1" ng-model="deliverySchedule.active" ng-disabled="!canBeActive || rights.catalogue != 'Edit'">
+            <label id="CUR-dBKzgAIA">Active</label>
+          </div>
+          <div id="CUR-ZRFDHNds" class="form-group required">
+            <label id="CUR-POesaTom">Include Works</label>
+            <ui-select ng-model="deliverySchedule.filterType" ng-disabled="rights.catalogue != 'Edit'" ng-change="updateAdditionalCustomFilters()">
+              <ui-select-match>
+                <span id="CUR-zSdffdEPU" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in (filterTypes | filter: $select.search)">
+                <span id="CUR-byhVXsaC" ng-bind="item.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-deliveryScheduleCustomFilterCheckBox" class="form-group m-t-25" ng-if="deliverySchedule.filterType == 'newAndUpdated' || deliverySchedule.filterType == 'manuallyAdded'">
+            <input id="CUR-deliveryScheduleCustomFilterCheckBoxInput" type="checkbox" value="1" ng-model="deliverySchedule.additionalCustomFilters" ng-disabled="rights.catalogue != 'Edit'">
+            <label id="CUR-deliveryScheduleCustomFilterCheckBoxLabel">Allow Custom Filters</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <delivery-filter id="deliveryFilterRef" edit="rights.catalogue != 'Edit'" ng-if="deliverySchedule.filterType == 'custom' || deliverySchedule.additionalCustomFilters" filter="deliverySchedule.filter" filtertype="deliverySchedule.filterType" composers="deliverySchedule.composers" exclude-composers="deliverySchedule.excludeComposers" publishers="deliverySchedule.publishers" exclude-publishers="deliverySchedule.excludePublishers" dateformat="dateFormat" count="filterCount" composers-and-publishers-integrity="composersAndPublishersIntegrity"></delivery-filter>
+  
+
+  <div id="CUR-auEeEmNt" class="row">
+    <div id="CUR-WnbuAmuI" class="col-xs-12 col-lg-12">
+      <div id="CUR-bwzTsZJP" class="panel panel-default">
+        <div id="CUR-lgKnKmtr" class="panel-heading">
+          <div id="CUR-iTRxhVba" class="panel-title">
+            Queued works
+          </div>
+        </div>
+        <div id="CUR-LdLTrgVX" class="panel-body">
+          <div class="alert alert-danger" role="alert" ng-if="uncontrolledWorks && uncontrolledWorks.length" ng-repeat="excludedWork in uncontrolledWorks">
+            <a id="CUR-excludedWorkLinkSchedules" href="/#/works/{{excludedWork._id}}/edit">{{excludedWork.title}}</a> - not added to Delivery as it is not controlled for this territory
+          </div>
+          <responsive-table headers="queuedWorkHeaders" data="queuedWorks" order-by="filter.orderBy"
+          sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="CUR-teSyxdlH" class="col-sm-12">
+    <div id="CUR-PlnBSKLc" class="pull-right">
+      <span id="CUR-fUyiAPYU" class="inline-block" ng-if="!tableFilter.isShowingAll">Showing 25 Per Page  |</span>
+      <span id="CUR-TUrSZcpW" class="inline-block" ng-if="tableFilter.isShowingAll">Showing {{tableFilter.limit}} Per Page</span>
+      <a id="CUR-KokUZWEi" class="p-l-5" ng-if="!tableFilter.isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-oPsjobOW" class="row">
+    <div id="CUR-EelFUNju" class="col-xs-12 text-center">
+      <pagination id="CUR-wYQcNrCm" pages="tableFilter.pages" total="tableFilter.totalPages" current="tableFilter.currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+
+  <div id="CUR-QZKFZZmY" class="row">
+    <div id="CUR-ueMDUEkI" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-yoLOEKvD" ng-show="deliverySchedule.updatedAt">Last Updated on {{ deliverySchedule.updatedAt | date : dateFormat : 'UTC' }}.</span> <a
+        href="javascript:;" ng-if="deliverySchedule._id" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-hKLRWSxw" class="modal-dialog">
+    <div id="CUR-ByWQBSxM" class="modal-content">
+      <div id="CUR-dImHwmQM" class="modal-header clearfix text-left">
+        <button id="CUR-OrxKnJvl" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-TSBTqvjP">Delete Delivery Schedule</h5>
+      </div>
+      <div id="CUR-SRDVyfPF" class="modal-body">
+        <div id="CUR-wVfxARKH" class="row">
+          <div id="CUR-rcselIen" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this delivery schedule? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-nFzvIyoR" class="row">
+          <div id="CUR-XEezSJJQ" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-CazGRcha" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-voqbuajT" type="button" class="btn btn-danger m-t-5" ng-click="delete()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<model-history data="deliverySchedule.modelHistory"></model-history>

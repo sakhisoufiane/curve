@@ -1,0 +1,38 @@
+{
+  "title": "Entreprises",
+  "searchPlaceholder": "Rechercher des entreprises",
+  "entityName": "Entreprise",
+  "entityNamePlural": "Entreprises",
+  "entityNameLower": "entreprise",
+  "entityNameLowerPlural": "entreprises",
+  "export": "Exporter",
+  "emptyState": {
+    "title": "Aucune entreprise pour le moment",
+    "description": "Commencez par créer votre première entreprise."
+  },
+  "noResults": "Aucune entreprise ne correspond à votre recherche.",
+  "deleteSelected": "Supprimer la sélection",
+  "columns": {
+    "name": "Nom",
+    "createdAt": "Créé"
+  },
+  "exportToast": {
+    "successTitle": "Export demandé",
+    "successDescription": "Votre export vous sera envoyé par e-mail sous peu.",
+    "errorTitle": "Échec de l'export",
+    "errorDescription": "Veuillez réessayer."
+  },
+  "deleteToast": {
+    "successTitle_one": "1 Entreprise supprimée",
+    "successTitle_other": "{{count}} Entreprises supprimées",
+    "errorTitle": "Échec de la suppression",
+    "errorDescription": "Veuillez réessayer."
+  },
+  "deleteDialog": {
+    "description": "Cette action est irréversible."
+  },
+  "importToast": {
+    "successTitle": "Entreprises en cours d'importation",
+    "successDescription": "Un rapport vous sera envoyé sous peu."
+  }
+}

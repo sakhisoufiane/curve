@@ -1,0 +1,32 @@
+{
+  "env": {
+    "cypress/globals": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:cypress/recommended"
+  ],
+  "plugins": [
+    "cypress"
+  ],
+  "rules": {
+    "cypress/no-assigning-return-values": "error",
+    "cypress/no-unnecessary-waiting": "off",
+    "cypress/unsafe-to-chain-command": "off",
+    "cypress/assertion-before-screenshot": "warn",
+    "cypress/no-force": "off",
+    "cypress/no-async-tests": "error",
+    "cypress/no-pause": "error",
+    "block-spacing": "error",
+    "no-undef": "error",
+    "no-mixed-spaces-and-tabs": "error",
+    "indent": ["error", 2],
+    "key-spacing": ["error", { "afterColon": true }],
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "quotes": ["error", "single"],
+    "object-curly-spacing": ["error", "always"],
+    "spaced-comment": 2,
+    "keyword-spacing": 2
+  }
+}

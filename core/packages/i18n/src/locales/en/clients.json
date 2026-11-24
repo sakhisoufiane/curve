@@ -1,0 +1,24 @@
+{
+  "title": "Clients",
+  "searchPlaceholder": "Search clients",
+  "entityName": "Client",
+  "entityNamePlural": "Clients",
+  "entityNameLower": "client",
+  "entityNameLowerPlural": "clients",
+  "export": "Export",
+  "emptyState": {
+    "title": "No clients yet",
+    "description": "Get started by creating your first client."
+  },
+  "noResults": "No clients match your search.",
+  "columns": {
+    "name": "Name",
+    "createdAt": "Created"
+  },
+  "exportToast": {
+    "successTitle": "Export requested",
+    "successDescription": "Your export will be sent to you via email shortly.",
+    "errorTitle": "Export failed",
+    "errorDescription": "Please try again."
+  }
+}

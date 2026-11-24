@@ -1,0 +1,38 @@
+{
+  "title": "Bedrijven",
+  "searchPlaceholder": "Bedrijven zoeken",
+  "entityName": "Bedrijf",
+  "entityNamePlural": "Bedrijven",
+  "entityNameLower": "bedrijf",
+  "entityNameLowerPlural": "bedrijven",
+  "export": "Exporteren",
+  "emptyState": {
+    "title": "Nog geen bedrijven",
+    "description": "Begin met het aanmaken van je eerste bedrijf."
+  },
+  "noResults": "Geen bedrijven komen overeen met je zoekopdracht.",
+  "deleteSelected": "Geselecteerde verwijderen",
+  "columns": {
+    "name": "Naam",
+    "createdAt": "Aangemaakt"
+  },
+  "exportToast": {
+    "successTitle": "Export aangevraagd",
+    "successDescription": "Je export wordt binnenkort per e-mail naar je verzonden.",
+    "errorTitle": "Export mislukt",
+    "errorDescription": "Probeer het opnieuw."
+  },
+  "deleteToast": {
+    "successTitle_one": "1 Bedrijf verwijderd",
+    "successTitle_other": "{{count}} Bedrijven verwijderd",
+    "errorTitle": "Verwijderen mislukt",
+    "errorDescription": "Probeer het opnieuw."
+  },
+  "deleteDialog": {
+    "description": "Deze actie kan niet ongedaan worden gemaakt."
+  },
+  "importToast": {
+    "successTitle": "Bedrijven worden geïmporteerd",
+    "successDescription": "Er wordt binnenkort een rapport naar je gestuurd."
+  }
+}

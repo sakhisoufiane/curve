@@ -1,0 +1,56 @@
+<div id="CUR-zWlOjbzy" class="jumbotron" data-pages="parallax">
+  <div id="CUR-YBTEiXdr" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-VjoaEagR" class="inner">
+      <ul id="CUR-UpwguAoO" class="breadcrumb">
+        <li id="CUR-ElFmmQrb">
+          <a id="CUR-sdRpqlPb" href="/#/paymentDetails">Payment Details</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-rxyZdBtq" class="container-fluid container-fixed-lg">
+  <!-- START: Payment Details -->
+  <div id="CUR-fbqpSOGU" class="row">
+    <!-- Tipalti -->
+    <div id="CUR-AjrCquvm" class="col-xs-12" ng-show="paymentProvider == 'Tipalti'">
+      <div id="CUR-gfJMJAac" class="panel panel-default">
+        <div id="CUR-iUUCVQIb" class="panel-heading">
+          <div id="CUR-KqfPzoHJ" class="panel-title">
+            Payment Details
+          </div>
+        </div>
+
+        <div id="CUR-KURpbXsD" class="panel-body p-t-15">
+          <div id="CUR-CHPPItUe">
+            <iframe ng-if="tipaltiIframeUrl" ng-src="{{tipaltiIframeUrl}}" frameborder="0"
+              style="width: 100%; height: 1200px"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Curve Pay -->
+    <div id="CUR-AjrCquvm" class="col-xs-6" ng-show="paymentProvider == 'Curve Pay'">
+      <div id="CUR-gfJMJAac" class="panel panel-default">
+        <div id="CUR-iUUCVQIb" class="panel-heading">
+          <div id="CUR-KqfPzoHJ" class="panel-title">
+            Payment Details
+          </div>
+        </div>
+
+        <div id="CUR-HYtHsdfsd" class="panel-body p-t-15">
+          <div id="CUR-jAzLHyewrwe">
+            <div ng-show="curvePayError" class="alert alert-danger">
+              <p><b>Payments Details: {{curvePayError}}</b></p>
+            </div>
+            <iframe ng-if="curvePayiFrameUrl" ng-src="{{curvePayiFrameUrl}}" frameborder="0"
+              style="width: 100%; height: 1600px"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END: Payment Details -->
+</div>

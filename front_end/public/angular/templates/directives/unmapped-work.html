@@ -1,0 +1,51 @@
+<td class="v-align-middle hidden-xs">
+  <input id="work-select-{{index}}" type="checkbox" ng-model="work.selected">
+</td>
+<td style="width: 13%;"><a id="work-link-{{index}}" href="#/sales/{{work.salesFileId}}/edit">{{work.salesFileId}}</a></td>
+<td style="width: 13%;">
+  <div style="flex-wrap: wrap;">
+    {{work.title}}
+  </div>
+</td>
+<td style="width: 13%;">{{work._id.source}}</td>
+<td style="width: 13%;">
+  <div ng-if="work._id.identifier" style="display: flex; align-items: center;">
+    <p style="color: rgba(44,44,44,.35); font-weight: 600; font-size: 12px!important;">ID</p>
+    <div style="margin: 4px;"></div>
+    <p style="font-size: 12px!important; text-align: center;">{{work._id.identifier}}</p>
+  </div>
+  <div ng-if="work.iswc" style="display: flex; align-items: center;">
+    <p style="color: rgba(44,44,44,.35); font-weight: 600; font-size: 12px!important;">ISWC</p>
+    <div style="margin: 4px;"></div>
+    <p style="font-size: 12px!important; text-align: center;">{{work.iswc}}</p>
+  </div>
+  <div ng-if="work.tunecode" style="display: flex; align-items: center;">
+    <p style="color: rgba(44,44,44,.35); font-weight: 600; font-size: 12px!important;">TUNE</p>
+    <div style="margin: 4px;"></div>
+    <p style="font-size: 12px!important; text-align: center;">{{work.tunecode}}</p>
+  </div>
+  <div ng-if="work.songcode" style="display: flex; align-items: center;">
+    <p style="color: rgba(44,44,44,.35); font-weight: 600; font-size: 12px!important;">SONG</p>
+    <div style="margin: 4px;"></div>
+    <p style="font-size: 12px!important; text-align: center;">{{work.songcode}}</p>
+  </div>
+</td>
+<td style="width: 13%;">
+  <div style="display: flex; flex-wrap: wrap; width: 70%;">
+    {{work.party1}}
+    {{work.party2}}
+    {{work.party3}}
+    {{work.party4}}
+    {{work.party5}}
+  </div>
+</td>
+<td style="width: 13%;">{{work.netValue}}</td>
+<td style="width: 13%;">
+  <work-select-field allow-clear="true" value="work.workId" edit="true"></work-select-field>
+</td>
+<td style="width: 13%;">
+  <i class="fa fa-check text-success" ng-if="work.complete"></i>
+</td>
+<td class="w-20">
+  <button id="create-work-{{index}}" class="btn btn-complete" ng-click="createWork({ work: work })">+ Create </button>
+</td>

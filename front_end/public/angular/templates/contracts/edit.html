@@ -1,0 +1,1171 @@
+<div id="CUR-mFpedtFr" class="jumbotron" data-pages="parallax">
+  <div id="CUR-wdQVOyRJ" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-MEiDAmGB" class="inner">
+      <ul id="CUR-gLsdjFqx" class="breadcrumb">
+        <li id="CUR-gzAoTply">
+          <a id="CUR-wOfZbPpM" ng-if="contract.contractType !== 'Mechanical'" href="/#/contracts?contractType=Artist">Contracts</a>
+          <a id="CUR-ekDjaNNY" ng-if="contract.contractType === 'Mechanical'" href="/#/contracts?contractType=Mechanical">Mechanical Contracts</a>
+        </li>
+        <li id="CUR-ZPMeoEYA" ng-show="!contract._id"><a id="CUR-DRBWJCzr" href="" class="active">Create</a></li>
+        <li id="CUR-GegozJkp" ng-show="contract._id"><a id="CUR-rHFoxnjL" href="/#/contracts/{{contract._id}}/edit" class="active">{{contract.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-sQPHJJzR" class="container-fluid container-fixed-lg">
+  <div id="CUR-auFHWrlk" class="row">
+    <div id="CUR-aAileTlC" class="col-xs-12 text-right two-cols-row sm-p-l-20 sm-p-r-20">
+      <button id="CUR-EDDJtFXV" ng-show="rights.contracts == 'Edit'" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" ng-show="contract._id"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-eGbNFkgv" ng-show="rights.contracts == 'Edit'" class="btn btn-warning" ng-click="copy()" ng-show="contract._id"><i class="fa fa-copy"></i> Copy</button>
+      <button id="CUR-TinbGPNU" ng-show="rights.contracts == 'Edit'" class="btn btn-complete" ng-click="save()"><i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-tPHFzGMx" ng-show="deletionError" class="alert alert-danger">
+    <div id="CUR-ikLzCtZu" ng-show="deletionError.sales && deletionError.sales.length > 0">
+      <p>The following Sales Files need to be detached first:</p>
+      <p id="CUR-ZfcswpiU" ng-repeat="error in deletionError.sales track by $index">
+        <a id="CUR-awETJCZn" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-rZTbkyfp" ng-show="deletionError.costs && deletionError.costs.length > 0">
+      <p>The following Costs need to be detached first:</p>
+      <p id="CUR-BBBNcIMY" ng-repeat="error in deletionError.costs track by $index">
+        <a id="CUR-ceUPRkAk" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-uAjTQqIN" ng-show="deletionError.statements && deletionError.statements.length > 0">
+      <p>The following Statements need to be deleted first:</p>
+      <p id="CUR-swiHvQzq" ng-repeat="error in deletionError.statements track by $index">
+        <a id="CUR-exkhgVRK" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-JwnlbapI" ng-show="deletionError.contracts && deletionError.contracts.length > 0">
+      <p>The following Cross Contracts need to be detached first:</p>
+      <p id="CUR-LFPaDtyR" ng-repeat="error in deletionError.contracts track by $index">
+        <a id="CUR-JJJoeRzL" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-skTcLMPq" ng-show="deletionError.releases && deletionError.releases.length > 0">
+      <p>The following Releases need to be detached first:</p>
+      <p id="CUR-kzPCYfBP" ng-repeat="error in deletionError.releases track by $index">
+        <a id="CUR-VqrNOqeF" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-fNBTZkth" ng-show="deletionError.tracks && deletionError.tracks.length > 0">
+      <p>The following Tracks need to be detached first:</p>
+      <p id="CUR-ypfOILFf" ng-repeat="error in deletionError.tracks track by $index">
+        <a id="CUR-iuEkumZB" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-ashHQnSn" ng-show="deletionError.works && deletionError.works.length > 0">
+      <p>The following Works need to be detached first:</p>
+      <p id="CUR-hvGvbDYj" ng-repeat="error in deletionError.works track by $index">
+        <a id="CUR-sQkZIzZf" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-DlYRLCzy" ng-show="deletionError.payments && deletionError.payments.length > 0">
+      <p>Payments associated with this contract have already been paid out.</p>
+      <p id="CUR-bNzyCled" ng-repeat="error in deletionError.payments track by $index">
+        <a id="CUR-YrotTAZQ" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-DlYRLCzy" ng-show="deletionError.periods && deletionError.periods.length > 0">
+      <p>The following periods with the same accounting period are currently processing:</p>
+      <p id="CUR-bNzyCled" ng-repeat="error in deletionError.periods track by $index">
+        <a id="CUR-YrotTAZQ" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+  </div>
+
+  <div id="CUR-EgRtdlsaF" ng-show="contract.validationErrors && contract.validationErrors.length !== 0 " class="alert alert-warning">
+    <p id="CUR-EgRtd12D"><b>This contract has some issues that may affect its ability to report royalties - </b></p>
+    <ul id="CUR-EgRt3FFS">
+      <li ng-repeat="error in contract.validationErrors track by $index">
+        {{error}}
+      </li>
+    </ul>
+  </div>
+
+  <div id="CUR-EgRtdRDW" class="row">
+    <div id="CUR-inTSFOvi" class="panel panel-transparent hidden-xs">
+      <ul id="CUR-FzztAaoR" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-GYlMqnMn" class="active" ng-click="setTab('overview')">
+          <a id="CUR-LsamaLGD" data-toggle="tab" aria-expanded="true"><span id="CUR-rPYOwINA">Overview</span></a>
+        </li>
+        <li id="CUR-gQZiaVvH" ng-click="setTab('terms')">
+          <a id="CUR-iKTOUYFL" data-toggle="tab" aria-expanded="false"><span id="CUR-aXNqZBBZ">Terms</span></a>
+        </li>
+        <li id="CUR-DWEHagRf" ng-click="setTab('reserves')" ng-if="clientType != 'Publisher'">
+          <a id="CUR-XZpvsqAT" data-toggle="tab" aria-expanded="false"><span id="CUR-oVcnluMv">Reserves</span></a>
+        </li>
+        <li id="CUR-NnVvdaUq" ng-click="setTab('escalations')" ng-if="features && features.escalations">
+          <a id="CUR-uIfutBqU" data-toggle="tab" aria-expanded="false"><span id="CUR-jzWfyYYX">Escalations</span></a>
+        </li>
+        <li id="CUR-IRsvPgiV" ng-click="setTab('catalogue')" ng-show="contract.contractType != 'Mechanical'">
+          <a id="CUR-DnYNVufw" data-toggle="tab" aria-expanded="false"><span id="CUR-OAwbLlyG">Catalogue</span></a>
+        </li>
+        <li id="CUR-MMgDVOJD" ng-click="setTab('costs')" ng-if="clientType != 'Publisher' && contract.contractType != 'Mechanical'">
+          <a id="CUR-ODaCHGGV" data-toggle="tab" aria-expanded="false"><span id="CUR-WatIkiaG">Costs</span></a>
+        </li>
+        <li id="CUR-tgNgxqAA" ng-click="setTab('transactions')">
+          <a id="CUR-yBCpduLw" data-toggle="tab" aria-expanded="false"><span id="CUR-qqDowGnR">Transactions</span></a>
+        </li>
+        <li id="CUR-RmmOXbao" ng-click="setTab('aliases')" ng-show="contract.contractType != 'Mechanical' && paymentTier !== 'Lite'">
+          <a id="CUR-zJqMvzcL" data-toggle="tab" aria-expanded="false"><span id="CUR-ULXukNjy">Aliases</span></a>
+        </li>
+        <li id="CUR-ysIkyFls" ng-click="setTab('analytics')">
+          <a id="CUR-IJnAvFVh" data-toggle="tab" aria-expanded="false"><span id="CUR-pszzGMAW">Analytics</span></a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-vwAEUrWe" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-gcqsYSHw" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+        <div id="CUR-nDIjxWxw" ng-show="activeTab === 'terms'" ng-include="'terms-tab.html'"></div>
+        <div id="CUR-sbFdtBuj" ng-show="activeTab === 'reserves'" ng-include="'reserves-tab.html'"></div>
+        <div id="CUR-NKdqPkFQ" ng-show="activeTab === 'escalations'" ng-include="'escalations-tab.html'"></div>
+        <div id="CUR-PkEBKhrM" ng-show="activeTab === 'catalogue'" ng-include="'catalogue-tab.html'"></div>
+        <div id="CUR-ZRrumOEt" ng-show="activeTab === 'costs'" ng-include="'costs-tab.html'"></div>
+        <div id="CUR-OsMFbGqx" ng-show="activeTab === 'transactions'" ng-include="'transactions-tab.html'"></div>
+        <div id="CUR-uEGctheh" ng-show="activeTab === 'aliases'" ng-include="'aliases-tab.html'"></div>
+        <div id="CUR-elTXAtVF" ng-show="activeTab === 'analytics'">
+          <analytics-suite analytics-config="analyticsConfig" analytics-info="'Contract analytics displays all catalogue associated with this contract at 100% of revenue.'"></analytics-suite>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-VjRTxQBa" class="col-xs-12 visible-xs p-l-20 p-r-20" ng-if="showAccordions">
+      <uib-accordion close-others="true" ng-init="status1.open = true; status2.open = false; status3.open = false; status4.open = false; status5.open = false; status6.open = false; status7.open = false; status8.open = false;">
+        <div id="CUR-HLkHIoGV" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>
+            Overview <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-EVrCAuGd" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div id="CUR-WiLedwxq" uib-accordion-group class="panel-default" is-open="status2.open">
+          <uib-accordion-heading>
+            Terms <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-iSSYZNFk" ng-include="'terms-tab.html'"></div>
+        </div>
+        <div id="CUR-ewjrOLll" uib-accordion-group class="panel-default" is-open="status3.open" ng-if="clientType != 'Publisher'">
+          <uib-accordion-heading>
+            Reserves <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-AbbyUboK" ng-include="'reserves-tab.html'"></div>
+        </div>
+        <div id="CUR-lLJYkuxe" uib-accordion-group class="panel-default" is-open="status4.open" ng-if="features && features.escalations">
+          <uib-accordion-heading>
+            Escalations <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status4.open, 'glyphicon-chevron-right': !status4.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-CTUsILFb" ng-include="'escalations-tab.html'"></div>
+        </div>
+        <div id="CUR-jRdVlQmo" uib-accordion-group class="panel-default" is-open="status5.open" ng-if="contract.contractType != 'Mechanical'">
+          <uib-accordion-heading>
+            Catalogue <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status5.open, 'glyphicon-chevron-right': !status5.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-rxEMUBMo" ng-include="'catalogue-tab.html'"></div>
+        </div>
+        <div id="CUR-IrxfXRKn" uib-accordion-group class="panel-default" is-open="status6.open" ng-if="clientType != 'Publisher' && contract.contractType != 'Mechanical'">
+          <uib-accordion-heading>
+            Costs <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status6.open, 'glyphicon-chevron-right': !status6.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-kfrzPclJ" ng-include="'costs-tab.html'"></div>
+        </div>
+        <div id="CUR-mVHCGRhI" uib-accordion-group class="panel-default" is-open="status7.open">
+          <uib-accordion-heading>
+            Transactions <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status7.open, 'glyphicon-chevron-right': !status7.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-lEUmzoiJ" ng-include="'transactions-tab.html'"></div>
+        </div>
+        <div id="CUR-BgdhlOWl" uib-accordion-group class="panel-default" is-open="status8.open" ng-if="contract.contractType != 'Mechanical' && paymentTier !== 'Lite'">
+          <uib-accordion-heading>
+            Aliases <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status8.open, 'glyphicon-chevron-right': !status8.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-fblQMCsX" ng-include="'aliases-tab.html'"></div>
+        </div>
+        <div id="CUR-oUoyEWrV" uib-accordion-group class="panel-default" is-open="status9.open">
+          <uib-accordion-heading>
+            Analytics <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status9.open, 'glyphicon-chevron-right': !status9.open}"></i>
+          </uib-accordion-heading>
+          <analytics-suite analytics-config="analyticsConfig" analytics-mobile-sections="true"></analytics-suite>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+  <div id="CUR-lYNNCHtr" class="row">
+    <div id="CUR-fukBLpsN" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-QIGKRDiY" ng-show="contract.updatedAt">Last Updated on {{ contract.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-jKsgeiLz" href="javascript:;" ng-if="contract._id" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+<!--<div id="CUR-iZCbmVbm" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+    <div id="CUR-tljqjjEq" class="row">
+      <div id="CUR-tjzPhKDI" class="col-sm-12 text-right">
+        <h6>Created By: {{contract.createdBy.email}}</h6>
+        <h6>Last Modified By: {{contract.lastModifiedBy.email}}</h6>
+      </div>
+    </div>
+  </div>-->
+<div class="modal fade stick-up" id="deleteFileModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-vugsyfXc" class="modal-dialog">
+    <div id="CUR-JUASEdcM" class="modal-content">
+      <div id="CUR-teCDgVBv" class="modal-header clearfix text-left">
+        <button id="CUR-rNLqnvhp" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-GExqHhve">Delete File</h5>
+      </div>
+      <div id="CUR-UPNjBZrA" class="modal-body">
+        <div id="CUR-HLzKTKUF" class="row">
+          <div id="CUR-KTCrUYvF" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this file? It cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-ZBKKvGdk" class="row">
+          <div id="CUR-TFBMxBeU" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-PFBkBAXV" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-VoGpaSxg" type="button" class="btn btn-danger m-t-5" ng-click="deleteFile()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-bglwbDLK" class="modal-dialog">
+    <div id="CUR-wMGsKnrn" class="modal-content">
+      <div id="CUR-qMilXBrU" class="modal-header clearfix text-left">
+        <button id="CUR-BYEdnYcf" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-PdVLzywN">Delete Contract</h5>
+      </div>
+      <div id="CUR-TUXuGJgE" class="modal-body">
+        <div id="CUR-LCTnfGtF" class="row">
+          <div id="CUR-lTcjQeff" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this contract? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-stestmCY" class="row">
+          <div id="CUR-jkHVPwAw" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-IYZmINbC" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-SIepMXur" type="button" class="btn btn-danger m-t-5" ng-click="delete()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/ng-template" id="overview-tab.html">
+  <div id="CUR-HdMgSrCT" class="row">
+    <div id="CUR-GhPsdHXJ" class="col-xs-12 col-md-6">
+      <div id="CUR-eylGkTHA" class="panel panel-default sm-m-b-5">
+        <div id="CUR-xcMIRrig" class="panel-heading">
+          <div id="CUR-ZHXJBjTT" class="panel-title">
+            Overview <documentation link="http://guide.curveroyaltysystems.com/article/contracts-overview/#overview"></documentation>
+          </div>
+        </div>
+        <div id="CUR-qeAyCQof" class="panel-body p-t-15">
+          <div id="CUR-hFDPBagg" class="form-group required">
+            <label id="CUR-VZVwrTnP">Name</label>
+            <input id="CUR-tYltRUcS" type="text" class="form-control" ng-model="contract.name" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+
+          <div id="CUR-GcRTTdNA" class="form-group required" ng-if="features && features.companies">
+            <label id="CUR-aytJgykW">Company <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Only select if you want to use statement design and output for selected company, otherwise leave blank to use your default settings"></i></label>
+            <ui-select ng-model="contract.companyId" ng-disabled="rights.contracts != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-xYVexCqw" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item._id as item in (companies | filter: $select.search)">
+                <span id="CUR-PSCMXGVw" ng-bind="item.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-vrNKSVkL" class="form-group" ng-if="features && features.accounting">
+            <input id="CUR-UHHltBUa" type="checkbox" value="1" ng-model="contract.primaryContract" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-zGyJSXUD">Main Artist <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="You only need to worry about this if you are utilising accounting functionality. This denotes that the contract is one of the main artist accounts, and not a third party."></i></label>
+          </div>
+          <div id="CUR-trlDQDwJ" class="form-group required">
+            <label id="CUR-jpxWgBYI">Foreign ID</label>
+            <input id="CUR-gaQtKgcB" type="text" class="form-control" ng-model="contract.foreignId" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-projectId" class="form-group required">
+            <label id="CUR-projectId-label">Project ID</label>
+            <input id="CUR-projectId-input" type="text" class="form-control" ng-model="contract.projectId" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-isvSrjLA" class="form-group required" ng-if="features && features.multicurrency && clientCurrencies">
+            <label id="CUR-tXdmkGHf">Currency</label>
+            <ui-select ng-model="contract.currency" ng-disabled="rights.contracts != 'Edit'">
+              <ui-select-match allow-clear="false">
+                <span id="CUR-DksNClRi" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="currency as currency in clientCurrencies | orderBy: 'code' | filter: $select.search">
+                <span id="CUR-LQcCzhiE" ng-bind-html="currency"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-dhlwtNiz" class="form-group required" ng-if="contract.contractType == 'Mechanical'">
+            <label id="CUR-uwRtZUqZ">License No</label>
+            <input id="CUR-oaTCKDBN" type="text" class="form-control" ng-model="contract.licenseNo" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-ZxtyZCPP" class="form-group required">
+            <label id="CUR-KuWObaYW">Accounting Period</label>
+            <ui-select ng-model="contract.accountingPeriod" ng-disabled="rights.contracts != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-qaxHFwWK" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in (accountingPeriods | filter: $select.search)">
+                <span id="CUR-BcAglvFK" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-lCgBDBVK" class="form-group required" ng-show="clientType != 'Publisher' && contract.contractType != 'Mechanical'">
+            <label id="CUR-JrPYRgbZ">
+              Contract Type
+              <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="
+              <b>Royalty</b> - Calculates royalty at each line </br>
+              <b>Profit Share - Classic</b> - Performs the profit share calculation on total sales - total costs. Negative balances are held at 100%.</br>
+              <b>Profit Share - Flexible</b> - Performs the profit share calculation on total sales - total costs. All values are split by the profit share amount, and so provides a simpler setup for profit share calculations.
+              "></i>
+            </label>
+            <documentation link="http://guide.curveroyaltysystems.com/article/contracts-overview/#profitshares"></documentation>
+            <ui-select ng-model="contract.type" ng-disabled="rights.contracts != 'Edit'">
+              <ui-select-match>
+                <span id="CUR-XanMLNZY" ng-bind="$select.selected.label"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in (contractTypes | filter: $select.search)">
+                <span id="CUR-WeCzmqBc" ng-bind="item.label"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-snvLqzON" class="form-group required" ng-if="contract.type == 'Profit Share' || contract.type == 'Profit Share - Flexible'" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-BExbalUQ">Profit Share %</label>
+            <input id="CUR-vzuORtcB" type="number" class="form-control" ng-model="contract.profitSharePercentage">
+          </div>
+          <div id="CUR-xfZzESkA" class="form-group">
+            <input id="CUR-WPOpLNjX" type="checkbox" value="1" ng-model="contract.active" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-qDBNXwBZ">Active <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="An active contract will produce statements within a period. Set to inactive if you no longer want to produce statements for this contract"></i></label>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-hFIgaAyo" class="panel panel-default">
+        <div id="CUR-NXMDrZSQ" class="panel-heading">
+          <div id="CUR-TiDUsEpf" class="panel-title">
+            Notes
+          </div>
+        </div>
+        <div id="CUR-oBqAqiun" class="panel-body p-t-15">
+          <div id="CUR-BIaDTDYH" class="form-group">
+            <textarea class="form-control standard-textarea" ng-model="contract.notes" ng-disabled="rights.contracts != 'Edit'"></textarea>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-uVqlrMQx" class="panel panel-default" ng-show="clientType != 'Publisher' && contract.contractType != 'Mechanical' && features && features.ftpIngestion">
+        <div id="CUR-UpHVcHSx" class="panel-heading">
+          <div id="CUR-IsAUpaAT" class="panel-title">
+            Labels <documentation link="http://guide.curveroyaltysystems.com/article/contracts-overview/#labels"></documentation>
+          </div>
+        </div>
+        <div id="CUR-QrMVdZMK" class="panel-body p-t-15">
+          <p>Labels are used to match any XML imports to your contracts. Add any labels here, and any releases being delivered into your account will automatically be added to this contract</p>
+          <div id="CUR-vKRlLUfX" class="row" ng-repeat="label in displayLabels track by $index">
+            <div id="CUR-trWOTadL" class="form-group col-xs-8 col-sm-10">
+              <input id="CUR-wSquTWNL" type="text" class="form-control" ng-model="label.name" ng-disabled="rights.contracts != 'Edit'">
+            </div>
+            <div id="CUR-MRUolLnj" class="form-group col-xs-4 col-sm-2 text-right">
+              <button id="CUR-ZVsmIelu" class="btn btn-danger" ng-click="deleteLabel(label)" ng-if="rights.contracts == 'Edit'"><i class="fa fa-trash"></i></button>
+            </div>
+          </div>
+          <div id="CUR-vzpavBot" class="row">
+            <div id="CUR-oKKUufmW" class="col-sm-6">
+              <button id="CUR-BZAXogGG" class="btn btn-complete pull-left" ng-click="addLabel()" ng-if="rights.contracts == 'Edit'">+ Add</button>
+            </div>
+            <div id="CUR-EDYDbFQL" class="col-sm-6 text-right">
+              <button id="CUR-YVsMCCxn" class="btn btn-primary pull-right" ng-click="matchContractToLabels()" tooltips tooltip-class="wider" tooltip-template="Update any releases and tracks in catalogue that have one of these labels in their label field" ng-if="rights.contracts == 'Edit'">Flush Contract to Catalogue</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-ohAgPtWp" class="col-xs-12 col-md-6">
+      <div id="CUR-vQYIeCMf" class="panel panel-default">
+        <div id="CUR-WtNwCFqB" class="panel-heading">
+          <div id="CUR-zBbjtOuR" class="panel-title">
+            Finances
+          </div>
+        </div>
+        <div id="CUR-xkKuHSlQ" class="panel-body p-t-15">
+
+          <div id="CUR-eahYeMnc" class="form-group required" ng-if="contract.payeeBalanceCondition === 'Never' || !features.payeeBalances">
+            <label id="CUR-ZLQqSWGY">Payee</label>
+            <payee-select-field 
+              value="contract.payees[0].payeeId"
+              populated="contract.payees[0].payee"
+              edit="rights.contracts == 'Edit'"
+              allow-clear="true"
+              >
+            </payee-select-field>
+          </div>
+
+          <!-- !Payee Balance Row -->
+          <div id="CUR-otmSWLpI" class="form-group" ng-if="features.payeeBalances && contract.payeeBalanceCondition !== 'Never'">
+            <payee-balance-row 
+              payee="payee"
+              payees="contract.payees"
+              index="$index"
+              edit="rights.contracts == 'Edit'"
+              delete="deletePayeeBalanceRow(payee)"
+              current-payees="contract.payees"
+              ng-repeat="payee in contract.payees track by $index"
+            >
+            </payee-balance-row>
+            <br>
+            <button id="CUR-mlpOrjUr" ng-show="rights.contracts == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addPayeeBalanceRow()">+ Payee</button>
+          </div>
+
+          <div id="CUR-nFrEBhoH" class="form-group required" ng-if="contract.payeeBalanceCondition === 'Never' || !features.payeeBalances || clientType === 'Distributor'">
+            <label id="CUR-LJqdcakE">Min Payout</label>
+            <input id="CUR-pLtIIIAd" type="text" class="form-control" ng-model="contract.minPayout" ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-xzwTmbnK" class="form-group" ng-if="features && features.selfBilling && (!features.payeeBalances || contract.payeeBalanceCondition === 'Never' || clientType === 'Distributor')">
+            <input id="CUR-NbVBVKni" type="checkbox" value="1" ng-model="contract.selfBilling" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-uWfbINAj">Generate Self Billing Invoice <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Creates a Self Billing Invoice delivered as part of the statement"></i></label>
+          </div>
+          <div id="CUR-EfntvpCE" class="form-group" ng-if="clientType != 'Publisher' && features && features.selfBilling && (!features.payeeBalances || contract.payeeBalanceCondition === 'Never' || clientType === 'Distributor')">
+            <input id="CUR-DFqUjlRE" type="checkbox" value="1" ng-model="contract.feesInvoice" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-zOExUdQs">Generate Fees Invoice <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Creates a Fees Invoice for your distribution fees, delivered as part of the statement"></i></label>
+          </div>
+          <div id="CUR-sndVBdyl" class="form-group" ng-if="features && features.withholdingTax && (!features.payeeBalances || contract.payeeBalanceCondition === 'Never' || clientType === 'Distributor')">
+            <input id="CUR-GCVloQPW" type="checkbox" value="1" ng-model="contract.deductWithholding" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-higYvCRL">Deduct Withholding Tax <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Deducts withholding tax on this contract, percentage set in general against the payee, or for specific sales lines in the sales terms"></i></label>
+          </div>
+
+          <!-- !Payee Balance Condition -->
+          <div id="CUR-lCgBDBVK" class="form-group required" ng-show="features && features.payeeBalances">
+            <!-- TODO Not sure about tooltip -->
+            <label id="CUR-JrPYRgbZ">
+              Transfer Payee Balance
+              <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="
+              <b>Never</b> - Contract balance will never be transferred to the payee </br>
+              <b>Always</b> - Will transfer the contract balance to payee, regardless on whether the balance is positive or negative</br>
+              <b>When Positive</b> - Will only transfer the contract balance to payee when greater than 0
+              "></i>
+            </label>
+            <!-- TODO Need for documentation -->
+            <!-- <documentation link="http://guide.curveroyaltysystems.com/article/contracts-overview/#profitshares"></documentation> -->
+            <ui-select ng-model="contract.payeeBalanceCondition" ng-disabled="rights.contracts != 'Edit'">
+              <ui-select-match>
+                <span id="CUR-XanMLNZY" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item as item in (payeeBalanceConditions | filter: $select.search)">
+                <span id="CUR-WeCzmqBc" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+
+        </div>
+      </div>
+      <div id="CUR-iWEunjOu" class="panel panel-default" ng-show="contract.payeeBalanceCondition === 'Never'">
+        <div id="CUR-qoyofUuT" class="panel-heading">
+          <div id="CUR-ZzhFImgH" class="panel-title">
+            Auto Payment
+          </div>
+        </div>
+        <div id="CUR-yYQNRTNK" class="panel-body p-t-15">
+          <div id="CUR-yVbLhETb" class="form-group">
+            <input id="CUR-XTiyvqea" type="checkbox" value="1" ng-model="contract.autoPayment" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-cBpyNKHy">Generate Auto Payment <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Automatically creates transaction if balance is over Min Payout. Auto Payment is required if creating a self billing invoice."></i></label>
+          </div>
+          <div id="CUR-MxtrgajP" ng-if="features && features.crossContracts">
+            <p>
+              Use the payment conditions below to configure when an auto payment should take place. This should be used for instances when producers or a third party should only be paid when another contract is recouped.
+            </p>
+            <auto-payment-condition-row edit="rights.contracts == 'Edit'" ng-repeat="payment in contract.autoPaymentConditions track by $index" payment="payment" contract-type="contract.contractType" index="$index" delete="deleteAutoPaymentRow(payment)"></auto-payment-condition-row>
+            <br>
+            <button id="CUR-doBDJZIS" ng-show="rights.contracts == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addAutoPaymentRow()">+ Payment Condition</button>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-eLkwqIts" class="panel panel-default">
+        <div id="CUR-jTwMaeMF" class="panel-heading">
+          <div id="CUR-vmwstNie" class="panel-title">
+            Contract Details
+          </div>
+        </div>
+        <div id="CUR-jVwVoyxc" class="panel-body p-t-15">
+          <div id="CUR-RvDLPugd" class="form-group">
+            <label id="CUR-dztmSjnL">Start Date <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is just for reference, and does not affect whether this statement will calculate or not"></i></label>
+            <div id="datepicker-component" class="input-group date">
+              <input id="CUR-dyWxzodj" type="text" class="form-control" ng-model="contract.startDate" uib-datepicker-popup="{{dateFormat}}" is-open="datePopup.startDate.opened" ng-click="openDatePopup('startDate')" ng-disabled="rights.contracts != 'Edit'">
+              <span id="CUR-hPDLkOgg" class="input-group-addon" ng-click="openDatePopup('startDate')">
+                <i class="fa fa-calendar"></i>
+              </span>
+            </div>
+          </div>
+          <div id="CUR-psUjQtlb" class="form-group">
+            <label id="CUR-rbmKqDaJ">End Date <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is just for reference, and does not affect whether this statement will calculate or not"></i></label>
+            <div id="datepicker-component" class="input-group date">
+              <input id="CUR-HCfjjYNb" type="text" class="form-control" ng-model="contract.endDate" uib-datepicker-popup="{{dateFormat}}" is-open="datePopup.endDate.opened" ng-click="openDatePopup('endDate')" ng-disabled="rights.contracts != 'Edit'">
+              <span id="CUR-SrMejXrO" class="input-group-addon" ng-click="openDatePopup('endDate')">
+                <i class="fa fa-calendar"></i>
+              </span>
+            </div>
+          </div>
+          <div id="CUR-psUjQtlb" class="form-group">
+            <label id="CUR-rbmKqDaJ">Retention Period End Date <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The day until which you will control the catalogue. This is just for reference."></i></label>
+            <div id="datepicker-component" class="input-group date">
+              <input id="CUR-HCfjjYNb" type="text" class="form-control" ng-model="contract.retentionPeriodEndDate" uib-datepicker-popup="{{dateFormat}}" is-open="datePopup.retentionPeriodEndDate.opened" ng-click="openDatePopup('retentionPeriodEndDate')" ng-disabled="rights.contracts != 'Edit'">
+              <span id="CUR-SrMejXrO" class="input-group-addon" ng-click="openDatePopup('retentionPeriodEndDate')">
+                <i class="fa fa-calendar"></i>
+              </span>
+            </div>
+          </div>
+          <div id="CUR-psUjQtlb" class="form-group">
+            <label id="CUR-rbmKqDaJ">Collection End Date <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="A fixed time after the end of the retention date. Even if you no longer control the work, you may still collect royalties from societies and this will be paid through as per usual."></i></label>
+            <div id="datepicker-component" class="input-group date">
+              <input id="CUR-HCfjjYNb" type="text" class="form-control" ng-model="contract.collectionEndDate" uib-datepicker-popup="{{dateFormat}}" is-open="datePopup.collectionEndDate.opened" ng-click="openDatePopup('collectionEndDate')" ng-disabled="rights.contracts != 'Edit'">
+              <span id="CUR-SrMejXrO" class="input-group-addon" ng-click="openDatePopup('collectionEndDate')">
+                <i class="fa fa-calendar"></i>
+              </span>
+            </div>
+          </div>
+          <div id="CUR-nxGGltrV" class="form-group">
+            <label id="CUR-NqJxUpNS">Categories <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="You can set up categories in the settings area, allowing to you to tag your contracts with various categories at once"></i></label>
+            <ui-select multiple ng-model="contract.contractCategories">
+              <ui-select-match allow-clear="true">
+               {{$item}}
+              </ui-select-match>
+              <ui-select-choices repeat="item in (contractCategories | filter: $select.search)">
+                <span id="CUR-EiryHMpi" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-MrlKuWpE" class="panel panel-default">
+        <div id="CUR-lNuuRaVy" class="panel-heading">
+          <div id="CUR-TgDcnQlg" class="panel-title">
+            Files
+          </div>
+        </div>
+        <div id="CUR-CRoaeyeb" class="panel-body" ng-if="!contract._id">
+          <p>Please save the contract before uploading files</p>
+        </div>
+        <div id="CUR-EIFfXUaX" class="panel-body p-t-15" ng-if="contract._id">
+          <loading></loading>
+          <div id="CUR-fEJIYoxI" class="required">
+            <button id="CUR-YCauYcGE" type="file"
+                    class="btn btn-complete w-xs-100-p m-xs-l-0"
+                    ngf-select
+                    ngf-pattern="'{{validFileTypes.join(',')}}'"
+                    accept="{{validFileTypes.join(',')}}"
+                    ngf-allow-dir="false"
+                    ngf-change="uploadFiles($files, $invalidFiles)"
+                    multiple="multiple"
+            >Select Files</button>
+          </div>
+          <div id="CUR-bPnRULgR" class="alert alert-danger" role="alert" ng-if="fileErrors.length > 0">
+            <strong>The following files are not valid for upload. Valid files types are <em>{{validFileTypes.join(", ")}}</em><br/>
+            <ul id="CUR-sytZopeH">
+              <li id="CUR-bPlhHxqc" ng-repeat="error in fileErrors">{{ error }}</li>
+            </ul>
+          </div>
+          <div id="CUR-zyHhLyNG" class="row" ng-if="contract.files.length > 0">
+            <div id="CUR-ZWhbtFXL" class="col-xs-12">
+              <div id="CUR-iPjMJOZQ" class="table-responsive">
+                <table id="CUR-CADRKedo" class="table table-hover table-condensed dataTable no-footer">
+                  <thead>
+                  <tr id="CUR-QvpNiFAT">
+                    <th class="col-xs-12 col-sm-12">File Name</th>
+                    <th class="col-xs-12 col-sm-12">&nbsp;</th>
+                  </tr>
+                  </thead>
+                  <tbody id="CUR-diYEhbaA">
+                  <tr id="CUR-ooZPNekI" ng-repeat="f in files track by $index">
+                    <td id="CUR-kxuiReCQ">
+                      <a id="CUR-SjrtZODm" href="{{f.publicLink}}" target="_blank">{{f.key.substring(f.key.lastIndexOf('/')+1)}}</a>
+                    </td>
+                    <td id="CUR-uijfJsFu" class="text-right">
+                      <button id="CUR-HBbfwtiZ" class="btn btn-danger m-b-0 p-t-0 p-b-0 p-l-10 p-r-10" data-toggle="modal" data-target="#deleteFileModal" data-file-key ="{{f.key}}" ng-click="deleteFileConfirm(f.key)" aria-hidden="false"><i class="fa fa-trash"></i></button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-iIAbCdga" class="panel panel-default" ng-if="features && features.crossContracts">
+        <div id="CUR-TOPmZQbh" class="panel-heading">
+          <div id="CUR-SIkkPcJU" class="panel-title">
+            Cross Contract <documentation link="http://guide.curveroyaltysystems.com/article/contracts-overview/#crosscontracts"></documentation>
+          </div>
+        </div>
+        <div id="CUR-otmSWLpI" class="panel-body p-t-15">
+          <p>
+            You can use this function to add or subtract onto another statement, in situations such as summary accounts or producer contracts. Configure the terms below to select the contracts and conditions that you want to add the output of this contract onto another, and the percentage to add onto that other contract.
+          </p>
+          <p>
+            Selecting 'Add To' adds the output from this contract onto another (Summary), whilst 'Subtract From' subtracts the output of this contract from the selected (Producer).
+          </p>
+          <contract-cross-row edit="rights.contracts == 'Edit'" ng-repeat="crossing in contract.crossContracts track by $index" crossing="crossing" contract-type="contract.contractType" accounting-period="contract.accountingPeriod" index="$index" delete="deleteCrossingRow(crossing)" client-type="clientType" complex-cross-contracts="features.complexCrossContracts" current-contract-id="contract._id"></contract-cross-row>
+          <br>
+          <button id="CUR-mlpOrjUr" ng-show="rights.contracts == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addCrossingRow()">+ Cross Contract</button>
+        </div>
+      </div>
+      <div id="CUR-ZABvTzvI" ng-if="contract.type != 'Profit Share' && contract.type != 'Profit Share - Flexible' && features && features.summaryStatements" class="panel panel-default">
+        <div id="CUR-fcgfQhzB" class="panel-heading">
+          <div id="CUR-GHuLmqkU" class="panel-title">
+            Summary Statement
+          </div>
+        </div>
+        <div id="CUR-IYlIRhTV" class="panel-body p-t-15">
+          <p>
+            Use this function when you want to provide a summary statement using Add To transfers above, and include all the sales and cost data and present as a single statement. The statements will still be transferred as transactions, but the main statement PDF and statement within the application will total all sales and costs associated.
+          </p>
+          <p>
+            Check this on the summary contract, not on the individual contracts.
+          </p>
+          <div id="CUR-KcyKrghb" class="form-group">
+            <input id="CUR-GucJbFFj" type="checkbox" value="1" ng-model="contract.summaryContractTotals" ng-disabled="rights.contracts != 'Edit'">
+            <label id="CUR-UDbWiorN">Total All Associated Statements</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</script>
+<script type="text/ng-template" id="terms-tab.html">
+  <div id="CUR-BFknHNmC" class="row" ng-if="contract.contractType != 'Mechanical'">
+    <div id="CUR-vCZZCHxx" class="col-xs-12">
+      <div id="CUR-ZyjnvAJH" class="panel panel-default sm-m-b-5">
+        <div id="CUR-vpQXDBes" class="panel-heading">
+          <div id="CUR-MWHEIZHC" class="panel-title" ng-if="clientType != 'Publisher'">
+            Sales <documentation link="http://guide.curveroyaltysystems.com/article/contracts-terms/#sales"></documentation>
+          </div>
+          <div id="CUR-KhIBBHQC" class="panel-title" ng-if="clientType == 'Publisher'">
+            Income <documentation link="http://guide.curveroyaltysystems.com/article/contracts-terms-in-a-publishing-deal/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-KZhyKqBQ" class="panel-body p-t-15">
+          <contract-sales-row term-type="'sale'" edit="rights.contracts == 'Edit'" features="features" ng-repeat="sale in contract.salesTerms | limitTo: 10: salesStartIndex track by $index" cat-types="catTypes" catalogue-groups="catalogueGroups" sale="sale" countries="countries" channels="distributionChannels" configurations="configurations" price-categories="priceCategories" sales-types="salesTypes" sources="sources" index="$index" delete="deleteSalesRow(sale)" client-type="clientType" escalation-trackers="escalationTrackingArray"></contract-sales-row>
+          <div id="CUR-lALFYORa" class="row" ng-if="contract.salesTerms.length > 10">
+            <div id="CUR-RTTzVPRD" class="col-xs-4">
+              Showing {{salesStartIndex + 1}} to {{lowestValue(salesStartIndex + 10, contract.salesTerms.length)}} of {{contract.salesTerms.length}}
+            </div>
+            <div id="CUR-HIMEnOtf" class="col-xs-4 center">
+              <div id="CUR-QVwhInpx" class="btn-group">
+                <button id="CUR-qHffSPOl" type="button" class="btn btn-default" ng-disabled="salesStartIndex == 0" ng-click="minusFromIndex('salesStartIndex', 10)"><</button>
+                <button id="CUR-YVJbAHlF" type="button" class="btn btn-default" ng-disabled="numberOfPagesLeft(contract.salesTerms, salesStartIndex)" ng-click="addToIndex('salesStartIndex', 10)">></button>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <button id="CUR-rjmQDouq" ng-show="rights.contracts == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addSalesRow()" ng-if="clientType != 'Publisher'">+ Sales</button>
+          <button id="CUR-idpDiiuB" ng-show="rights.contracts == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addSalesRow()" ng-if="clientType == 'Publisher'">+ Income</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-HrwKqkNR" class="row" ng-if="contract.contractType != 'Mechanical' && features && features.deductionTerms">
+    <div id="CUR-yVVZwtiw" class="col-xs-12">
+      <div id="CUR-UEEwxBrB" class="panel panel-default sm-m-b-5">
+        <div id="CUR-vZafOKBi" class="panel-heading">
+          <div id="CUR-LHjPMjJW" class="panel-title">
+            Deductions <documentation link="http://guide.curveroyaltysystems.com/article/contracts-terms/#deductions"></documentation>
+          </div>
+        </div>
+        <div id="CUR-wIybfEzy" class="panel-body p-t-15">
+          <contract-sales-row term-type="'deduction'" edit="rights.contracts == 'Edit'" features="features" ng-repeat="return in contract.deductionsTerms | limitTo: 10: deductionsStartIndex track by $index" deduction="true" cat-types="catTypes" catalogue-groups="catalogueGroups" sale="return" countries="countries" channels="distributionChannels" configurations="configurations" price-categories="priceCategories" sources="sources" sales-types="deductionTypes" deduction-basises="deductionBasises" client-type="clientType" index="$index" escalation-trackers="escalationTrackingArray" delete="deleteReturnsRow(sale)"></contract-sales-row>
+          <div id="CUR-TwhNAJcb" class="row" ng-show="contract.deductionsTerms.length > 10">
+            <div id="CUR-wmrMUieY" class="col-xs-4">
+              Showing {{deductionsStartIndex + 1}} to {{lowestValue(deductionsStartIndex + 10, contract.deductionsTerms.length)}} of {{contract.deductionsTerms.length}}
+            </div>
+            <div id="CUR-ZYlsHAWu" class="col-xs-4 center">
+              <div id="CUR-HPJicAHw" class="btn-group">
+                <button id="CUR-xsHAUsuu" type="button" class="btn btn-default" ng-disabled="deductionsStartIndex == 0" ng-click="minusFromIndex('deductionsStartIndex', 10)"><</button>
+                <button id="CUR-XdFwXoUW" type="button" class="btn btn-default" ng-disabled="numberOfPagesLeft(contract.deductionsTerms, deductionsStartIndex)" ng-click="addToIndex('deductionsStartIndex', 10)">></button>
+              </div>
+            </div>
+          </div>
+          <br>
+          <button id="CUR-tPohcINI" ng-show="rights.contracts == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addReturnsRow()">+ Deductions</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-GaAiXHkV" class="row" ng-if="clientType != 'Publisher' && contract.contractType != 'Mechanical' && features && features.mechanicals">
+    <div id="CUR-ZswWSLhP" class="col-xs-12">
+      <div id="CUR-rsBtPzKb" class="panel panel-default">
+        <div id="CUR-DsiIjboL" class="panel-heading">
+          <div id="CUR-yxaGhGXT" class="panel-title">
+            Mechanical Deduction <documentation link="http://guide.curveroyaltysystems.com/article/contracts-terms/#mechanical-deductions"></documentation>
+          </div>
+        </div>
+        <div id="CUR-KatkWhTB" class="panel-body p-t-15">
+          <contract-mechanical-contract-row term-type="'deduction'" edit="rights.contracts == 'Edit'" features="features" ng-repeat="term in contract.mechanicalTerms | limitTo: 10: mechanicalStartIndex track by $index" cat-types="catTypes" catalogue-groups="catalogueGroups" term="term" countries="countries" channels="distributionChannels" configurations="configurations" price-categories="priceCategories" currencies="currencies" mechanical-types="mechanicalTypes" rate-basises="rateBasises" deduction-types="deductionTypes" sources="sources" index="$index" delete="deleteMechanicalRow(term)" escalation-trackers="escalationTrackingArray"></contract-mechanical-contract-row>
+          <div id="CUR-BZPPVJwh" class="row" ng-if="contract.mechanicalTerms.length > 10">
+            <div id="CUR-rCOhtgWj" class="col-xs-4">
+              Showing {{mechanicalStartIndex + 1}} to {{lowestValue(mechanicalStartIndex + 10, contract.mechanicalTerms.length)}} of {{contract.mechanicalTerms.length}}
+            </div>
+            <div id="CUR-qUreaXhF" class="col-xs-4 center">
+              <div id="CUR-ZzvcjvMO" class="btn-group">
+                <button id="CUR-vJnyvpcx" type="button" class="btn btn-default" ng-disabled="mechanicalStartIndex == 0" ng-click="minusFromIndex('mechanicalStartIndex', 10)"><</button>
+                <button id="CUR-FWHFwYoa" type="button" class="btn btn-default" ng-disabled="numberOfPagesLeft(contract.mechanicalTerms, mechanicalStartIndex)" ng-click="addToIndex('mechanicalStartIndex', 10)">></button>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <button id="CUR-myKPsVJI" ng-show="rights.contracts == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addMechanicalRow()">+ Term</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-gHrKSOKz" class="row" ng-if="contract.contractType != 'Mechanical' && features && features.withholdingTax">
+    <div id="CUR-xMsBlBgJ" class="col-xs-12">
+      <div id="CUR-hXqqvrda" class="panel panel-default sm-m-b-5">
+        <div id="CUR-xWwcizPW" class="panel-heading">
+          <div id="CUR-kBHDUxQJ" class="panel-title">
+            Withholding Tax Deductions
+          </div>
+        </div>
+        <div id="CUR-WiSuYtuN" class="panel-body p-t-15">
+          <contract-sales-row termType="'deduction'" edit="rights.contracts == 'Edit'" features="features" ng-repeat="term in contract.withholdingTaxTerms | limitTo: 10: withholdingStartIndex track by $index" cat-types="catTypes" catalogue-groups="catalogueGroups" sale="term" countries="countries" channels="distributionChannels" configurations="configurations" price-categories="priceCategories" sources="sources" sales-types="deductionTypes" deduction-basises="withholdingBasises" index="$index" escalation-trackers="escalationTrackingArray" delete="deleteWithholdingRow(sale)" withholding="true"></contract-sales-row>
+          <div id="CUR-nOYQnrpN" class="row" ng-show="contract.withholdingTaxTerms.length > 10">
+            <div id="CUR-gdbvrFOw" class="col-xs-4">
+              Showing {{withholdingStartIndex + 1}} to {{lowestValue(withholdingStartIndex + 10, contract.withholdingTaxTerms.length)}} of {{contract.withholdingTaxTerms.length}}
+            </div>
+            <div id="CUR-Dwnaqsae" class="col-xs-4 center">
+              <div id="CUR-QOSkHEdW" class="btn-group">
+                <button id="CUR-ubeIfcMK" type="button" class="btn btn-default" ng-disabled="withholdingStartIndex == 0" ng-click="minusFromIndex('withholdingStartIndex', 10)"><</button>
+                <button id="CUR-nZzYhTLb" type="button" class="btn btn-default" ng-disabled="numberOfPagesLeft(contract.withholdingTaxTerms, withholdingStartIndex)" ng-click="addToIndex('withholdingStartIndex', 10)">></button>
+              </div>
+            </div>
+          </div>
+          <br>
+          <button id="CUR-yOMlaBJs" ng-show="rights.contracts == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addWithholdingRow()">+ Withholding Tax</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="CUR-wteLiyUJ" class="row" ng-if="clientType != 'Publisher' && contract.contractType != 'Mechanical'">
+    <div id="CUR-aKtZgyPb" class="col-xs-12">
+      <div id="CUR-NYdmNGfV" class="panel panel-default sm-m-b-5">
+        <div id="CUR-DseFSFnz" class="panel-heading">
+          <div id="CUR-mQDddmUs" class="panel-title">
+            Costs <documentation link="http://guide.curveroyaltysystems.com/article/contracts-terms/#costs"></documentation>
+          </div>
+        </div>
+        <div id="CUR-bMJDesjb" class="panel-body p-t-15">
+          <contract-costs-row edit="rights.contracts == 'Edit'" features="features" ng-repeat="cost in contract.costsTerms | limitTo: 10: costStartIndex track by $index" cost="cost" countries="countries" cost-types="costTypes" index="$index" escalation-trackers="escalationTrackingArray" delete="deleteCostsRow(cost)"></contract-costs-row>
+          <div id="CUR-UaYKWDHA" class="row" ng-show="contract.costsTerms.length > 10">
+            <div id="CUR-lHREJHpT" class="col-xs-4">
+              Showing {{costStartIndex + 1}} to {{lowestValue(costStartIndex + 10, contract.costsTerms.length)}} of {{contract.costsTerms.length}}
+            </div>
+            <div id="CUR-nEoipBhU" class="col-xs-4 center">
+              <div id="CUR-nlHaMgTM" class="btn-group">
+                <button id="CUR-Oawlgjeu" type="button" class="btn btn-default" ng-disabled="costStartIndex == 0" ng-click="minusFromIndex('costStartIndex', 10)"><</button>
+                <button id="CUR-tfVSfEdR" type="button" class="btn btn-default" ng-disabled="numberOfPagesLeft(contract.costsTerms, costStartIndex)" ng-click="addToIndex('costStartIndex', 10)">></button>
+              </div>
+            </div>
+          </div>
+          <br>
+          <button id="CUR-QbdLopnT" ng-show="rights.contracts == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addCostsRow()">+ Costs</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mechanical Contract Term -->
+  <div id="CUR-QCUlppdx" class="row" ng-if="contract.contractType == 'Mechanical'">
+    <div id="CUR-YevthyrH" class="col-xs-12">
+      <div id="CUR-nGKvZOKH" class="panel panel-default sm-m-b-5">
+        <div id="CUR-KXoKoYjn" class="panel-heading">
+          <div id="CUR-IMLWwpRA" class="panel-title">
+            Mechanicals <documentation link="http://guide.curveroyaltysystems.com/article/mechanicals#mechanical-terms"></documentation>
+          </div>
+        </div>
+        <div id="CUR-TTKuLrng" class="panel-body p-t-15">
+          <contract-mechanical-contract-row term-type="'sale'" edit="rights.contracts == 'Edit'" features="features" ng-repeat="term in contract.mechanicalContractTerms | limitTo: 10: mechanicalContractStartIndex track by $index" cat-types="catTypes" catalogue-groups="catalogueGroups" term="term" countries="countries" channels="distributionChannels" configurations="configurations" price-categories="priceCategories" mechanical-types="mechanicalTypes" rate-basises="rateBasises" mechanical="true" sources="sources" index="$index" delete="deleteMechanicalContractRow(term)" escalation-trackers="escalationTrackingArray"></contract-mechanical-contract-row>
+          <div id="CUR-sLNiygVs" class="row" ng-if="contract.mechanicalContractTerms.length > 10">
+            <div id="CUR-IuTafHOS" class="col-xs-4">
+              Showing {{mechanicalContractStartIndex + 1}} to {{lowestValue(mechanicalContractStartIndex + 10, contract.mechanicalContractTerms.length)}} of {{contract.mechanicalContractTerms.length}}
+            </div>
+            <div id="CUR-dxzkljbC" class="col-xs-4 center">
+              <div id="CUR-XKbWAOXM" class="btn-group">
+                <button id="CUR-dUNQialf" type="button" class="btn btn-default" ng-disabled="mechanicalContractStartIndex == 0" ng-click="minusFromIndex('mechanicalContractStartIndex', 10)"><</button>
+                <button id="CUR-nRlBQKRm" type="button" class="btn btn-default" ng-disabled="numberOfPagesLeft(contract.mechanicalContractTerms, mechanicalContractStartIndex)" ng-click="addToIndex('mechanicalContractStartIndex', 10)">></button>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <button id="CUR-XYgdzizn" ng-show="rights.contracts == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addMechanicalContractRow()">+ Term</button>
+        </div>
+      </div>
+    </div>
+</script>
+<script type="text/ng-template" id="reserves-tab.html">
+  <div id="CUR-eyJVBZbX" class="row">
+    <div id="CUR-dcuSaIGn" class="col-xs-12 col-md-6">
+      <div id="CUR-egDbzEVl" class="panel panel-default">
+        <div id="CUR-tApORvNF" class="panel-heading">
+          <div id="CUR-MUhFkmYL" class="panel-title">
+            Reserve Release Schedule <documentation link="http://guide.curveroyaltysystems.com/article/contracts-reserves/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-TidKyLKa" class="panel-body p-t-15">
+          <contract-reserves-row edit="rights.contracts == 'Edit'" ng-repeat="reserve in contract.reserves track by $index" reserve="reserve" index="$index" delete="deleteReservesRow(reserve)" index="$index"></contract-reserves-row>
+          <br>
+          <button id="CUR-OuSPJsjs" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-show="rights.contracts == 'Edit'" ng-click="addReservesRow()">+ Reserve Period</button>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-cheIvVvk" class="col-xs-12 col-md-6">
+      <div id="CUR-TYrbnesT" class="panel panel-default">
+        <div id="CUR-iImXOQhQ" class="panel-heading">
+          <div id="CUR-RaRrOqko" class="panel-title">
+            Reserve Basis
+          </div>
+        </div>
+        <div id="CUR-cEbybVcI" class="panel-body p-t-15">
+          <p>When should the reserve be taken? Should it be from your revenues ('Pre-Calculation'), or the artist's share ('Post-Calculation')?</p>
+          <div id="CUR-VcazXIxu" class="form-group required">
+            <ui-select ng-model="contract.reserveBasis" ng-disabled="rights.contracts != 'Edit'">
+              <ui-select-match>
+                <span id="CUR-nCwYnAsP" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in (reserveBasises | filter: $select.search)">
+                <span id="CUR-SMwHCtPG" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="escalations-tab.html">
+  <div id="CUR-KjUyAzYc" class="row" ng-if="features && features.escalations">
+    <div id="CUR-lZDiiOZy" class="col-xs-12">
+      <div id="CUR-qYUovkVC" class="panel panel-default">
+        <div id="CUR-WouJduID" class="panel-heading">
+          <div id="CUR-yGcocrLL" class="panel-title">
+            Escalation Tracking <documentation link="http://guide.curveroyaltysystems.com/article/contracts-escalations/#escalations"></documentation>
+          </div>
+        </div>
+        <div id="CUR-PGTrgKOO" class="panel-body p-t-15">
+          <contract-escalation-tracking-row edit="rights.contracts == 'Edit'" ng-repeat="escalationTracking in escalationTrackingArray track by $index" escalation="escalationTracking" index="$index" delete="deleteEscalationTrackingRow($index)"></contract-escalation-tracking-row>
+          <br>
+          <button id="CUR-ebnZWinU" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-show="rights.contracts == 'Edit'" ng-click="addEscalationTrackingRow()">+ Escalation</button>
+        </div>
+      </div>
+      <div id="CUR-pyzoUWhI" class="panel panel-default">
+        <div id="CUR-ftRRKXQq" class="panel-heading">
+          <div id="CUR-FfFGZZqH" class="panel-title">
+            Escalation Equivalents
+          </div>
+        </div>
+        <div id="CUR-sQPSnIoT" class="panel-body p-t-15">
+          <p>Escalation Equivalents allows you to set unit equivalents, for instance if 1000 streams equals one unit sold. Set specific equivalents for each configuration below.</p>
+          <p>For instance, if you want to say 1000 streams equals one unit, select the configuration below, and enter 1000 in the Amount field. When adding up units for the escalations, the system will then divide each unit by that amount.</p>
+          <contract-escalation-equivalent-row edit="rights.contracts == 'Edit'" ng-repeat="escalationEquivalent in contract.escalationEquivalents track by $index" escalation-equivalent="escalationEquivalent" configurations="configurations" index="$index" delete="deleteEscalationEquivalentRow(reserve)"></contract-escalation-equivalent-row>
+          <br>
+          <button id="CUR-zegkwIzq" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-show="rights.contracts == 'Edit'" ng-click="addEscalationEquivalentRow()">+ Escalation Equivalent</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="catalogue-tab.html">
+  <div id="CUR-cumoBEsr" class="row">
+    <div id="CUR-TAgALGut" class="col-xs-12">
+      <div id="CUR-ZnLGVDJa" class="panel panel-default xs-border-none">
+        <div id="CUR-DYZdOuiu" class="panel-heading">
+          <div id="CUR-apZUwHdg" class="panel-title">
+            Catalogue <documentation link="http://guide.curveroyaltysystems.com/article/contracts-0-catalogue-costs/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-lYTENfvp" class="panel-body sm-p-l-0 sm-p-r-0">
+          <div id="CUR-DdeifKVg" class="panel panel-transparent hidden-xs">
+            <!-- Nav tabs -->
+            <ul id="CUR-SFOQefdq" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx" ng-if="clientType != 'Publisher'">
+              <li id="CUR-qWrhOjDT" class="active" ng-click="setCatalogueTab('releases')">
+                <a id="CUR-eRHGdclw" data-toggle="tab" aria-expanded="true"><span id="CUR-KhjVHefC">Releases</span></a>
+              </li>
+              <li id="CUR-tqrofVua" ng-click="setCatalogueTab('tracks')">
+                <a id="CUR-mqdxPkHX" data-toggle="tab" aria-expanded="false"><span id="CUR-qtdOXpJP">Tracks</span></a>
+              </li>
+            </ul>
+            <div id="CUR-oQhXlntT" ng-show="activeCatalogueTab === 'releases'" ng-include="'catalogue-release-tab.html'"></div>
+            <div id="CUR-WqLxRLBV" ng-show="activeCatalogueTab === 'tracks'" ng-include="'catalogue-tracks-tab.html'"></div>
+            <div id="CUR-JHzPjkzc" ng-show="activeCatalogueTab === 'works'" ng-include="'catalogue-works-tab.html'"></div>
+          </div>
+          <div id="CUR-uePsTvSl" class="col-xs-12 visible-xs sm-p-l-0 sm-p-r-0">
+            <uib-accordion close-others="true" ng-init="subStatus1.open = true; subStatus2.open = false; subStatus3.open = false;">
+              <div id="CUR-DiKFudFR" uib-accordion-group class="panel-default" is-open="subStatus1.open" ng-if="clientType != 'Publisher'">
+                <uib-accordion-heading>
+                  Releases <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': subStatus1.open, 'glyphicon-chevron-right': !subStatus1.open}"></i>
+                </uib-accordion-heading>
+                <div id="CUR-mjImfrGp" ng-include="'catalogue-release-tab.html'"></div>
+              </div>
+              <div id="CUR-ppUiyICq" uib-accordion-group class="panel-default" is-open="subStatus2.open" ng-if="clientType != 'Publisher'">
+                <uib-accordion-heading>
+                  Tracks <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': subStatus2.open, 'glyphicon-chevron-right': !subStatus2.open}"></i>
+                </uib-accordion-heading>
+                <div id="CUR-DTedJJbU" ng-include="'catalogue-tracks-tab.html'"></div>
+              </div>
+              <div id="CUR-GOCyDShG" uib-accordion-group class="panel-default" is-open="subStatus3.open">
+                <uib-accordion-heading>
+                  Works <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': subStatus3.open, 'glyphicon-chevron-right': !subStatus3.open}"></i>
+                </uib-accordion-heading>
+                <div id="CUR-wtAwdOku" ng-include="'catalogue-works-tab.html'"></div>
+              </div>
+            </uib-accordion>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="costs-tab.html">
+  <div id="CUR-pUpSEpmS" class="row">
+    <div id="CUR-NSUJpFuO" class="col-xs-12">
+      <div id="CUR-AWbehfZA" class="panel panel-default">
+        <div id="CUR-TGHeNyuk" class="panel-body">
+          <responsive-table
+                  headers="costHeaders"
+                  data="contractCosts"
+                  selectable="false"
+                  sort-changed="getSortedDataCosts(orderBy, orderDir)"></responsive-table>
+              <div id="CUR-DjKwugLj" class="row">
+            <div id="CUR-ysPQaTiG" class="col-sm-12">
+              <div id="CUR-xpufLEOl" class="pull-right">
+                <span id="CUR-gtMnArTJ" class="inline-block" ng-if="!isShowingAllCosts">Showing 25 Per Page |</span>
+                <a id="CUR-ANauyYzv" class="p-l-5" ng-if="!isShowingAllCosts" ng-click="showAllCosts()">Show 500</a>
+              </div>
+            </div>
+            <div id="CUR-XnOIhxJR" ng-if="!isShowingAllCosts" class="row">
+              <div id="CUR-YcPeIzEn" class="col-xs-12 text-center">
+                <pagination id="CUR-HeTYRbpK" pages="pagesCosts" total="totalPagesCosts" current="currentPageCosts" change-page="changePageCosts(page)"></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</script>
+<script type="text/ng-template" id="transactions-tab.html">
+  <div id="CUR-YbrtOieN" class="tab-inner-content">
+    <div id="CUR-rrcVgOwS" class="row">
+      <div id="CUR-EFVplAXi" class="col-xs-12">
+        <div id="CUR-vXTAliDo" class="panel panel-default">
+          <div id="CUR-jqnHszpY" class="panel-heading">
+            <div id="CUR-XLYOTIgo" class="panel-title">
+              Transactions <documentation link="http://guide.curveroyaltysystems.com/article/contracts-transactions/"></documentation>
+            </div>
+          </div>
+          <div id="CUR-jryUYaUf" class="panel-body">
+            <div id="CUR-AQbVtRXm" class="row">
+              <div id="CUR-pkFQzyKc" class="col-xs-12 text-right two-cols-row">
+                <a id="CUR-bMVuVPHT" href="/#/transactions/new?contractId={{contract._id}}" ng-show="rights.contracts == 'Edit'" class="btn btn-complete"><i class="fa fa-plus"></i>&nbsp;Create</a>
+              </div>
+            </div>
+            <div id="CUR-WbvwoGDm" class="row">
+              <div id="CUR-sDYXbohL" class="col-xs-12">
+                <div id="CUR-hExYGJjT" class="table-responsive">
+                  <table id="CUR-ilFEDiYz" class="table table-hover table-condensed dataTable no-footer">
+                    <thead>
+                    <tr id="CUR-vvdmeKcQ">
+                      <th class="col-xs-6 col-sm-2">Date</th>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Invoice No.</th>
+                      <th class="col-xs-2">Amount</th>
+                      <th class="col-xs-2">Balance</th>
+                    </tr>
+                    </thead>
+                    <tbody id="CUR-bkzhmXhY">
+                    <tr id="CUR-vqhIatRK">
+                      <td id="CUR-svXgjvdB" class="v-align-middle"></td>
+                      <td id="CUR-EgkbDskX" class="v-align-middle"><a ng-click="updateOpeningBalance()">Opening Balance</a></td>
+                      <td id="CUR-CAZMIJHz" class="v-align-middle"></td>
+                      <td id="CUR-lTmvhmvq" class="v-align-middle"></td>
+                      <td id="CUR-lTmvhmvq" class="v-align-middle"></td>
+                      <td id="CUR-vLUZhMTX" class="v-align-middle">{{ contract.openingBalance | number: 2 }}</td>
+                    </tr>
+                    <tr transaction-table-row ng-repeat="transaction in contractTransactions" transaction="transaction" contract-id="contract._id"></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div id="CUR-XjIychRB" class="row">
+              <div id="CUR-lZLrBVIm" class="col-xs-12">
+                <h4 id="CUR-GsnSyvdh">Future Transactions</h4>
+                <div id="CUR-sbCLirIz" class="table-responsive">
+                  <table id="CUR-ljldnTPb" class="table table-hover table-condensed dataTable no-footer">
+                    <thead>
+                    <tr id="CUR-besKLWSc">
+                      <th class="col-xs-6 col-sm-2">Date</th>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th class="col-xs-2"></th>
+                      <th class="col-xs-2">Amount</th>
+                      <th class="col-xs-2">Balance</th>
+                    </tr>
+                    </thead>
+                    <tbody id="CUR-nFFjYMhv">
+                    <tr transaction-table-row ng-repeat="transaction in contractFutureTransactions" transaction="transaction" contract-id="contract._id"></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="catalogue-release-tab.html">
+  <div id="CUR-SZlktxXh" class="tab-inner-content">
+    <div id="CUR-kLAxsueX" class="row">
+      <div id="CUR-WzKoGFFL" class="col-sm-12">
+        <responsive-table
+                headers="releaseHeaders"
+                data="contractReleases"
+                selectable="false"
+                sort-changed="getSortedDataReleases(orderBy, orderDir)"></responsive-table>
+      </div>
+    </div>
+    <div id="CUR-lGZtQnhe" class="row">
+      <div id="CUR-yxtwOYNT" class="col-sm-12">
+        <div id="CUR-ZPbpfair" class="pull-right">
+          <span id="CUR-YogPQztN" class="inline-block" ng-if="!isShowingAllReleases">Showing 25 Per Page |</span>
+          <a id="CUR-WKJQVort" class="p-l-5" ng-if="!isShowingAllReleases" ng-click="showAllReleases()">Show 500</a>
+        </div>
+      </div>
+      <div id="CUR-PbEFIFIr" ng-if="!isShowingAllReleases" class="row">
+        <div id="CUR-pHLPvLdv" class="col-xs-12 text-center">
+          <pagination id="CUR-kKQZhZNH" pages="pagesReleases" total="totalPagesReleases" current="currentPageReleases" change-page="changePageReleases(page)"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="catalogue-tracks-tab.html">
+  <div id="CUR-RUglgqLJ" class="tab-inner-content">
+    <div id="CUR-XvVgcHoc" class="row">
+      <div id="CUR-ouOygade" class="col-sm-12">
+        <responsive-table
+                headers="trackHeaders"
+                data="contractTracks"
+                selectable="false"
+                sort-changed="getSortedDataTracks(orderBy, orderDir)"></responsive-table>
+      </div>
+    </div>
+    <div id="CUR-RbBQYcML" class="row">
+      <div id="CUR-NpyYUbOh" class="col-sm-12">
+        <div id="CUR-lbtyGpML" class="pull-right">
+          <span id="CUR-yOOdZxzp" class="inline-block" ng-if="!isShowingAllTracks">Showing 25 Per Page |</span>
+          <a id="CUR-hbJjllXG" class="p-l-5" ng-if="!isShowingAllTracks" ng-click="showAllTracks()">Show 500</a>
+        </div>
+      </div>
+      <div id="CUR-vcovWmBN" ng-if="!isShowingAllTracks" class="row">
+        <div id="CUR-LsbvwhIY" class="col-xs-12 text-center">
+          <pagination id="CUR-iSKZzwrA" pages="pagesTracks" total="totalPagesTracks" current="currentPageTracks" change-page="changePageTracks(page)"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="catalogue-works-tab.html">
+  <div id="CUR-XnDpYcyh" class="tab-inner-content">
+    <div id="CUR-fxvajBUR" class="row">
+      <div id="CUR-wpGcxvSf" class="col-sm-12">
+        <responsive-table
+                headers="workHeaders"
+                data="contractWorks"
+                selectable="false"
+                sort-changed="getSortedDataWorks(orderBy, orderDir)"></responsive-table>
+      </div>
+    </div>
+    <div id="CUR-IZFLiNyV" class="row">
+      <div id="CUR-LpBUZJyL" class="col-sm-12">
+        <div id="CUR-kQYOPUXP" class="pull-right">
+          <span id="CUR-dDGDPpzN" class="inline-block" ng-if="!isShowingAllWorks">Showing 25 Per Page |</span>
+          <a id="CUR-gUCHLhhu" class="p-l-5" ng-if="!isShowingAllWorks" ng-click="showAllWorks()">Show 500</a>
+        </div>
+      </div>
+      <div id="CUR-mcYbXHFp" ng-if="!isShowingAllWorks" class="row">
+        <div id="CUR-gkeoDbDX" class="col-xs-12 text-center">
+          <pagination id="CUR-WOKVvPKx" pages="pagesWorks" total="totalPagesWorks" current="currentPageWorks" change-page="changePageWorks(page)"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="aliases-tab.html">
+  <div id="CUR-RyUYQosx" class="row">
+    <div id="CUR-ZfPsWhfT" class="col-xs-12 col-md-6">
+      <div id="CUR-cFLCvBVw" class="panel panel-default">
+        <div id="CUR-STMhxgsV" class="panel-heading">
+          <div id="CUR-sjZoiXkj" class="panel-title">
+            Aliases <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-aliases/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-YbgeBWUN" class="panel-body p-t-15">
+          <alias-row ng-repeat="alias in displayAliases track by $index" alias="alias" edit="rights.catalogue == 'Edit'" delete="deleteAlias(alias)"></alias-row>
+          <button id="CUR-KJinihGR" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addAlias()">+ Alias</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<div class="modal fade stick-up" id="updateOpeningBalanceModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header clearfix text-left">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5>Edit Opening Balance</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <p>Are you sure you want to change the Opening Balance of this Contract? If a statement has already been created for this Contract,  the Opening Balance will no longer be in line with that on the produced statement. Please only change the Opening Balance if it is your intention to reprocess the Statement(s) of this Contract.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-11 m-t-20">
+            <div class="form-group">
+              <label for="">Opening Balance</label>
+              <input class="form-control" ng-model="openingBalance" ng-trim="false">
+            </div>
+          </div>
+          <div ng-show="showValidation" class="col-xs-1 m-t-25 p-l-5">
+            <p class="fa fa-check text-success"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 m-t-20 text-right">
+            <button type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-complete m-t-5" ng-click="save()"><i class="fa fa-check"></i>&nbsp;Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<model-history data="contract.modelHistory"></model-history>

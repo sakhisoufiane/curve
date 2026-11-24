@@ -1,0 +1,135 @@
+{
+  "env": {
+    "es2024": true,
+    "node": true,
+    "jest/globals": true
+  },
+  "extends": ["airbnb-base"],
+  "plugins": ["jest"],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "eqeqeq": "warn",
+    "no-empty": "warn",
+    "no-mixed-operators": "warn",
+    "global-require": "warn",
+    "no-lonely-if": "warn",
+    "import/order": "warn",
+    "no-useless-concat": "warn",
+    "import/no-unresolved": "warn",
+    "no-array-constructor": "warn",
+    "no-inner-declarations": "warn",
+    "no-prototype-builtins": "warn",
+    "no-nested-ternary": "warn",
+    "vars-on-top": "warn",
+    "no-sequences": "warn",
+    "no-restricted-globals": "warn",
+    "block-scoped-var": "warn",
+    "no-unreachable": "warn",
+    "no-loop-func": "warn",
+    "no-redeclare": "warn",
+    "no-return-assign": "warn",
+    "no-tabs": "warn",
+    "no-multi-assign": "warn",
+    "brace-style": "warn",
+    "no-restricted-properties": "warn",
+    "no-control-regex": "warn",
+    "default-case": "warn",
+    "max-len": [
+      "warn",
+      {
+        "code": 400,
+        "comments": 5000,
+        "ignoreStrings": true
+      }
+    ],
+    "no-bitwise": "warn",
+    "no-buffer-constructor": "warn",
+    "no-useless-escape": "warn",
+    "operator-assignment": "warn",
+    "no-self-compare": "warn",
+    "no-lone-blocks": "warn",
+    "prefer-arrow-callback": "warn",
+    "prefer-destructuring": [
+      "warn",
+      {
+        "array": false,
+        "object": true
+      }
+    ],
+    "prefer-spread": "warn",
+    "prefer-promise-reject-errors": "warn",
+    "prefer-const": "warn",
+    "no-unused-expressions": "warn",
+    "array-callback-return": "off",
+    "class-methods-use-this": "off",
+    "func-names": ["error", "never"],
+    "no-shadow": "off",
+    "consistent-return": "off",
+    "no-use-before-define": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-vars": ["warn", { "args": "none" }],
+    "no-param-reassign": "off",
+    "no-console": "off",
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|off|error|info|trace|time|timeEnd)$/]",
+        "message": "Unexpected property on console object was called"
+      },
+      {
+        "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(trace|time|timeEnd)$/]",
+        "message": "Use @curveroyaltysystems/platform-shared-utils > logger[debug|info|error] ( [Mixed] )"
+      }
+    ],
+    "object-curly-newline": "off",
+    "radix": "off",
+    "no-loss-of-precision": "warn",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/*.test.js",
+          "**/test/**",
+          "**/tests/**",
+          "jest.setup.js",
+          "jest.globalSetup.js",
+          "jest.globalTeardown.js"
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/*.test.js", "**/*.template.js"],
+      "env": {
+        "mocha": true
+      },
+      "globals": {},
+      "rules": {
+        "no-unused-expressions": "off",
+        "prefer-arrow-callback": "off",
+        "max-len": ["warn", { "code": 1200 }]
+      }
+    },
+    {
+      "files": ["models/*.js"],
+      "rules": {
+        "no-use-before-define": "off",
+        "global-require": "off"
+      }
+    },
+    {
+      "files": ["sandbox/*.js"],
+      "rules": {
+        "max-len": ["warn", { "code": 1200 }],
+        "import/extensions": "warn"
+      }
+    }
+  ]
+}

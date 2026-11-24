@@ -1,0 +1,140 @@
+openapi: 3.1.0
+info:
+  title: Delivered Works API
+  version: 1.10.0
+
+paths:
+  /deliveredWorks:
+    get:
+      tags:
+        - Delivered Works
+      summary: Retrieve delivered works
+      description: Returns a paginated list of delivered works with associated work data. Requires read access to catalogue.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+      responses:
+        '200':
+          description: Successfully retrieved delivered works
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deliveredWorks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DeliveredWork'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+components:
+  schemas:
+    DeliveredWork:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the delivered work
+          example: "67bed751da1eca866fb29ba5"
+        clientId:
+          type: string
+          description: Client ID associated with the delivered work
+          example: "64e8a4652dc5ac9aa6b5e3a9"
+        workId:
+          type: string
+          description: ID of the associated work
+          example: "655367e2aa6e3de02cdc2bf4"
+        deliveryPartnerId:
+          type: string
+          description: ID of the delivery partner
+          example: "66e289b59d98bad54b6f7a34"
+        status:
+          type: string
+          description: Status of the delivered work
+          example: "Delivered"
+        deliveryDate:
+          type: string
+          format: date-time
+          description: Date when the work was delivered
+          example: "2025-02-26T08:56:49.000Z"
+        messages:
+          type: array
+          description: List of associated messages
+          items:
+            type: string
+          example: []
+        userCreated:
+          type: boolean
+          description: Indicates if the user created the record
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the delivered work was created
+          example: "2025-02-26T08:56:49.800Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the delivered work was last updated
+          example: "2025-02-26T08:56:49.800Z"
+        title:
+          type: string
+          description: Title of the delivered work
+          example: "Works - Alternate Title via Import Test"
+        composer:
+          type: string
+          description: Composer of the delivered work
+          example: "Composer-Test-Data-Publishing1"
+        identifier:
+          type: string
+          description: Work identifier
+          example: "QAT125"

@@ -1,0 +1,13 @@
+NODE_ENV=development
+DOCKER=false
+apiUrl=http://localhost:8081
+apiUrlDevelopment=http://localhost:8081
+apiUrlStaging=https://staging-api.curveroyaltysystems.com
+apiUrlDocker=http://curveroyaltysystems.xyz.node.api:8081
+
+logGroupName="Development"
+logStreamName="FRONTEND"
+environmentName="Development"
+
+captchaSiteKey="*****"
+captchaSecretKey="*****"

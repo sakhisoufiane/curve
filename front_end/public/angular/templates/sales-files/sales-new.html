@@ -1,0 +1,97 @@
+<div id="CUR-oCePRNty" class="jumbotron" data-pages="parallax">
+  <div id="CUR-etQWYxCP" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-beKxvhQZ" class="inner">
+      <ul id="CUR-yeIwCGgO" class="breadcrumb">
+        <li id="CUR-YKSszZGS"><a id="CUR-eBOVTBNl" href="/#/sales">Sales</a></li>
+        <li id="CUR-lolWMNnI" ng-show="!salesFile._id"><a id="CUR-yEZsBcMg" href="/#/sales/new" class="active">Import</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-zDlRTCRs" class="container-fluid container-fixed-lg">
+  <div id="CUR-XjqWzrel" class="row">
+    <div id="CUR-polLbdYS" class="col-sm-6 col-sm-offset-3">
+      <div id="CUR-UryOnKku" class="panel panel-default">
+        <div id="CUR-vWGowcjT" class="panel-heading">
+          <div id="CUR-kltWPGzi" class="panel-title">
+            Sales File Setup <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-sales/#salesfilesetup"></documentation>
+          </div>
+        </div>
+        <div id="CUR-VSliOiGN" class="panel-body p-t-15">
+          <div id="CUR-PXLNWjFo" class="alert alert-danger" role="alert" ng-if="setupErrors.length > 0">
+            <strong>Errors:</strong><br/>
+            <ul id="CUR-XXIkrqyd">
+              <li ng-repeat="error in setupErrors">{{ error }}</li>
+            </ul>
+          </div>
+          <div id="CUR-aZmDoDZS" class="form-group">
+            <label id="CUR-GIuWyVci">Name</label>
+            <input id="CUR-TrNyQNmG" type="text" class="form-control" ng-model="salesFile.name">
+            <label id="CUR-iMQVVuLl" class="error" ng-if="setupErrors.includes('Sales File is required to have a name')">Name is required</label>
+          </div>
+          <div id="CUR-jzkWIrSb" class="form-group">
+            <label id="CUR-oUjFBtUL">Invoice No</label>
+            <input id="CUR-jPyWpQuI" type="text" class="form-control" ng-model="salesFile.invoiceNo">
+          </div>
+          <div id="CUR-EvItEuIN" class="form-group">
+            <label id="CUR-hJtXsoZk">Target Period</label>
+            <input id="CUR-wHZoXAzf" type="text" class="form-control" ng-model="salesFile.targetPeriod">
+          </div>
+          <div id="CUR-kjhkSkj" class="form-group">
+            <label id="CUR-SlkfxlA" ng-if="clientType">
+              {{ clientType === 'Publisher' ? 'Income File Foreign ID' : 'Sales File Foreign ID' }}
+              </label>
+            <input id="CUR-Ljkdjsi" type="text" class="form-control" ng-model="salesFile.foreignId">
+          </div>
+          <div id="CUR-ttKWSRAM" class="form-group">
+            <label id="CUR-FzYyspBE">Source</label>
+            <ui-select class="full-width" ng-model="salesFile.salesAccountName">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-jaZuqNmv" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in sources | filter: $select.search track by $index">
+                <span id="CUR-DsGBEUXk" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-kEQIKfxL" class="form-group">
+            <label id="CUR-UxOlwhOn">Template</label>
+            <ui-select class="full-width" ng-model="salesFile.salesTemplateName" on-select="onSelectedTemplate($item)">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-zeyUjnju" ng-bind="$select.selected.name"></span> 
+              </ui-select-match>
+              <ui-select-choices repeat="item.name as item in templates | orderBy: 'name' | filter: { name: $select.search, source: salesFile.salesAccountName}">
+                <span id="CUR-qFMHEUBU" ng-bind="item.name"></span>
+              </ui-select-choices>
+            </ui-select>
+            <label id="CUR-kvjFZAvi" class="error" ng-if="setupErrors.includes('Sales File is required to have a template')">Template is required</label>
+          </div>
+          <div id="CUR-ocjACnYF" class="form-group m-t-20">
+            <label id="CUR-hJjwXwRG">File</label>  
+            <input id="CUR-jHJbhksv" type="file" class="m-t-10" ngf-select ngf-allow-dir="false" ng-model="files[0]">
+            <label id="CUR-XcSreZWo" class="error" ng-if="setupErrors.includes('Sales File is required to have a file')">File is required</label>
+          </div>
+          <div id="CUR-VtFYfBlo" class="form-group m-t-20" ng-if="['Apple Music', 'iTunes', 'iTunes Match', 'Beats', 'Apple DJ', 'Facebook'].includes(selectedTemplate.fileType)">
+            <label id="CUR-rXFphuDO">Financial File <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-apple-sales-files/"></documentation></label>  
+            <input id="CUR-PpHrkzpZ" type="file" class="m-t-10" ngf-select ngf-allow-dir="false" ng-model="files[1]">
+            <label id="CUR-AYomRhEN" class="error" ng-if="setupErrors.includes('Finance File is required for Apple Sales Files')">Financial File is required</label>
+          </div>
+          <div id="CUR-RjLhHUzK" class="form-group m-t-20" ng-if="['Apple Music', 'iTunes', 'iTunes Match', 'Beats', 'Apple DJ', 'Facebook'].includes(selectedTemplate.fileType)">
+            <label id="CUR-daXePIpE">Exchange Rates</label>  
+            <exchange-rate-row sales="true" ng-repeat="exchangeRate in salesFile.exchangeRates track by $index"
+              exchange-rate="exchangeRate" delete="deleteExchangeRate(exchangeRate)" index="$index"></exchange-rate-row>
+            <div id="CUR-ApjYeztj" class="row exchange-rate-button">
+              <button id="CUR-TluSLoix" class="btn btn-complete" ng-click="addExchangeRate()">+ Add</button>
+            </div>
+          </div>
+          <div id="CUR-tAskzfpQ" class="row">
+            <div id="CUR-sBMtvEcK" class="col-xs-12 center two-cols-row">
+              <button id="CUR-KpvIKKYz" class="btn btn-complete m-t-10" ng-click="create()"><i class="fa fa-download"></i>&nbsp;Import</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

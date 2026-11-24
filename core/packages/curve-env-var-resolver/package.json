@@ -1,0 +1,40 @@
+{
+  "name": "@curveroyaltysystems/curve-env-var-resolver",
+  "version": "1.4.6",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "rimraf dist && tsc",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "lint": "eslint \"src/**/*.[ts|js]*\"",
+    "lint:quiet": "eslint \"src/**/*.[ts|js]*\" --quiet",
+    "test": "jest --runInBand --no-cache",
+    "test:unit": "jest --testMatch='<rootDir>/src/**/*.unit.test.{ts,js}' --runInBand --no-cache",
+    "test:int": "jest --testMatch='<rootDir>/src/**/*.integration.test.{ts,js}' --runInBand --no-cache",
+    "test:coverage": "jest --coverage",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "node-env-resolver": "6.5.0",
+    "node-env-resolver-aws": "10.0.0"
+  },
+  "devDependencies": {
+    "@curveroyaltysystems/eslint-config": "*",
+    "@curveroyaltysystems/prettier-config": "*",
+    "@curveroyaltysystems/test-config": "*",
+    "@curveroyaltysystems/typescript-config": "*",
+    "rimraf": "3.0.2"
+  },
+  "prettier": "@curveroyaltysystems/prettier-config",
+  "jest": {
+    "preset": "@curveroyaltysystems/test-config"
+  }
+}

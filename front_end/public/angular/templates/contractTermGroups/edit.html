@@ -1,0 +1,103 @@
+<div id="CUR-QvkDpiTL" class="jumbotron" data-pages="parallax">
+  <div id="CUR-XFfsxJNF" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-GKGhwSze" class="inner">
+      <ul id="CUR-KmTILrEw" class="breadcrumb">
+        <li id="CUR-okUoSQdg">
+          <a id="CUR-fzyYMLnt" href="/#/contractTermGroups">Contract Term Groups</a>
+        </li>
+        <li id="CUR-vydffDXs" ng-show="!contractTermGroup._id">
+          <a id="CUR-xPIfyOAD" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-nTXuFvSf" ng-show="contractTermGroup._id">
+          <a id="CUR-zJwcdTbI" href="/#/contractTermGroups/{{contractTermGroup._id}}" class="active">{{contractTermGroup.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-BUmMzDXT" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-pqUfYZBf" class="row">
+    <div id="CUR-kIrgPyVN" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-myTqHvZW" ng-if="contractTermGroup._id" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+        <i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-AfYYoiSP" class="btn btn-complete" ng-click="save()">
+        <i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-EmuhnGcw" class="row">
+    <div id="CUR-ZYOFEuoh" class="col-xs-12 col-sm-6">
+      <div id="CUR-wqkpRZnJ" class="panel panel-default">
+        <div id="CUR-yAKMyDRZ" class="panel-heading">
+          <div id="CUR-LNABdRsL" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-wlRwRGHI" class="panel-body p-t-15">
+          <div id="CUR-zLzoHfDI" class="form-group required">
+            <label id="CUR-xIeAauMy">Name</label>
+            <input id="CUR-YwxRdBKl" type="text" class="form-control" ng-model="contractTermGroup.name">
+          </div>
+          <div id="CUR-WShiKSWI" class="form-group required">
+            <label id="CUR-zpGxZmDy">Type</label>
+            <ui-select ng-model="contractTermGroup.type">
+              <ui-select-match allow-clear="false">
+                <span id="CUR-OySPeffV" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in (types | filter: $select.search)">
+                <span id="CUR-dGolRFaO" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-FKkHQWSt" class="col-xs-12 col-sm-6">
+      <div id="CUR-LqlFDpnm" class="panel panel-default">
+        <div id="CUR-OuEkSKLL" class="panel-heading">
+          <div id="CUR-yYqKJtAC" class="panel-title">
+            Items
+          </div>
+        </div>
+        <div id="CUR-aoBEEqMo" class="panel-body p-t-15">
+          <contract-term-item-row ng-repeat="item in displayItems track by $index"
+            item="item" items="itemList" delete="deleteItem(item)"></contract-term-item-row>
+          <div id="CUR-VytDdLeR" class="two-cols-row">
+            <button id="CUR-blsyWFBs" class="btn btn-complete" ng-click="addItem()">+ Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-KPkmVihV" class="row">
+    <div id="CUR-ZtQLStPt" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-jmNkSxMm" ng-show="contractTermGroup.updatedAt">Last Updated on {{ contractTermGroup.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-tCYuJaVw" href="javascript:;" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-sGwMniPQ" class="modal-dialog">
+    <div id="CUR-NXbMxWmS" class="modal-content">
+      <div id="CUR-UJYHRpzc" class="modal-header clearfix text-left">
+        <button id="CUR-aqsxQklA" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-fiPvUjBF">Delete Contract Term Group</h5>
+      </div>
+      <div id="CUR-YrJofwnO" class="modal-body">
+        <div id="CUR-ObfbWOiG" class="row">
+          <div id="CUR-UdlPZcEO" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this contract term group? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-NnDkJJwi" class="row">
+          <div id="CUR-BTojYMDu" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-SACIobus" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-FuntMgSG" type="button" class="btn btn-danger m-t-5" ng-click="delete()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<model-history data="contractTermGroup.modelHistory"></model-history>

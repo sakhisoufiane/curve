@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ern:NewReleaseMessage MessageSchemaVersionId="ern/382" ReleaseProfileVersionId="CommonReleaseTypes/13/AudioAlbumMusicandSpeech" xmlns:ern="http://ddex.net/xml/ern/382" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ddex.net/xml/ern/382 http://ddex.net/xml/ern/382/release-notification.xsd" xmlns:avs="http://ddex.net/xml/avs/avs_20161006.xsd">
+  <MessageHeader>
+    <MessageThreadId>FUGA_7527095395</MessageThreadId>
+    <MessageId>FUGA_1000507549558</MessageId>
+    <MessageFileName>8720623824792.xml</MessageFileName>
+    <MessageSender>
+      <PartyId>PADPIDA20110330020</PartyId>
+      <PartyName>
+        <FullName>FUGA</FullName>
+      </PartyName>
+    </MessageSender>
+    <SentOnBehalfOf>
+      <PartyId>PADPIDA20110330020</PartyId>
+      <PartyName>
+        <FullName>FUGA TEST CP</FullName>
+      </PartyName>
+    </SentOnBehalfOf>
+    <MessageRecipient>
+      <PartyId Namespace="PADPIDA20110330020">5115821</PartyId>
+      <PartyName>
+        <FullName>FUGA TEST DSP (Curve Dolby) DSPOPS-1474</FullName>
+      </PartyName>
+    </MessageRecipient>
+    <MessageCreatedDateTime>2024-04-04T10:23:46+02:00</MessageCreatedDateTime>
+    <MessageControlType>LiveMessage</MessageControlType>
+  </MessageHeader>
+  <UpdateIndicator>OriginalMessage</UpdateIndicator>
+  <ResourceList>
+    <SoundRecording>
+      <SoundRecordingType>MusicalWorkSoundRecording</SoundRecordingType>
+      <SoundRecordingId>
+        <ISRC>NLRD52051526</ISRC>
+        <ProprietaryId Namespace="PADPIDA20110330020">4597125565</ProprietaryId>
+      </SoundRecordingId>
+      <SoundRecordingId>
+        <ISRC>NLRD52051526</ISRC>
+        <ProprietaryId Namespace="PADPIDA20110330020">NLP4Y2000005</ProprietaryId>
+      </SoundRecordingId>
+      <ResourceReference>A1</ResourceReference>
+      <ReferenceTitle>
+        <TitleText>Silent Lost DOLBY</TitleText>
+        <SubTitle>Extended Mix</SubTitle>
+      </ReferenceTitle>
+      <IsInstrumental>true</IsInstrumental>
+      <Duration>PT9M41S</Duration>
+      <SoundRecordingDetailsByTerritory>
+        <TerritoryCode>Worldwide</TerritoryCode>
+        <Title TitleType="FormalTitle">
+          <TitleText>Silent Lost DOLBY</TitleText>
+          <SubTitle>Extended Mix</SubTitle>
+        </Title>
+        <Title TitleType="DisplayTitle">
+          <TitleText>Silent Lost DOLBY</TitleText>
+          <SubTitle>Extended Mix</SubTitle>
+        </Title>
+        <DisplayArtist SequenceNumber="1">
+          <PartyName>
+            <FullName>Hollt</FullName>
+          </PartyName>
+          <ArtistRole>MainArtist</ArtistRole>
+        </DisplayArtist>
+        <ResourceContributor>
+          <PartyName>
+            <FullName>Jeffrey Frugte</FullName>
+          </PartyName>
+          <ResourceContributorRole>Producer</ResourceContributorRole>
+          <ResourceContributorRole Namespace="PADPIDA20110330020" UserDefinedValue="Mixer">UserDefined</ResourceContributorRole>
+          <ResourceContributorRole Namespace="PADPIDA20110330020" UserDefinedValue="Engineer">UserDefined</ResourceContributorRole>
+        </ResourceContributor>
+        <IndirectResourceContributor>
+          <PartyName>
+            <FullName>WES Productions</FullName>
+          </PartyName>
+          <IndirectResourceContributorRole>MusicPublisher</IndirectResourceContributorRole>
+        </IndirectResourceContributor>
+        <IndirectResourceContributor>
+          <PartyName>
+            <FullName>Jeffrey Frugte</FullName>
+          </PartyName>
+          <IndirectResourceContributorRole>Composer</IndirectResourceContributorRole>
+        </IndirectResourceContributor>
+        <DisplayArtistName>Hollt</DisplayArtistName>
+        <LabelName>die Stube Records</LabelName>
+        <RightsController>
+          <PartyName>
+            <FullName>Jeffrey Frugte</FullName>
+          </PartyName>
+          <RightsControllerRole>RightsController</RightsControllerRole>
+          <RightShareUnknown>true</RightShareUnknown>
+        </RightsController>
+        <OriginalResourceReleaseDate LocationDescription="WES Productions Studio, Benthuizen, the Netherlands">2020-12-18</OriginalResourceReleaseDate>
+        <PLine>
+          <Year>2020</Year>
+          <PLineText>die Stube Records / Hollt Music</PLineText>
+        </PLine>
+        <Genre>
+          <GenreText>Dance</GenreText>
+          <SubGenre>Melodic House &amp; Techno</SubGenre>
+        </Genre>
+        <ParentalWarningType>NotExplicit</ParentalWarningType>
+      </SoundRecordingDetailsByTerritory>
+      <TerritoryOfCommissioning>NL</TerritoryOfCommissioning>
+    </SoundRecording>
+    <Image>
+      <ImageType>FrontCoverImage</ImageType>
+      <ImageId>
+        <ProprietaryId Namespace="PADPIDA20110330020">4597126469</ProprietaryId>
+      </ImageId>
+      <ResourceReference>A2</ResourceReference>
+      <ImageDetailsByTerritory>
+        <TerritoryCode>Worldwide</TerritoryCode>
+      </ImageDetailsByTerritory>
+    </Image>
+    <Text>
+      <TextType>LinerNotes</TextType>
+      <TextId>
+        <ProprietaryId Namespace="PADPIDA20110330020">8720623824792.txt</ProprietaryId>
+      </TextId>
+      <ResourceReference>A3</ResourceReference>
+      <TextDetailsByTerritory>
+        <TerritoryCode>Worldwide</TerritoryCode>
+      </TextDetailsByTerritory>
+    </Text>
+  </ResourceList>
+  <ReleaseList>
+    <Release IsMainRelease="true">
+      <ReleaseId>
+        <ICPN IsEan="true">8720623824792</ICPN>
+        <CatalogNumber Namespace="PADPIDA20110330020">8720623824792-TEST</CatalogNumber>
+        <ProprietaryId Namespace="PADPIDA20110330020">7527095395</ProprietaryId>
+      </ReleaseId>
+      <ReleaseReference>R0</ReleaseReference>
+      <ReferenceTitle>
+        <TitleText>Silent Lost DOLBY - TEST</TitleText>
+      </ReferenceTitle>
+      <ReleaseResourceReferenceList>
+        <ReleaseResourceReference ReleaseResourceType="PrimaryResource">A1</ReleaseResourceReference>
+        <ReleaseResourceReference ReleaseResourceType="SecondaryResource">A2</ReleaseResourceReference>
+        <ReleaseResourceReference ReleaseResourceType="SecondaryResource">A3</ReleaseResourceReference>
+      </ReleaseResourceReferenceList>
+      <ReleaseType>EP</ReleaseType>
+      <ReleaseDetailsByTerritory>
+        <TerritoryCode>Worldwide</TerritoryCode>
+        <DisplayArtistName>Hollt</DisplayArtistName>
+        <LabelName>die Stube Records</LabelName>
+        <Title TitleType="FormalTitle">
+          <TitleText>Silent Lost DOLBY - TEST</TitleText>
+        </Title>
+        <Title TitleType="DisplayTitle">
+          <TitleText>Silent Lost DOLBY - TEST</TitleText>
+        </Title>
+        <DisplayArtist SequenceNumber="1">
+          <PartyName>
+            <FullName>Hollt</FullName>
+          </PartyName>
+          <ArtistRole>MainArtist</ArtistRole>
+        </DisplayArtist>
+        <ParentalWarningType>NotExplicit</ParentalWarningType>
+        <ResourceGroup>
+          <ResourceGroup>
+            <Title>
+              <TitleText>Disc-1</TitleText>
+            </Title>
+            <SequenceNumber>1</SequenceNumber>
+            <ResourceGroupContentItem>
+              <SequenceNumber>1</SequenceNumber>
+              <ResourceType>SoundRecording</ResourceType>
+              <ReleaseResourceReference ReleaseResourceType="PrimaryResource">A1</ReleaseResourceReference>
+              <IsInstantGratificationResource>false</IsInstantGratificationResource>
+              <IsPreOrderIncentiveResource>false</IsPreOrderIncentiveResource>
+            </ResourceGroupContentItem>
+          </ResourceGroup>
+          <ResourceGroupContentItem>
+            <ReleaseResourceReference ReleaseResourceType="SecondaryResource">A2</ReleaseResourceReference>
+          </ResourceGroupContentItem>
+          <ResourceGroupContentItem>
+            <ReleaseResourceReference ReleaseResourceType="SecondaryResource">A3</ReleaseResourceReference>
+          </ResourceGroupContentItem>
+        </ResourceGroup>
+        <Genre>
+          <GenreText>Dance</GenreText>
+          <SubGenre>Melodic House &amp; Techno</SubGenre>
+        </Genre>
+        <ReleaseDate>2020-12-18</ReleaseDate>
+        <OriginalReleaseDate LocationDescription="WES Productions Studio, Benthuizen, the Netherlands">2020-12-18</OriginalReleaseDate>
+      </ReleaseDetailsByTerritory>
+      <PLine>
+        <Year>2020</Year>
+        <PLineText>die Stube Records / Hollt Music</PLineText>
+      </PLine>
+      <CLine>
+        <Year>2020</Year>
+        <CLineText>die Stube Records / Hollt Music</CLineText>
+      </CLine>
+    </Release>
+    <Release>
+      <ReleaseId>
+        <ISRC>NLRD52051526</ISRC>
+      </ReleaseId>
+      <ReleaseReference>R1</ReleaseReference>
+      <ReferenceTitle>
+        <TitleText>Silent Lost DOLBY</TitleText>
+        <SubTitle>Extended Mix</SubTitle>
+      </ReferenceTitle>
+      <ReleaseResourceReferenceList>
+        <ReleaseResourceReference ReleaseResourceType="PrimaryResource">A1</ReleaseResourceReference>
+      </ReleaseResourceReferenceList>
+      <ReleaseType>TrackRelease</ReleaseType>
+      <ReleaseDetailsByTerritory>
+        <TerritoryCode>Worldwide</TerritoryCode>
+        <DisplayArtistName>Hollt</DisplayArtistName>
+        <LabelName>die Stube Records</LabelName>
+        <Title TitleType="FormalTitle">
+          <TitleText>Silent Lost DOLBY</TitleText>
+          <SubTitle>Extended Mix</SubTitle>
+        </Title>
+        <Title TitleType="DisplayTitle">
+          <TitleText>Silent Lost DOLBY</TitleText>
+          <SubTitle>Extended Mix</SubTitle>
+        </Title>
+        <DisplayArtist SequenceNumber="1">
+          <PartyName>
+            <FullName>Hollt</FullName>
+          </PartyName>
+          <ArtistRole>MainArtist</ArtistRole>
+        </DisplayArtist>
+        <RelatedRelease>
+          <ReleaseId>
+            <ICPN IsEan="true">8720623824792</ICPN>
+          </ReleaseId>
+          <ReleaseRelationshipType>IsReleaseFromRelease</ReleaseRelationshipType>
+        </RelatedRelease>
+        <ParentalWarningType>NotExplicit</ParentalWarningType>
+        <ResourceGroup>
+          <ResourceGroupContentItem>
+            <ReleaseResourceReference ReleaseResourceType="PrimaryResource">A1</ReleaseResourceReference>
+          </ResourceGroupContentItem>
+        </ResourceGroup>
+        <Genre>
+          <GenreText>Dance</GenreText>
+          <SubGenre>Melodic House &amp; Techno</SubGenre>
+        </Genre>
+        <ReleaseDate>2020-12-18</ReleaseDate>
+        <OriginalReleaseDate LocationDescription="WES Productions Studio, Benthuizen, the Netherlands">2020-12-18</OriginalReleaseDate>
+      </ReleaseDetailsByTerritory>
+      <PLine>
+        <Year>2020</Year>
+        <PLineText>die Stube Records / Hollt Music</PLineText>
+      </PLine>
+      <CLine>
+        <Year>2020</Year>
+        <CLineText>die Stube Records / Hollt Music</CLineText>
+      </CLine>
+    </Release>
+  </ReleaseList>
+  <DealList>
+    <ReleaseDeal>
+      <DealReleaseReference>R0</DealReleaseReference>
+      <Deal>
+        <DealTerms>
+          <CommercialModelType>RightsClaimModel</CommercialModelType>
+          <Usage>
+            <UseType>UserMakeAvailableUserProvided</UseType>
+          </Usage>
+          <TerritoryCode>Worldwide</TerritoryCode>
+          <ValidityPeriod>
+            <StartDate>2021-03-01</StartDate>
+          </ValidityPeriod>
+        </DealTerms>
+      </Deal>
+      <EffectiveDate>2024-04-04</EffectiveDate>
+    </ReleaseDeal>
+    <ReleaseDeal>
+      <DealReleaseReference>R1</DealReleaseReference>
+      <Deal>
+        <DealTerms>
+          <CommercialModelType>RightsClaimModel</CommercialModelType>
+          <Usage>
+            <UseType>UserMakeAvailableUserProvided</UseType>
+          </Usage>
+          <TerritoryCode>Worldwide</TerritoryCode>
+          <ValidityPeriod>
+            <StartDate>2021-03-01</StartDate>
+          </ValidityPeriod>
+        </DealTerms>
+      </Deal>
+      <EffectiveDate>2024-04-04</EffectiveDate>
+    </ReleaseDeal>
+  </DealList>
+</ern:NewReleaseMessage>

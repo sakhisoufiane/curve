@@ -1,0 +1,135 @@
+<div class="container-fluid container-fixed-lg">
+  <div class="row">
+    <div class="col-xs-12 col-md-10 col-md-offset-1">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row m-b-20">
+            <div class="col-xs-12">
+              <ul class="breadcrumb wizard-breadcrumb">
+                <li><a ng-click="changePage('Setup')">Setup</a></li>
+                <li><a class="active">Files</a></li>
+                <li ng-if="import.transferringSystem != 'CWR' && import.transferringSystem != 'Maestro 400 Catalogue Shipment'">Mapping</li>
+                <li ng-if="import.transferringSystem === 'Counterpoint Recordings'">Defaults</li>
+                <li>Complete</li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 ">
+              <form name="form" role="form">
+                <div class="list-uploads">
+                  <div class="alert alert-danger" role="alert" ng-if="filesErrors.length > 0">
+                    <strong>Files Errors:</strong>
+                    <br/>
+                    <ul>
+                      <!-- Counterpoint Records -->
+                      <li ng-if="form.royaltorsFile.$invalid">Contract Royaltor Database File is required</li>
+                      <li ng-if="form.royaltorRatesFile.$invalid">Royaltor Rates File is required</li>
+                      <li ng-if="form.royaltorProductsFile.$invalid">Royaltor Products File is required</li>
+                      <li ng-if="form.soundRecordingsFile.$invalid">Sound Recordings File is required</li>
+                      <li ng-if="form.productManagerFile.$invalid">Product Manager File is required</li>
+                      <li ng-if="form.productAKAsFile.$invalid">Products AKAs File is required</li>
+
+                      <!-- Counterpoint Publishing -->
+                      <li ng-if="form.publishingCatalogueExport.$invalid">Catalogue Shipment File is required</li>
+                      <li ng-if="form.publishingRatesExport.$invalid">Rates File is required</li>
+                      <li ng-if="form.publishingComposers.$invalid">Composers File is required</li>
+                      <li ng-if="form.publishingPublishers.$invalid">Publishers File is required</li>
+                      <li ng-if="form.publishingBalances.$invalid">Balances File is required</li>
+                      <li ng-if="form.publishingTerritoryManager.$invalid">Territory Manager File is required</li>
+                    </ul>
+                    <ul ng-if="form.$valid">
+                      <li ng-repeat="error in filesErrors"><strong>{{ error.file }} :</strong> {{error.error}}</li>
+                    </ul>
+                  </div>
+                  <div ng-if="import.transferringSystem === 'Counterpoint Recordings'">
+                    <div class="form-group m-t-20">
+                      <label>1. Contract Royaltor Database</label>
+                      <input name="royaltorsFile" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[0]" aria-invalid="false" ng-change="uploadFile(files[0], 'royaltorsFile')" ng-required="true">
+                    </div>
+                    <div class="form-group m-t-20">
+                      <label>2. Royaltor Rates</label>
+                      <input name="royaltorRatesFile" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[1]" aria-invalid="false" ng-change="uploadFile(files[1], 'royaltorRatesFile')" ng-required="true">
+                    </div>
+                    <div class="form-group m-t-20">
+                      <label>3. Royaltor Products</label>
+                      <input name="royaltorProductsFile" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[2]" aria-invalid="false" ng-change="uploadFile(files[2], 'royaltorProductsFile')" ng-required="true">
+                    </div>
+                    <div class="form-group m-t-20">
+                      <label>4. Sound Recordings</label>
+                      <input name="soundRecordingsFile" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[3]" aria-invalid="false" ng-change="uploadFile(files[3], 'soundRecordingsFile')" ng-required="true">
+                    </div>
+                    <div class="form-group m-t-20">
+                      <label>5. Product Manager</label>
+                      <input name="productManagerFile" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[4]" aria-invalid="false" ng-change="uploadFile(files[4], 'productManagerFile')" ng-required="true">
+                    </div>
+                    <div class="form-group m-t-20">
+                      <label>6. Products AKAs</label>
+                      <input name="productAKAsFile" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[5]" aria-invalid="false" ng-change="uploadFile(files[5], 'productAKAsFile')" ng-required="true">
+                    </div>
+                  </div>
+                  <div ng-if="import.transferringSystem === 'Counterpoint Publishing' || import.transferringSystem === 'Linked Publishing'">
+                    <div class="form-group m-t-20">
+                      <label>1. Catalogue Shipment</label>
+                      <input name="publishingCatalogueExport" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[0]" aria-invalid="false" ng-change="uploadFile(files[0], 'publishingCatalogueExport')" ng-required="true">
+                    </div>
+                    <div class="form-group m-t-20">
+                      <label>2. Rates Export</label>
+                      <input name="publishingRatesExport" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[1]" aria-invalid="false" ng-change="uploadFile(files[1], 'publishingRatesExport')">
+                    </div>
+                    <div class="form-group m-t-20">
+                      <label>3. Composers Export</label>
+                      <input name="publishingComposers" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[2]" aria-invalid="false" ng-change="uploadFile(files[2], 'publishingComposers')" ng-required="true">
+                    </div>
+                    <div class="form-group m-t-20">
+                      <label>4. Publishers Export</label>
+                      <input name="publishingPublishers" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[3]" aria-invalid="false" ng-change="uploadFile(files[3], 'publishingPublishers')" ng-required="true">
+                    </div>
+                    <div class="form-group m-t-20">
+                      <label>5. Balances</label>
+                      <input name="publishingBalances" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[4]" aria-invalid="false" ng-change="uploadFile(files[4], 'publishingBalances')">
+                    </div>
+                    <div class="form-group m-t-20">
+                      <label>6. Territory Manager</label>
+                      <input name="publishingTerritoryManager" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[5]" aria-invalid="false" ng-change="uploadFile(files[5], 'publishingTerritoryManager')">
+                    </div>
+                  </div>
+                  <div ng-if="import.transferringSystem === 'SR1 Publishing'">
+                    <div class="form-group m-t-20">
+                      <label>1. Catalogue Export</label>
+                      <input name="publishingCatalogueExport" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[0]" aria-invalid="false" ng-change="uploadFile(files[0], 'publishingCatalogueExport')" ng-required="true">
+                    </div>
+                  </div>
+                  <div ng-if="import.transferringSystem === 'CWR'">
+                    <div class="form-group m-t-20">
+                      <label>1. CWR File</label>
+                      <input name="publishingCatalogueExport" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[0]" aria-invalid="false" ng-change="uploadFile(files[0], 'publishingCatalogueExport')" ng-required="true">
+                    </div>
+                  </div>
+                  <div ng-if="import.transferringSystem === 'Maestro 400 Catalogue Shipment'">
+                    <div class="form-group m-t-20">
+                      <label>1. Maestro 400 Catalogue Shipment File</label>
+                      <input name="publishingCatalogueExport" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[0]" aria-invalid="false" ng-change="uploadFile(files[0], 'publishingCatalogueExport')" ng-required="true">
+                    </div>
+                  </div>
+                  <div ng-if="import.transferringSystem === 'Catalogue Shipment'">
+                    <div class="form-group m-t-20">
+                      <label>1. Catalogue Shipment</label>
+                      <input name="publishingCatalogueExport" type="file" class="m-t-10" ngf-select="" ngf-allow-dir="false" ng-model="files[0]" aria-invalid="false" ng-change="uploadFile(files[0], 'publishingCatalogueExport')" ng-required="true">
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="row m-t-20">
+            <div class="col-xs-12">
+              <a ng-click="validateFilesStep(form)" class="btn btn-complete pull-right">Next</a>
+              <a ng-click="changePage('Setup')" class="btn btn-default pull-right">Back</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

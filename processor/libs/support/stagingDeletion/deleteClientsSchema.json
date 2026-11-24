@@ -1,0 +1,91 @@
+[
+    {
+        "name": "statement",
+        "files": ["allFilesZip", "salesCsv", "costsCsv", "pdf", "statementOfAccount", "selfBillingInvoice", "feesInvoice", "customStatement"]
+    },
+    {
+        "name": "period",
+        "files": ["allCalculatedSalesCsv", "allCalculatedCostsCsv", "unreportedSalesCsv", "unreportedCostsCsv", "suspenseCsv", "generalLedgerSummary", "customStatement", "statementsZip"]
+    },
+    {
+        "name": "sales",
+        "files": ["file", "customAdditionalFile"]
+    },
+    {
+        "name": "salesTemplate",
+        "files": ["file"]
+    },
+    {
+        "name": "cost",
+        "files": ["file"]
+    },
+    {
+        "name": "contract",
+        "files": ["file"]
+    },
+    {
+        "name": "payee"
+    },
+    {
+        "name": "release"
+    },{
+        "name": "tracks"
+    },{
+        "name": "works"
+    },
+    {
+        "name": "publisher"
+    },
+    {
+        "name": "composer"
+    },
+    {
+        "name": "deliveries"
+    },
+    {
+        "name": "cwracknowledgements"
+    },
+    {
+        "name": "companies"
+    },
+    {
+        "name": "contracttermgroups"
+    },
+    {
+        "name": "deliverypartners"
+    },
+    {
+        "name": "deliveryprofiles"
+    },
+    {
+        "name": "mcpcretentions"
+    },
+    {
+        "name": "mcpcnegative"
+    },
+    {
+        "name": "payments"
+    },
+    {
+        "name": "paymentgroups"
+    },
+    {
+        "name": "territorygroups"
+    },
+    {
+        "name": "transactions"
+    },
+    {
+        "name": "unmappedworks"
+    },
+    {
+        "name": "unmappedtracks"
+    },
+    {
+        "name": "unmappedreleases"
+    },
+    {
+        "name": "clients"
+    }
+
+]

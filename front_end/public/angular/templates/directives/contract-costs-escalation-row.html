@@ -1,0 +1,50 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="panel panel-default bg-gray-l m-l-m-9">
+			<div class="panel-body p-t-15">
+				<div class="row" ng-repeat="condition in escalation.conditions track by $index">
+					<div class="form-group col-xs-6 col-sm-4 col-md-2">
+		        <label>Esc. Tracker</label>
+		        <select class="form-control" ng-model="condition.escalationTracker" ng-options="item as item for item in escalationTrackersWithTypes" ng-disabled="edit != true"></select>
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-2" ng-if="condition.escalationTracker != 'Cost Date' && condition.escalationTracker != 'Reporting Date'">
+		        <label>Threshold Type</label>
+		        <select class="form-control" ng-model="condition.thresholdType" ng-options="item as item for item in thresholdTypes" ng-disabled="edit != true"></select>
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-2" ng-if="condition.escalationTracker != 'Cost Date' && condition.escalationTracker != 'Reporting Date'">
+		        <label>When</label>
+		        <select class="form-control" ng-model="condition.when" ng-options="item as item for item in whenTypes" ng-disabled="edit != true"></select>
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-2">
+		        <label>Threshold</label>
+		        <input type="number" class="form-control" ng-model="condition.threshold" ng-if="condition.escalationTracker != 'Cost Date' && condition.escalationTracker != 'Reporting Date'" ng-disabled="edit != true">
+		        <div id="datepicker-component" class="form-group input-group date" ng-if="condition.escalationTracker === 'Cost Date' || condition.escalationTracker === 'Reporting Date'">
+              <input type="text" class="form-control" ng-model="condition.threshold" uib-datepicker-popup="{{dateFormat}}" is-open="condition.dateOpen" ng-model-options="{timezone: 'utc'}" ng-click="openDatePopup($index)" ng-disabled="edit != true">
+              <span class="input-group-addon" ng-click="openDatePopup($index)">
+                <i class="fa fa-calendar"></i>
+              </span>
+            </div>
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-3">
+		        <button class="btn btn-danger row-button m-xs-t-0 m-l-0" ng-show="edit == true" ng-click="deleteCondition(condition)" ng-if="$index != 0" tooltips tooltip-template="Delete Condition">
+			        <i class="fa fa-trash"></i>
+			      </button>
+			      <button class="btn btn-complete row-button m-xs-t-0 m-l-0" ng-show="edit == true" ng-click="addCondition()" ng-if="escalation.conditions.length == $index + 1">+ Condition</button>
+		      </div>
+			  </div>
+			  <div class="row">
+		      <div class="form-group col-xs-6 col-sm-4 col-md-2">
+		        <label>Rate %</label>
+		        <input type="text" class="form-control" ng-model="escalation.rate" ng-disabled="edit != true">
+		      </div>
+		      <div class="form-group col-xs-6 col-sm-4 col-md-2">
+		        <button class="btn btn-danger row-button m-xs-t-0 m-l-0" ng-show="edit == true" ng-click="delete({ escalation: escalation })" tooltips tooltip-template="Delete Escalation">
+			        <i class="fa fa-trash"></i>
+			      </button>
+		      </div>
+		      
+		    </div>
+		  </div>
+		</div>
+	</div>
+</div>

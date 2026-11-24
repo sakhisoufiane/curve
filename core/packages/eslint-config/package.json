@@ -1,0 +1,27 @@
+{
+  "name": "@curveroyaltysystems/eslint-config",
+  "version": "1.2.0",
+  "private": true,
+  "files": [
+    "index.js",
+    "library.js",
+    "react.js",
+    "react.d.ts"
+  ],
+  "devDependencies": {
+    "@curveroyaltysystems/typescript-config": "*",
+    "@eslint/js": "9.39.4",
+    "@typescript-eslint/eslint-plugin": "8.58.2",
+    "@typescript-eslint/parser": "8.58.2",
+    "eslint": "9.39.4",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-config-turbo": "2.9.6",
+    "eslint-plugin-jest": "28.14.0",
+    "eslint-plugin-only-warn": "1.2.1",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "eslint-plugin-react-refresh": "0.4.26",
+    "globals": "16.5.0",
+    "typescript-eslint": "8.58.2"
+  }
+}

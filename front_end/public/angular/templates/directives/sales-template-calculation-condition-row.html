@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-sm-3">
+    <div class="form-group">
+      <ui-select ng-model="condition.inputType" ng-disabled="edit != true">
+        <ui-select-match>
+          <span ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in inputTypes | filter: $select.search">
+          <span class="country" ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="form-group" ng-if="condition.inputType=='Column'">
+      <input type="number" class="form-control" ng-model="condition.if" ng-disabled="edit != true">
+    </div>
+    <div class="form-group" ng-if="condition.inputType=='Field'">
+      <ui-select ng-model="condition.if" ng-disabled="edit != true">
+        <ui-select-match>
+          <span ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item.value as item in templateFields | filter: $select.search">
+          <span class="country" ng-bind="item.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="form-group">
+      <ui-select ng-model="condition.comparison" ng-disabled="edit != true">
+        <ui-select-match>
+          <span ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices group-by="groupFind" repeat="item in comparaisons | filter: $select.search">
+          <span class="country" ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <div class="form-group" ng-if="condition.if != 'Skip Row' && condition.comparison != 'Is Not Blank' && condition.comparison != 'Is Blank' && condition.comparison != ''">
+      <input type="text" class="form-control" ng-model="condition.value" ng-disabled="edit != true">
+    </div>
+  </div>
+  <div class="col-sm-1 text-right">
+    <div class="form-group">
+      <button class="btn btn-danger" ng-show="edit == true" ng-click="delete({ comparaisons: comparaisons })"><i class="fa fa-trash"></i></button>
+    </div>
+  </div>
+</div>

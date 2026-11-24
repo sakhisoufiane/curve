@@ -1,0 +1,2727 @@
+openapi: 3.0.3
+info:
+  title: Periods API
+  version: '1.0.0'
+  description: |
+    API for managing accounting periods in the system.
+    Supports CRUD operations on periods with access control validation.
+    Includes support for period status, calculations, and associations.
+    
+    Access Control:
+    - Read access requires period read permissions
+    - Write access requires period write permissions
+    - Admin users can access all periods
+    - Payee users can only access published periods associated with their contracts
+
+paths:
+  /periods:
+    get:
+      tags:
+        - "Periods"
+      summary: Retrieve a list of Periods
+      description: |
+        Retrieves a paginated list of periods with complex access control:
+        - Admin users: All periods with full filtering
+        - Payee users: Only published periods associated with their contracts
+        - Text search supports regex patterns and 24-character ObjectId validation
+      parameters:
+        - in: query
+          name: orderBy
+          required: false
+          schema:
+            type: string
+            enum: ["name","year","accountingPeriod","grossAmount","grossCosts","createdAt","status","calculationStatus","runNo","updatedAt"]
+            example: name
+          description: Field to sort results by
+        - in: query
+          name: orderDir
+          required: false
+          schema:
+            type: string
+            enum: ["asc","desc"]
+            example: asc
+          description: Sort direction
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: number
+            example: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: number
+            example: 25
+            maximum: 100
+          description: Number of items per page
+        - in: query
+          name: text
+          required: false
+          schema:
+            type: string
+            example: "Period Name"
+          description: |
+            Search text to filter periods by name. Supports regex patterns for name searches.
+            If exactly 24 characters, will also search by ObjectId for exact matches.
+      responses:
+        200:
+          description: Successfully retrieved periods with access control applied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  periods:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Period'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      tags:
+        - "Periods"
+      summary: Create a new Period
+      description: Creates a new period with validation and automatic setup. Requires admin write access.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeriodInput'
+      responses:
+        200:
+          description: Successfully created period
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        400:
+          description: Bad request - validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}:
+    get:
+      tags:
+        - "Periods"
+      summary: Retrieve a specific Period
+      description: Returns details for a specific period by ID with access control validation.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Successfully retrieved period
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - "Periods"
+      summary: Update a Period
+      description: Updates a period by ID with validation and access control. Requires admin write access.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeriodInput'
+      responses:
+        200:
+          description: Successfully updated period
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        400:
+          description: Bad request - validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - "Periods"
+      summary: Delete a Period
+      description: Deletes a period by ID. Requires admin write access and period must be in Draft status.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Successfully deleted period
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/detail:
+    get:
+      tags:
+        - "Periods"
+      summary: Retrieve detailed Period information
+      description: |
+        Returns comprehensive period details including sales files, costs, statements, and calculation statistics.
+        Access control applied based on user type.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Successfully retrieved detailed period information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  period:
+                    $ref: '#/components/schemas/Period'
+                  salesFiles:
+                    type: array
+                    items:
+                      type: object
+                  costs:
+                    type: array
+                    items:
+                      type: object
+                  statements:
+                    type: array
+                    items:
+                      type: object
+                  calculationStats:
+                    type: object
+                    properties:
+                      totalLines:
+                        type: number
+                      validLines:
+                        type: number
+                      invalidLines:
+                        type: number
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/history:
+    get:
+      tags:
+        - "Periods"
+      summary: Retrieve Period history
+      description: Returns the modification history for a specific period.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Successfully retrieved period history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ops:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              op:
+                                type: string
+                              path:
+                                type: string
+                              value:
+                                type: string
+                        _id:
+                          type: string
+                        ref:
+                          type: string
+                        author:
+                          type: object
+                          nullable: true
+                        timestamp:
+                          type: string
+                          format: date-time
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/qa_report:
+    get:
+      tags:
+        - "Periods"
+      summary: Generate QA report for Period
+      description: Generates and returns a Quality Assurance report for the period.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Successfully generated QA report
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  report:
+                    type: object
+                    description: QA report data
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/sales_files:
+    get:
+      tags:
+        - "Periods"
+      summary: Retrieve sales files for Period
+      description: Returns paginated list of sales files associated with the period.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+        - in: query
+          name: page
+          schema:
+            type: number
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: number
+            default: 25
+          description: Number of items per page
+      responses:
+        200:
+          description: Successfully retrieved sales files
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  salesFiles:
+                    type: array
+                    items:
+                      type: object
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/costs:
+    get:
+      tags:
+        - "Periods"
+      summary: Retrieve costs for Period
+      description: Returns paginated list of costs associated with the period.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+        - in: query
+          name: page
+          schema:
+            type: number
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: number
+            default: 25
+          description: Number of items per page
+      responses:
+        200:
+          description: Successfully retrieved costs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  costs:
+                    type: array
+                    items:
+                      type: object
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/statements_export:
+    get:
+      tags:
+        - "Periods"
+      summary: Export statements for Period
+      description: Initiates export of period statements and sends them via email.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Export initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Your report will be sent to you via email shortly"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/export_sales:
+    get:
+      tags:
+        - "Periods"
+      summary: Export sales data for Period
+      description: Initiates export of period sales data and sends it via email.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Sales export initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Your report will be sent to you via email shortly"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/export_costs:
+    get:
+      tags:
+        - "Periods"
+      summary: Export costs data for Period
+      description: Initiates export of period costs data and sends it via email.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Costs export initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Your report will be sent to you via email shortly"
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/batch_tasks:
+    get:
+      tags:
+        - "Periods"
+      summary: Retrieve batch tasks for Period
+      description: Returns list of batch tasks associated with the period calculation process.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Successfully retrieved batch tasks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  batchTasks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        status:
+                          type: string
+                        taskType:
+                          type: string
+                        progress:
+                          type: number
+                        startTime:
+                          type: string
+                          format: date-time
+                        endTime:
+                          type: string
+                          format: date-time
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/unincluded_sales_files:
+    get:
+      tags:
+        - "Periods"
+      summary: Retrieve unincluded sales files for Period
+      description: Returns sales files that are not yet included in the period.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+        - in: query
+          name: page
+          schema:
+            type: number
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: number
+            default: 25
+          description: Number of items per page
+      responses:
+        200:
+          description: Successfully retrieved unincluded sales files
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  salesFiles:
+                    type: array
+                    items:
+                      type: object
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/unincluded_costs:
+    get:
+      tags:
+        - "Periods"
+      summary: Retrieve unincluded costs for Period
+      description: Returns costs that are not yet included in the period.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+        - in: query
+          name: page
+          schema:
+            type: number
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: number
+            default: 25
+          description: Number of items per page
+      responses:
+        200:
+          description: Successfully retrieved unincluded costs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  costs:
+                    type: array
+                    items:
+                      type: object
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+        403:
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/include_all_sales_files:
+    get:
+      tags:
+        - "Periods"
+      summary: Include all sales files in period
+      description: Adds all available sales files to the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: All sales files included successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/include_filtered_sales_files:
+    get:
+      tags:
+        - "Periods"
+      summary: Include filtered sales files in period
+      description: Adds sales files matching specific criteria to the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+        - in: query
+          name: filter
+          schema:
+            type: string
+          description: Filter criteria for sales files
+      responses:
+        200:
+          description: Filtered sales files included successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/include_selected_sales_files:
+    get:
+      tags:
+        - "Periods"
+      summary: Include selected sales files in period
+      description: Adds specific sales files by IDs to the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+        - in: query
+          name: salesFileIds
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          description: Array of sales file IDs to include
+      responses:
+        200:
+          description: Selected sales files included successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/remove_selected_sales_files:
+    get:
+      tags:
+        - "Periods"
+      summary: Remove selected sales files from period
+      description: Removes specific sales files by IDs from the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+        - in: query
+          name: salesFileIds
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          description: Array of sales file IDs to remove
+      responses:
+        200:
+          description: Selected sales files removed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/include_all_costs:
+    get:
+      tags:
+        - "Periods"
+      summary: Include all costs in period
+      description: Adds all available costs to the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: All costs included successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/include_filtered_costs:
+    get:
+      tags:
+        - "Periods"
+      summary: Include filtered costs in period
+      description: Adds costs matching specific criteria to the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+        - in: query
+          name: filter
+          schema:
+            type: string
+          description: Filter criteria for costs
+      responses:
+        200:
+          description: Filtered costs included successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/include_selected_costs:
+    get:
+      tags:
+        - "Periods"
+      summary: Include selected costs in period
+      description: Adds specific costs by IDs to the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+        - in: query
+          name: costIds
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          description: Array of cost IDs to include
+      responses:
+        200:
+          description: Selected costs included successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/remove_selected_costs:
+    get:
+      tags:
+        - "Periods"
+      summary: Remove selected costs from period
+      description: Removes specific costs by IDs from the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+        - in: query
+          name: costIds
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          description: Array of cost IDs to remove
+      responses:
+        200:
+          description: Selected costs removed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/resolved_groups:
+    get:
+      tags:
+        - "Periods"
+      summary: Get resolved sales groups for period
+      description: Retrieves all resolved sales groups included in the period for processing
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+      responses:
+        200:
+          description: Successfully retrieved resolved groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resolvedGroups:
+                    type: array
+                    items:
+                      type: object
+                      description: Resolved sales group data
+        403:
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/unincluded_resolved_groups:
+    get:
+      tags:
+        - "Periods"
+      summary: Get unincluded resolved sales groups
+      description: Retrieves resolved sales groups that are available but not yet included in the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+      responses:
+        200:
+          description: Successfully retrieved unincluded resolved groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resolvedGroups:
+                    type: array
+                    items:
+                      type: object
+                      description: Unincluded resolved sales group data
+        403:
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/include_filtered_resolved_groups:
+    post:
+      tags:
+        - "Periods"
+      summary: Include filtered resolved groups
+      description: Includes resolved sales groups in the period based on filter criteria
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              description: Filter criteria for selecting resolved groups to include
+      responses:
+        200:
+          description: Successfully included filtered resolved groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Filtered resolved groups included successfully"
+        403:
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/include_selected_resolved_groups:
+    post:
+      tags:
+        - "Periods"
+      summary: Include selected resolved groups
+      description: Includes specific resolved sales groups in the period based on provided IDs
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of resolved group IDs to include
+              required:
+                - ids
+      responses:
+        200:
+          description: Successfully included selected resolved groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Selected resolved groups included successfully"
+        403:
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/remove_selected_resolved_groups:
+    post:
+      tags:
+        - "Periods"
+      summary: Remove selected resolved groups
+      description: Removes specific resolved sales groups from the period based on provided IDs
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of resolved group IDs to remove
+              required:
+                - ids
+      responses:
+        200:
+          description: Successfully removed selected resolved groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Selected resolved groups removed successfully"
+        403:
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/calculate:
+    post:
+      tags:
+        - "Periods"
+      summary: Trigger period calculation
+      description: Initiates the calculation process for the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Calculation initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Period sent for calculation"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Calculation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/calculateFull:
+    post:
+      tags:
+        - "Periods"
+      summary: Trigger full period calculation (Internal Only)
+      description: Initiates a full calculation process for the period. Only accessible to internal users.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Full calculation initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Period sent for calculation"
+        403:
+          description: Forbidden - internal access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Calculation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/validate_generate_unreported_file:
+    post:
+      tags:
+        - "Periods"
+      summary: Validate unreported file generation
+      description: Validates if unreported file can be generated for the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Type of unreported file to validate
+                excludedSalesFiles:
+                  type: array
+                  items:
+                    type: string
+                  description: Sales files to exclude from validation
+      responses:
+        200:
+          description: Validation response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  canGenerate:
+                    type: boolean
+                  type:
+                    type: string
+                  publicLink:
+                    type: string
+        400:
+          description: Bad request - missing required parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/generate_unreported_file:
+    post:
+      tags:
+        - "Periods"
+      summary: Generate unreported file
+      description: Initiates generation of unreported CSV file for the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Type of unreported file to generate
+                excludedSalesFiles:
+                  type: array
+                  items:
+                    type: string
+                  description: Sales files to exclude from generation
+      responses:
+        200:
+          description: File generation initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "The \"Generate Unreported CSV\" process has been successfully initiated. You will be notified upon completion."
+        400:
+          description: Bad request - missing required parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/process_batch_task:
+    post:
+      tags:
+        - "Periods"
+      summary: Process batch task (Super Internal Only)
+      description: Re-runs a specific batch task for the period. Only accessible to super internal users.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - batchTaskId
+              properties:
+                batchTaskId:
+                  type: string
+                  description: ID of the batch task to re-run
+      responses:
+        200:
+          description: Batch task processing initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Re-running Batch Task {id}"
+        403:
+          description: Forbidden - super internal access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found or missing batch task ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/statements_zip:
+    post:
+      tags:
+        - "Periods"
+      summary: Create statements ZIP file
+      description: Creates a ZIP file containing period statements
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      requestBody:
+        required: false
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                selectedFiles:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of selected files to include in ZIP
+      responses:
+        200:
+          description: ZIP creation initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exportStatus:
+                    type: object
+                    description: Status of the ZIP export operation
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/sales_csv:
+    post:
+      tags:
+        - "Periods"
+      summary: Generate sales CSV
+      description: Initiates creation of sales CSV file for the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Sales CSV generation initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Period sent for calculation"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/costs_csv:
+    post:
+      tags:
+        - "Periods"
+      summary: Generate costs CSV
+      description: Initiates creation of costs CSV file for the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Costs CSV generation initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Period sent for calculation"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/catalogue_setting_error:
+    post:
+      tags:
+        - "Periods"
+      summary: Set period calculation error status
+      description: Updates period status to 'Errored' with error details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - error
+              properties:
+                error:
+                  type: object
+                  description: Error details to store
+      responses:
+        200:
+          description: Period error status saved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Period errored saved"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/catalogue_setting_complete:
+    post:
+      tags:
+        - "Periods"
+      summary: Set period calculation status to calculating sales
+      description: Updates period calculation status to 'Calculating Sales'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Period status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Period updated"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/create_statement:
+    post:
+      tags:
+        - "Periods"
+      summary: Create statement for period and contract
+      description: Creates a new statement for the specified period and contract
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - contractId
+              properties:
+                contractId:
+                  type: string
+                  description: ID of the contract to create statement for
+      responses:
+        200:
+          description: Statement created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Statement created"
+        201:
+          description: Statement already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "A statement for this contract already exists for this period"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found or missing contract ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/publish_all_statements:
+    get:
+      tags:
+        - "Periods"
+      summary: Publish all statements for period
+      description: Updates all statements for the period to 'Published' status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: All statements are being updated to Published
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "All Statements are updating to Published. An email will be sent to you shortly."
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/unpublish_all_statements:
+    get:
+      tags:
+        - "Periods"
+      summary: Unpublish all statements for period
+      description: Updates all statements for the period to 'Pending' status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: All statements are being updated to Pending
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "All Statements are updating to Pending. An email will be sent to you shortly."
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/send_all_statements:
+    get:
+      tags:
+        - "Periods"
+      summary: Send all statements for period
+      description: Initiates sending of all statements for the period. Requires Edit or Approval permissions.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: All statements are being sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "All Statements are sending. An email will be sent to you shortly."
+        403:
+          description: Forbidden - Edit or Approval permissions required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/archive_all_sales_files:
+    get:
+      tags:
+        - "Periods"
+      summary: Archive all sales files for period
+      description: Archives all sales files associated with the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Sales files archived successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Sales Files Successfully Archived"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/archive_fully_reported_sales_files:
+    get:
+      tags:
+        - "Periods"
+      summary: Archive fully reported sales files for period
+      description: Archives only sales files that have been fully reported
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Fully reported sales files archived successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Sales Files Successfully Archived"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/archive_all_costs:
+    get:
+      tags:
+        - "Periods"
+      summary: Archive all costs for period
+      description: Archives all costs associated with the period
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Costs archived successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Costs Successfully Archived"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/archive_fully_reported_costs:
+    get:
+      tags:
+        - "Periods"
+      summary: Archive fully reported costs for period
+      description: Archives only costs that have been fully reported
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: Fully reported costs archived successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Costs Successfully Archived"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/platoon_output:
+    get:
+      tags:
+        - "Periods"
+      summary: Send period output to SAP via Platoon
+      description: Initiates delivery of period data to SAP through Platoon integration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: SAP output delivery initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Output to SAP being sent"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/{id}/platoon_sap_download:
+    get:
+      tags:
+        - "Periods"
+      summary: Download SAP output from Platoon
+      description: Initiates download of SAP output files from Platoon
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+          example: "650938707c29f69000d7a6d5"
+      responses:
+        200:
+          description: SAP output download initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "SAP Output Being Created"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Period not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /periods/raw-export:
+    post:
+      tags:
+        - Periods
+      summary: Raw CSV Export of Periods
+      description: |
+        Export periods data to a raw CSV file. By default, the export is processed asynchronously
+        and a notification email is sent when complete. When sync=true, the request waits for
+        the export to complete and returns the download URL directly in the response.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sync:
+                  type: boolean
+                  default: false
+                  description: |
+                    If true, waits for export to complete and returns download URL directly.
+                    If false (default), sends notification email when export is ready.
+                filter:
+                  type: object
+                  description: Filter object to select periods for export.
+                  properties:
+                    text:
+                      type: string
+                      description: Text search filter for period name.
+                    accountingPeriodType:
+                      type: string
+                      description: Filter by accounting period type.
+                      enum: ["Monthly", "Quarterly", "Half-Yearly", "Yearly"]
+                    accountingPeriod:
+                      type: string
+                      description: Filter by accounting period.
+                      enum: ["Y1","H1","H2","Q1","Q2","Q3","Q4","M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","Custom"]
+                    contractType:
+                      type: string
+                      description: Filter by contract type.
+                    year:
+                      type: number
+                      description: Filter by year.
+                    createdAfter:
+                      type: string
+                      format: date
+                      description: Filter for periods created on or after this date. Date-only values use start of day UTC.
+                      example: "2025-01-01"
+                    createdBefore:
+                      type: string
+                      format: date
+                      description: Filter for periods created on or before this date. Date-only values use end of day UTC.
+                      example: "2025-12-31"
+                    updatedAfter:
+                      type: string
+                      format: date
+                      description: Filter for periods updated on or after this date. Date-only values use start of day UTC.
+                      example: "2025-01-01"
+                    updatedBefore:
+                      type: string
+                      format: date
+                      description: Filter for periods updated on or before this date. Date-only values use end of day UTC.
+                      example: "2025-12-31"
+      responses:
+        '200':
+          description: |
+            When sync=false (default): Export process started successfully, email notification will be sent.
+            When sync=true: Export completed, returns download URL (expires in 24 hours).
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Your report will be sent to you via email shortly"
+                    description: Response when sync=false (default)
+                  - type: object
+                    properties:
+                      csvPublicLink:
+                        type: string
+                        format: uri
+                        example: "https://s3.amazonaws.com/bucket/raw_exports/Client-periods%20raw%20export%2020260120133708304.csv"
+                    description: Response when sync=true
+        '403':
+          description: Forbidden, the user does not have sufficient rights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error occurred while processing the export.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: string
+                    description: Error details (only returned when sync=true)
+
+components:
+  schemas:
+    PaginationMeta:
+      type: object
+      properties:
+        currentPage:
+          type: number
+        totalPages:
+          type: number
+        total:
+          type: number
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    Period:
+      type: object
+      properties:
+        _id:
+          type: string
+        clientId:
+          type: string
+        name:
+          type: string
+        setupStage:
+          type: string
+          description: Current setup stage of the period
+        year:
+          type: number
+        accountingPeriod:
+          type: string
+          enum: ["Y1","H1","H2","Q1","Q2","Q3","Q4","M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","Custom"]
+        accountingPeriodType:
+          type: string
+          enum: ["Yearly","Half-Yearly","Quarterly","Monthly"]
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        accountingDate:
+          type: string
+          format: date-time
+        forceFull:
+          type: boolean
+          default: false
+        status:
+          type: string
+          enum: ["Draft","Processing","Complete","Deleting","Error"]
+        contractType:
+          type: string
+          enum: ["Standard","Mechanical","MCPS"]
+          default: "Standard"
+        calculationStatus:
+          type: string
+          description: Current calculation step status
+        calculationError:
+          type: object
+          description: Error details if calculation fails
+        processStartTime:
+          type: string
+          format: date-time
+        processEndTime:
+          type: string
+          format: date-time
+        units:
+          type: number
+        grossAmount:
+          type: number
+        netAmount:
+          type: number
+        grossCosts:
+          type: number
+        netCosts:
+          type: number
+        lines:
+          type: number
+        valid:
+          type: number
+          description: Number of valid calculation lines
+        invalidLines:
+          type: number
+          description: Number of invalid calculation lines
+        salesFilesIds:
+          type: array
+          items:
+            type: string
+          description: Array of associated sales file IDs
+        costIds:
+          type: array
+          items:
+            type: string
+          description: Array of associated cost IDs
+        runNo:
+          type: number
+          default: 0
+          description: Period run number for recalculations
+        locked:
+          type: boolean
+          description: Whether period is locked for editing
+        createdBy:
+          type: string
+          description: User ID who created the period
+        lastModifiedBy:
+          type: string
+          description: User ID who last modified the period
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    PeriodInput:
+      type: object
+      required:
+        - name
+        - year
+        - accountingPeriod
+        - startDate
+        - endDate
+      properties:
+        name:
+          type: string
+          description: Name of the period
+        year:
+          type: number
+          description: Year for the period
+        accountingPeriod:
+          type: string
+          enum: ["Y1","H1","H2","Q1","Q2","Q3","Q4","M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","Custom"]
+          description: Accounting period type
+        accountingPeriodType:
+          type: string
+          enum: ["Yearly","Half-Yearly","Quarterly","Monthly"]
+          description: Type of accounting period
+        startDate:
+          type: string
+          format: date-time
+          description: Start date of the period
+        endDate:
+          type: string
+          format: date-time
+          description: End date of the period
+        accountingDate:
+          type: string
+          format: date-time
+          description: Accounting date for the period
+        contractType:
+          type: string
+          enum: ["Standard","Mechanical","MCPS"]
+          default: "Standard"
+          description: Type of contracts for the period
+        forceFull:
+          type: boolean
+          default: false
+          description: Whether to force full calculation
+        currencyExchangeRates:
+          type: array
+          items:
+            type: object
+            properties:
+              from:
+                type: string
+              to:
+                type: string
+              rate:
+                type: number
+          description: Currency exchange rates for the period

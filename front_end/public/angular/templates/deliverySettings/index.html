@@ -1,0 +1,345 @@
+<div id="CUR-nSwqGyif" class="jumbotron" data-pages="parallax">
+  <div id="CUR-KBEPUfBv" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-zFMZIDRb" class="inner">
+      <ul id="CUR-hWvBXiea" class="breadcrumb">
+        <li id="CUR-OrfJNlqA"><a id="CUR-EyLFVuGo" href="/#/deliverySettings">Delivery Settings</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="CUR-YoXRLJdy" class="container-fluid container-fixed-lg">
+  <div id="CUR-BkSJznSv" class="row">
+    <div id="CUR-vfmZULrx" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-12 col-md-offset-0">
+    </div>
+  </div>
+  <div id="CUR-zhBvnWPO" class="row">
+    <div id="CUR-fIFBYHLQ" class="panel panel-transparent hidden-xs">
+      <ul id="CUR-ExXHqycp" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-pHRzIrGk" ng-class="activeTab == 'overview' ? 'active' : ''" ng-click="setTab('overview')">
+          <a id="CUR-CxdpPIAR" data-toggle="tab" aria-expanded="true"><span id="CUR-gjqzzzOM">Overview</span></a>
+        </li>
+        <li id="CUR-UxGSDDUK" ng-class="activeTab == 'deliveryPartners' ? 'active' : ''" ng-if="userRole === 'client'" ng-click="setTab('deliveryPartners')">
+          <a id="CUR-rCVNRbuE" data-toggle="tab" aria-expanded="false"><span id="CUR-EZFNbIXr">Delivery Partners</span></a>
+        </li>
+        <li id="CUR-ZEeONYRI" ng-class="activeTab == 'deliveryProfiles' ? 'active' : ''" ng-if="userRole === 'client'" ng-click="setTab('deliveryProfiles')">
+          <a id="CUR-dxqmmyTW" data-toggle="tab" aria-expanded="false"><span id="CUR-oebOddaD">Delivery Profiles</span></a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-IuDtWVRg" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-HmtOdiye" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+        <div id="CUR-daxqwqjV" ng-show="activeTab === 'deliveryPartners'" ng-include="'deliveryPartners-tab.html'"></div>
+        <div id="CUR-kSTcbIpx" ng-show="activeTab === 'deliveryProfiles'" ng-include="'deliveryProfiles-tab.html'"></div>
+      </div>
+    </div>
+    <div id="CUR-tbPCvFkh" class="col-xs-12 visible-xs p-l-20 p-r-20" ng-if="showAccordions">
+      <uib-accordion close-others="true"
+        ng-init="status1.open = true; status2.open = false; status3.open = false; status4.open = false; status5.open = false; status6.open = false; status7.open = false; status8.open = false; status9.open = false;">
+        <div id="CUR-LKTRxVQK" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>
+            Overview <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-hsZuybmc" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div id="CUR-TQkqZXpS" uib-accordion-group class="panel-default" is-open="status2.open" ng-if="userRole === 'client'">
+          <uib-accordion-heading>
+            Delivery Partners <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-cyIWfNsg" ng-include="'deliveryPartners-tab.html'"></div>
+        </div>
+        <div id="CUR-kfMQjALE" uib-accordion-group class="panel-default" is-open="status3.open" ng-if="userRole === 'client'">
+          <uib-accordion-heading>
+            Delivery Profiles <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-xYBstEkW" ng-include="'deliveryProfiles-tab.html'"></div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW TAB-->
+<script type="text/ng-template" id="overview-tab.html">
+  <div id="CUR-jwdUNVZU" class="sm-p-l-15 sm-p-r-15 text-right">
+    <button id="CUR-vMNgWhNh" type="button" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="saveDeliverySettings()"><i
+        class="fa fa-check"></i>
+      Save</button>
+  </div>
+  <div id="CUR-FeMfHomD" class="row">
+    <div id="CUR-zLPoDGxA" class="col-xs-12 col-sm-6">
+      <div id="CUR-JTtWvQTw" class="panel panel-default" ng-if="clientType == 'Publisher'">
+        <div id="CUR-PnnJLrZB" class="panel-heading">
+          <div id="CUR-QDIvslKy" class="panel-title">
+            CWR Setup
+          </div>
+          <div id="CUR-MGdQlgoe" class="form-group required">
+            <label id="CUR-pzrwmCcj">Sending Party Name</label>
+            <input id="CUR-XSgJqkTv" type="text" class="form-control" ng-model="client.cwrPartyName"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-EYdfSbnF" class="form-group required">
+            <label id="CUR-xIgpVElf">Sending Party ID</label>
+            <input id="CUR-bYrAOGWN" type="text" class="form-control" ng-model="client.cwrPartyId" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-wTFgDdBB" class="form-group required">
+            <label id="CUR-ULVJhWdK">Sending IPI No</label>
+            <input id="CUR-VZJnyCmw" type="text" class="form-control" ng-model="client.ipiNo" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+        </div>
+      </div>
+      </div>
+        <div id="CUR-div-panel-default-AutoApprove" class="col-xs-12 col-sm-6" ng-if="clientType == 'Publisher' && features && features.deliveries">
+          <div id="CUR-NrkoHiBb" class="panel panel-default">
+          <div id="CUR-div-panel-heading-AutoApprove" class="panel-heading">
+            <div id="CUR-div-panel-title-AutoApprove" class="panel-title">
+              Auto Approve Works
+            </div>
+            <p>
+              IMPORTANT - Enabling Auto Approve works will automatically queue works that are ingested into Curve and are valid for delivery.
+              Unless you set Works to On Hold they will be delivered in any Delivery Schedules you have set up that include all Approved Works.
+            </p>
+            <div id="CUR-div-panel-body-fg-AutoApprove" class="form-group required">
+              <input id="CUR-div-panel-body-fg-input-AutoApprove" type="checkbox" value="1" ng-model="client.autoApproveWorks">
+              <label id="CUR-div-panel-body-fg-lbl-AutoApprove">Auto Approve Works</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-div-panel-default-AutoApprove" class="col-xs-12 col-sm-6" ng-if="clientType == 'Publisher' && features && features.deliveries">
+        <div id="CUR-wZVOgiXN" class="panel panel-default">
+          <div id="CUR-div-panel-heading-AutoApprove" class="panel-heading">
+            <div id="CUR-div-panel-title-AutoApprove" class="panel-title">
+              Delivery Schedule Settings
+            </div>
+          </div>
+          <!-- Email -->
+          <div id="CUR-ksdNlXmF" class="panel-body" style="color: #333;">
+          <div id="CUR-div-panel-body-fg-email" class="form-group required">
+            <label id="CUR-div-panel-body-fg-lbl-email">User Notifications</label>
+          </div>
+            <p>
+            Add up to 3 users below to receive a notification 48 hours before a scheduled delivery is due to run, and confirmation when the delivery is complete.
+            </p>
+            <div id="CUR-div-panel-body-fg-email-form-group" class="form-group">
+              <div id="CUR-div-panel-body-fg-email-form-input-container" class="row">
+                  <user-select-field ng-repeat="email in deliveryEmails" value="email._id" edit="rights.catalogue == 'Edit'" populated="email.email" delete="removeDeliveryEmail(email)"></user-select-field>                    
+                </div>
+              </div>
+            <button
+              id="CUR-div-panel-body-fg-email-form-delete-add-btn"
+              class="btn btn-complete"
+              style="margin-left: 0px"
+              ng-show="rights.catalogue == 'Edit'"
+              ng-click="addDeliveryEmail(deliveryEmails, email)"
+              ng-disabled="deliveryEmails.length >= 3"
+            ><i class="fa fa-plus"></i> User</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+<!-- DELIVERY PARTNERS TAB-->
+<script type="text/ng-template" id="deliveryPartners-tab.html">
+  <div id="CUR-TmYEIwYA" class="jumbotron" data-pages="parallax">
+    <div id="CUR-goVOpdST" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+      <div id="CUR-OXJGsXkW" class="inner">
+      </div>
+    </div>
+  </div>
+  <div id="CUR-tuKZHRwn" class="sm-p-l-15 sm-p-r-15 text-right">
+    <div id="CUR-oLNVGMdI" class="row">
+      <div id="CUR-LovFSGJx" class="col-xs-6 col-md-4 col-lg-4 text-left">
+        <form id="CUR-dpflkBAO" class="sm-p-l-15 sm-p-r-15" ng-submit="searchDeliveryPartners()">
+          <div id="CUR-meACiBuc" class="input-group transparent">
+            <input id="CUR-lCxCerFC" type="text" class="form-control" placeholder="Search" ng-model="deliveryPartnersFilter.text">
+            <span id="CUR-HSVdfwRt" class="input-group-addon pointer" ng-click="searchDeliveryPartners()">
+              <i class="pg-search"></i>
+            </span>
+          </form>
+        </div>
+      </div>
+      <div id="CUR-nbLaGOCJ" class="col-xs-6 col-md-4 col-lg-4 col-md-offset-4 text-right">
+        <div id="CUR-eTIvgRoS" class="sm-p-l-15 sm-p-r-15">
+          <button id="CUR-faVlnFtB" class="btn btn-danger w-xs-100-p m-xs-l-0" data-toggle="modal" data-target="#deliveryPartnersDeleteModal">
+            <i class="fa fa-trash"></i>&nbsp;Delete</button>
+             <a id="CUR-evObSOjH" href="/#/deliverySettings/deliveryPartners/new" ng-if="!demoMode">
+              <button id="CUR-JCjEdwqh" class="btn btn-complete w-xs-100-p m-xs-l-0">
+              <i class="fa fa-plus"></i>&nbsp;Create</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-ksSyVbRi" class="col-sm-12">
+        <h5 id="CUR-TdQbAoqJ" class="pull-right">Total: {{deliveryPartnersTotal}}</h5>
+      </div>
+    <div id="CUR-QFzgwbZz" class="row">
+      <div id="CUR-KoIkHaBh" class="col-xs-12 text-left">
+        <div id="CUR-TivoNhgU" class="panel panel-default">
+          <div id="CUR-EzKAXDNj" class="panel-heading">
+            <div id="CUR-OwPUAlsE" class="panel-title">
+              Delivery Partners <documentation link="http://guide.curveroyaltysystems.com/article/settings/#delivery-partners"></documentation>
+            </div>
+          </div>
+          <div id="CUR-hWERwwkt" class="panel-body">
+            <div id="CUR-xvpwiIzA" class="table-responsive">
+              <table id="CUR-bzyAsRLY" class="table table-hover table-condensed dataTable no-footer">
+                <thead>
+                  <tr id="CUR-ZdtZtSjT">
+                    <th class="table-checkbox hidden-xs">
+                      <input id="CUR-celUMJTj" type="checkbox" class="select-all" ng-click="selectAllDeliveryPartners()" ng-checked="selectAllChecked" ng-show="rights.contracts == 'Edit'">
+                    </th>
+                    <th ng-click="getDeliveryPartnersSortedData('name', deliveryPartnersFilter.orderDir)" ng-class="whatClassIsIt('name')">Partner</th>
+                    <th ng-click="getDeliveryPartnersSortedData('createdAt', deliveryPartnersFilter.orderDir)" ng-class="whatClassIsIt('createdAt')">Created</th>
+                    <th>Last Delivery</th>
+                    <th>Next Delivery</th>
+                    <th>Delivery Schedule</th>
+                  </tr>
+                </thead>
+                <tbody id="CUR-ODvQxQiO">
+                  <tr id="CUR-EsImiOOl" delivery-partner-table-row ng-repeat="dp in deliveryPartners" index="{{$index}}" dp="dp"></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-BbgYeeEQ" class="col-sm-12">
+        <div id="CUR-GBVxoCHH" class="pull-right">
+          <span id="CUR-KQxGPRJX" class="inline-block" ng-if="!isShowingAllDeliveryPartners">Showing 25 Per Page  |</span>
+          <span id="CUR-mllirTRT" class="inline-block" ng-if="isShowingAllDeliveryPartners">Showing {{deliveryPartnersFilter.limit}} Per Page</span>
+          <a id="CUR-rIhqdxdP" class="p-l-5" ng-if="!isShowingAllDeliveryPartners" ng-click="showAllDeliveryPartners()">Show 500</a>
+        </div>
+      </div>
+    <div id="CUR-QrJDLYlZ" class="row">
+      <div id="CUR-JXyYuaJO" class="col-xs-12 text-center">
+        <pagination id="CUR-MzdgUpCY" pages="deliveryPartnersPages" total="deliveryPartnersTotalPages" current="deliveryPartnersCurrentPage" change-page="changeDeliveryPartnersPage(page)"></pagination>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade stick-up" id="deliveryPartnersDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="CUR-EOgAIeYY" class="modal-dialog">
+      <div id="CUR-McddBesL" class="modal-content">
+        <div id="CUR-cZMbSlNS" class="modal-header clearfix text-left">
+          <button id="CUR-DzYrOkDC" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="pg-close fs-14"></i>
+          </button>
+          <h5 id="CUR-pvuQPoPK">Delete Deliveries</h5>
+        </div>
+        <div id="CUR-wbrgDqtK" class="modal-body">
+          <div id="CUR-sTIlxquL" class="row">
+            <div id="CUR-rAMpnyPx" class="col-xs-12 m-t-20">
+              <p>Are you sure you want to delete the selected Delivery Partners? This cannot be undone.</p>
+            </div>
+          </div>
+          <div id="CUR-bvZEMabS" class="row">
+            <div id="CUR-ijHyVxXB" class="col-xs-12 m-t-20 text-right">
+              <button id="CUR-dVEwBKoP" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+              <button id="CUR-ciuBeKxT" type="button" class="btn btn-danger m-t-5" ng-click="deleteSelectedDeliveryPartners()">
+                <i class="fa fa-trash"></i>&nbsp;Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<!-- DELIVERY PROFILES TAB -->
+<script type="text/ng-template" id="deliveryProfiles-tab.html">
+  <div id="CUR-IymOEaqW" class="jumbotron" data-pages="parallax">
+    <div id="CUR-qNSsQGwg" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+      <div id="CUR-vCYFRDFB" class="inner">
+      </div>
+    </div>
+  </div>
+<!-- Main Container -->
+<div id="CUR-KDfurkhV" class="sm-p-l-15 sm-p-r-15 text-right">
+    <!-- Search and Buttons -->
+    <div id="CUR-HCMXWoRW" class="row">
+      <div id="CUR-ScZrpSTf" class="col-xs-6 col-md-4 col-lg-4 text-left">
+        <form id="CUR-mhBytCcL" class="sm-p-l-15 sm-p-r-15" ng-submit="searchDeliveryProfiles()">
+          <div id="CUR-WRoZyZQR" class="input-group transparent">
+            <input id="CUR-AUTydjaJ" type="text" class="form-control" placeholder="Search" ng-model="deliveryProfilesFilter.text">
+            <span id="CUR-EWeTUuhW" class="input-group-addon pointer" ng-click="searchDeliveryProfiles()">
+              <i class="pg-search"></i>
+            </span>
+          </div>
+        </form>
+      </div>
+      <div id="CUR-uXXBXbEJ" class="col-xs-6 col-md-4 col-md-offset-4 text-right">
+        <div id="CUR-ITCsoMdy" class="sm-p-l-15 sm-p-r-15">
+          <button id="CUR-Qofbnopm" class="btn btn-danger w-xs-100-p m-xs-l-0" data-toggle="modal" data-target="#deleteModal"
+            ng-show="rights.catalogue == 'Edit'">
+            <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          <a id="CUR-SnotCIYr" href="/#/deliverySettings/deliveryProfiles/new" ng-show="rights.catalogue == 'Edit' && !demoMode">
+            <button id="CUR-qzOPeGgg" class="btn btn-complete w-xs-100-p m-xs-l-0">
+              <i class="fa fa-plus"></i>&nbsp;Create</button>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-GPrZHIId" class="col-sm-12">
+      <h5 id="CUR-vKUqPpGT" class="pull-right">Total: {{deliveryProfilesTotal}}</h5>
+    </div>
+    <div id="CUR-xrcHJXcO" class="row">
+      <div id="CUR-NhIwYfIs" class="col-xs-12 text-left">
+        <div id="CUR-PEhJtpeR" class="panel panel-default">
+          <div id="CUR-RKoFerRV" class="panel-heading">
+            <div id="CUR-kxfENPtc" class="panel-title">
+              Delivery Profiles
+            </div>
+          </div>
+          <div id="CUR-jzefvKZi" class="panel-body">
+            <responsive-table headers="headers" data="deliveryProfiles" selectable="true" order-by="deliveryProfilesFilter.orderBy"
+              sort-changed="getDeliveryProfilesSortedData(orderBy, orderDir)"></responsive-table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-MoQRwhVV" class="col-sm-12">
+      <div id="CUR-JlFdntGf" class="pull-right">
+        <span id="CUR-pFjmrDLR" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+        <span id="CUR-MbQtVITJ" class="inline-block" ng-if="isShowingAll">Showing {{deliveryProfilesFilter.limit}} Per Page</span>
+        <a id="CUR-ptQWlhdg" class="p-l-5" ng-if="!isShowingAll" ng-click="showAllDeliveryProfiles()">Show 500</a>
+      </div>
+    </div>
+    <div id="CUR-CgeXfKLm" class="row">
+      <div id="CUR-uSvTABjd" class="col-xs-12 text-center">
+        <pagination id="CUR-XWfAeJsN" pages="deliveryProfilesPages" total="deliveryProfilesTotalPages" current="deliveryProfilesCurrentPage" change-page="changeDeliveryProfiles(page)"></pagination>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="CUR-hBAzyFLD" class="modal-dialog">
+      <div id="CUR-hkfCFPSq" class="modal-content">
+        <div id="CUR-UVWZkyxD" class="modal-header clearfix text-left">
+          <button id="CUR-wDHVSXUv" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="pg-close fs-14"></i>
+          </button>
+          <h5 id="CUR-NJsamOVh">Delete Delivery Profiles</h5>
+        </div>
+        <div id="CUR-rGsiwfUo" class="modal-body">
+          <div id="CUR-TIXnarFg" class="row">
+            <div id="CUR-sinyCWxa" class="col-xs-12 m-t-20">
+              <p>Are you sure you want to delete the selected delivery profiles? This cannot be undone.</p>
+            </div>
+          </div>
+          <div id="CUR-opPGGDRV" class="row">
+            <div id="CUR-CUOfdYPj" class="col-xs-12 m-t-20 text-right">
+              <button id="CUR-RvgTqHta" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+              <button id="CUR-EaaxgOsA" type="button" class="btn btn-danger m-t-5" ng-click="deleteSelectedDeliveryProfiles()">
+                <i class="fa fa-trash"></i>&nbsp;Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

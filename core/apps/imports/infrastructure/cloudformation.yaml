@@ -1,0 +1,193 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for Curve Royalties Imports Lambda function'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: development
+    AllowedValues:
+      - development
+      - production
+    Description: Environment name (development or production)
+
+  LambdaMemorySize:
+    Type: Number
+    Default: 1024
+    Description: Memory size for Lambda function in MB
+
+  LambdaTimeout:
+    Type: Number
+    Default: 300
+    Description: Timeout for Lambda function in seconds
+
+  ECRRepositoryName:
+    Type: String
+    Default: curve-royalties-imports
+    Description: Name of the ECR repository
+
+  ECRImageTag:
+    Type: String
+    Default: latest
+    Description: Tag of the ECR image to deploy (defaults to latest, but should be set to 'development' or 'production')
+
+Mappings:
+  EnvironmentConfig:
+    development:
+      LogLevel: debug
+      RetentionDays: 14
+      MemorySize: 1024
+    production:
+      LogLevel: info
+      RetentionDays: 30
+      MemorySize: 2048
+
+Resources:
+  ImportsFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: !Sub 'ImportsLambdaPolicy-${Environment}'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub 'arn:aws:s3:::curve-royalties-imports-${Environment}/*'
+                  - !Sub 'arn:aws:s3:::curve-royalties-imports-${Environment}'
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                Resource:
+                  - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/curve-royalties-imports-${Environment}'
+              - Effect: Allow
+                Action:
+                  - sqs:SendMessage
+                  - sqs:ReceiveMessage
+                  - sqs:DeleteMessage
+                Resource:
+                  - !Sub 'arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:curve-royalties-imports-${Environment}'
+
+  ImportsFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub 'curve-royalties-imports-${Environment}'
+      Role: !GetAtt ImportsFunctionRole.Arn
+      PackageType: Image
+      Code:
+        ImageUri: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRRepositoryName}:${ECRImageTag}'
+      MemorySize: !FindInMap [EnvironmentConfig, !Ref Environment, MemorySize]
+      Timeout: !Ref LambdaTimeout
+      Environment:
+        Variables:
+          NODE_ENV: !Ref Environment
+          LOG_LEVEL: !FindInMap [EnvironmentConfig, !Ref Environment, LogLevel]
+          ENVIRONMENT: !Ref Environment
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Application
+          Value: CurveRoyalties
+        - Key: Service
+          Value: Imports
+
+  ImportsFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/curve-royalties-imports-${Environment}'
+      RetentionInDays: !FindInMap [EnvironmentConfig, !Ref Environment, RetentionDays]
+
+  ImportsFunctionAlias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      FunctionName: !Ref ImportsFunction
+      FunctionVersion: $LATEST
+      Name: !Ref Environment
+
+  StepFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: states.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ImportsStepFunctionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource:
+                  - !GetAtt ImportsFunction.Arn
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource:
+                  - !Sub 'arn:aws:s3:::curve-royalties-imports-${Environment}/*'
+
+  ImportsStateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      StateMachineName: !Sub 'curve-royalties-imports-${Environment}'
+      RoleArn: !GetAtt StepFunctionRole.Arn
+      Definition:
+        Comment: "State machine for processing large import files"
+        StartAt: ProcessImport
+        States:
+          ProcessImport:
+            Type: Task
+            Resource: !GetAtt ImportsFunction.Arn
+            Parameters:
+              "importTemplateVersion.$": "$.importTemplateVersion"
+              "file.$": "$.file"
+              "curveUser.$": "$.curveUser"
+              "overwriteBlanks.$": "$.overwriteBlanks"
+            End: true
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Application
+          Value: CurveRoyalties
+        - Key: Service
+          Value: Imports
+
+Outputs:
+  LambdaFunctionArn:
+    Description: ARN of the Lambda function
+    Value: !GetAtt ImportsFunction.Arn
+    Export:
+      Name: !Sub 'curve-royalties-imports-lambda-${Environment}'
+
+  LambdaFunctionName:
+    Description: Name of the Lambda function
+    Value: !Ref ImportsFunction
+    Export:
+      Name: !Sub 'curve-royalties-imports-lambda-name-${Environment}'
+
+  StepFunctionArn:
+    Description: ARN of the Step Function state machine
+    Value: !Ref ImportsStateMachine
+    Export:
+      Name: !Sub 'curve-royalties-imports-stepfunction-${Environment}'

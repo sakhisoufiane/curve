@@ -1,0 +1,1273 @@
+openapi: 3.0.3
+info:
+  title: Sales API
+  description: Sales management API for retrieving, updating, and managing sales data
+  version: 1.0.0
+
+paths:
+  /sales:
+    get:
+      tags:
+        - Sales
+      summary: Retrieve sales data
+      description: Returns a list of sales data with pagination and filtering. Only accessible to client users (not payees).
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number to return
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+          description: Number of items to return per page
+        - name: orderBy
+          in: query
+          schema:
+            type: string
+            default: id
+          description: Column to order by
+        - name: orderDir
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: ASC
+          description: Order direction
+        - name: text
+          in: query
+          schema:
+            type: string
+          description: Text search filter
+        - name: releaseIds
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by release IDs
+        - name: trackIds
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by track IDs
+        - name: workIds
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by work IDs
+        - name: contractId
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by contract ID
+        - name: catType
+          in: query
+          schema:
+            type: string
+          description: Filter by catalogue type
+        - name: salesFileId
+          in: query
+          schema:
+            type: string
+          description: Filter by sales file ID
+        - name: salesFileIds
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by multiple sales file IDs
+        - name: partitionNo
+          in: query
+          schema:
+            type: integer
+          description: Filter by partition number
+        - name: trackTitle
+          in: query
+          schema:
+            type: string
+          description: Filter by track title (alias for originalTrackTitle)
+        - name: originalTrackTitle
+          in: query
+          schema:
+            type: string
+          description: Filter by original track title
+        - name: trackArtist
+          in: query
+          schema:
+            type: string
+          description: Filter by track artist (alias for originalTrackArtist)
+        - name: originalTrackArtist
+          in: query
+          schema:
+            type: string
+          description: Filter by original track artist
+        - name: releaseArtist
+          in: query
+          schema:
+            type: string
+          description: Filter by release artist (alias for originalReleaseArtist)
+        - name: originalReleaseArtist
+          in: query
+          schema:
+            type: string
+          description: Filter by original release artist
+        - name: releaseTitle
+          in: query
+          schema:
+            type: string
+          description: Filter by release title (alias for originalReleaseTitle)
+        - name: originalReleaseTitle
+          in: query
+          schema:
+            type: string
+          description: Filter by original release title
+        - name: barcode
+          in: query
+          schema:
+            type: string
+          description: Filter by barcode
+        - name: catNo
+          in: query
+          schema:
+            type: string
+          description: Filter by catalogue number
+        - name: isrc
+          in: query
+          schema:
+            type: string
+          description: Filter by ISRC
+        - name: territory
+          in: query
+          schema:
+            type: string
+          description: Filter by territory
+        - name: distributionChannel
+          in: query
+          schema:
+            type: string
+          description: Filter by distribution channel
+        - name: configuration
+          in: query
+          schema:
+            type: string
+          description: Filter by configuration
+        - name: source
+          in: query
+          schema:
+            type: string
+          description: Filter by source
+        - name: subSource
+          in: query
+          schema:
+            type: string
+          description: Filter by sub-source
+        - name: status
+          in: query
+          schema:
+            type: string
+          description: Filter by status
+        - name: originalIdentifier
+          in: query
+          schema:
+            type: string
+          description: Filter by original identifier
+        - name: originalWorkTitle
+          in: query
+          schema:
+            type: string
+          description: Filter by original work title
+        - name: originalComposers
+          in: query
+          schema:
+            type: string
+          description: Filter by original composers
+        - name: iswc
+          in: query
+          schema:
+            type: string
+          description: Filter by ISWC
+        - name: tunecode
+          in: query
+          schema:
+            type: string
+          description: Filter by tunecode
+      responses:
+        200:
+          description: Successfully retrieved sales data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sales:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Sale'
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      currentPage:
+                        type: integer
+        403:
+          description: Forbidden, the user is not a client user or does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Client not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Client not found"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /sales/export_to_csv:
+    post:
+      tags:
+        - Sales
+      summary: Export sales data to CSV
+      description: Exports filtered sales data to CSV and sends it via email. Only accessible to client users (not payees).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Sales Line IDs to export
+                filter:
+                  type: object
+                  properties:
+                    releaseIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Filter by release IDs
+                    trackIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Filter by track IDs
+                    workIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Filter by work IDs
+                    contractId:
+                      type: array
+                      items:
+                        type: string
+                      description: Filter by contract ID
+                    catType:
+                      type: string
+                      description: Filter by catalogue type
+                    salesFileId:
+                      type: string
+                      description: Filter by sales file ID
+                    salesFileIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Filter by multiple sales file IDs
+                    partitionNo:
+                      type: integer
+                      description: Filter by partition number
+                    trackTitle:
+                      type: string
+                      description: Filter by track title (alias for originalTrackTitle)
+                    originalTrackTitle:
+                      type: string
+                      description: Filter by original track title
+                    trackArtist:
+                      type: string
+                      description: Filter by track artist (alias for originalTrackArtist)
+                    originalTrackArtist:
+                      type: string
+                      description: Filter by original track artist
+                    releaseArtist:
+                      type: string
+                      description: Filter by release artist (alias for originalReleaseArtist)
+                    originalReleaseArtist:
+                      type: string
+                      description: Filter by original release artist
+                    releaseTitle:
+                      type: string
+                      description: Filter by release title (alias for originalReleaseTitle)
+                    originalReleaseTitle:
+                      type: string
+                      description: Filter by original release title
+                    barcode:
+                      type: string
+                      description: Filter by barcode
+                    catNo:
+                      type: string
+                      description: Filter by catalogue number
+                    isrc:
+                      type: string
+                      description: Filter by ISRC
+                    territory:
+                      type: string
+                      description: Filter by territory
+                    distributionChannel:
+                      type: string
+                      description: Filter by distribution channel
+                    configuration:
+                      type: string
+                      description: Filter by configuration
+                    source:
+                      type: string
+                      description: Filter by source
+                    subSource:
+                      type: string
+                      description: Filter by sub-source
+                    status:
+                      type: string
+                      description: Filter by status
+                    originalIdentifier:
+                      type: string
+                      description: Filter by original identifier
+                    originalWorkTitle:
+                      type: string
+                      description: Filter by original work title
+                    originalComposers:
+                      type: string
+                      description: Filter by original composers
+                    iswc:
+                      type: string
+                      description: Filter by ISWC
+                    tunecode:
+                      type: string
+                      description: Filter by tunecode
+      responses:
+        200:
+          description: Successfully initiated CSV export
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Your report will be sent to you via email shortly"
+        403:
+          description: Forbidden, the user is not a client user or does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Client not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Client not found"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /sales/{id}:
+    get:
+      tags:
+        - Sales
+      summary: Retrieve a specific sale
+      description: Returns details for a specific sale by ID. Only accessible to client users.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Sale ID
+      responses:
+        200:
+          description: Successfully retrieved sale
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sales:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Sale'
+        403:
+          description: Forbidden, the user is not a client user or does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Client not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Client not found"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    put:
+      tags:
+        - Sales
+      summary: Update a specific sale
+      description: Updates a sale by ID. Only accessible to client users.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Sale ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleInput'
+      responses:
+        200:
+          description: Successfully updated sale
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sale:
+                    $ref: '#/components/schemas/Sale'
+        403:
+          description: Forbidden, the user is not a client user or does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Client or sale not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find sales line"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    delete:
+      tags:
+        - Sales
+      summary: Delete a specific sale
+      description: Deletes a sale by ID. Only accessible to client users.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Sale ID
+      responses:
+        200:
+          description: Successfully deleted sale
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Sale successfully deleted"
+        403:
+          description: Forbidden, the user is not a client user or does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Client or sale not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find sales line to delete"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /sales/multiple_ids:
+    put:
+      tags:
+        - Sales
+      summary: Update multiple sales by IDs
+      description: Updates multiple sales by their IDs. Only accessible to client users.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of sale IDs to update
+                catType:
+                  type: string
+                  description: Catalogue type
+                distributionChannel:
+                  type: string
+                  description: Distribution channel
+                configuration:
+                  type: string
+                  description: Configuration
+                priceCategory:
+                  type: string
+                  description: Price category
+                source:
+                  type: string
+                  description: Source
+                subSource:
+                  type: string
+                  description: Sub-source
+                status:
+                  type: string
+                  description: Status
+              required:
+                - ids
+      responses:
+        200:
+          description: Successfully updated sales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Successfully updated"
+        403:
+          description: Forbidden, the user is not a client user or does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Client not found or no sales lines selected
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No sales lines selected"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /sales/filtered:
+    put:
+      tags:
+        - Sales
+      summary: Update sales by filter
+      description: Updates sales that match the specified filter criteria. Only accessible to client users.
+      parameters:
+        - name: releaseIds
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by release IDs
+        - name: trackIds
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by track IDs
+        - name: workIds
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by work IDs
+        - name: contractId
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by contract ID
+        - name: catType
+          in: query
+          schema:
+            type: string
+          description: Filter by catalogue type
+        - name: salesFileId
+          in: query
+          schema:
+            type: string
+          description: Filter by sales file ID
+        - name: salesFileIds
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by multiple sales file IDs
+        - name: partitionNo
+          in: query
+          schema:
+            type: integer
+          description: Filter by partition number
+        - name: trackTitle
+          in: query
+          schema:
+            type: string
+          description: Filter by track title (alias for originalTrackTitle)
+        - name: originalTrackTitle
+          in: query
+          schema:
+            type: string
+          description: Filter by original track title
+        - name: trackArtist
+          in: query
+          schema:
+            type: string
+          description: Filter by track artist (alias for originalTrackArtist)
+        - name: originalTrackArtist
+          in: query
+          schema:
+            type: string
+          description: Filter by original track artist
+        - name: releaseArtist
+          in: query
+          schema:
+            type: string
+          description: Filter by release artist (alias for originalReleaseArtist)
+        - name: originalReleaseArtist
+          in: query
+          schema:
+            type: string
+          description: Filter by original release artist
+        - name: releaseTitle
+          in: query
+          schema:
+            type: string
+          description: Filter by release title (alias for originalReleaseTitle)
+        - name: originalReleaseTitle
+          in: query
+          schema:
+            type: string
+          description: Filter by original release title
+        - name: barcode
+          in: query
+          schema:
+            type: string
+          description: Filter by barcode
+        - name: catNo
+          in: query
+          schema:
+            type: string
+          description: Filter by catalogue number
+        - name: isrc
+          in: query
+          schema:
+            type: string
+          description: Filter by ISRC
+        - name: territory
+          in: query
+          schema:
+            type: string
+          description: Filter by territory
+        - name: distributionChannel
+          in: query
+          schema:
+            type: string
+          description: Filter by distribution channel
+        - name: configuration
+          in: query
+          schema:
+            type: string
+          description: Filter by configuration
+        - name: source
+          in: query
+          schema:
+            type: string
+          description: Filter by source
+        - name: subSource
+          in: query
+          schema:
+            type: string
+          description: Filter by sub-source
+        - name: status
+          in: query
+          schema:
+            type: string
+          description: Filter by status
+        - name: originalIdentifier
+          in: query
+          schema:
+            type: string
+          description: Filter by original identifier
+        - name: originalWorkTitle
+          in: query
+          schema:
+            type: string
+          description: Filter by original work title
+        - name: originalComposers
+          in: query
+          schema:
+            type: string
+          description: Filter by original composers
+        - name: iswc
+          in: query
+          schema:
+            type: string
+          description: Filter by ISWC
+        - name: tunecode
+          in: query
+          schema:
+            type: string
+          description: Filter by tunecode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleInput'
+      responses:
+        200:
+          description: Successfully updated sales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Successfully updated"
+        400:
+          description: Bad request, no filters were selected
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No filters were selected, please select one"
+        403:
+          description: Forbidden, the user is not a client user or does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Client not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Client not found"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /sales/delete_multiple_ids:
+    put:
+      tags:
+        - Sales
+      summary: Delete multiple sales by IDs
+      description: Deletes multiple sales by their IDs. Only accessible to client users.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of sale IDs to delete
+              required:
+                - ids
+      responses:
+        200:
+          description: Successfully deleted sales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Successfully updated"
+        403:
+          description: Forbidden, the user is not a client user or does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        404:
+          description: Client not found or no sales lines selected
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No sales lines selected"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /sales/import_mappings:
+    post:
+      tags:
+        - Sales
+      summary: Import mappings
+      description: Imports mappings from a file. Only accessible to client users.
+      parameters:
+        - name: catalogueType
+          in: query
+          schema:
+            type: string
+          description: Type of catalogue for the mappings
+        - name: templateType
+          in: query
+          schema:
+            type: string
+          description: Type of template for the mappings
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Mappings file to upload
+              required:
+                - file
+      responses:
+        200:
+          description: Successfully initiated mappings import
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Alias mappings are importing, and a report will be sent to you shortly."
+        400:
+          description: Bad request, file is missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        403:
+          description: Forbidden, the user is not a client user or does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+components:
+  schemas:
+    Sale:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the sale
+        status:
+          type: string
+          description: Status of the sale
+        catType:
+          type: string
+          description: Catalogue type
+        distributionChannel:
+          type: string
+          description: Distribution channel
+        configuration:
+          type: string
+          description: Configuration
+        priceCategory:
+          type: string
+          description: Price category
+        source:
+          type: string
+          description: Source of the sale
+        subSource:
+          type: string
+          description: Sub-source of the sale
+        territory:
+          type: string
+          description: Territory of the sale
+        barcode:
+          type: string
+          description: Barcode
+        catNo:
+          type: string
+          description: Catalogue number
+        isrc:
+          type: string
+          description: International Standard Recording Code
+        units:
+          type: number
+          description: Number of units
+        retailPrice:
+          type: number
+          description: Retail price
+        perUnitRate:
+          type: number
+          description: Rate per unit
+        grossAmount:
+          type: number
+          description: Gross amount
+        netAmount:
+          type: number
+          description: Net amount
+        exchangeRate:
+          type: number
+          description: Exchange rate
+        mechanicalAtSource:
+          type: number
+          description: Mechanical at source
+        discountAmount:
+          type: number
+          description: Discount amount
+        originalCurrency:
+          type: string
+          description: Original currency
+        homeCurrencyGrossAmount:
+          type: number
+          description: Gross amount in home currency
+        homeCurrencyNetAmount:
+          type: number
+          description: Net amount in home currency
+        homeCurrencyMechanicalAtSource:
+          type: number
+          description: Mechanical at source in home currency
+        homeCurrencyDiscountAmount:
+          type: number
+          description: Discount amount in home currency
+        originalReleaseTitle:
+          type: string
+          description: Original release title
+        originalReleaseArtist:
+          type: string
+          description: Original release artist
+        originalTrackTitle:
+          type: string
+          description: Original track title
+        originalTrackArtist:
+          type: string
+          description: Original track artist
+        originalWorkTitle:
+          type: string
+          description: Original work title
+        originalComposers:
+          type: string
+          description: Original composers
+        originalIdentifier:
+          type: string
+          description: Original identifier
+        iswc:
+          type: string
+          description: International Standard Musical Work Code
+        tunecode:
+          type: string
+          description: Tunecode
+        songCode:
+          type: string
+          description: Song code
+        contractIdentifier:
+          type: string
+          description: Contract identifier
+        production:
+          type: string
+          description: Production
+        episode:
+          type: string
+          description: Episode
+        dateFrom:
+          type: string
+          format: date
+          description: Date from
+        dateTo:
+          type: string
+          format: date
+          description: Date to
+        party1:
+          type: string
+          description: Party 1
+        party2:
+          type: string
+          description: Party 2
+        party3:
+          type: string
+          description: Party 3
+        party4:
+          type: string
+          description: Party 4
+        party5:
+          type: string
+          description: Party 5
+        saleDate:
+          type: string
+          format: date
+          description: Sale date
+        transactionDate:
+          type: string
+          format: date
+          description: Transaction date
+        releaseId:
+          type: string
+          description: Release ID
+        trackId:
+          type: string
+          description: Track ID
+        workId:
+          type: string
+          description: Work ID
+        contractId:
+          type: string
+          description: Contract ID
+        description:
+          type: string
+          description: Description
+
+    SaleInput:
+      type: object
+      properties:
+        catType:
+          type: string
+          description: Catalogue type
+        distributionChannel:
+          type: string
+          description: Distribution channel
+        configuration:
+          type: string
+          description: Configuration
+        priceCategory:
+          type: string
+          description: Price category
+        source:
+          type: string
+          description: Source of the sale
+        subSource:
+          type: string
+          description: Sub-source of the sale
+        originalTrackTitle:
+          type: string
+          description: Original track title
+        originalTrackArtist:
+          type: string
+          description: Original track artist
+        originalReleaseArtist:
+          type: string
+          description: Original release artist
+        originalReleaseTitle:
+          type: string
+          description: Original release title
+        barcode:
+          type: string
+          description: Barcode
+        catNo:
+          type: string
+          description: Catalogue number
+        isrc:
+          type: string
+          description: International Standard Recording Code
+        identifier:
+          type: string
+          description: Identifier
+        territory:
+          type: string
+          description: Territory of the sale
+        currency:
+          type: string
+          description: Currency (maps to originalCurrency in database)
+        exchangeRate:
+          type: number
+          description: Exchange rate
+        saleDate:
+          type: string
+          format: date
+          description: Sale date
+        transactionDate:
+          type: string
+          format: date
+          description: Transaction date
+        releaseId:
+          type: string
+          description: Release ID
+        trackId:
+          type: string
+          description: Track ID
+        workId:
+          type: string
+          description: Work ID
+        contractId:
+          type: string
+          description: Contract ID
+        status:
+          type: string
+          description: Status of the sale

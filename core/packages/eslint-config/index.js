@@ -1,0 +1,120 @@
+module.exports = {
+  extends: ['airbnb-base', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  plugins: ['jest', '@typescript-eslint'],
+  env: {
+    node: true,
+    es2021: true,
+    'jest/globals': true,
+  },
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
+  parser: '@typescript-eslint/parser',
+  overrides: [
+    {
+      files: ['*.json', '*.jsonc'],
+      rules: {
+        quotes: ['error', 'double', { avoidEscape: true }],
+        // This rule is not applicable for JSON files
+        'no-unused-expressions': 'off',
+        // ALSO disable the TypeScript-ESLint rule that is causing the error
+        '@typescript-eslint/no-unused-expressions': 'off',
+      },
+    },
+  ],
+  rules: {
+    eqeqeq: 'warn',
+    'no-plusplus': 'warn',
+    'guard-for-in': 'warn',
+    'no-mixed-operators': 'warn',
+    'global-require': 'warn',
+    'max-len': [
+      'warn',
+      {
+        code: 250,
+        comments: 5000,
+        ignoreStrings: true,
+      },
+    ],
+    'no-lonely-if': 'warn',
+    'no-useless-concat': 'warn',
+    'new-cap': 'warn',
+    'no-array-constructor': 'warn',
+    'no-inner-declarations': 'warn',
+    'no-prototype-builtins': 'warn',
+    'no-nested-ternary': 'warn',
+    'no-sequences': 'warn',
+    'no-restricted-globals': 'warn',
+    'no-return-assign': 'warn',
+    'no-multi-assign': 'warn',
+    'no-restricted-properties': 'warn',
+    'no-control-regex': 'warn',
+    'no-dupe-keys': 'warn',
+    'prefer-arrow-callback': 'warn',
+    'prefer-destructuring': [
+      'warn',
+      {
+        array: false,
+        object: true,
+      },
+    ],
+    'prefer-spread': 'warn',
+    'prefer-promise-reject-errors': 'warn',
+    'no-bitwise': 'warn',
+    'no-buffer-constructor': 'warn',
+    'no-useless-escape': 'warn',
+    'no-unused-expressions': 'warn',
+    'func-names': ['error', 'never'],
+    'array-callback-return': 'off',
+    'class-methods-use-this': 'off',
+    'object-curly-newline': 'off',
+    radix: 'off',
+    'no-empty': 'off',
+    'no-shadow': 'off',
+    'consistent-return': 'off',
+    'no-use-before-define': 'off',
+    'no-underscore-dangle': 'off',
+    'no-unused-vars': ['warn', { args: 'none' }],
+    'no-param-reassign': 'off',
+    'no-console': 'off',
+    'import/no-extraneous-dependencies': 'off',
+    'no-restricted-syntax': [
+      'warn',
+      {
+        selector:
+          "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|off|error|info|trace|time|timeEnd)$/]",
+        message: 'Unexpected property on console object was called',
+      },
+      {
+        selector: "CallExpression[callee.object.name='console'][callee.property.name!=/^(trace|time|timeEnd)$/]",
+        message: 'Use @curveroyaltysystems/platform-shared-utils > logger[debug|info|error] ( [Mixed] )',
+      },
+    ],
+    'import/prefer-default-export': 'off',
+    'import/extensions': 'off',
+    'import/no-unresolved': 'off',
+    quotes: ['error', 'single', { avoidEscape: true }],
+    'no-await-in-loop': 'off',
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: 'ExportAllDeclaration',
+        message: 'Barrel exports (export * from) are not allowed. Use explicit named exports instead.',
+      },
+    ],
+    '@typescript-eslint/no-unused-expressions': [
+      'error',
+      {
+        allowTernary: true,
+        allowShortCircuit: true,
+      },
+    ],
+    'no-promise-executor-return': 'off',
+  },
+  ignorePatterns: ['**/dist/**'],
+};

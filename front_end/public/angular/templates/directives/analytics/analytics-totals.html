@@ -1,0 +1,40 @@
+<div data-ng-if="comparisonData || alwaysShow" data-ng-class="{ 'col-xs-12' : !comparisonData, 'col-xs-6': comparisonData }">
+  <div class="row" data-ng-if="totals">
+    <div data-ng-class="{ 'col-sm-6' : !totals.costs && !comparisonData, 'col-sm-4': totals.costs && !comparisonData, 'col-sm-12': comparisonData }" class="col-xs-12">
+      <div class="panel panel-default height-100 bg-complete sm-m-b-5">
+        <div class="panel-heading">
+          <div class="panel-title text-white">
+            Total Revenue >
+          </div>
+        </div>
+        <div class="panel-body bg-transparent">
+          <h3 class="text-white no-margin"><span class="semi-bold">{{currencySymbol}}{{totals.revenue | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div data-ng-class="{ 'col-sm-6' : !totals.costs && !comparisonData, 'col-sm-4': totals.costs && !comparisonData, 'col-sm-12': comparisonData }" class="col-xs-12">
+      <div data-ng-class="{ 'sm-m-b-5' : totals.costs }" class="panel panel-default height-100 bg-success-green">
+        <div class="panel-heading">
+          <div class="panel-title text-white">
+            Total Units >
+          </div>
+        </div>
+        <div class="panel-body bg-transparent">
+          <h3 class="text-white no-margin"><span class="semi-bold">{{totals.units | number: 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div data-ng-if="totals.costs" data-ng-class="{ 'col-sm-4': !comparisonData, 'col-sm-12': comparisonData }" class="col-xs-12">
+      <div class="panel panel-default height-100 bg-warning">
+        <div class="panel-heading">
+          <div class="panel-title text-white">
+            Total Costs >
+          </div>
+        </div>
+        <div class="panel-body bg-transparent">
+          <h3 class="text-white no-margin"><span class="semi-bold">{{currencySymbol}}{{totals.costs | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

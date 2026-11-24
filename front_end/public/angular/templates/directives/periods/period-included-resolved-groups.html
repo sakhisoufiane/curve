@@ -1,0 +1,192 @@
+<div class="container-fluid container-fixed-lg">
+  <div class="row">
+    <div class="col-xs-12 col-md-10 col-md-offset-1">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div id="resolved-groups-nav" class="row m-b-20">
+            <div id="resolved-groups-nav-content" class="col-xs-12">
+              <ul id="resolved-groups-nav-breadcrumb" class="breadcrumb wizard-breadcrumb">
+                <li id="resolved-groups-nav-breadcrumb-setup"><a ng-click="changePage('Setup', false, true)">Setup</a></li>
+                <li id="resolved-groups-nav-breadcrumb-included-sales" ng-if="clientType !== 'Publisher'" ng-click="changePage('Included Sales', false, true)"><a>Included Sales</a></li>
+                <li id="resolved-groups-nav-breadcrumb-included-income" ng-if="clientType === 'Publisher'" ng-click="changePage('Included Sales', false, true)"><a>Included Income</a></li>
+                <li id="resolved-groups-nav-breadcrumb-included-resolved-income" ng-if="clientType !== 'Publisher'"><a class="active">Included Resolved Sales</a></li>
+                <li id="resolved-groups-nav-breadcrumb-included-resolved-income" ng-if="clientType === 'Publisher'"><a class="active">Included Resolved Income</a></li>
+                <li id="resolved-groups-nav-breadcrumb-included-costs" ng-if="period.contractType !== 'Mechanical' && clientType !== 'Publisher'">Included Costs</li>
+              </ul>
+            </div>
+          </div>
+          <div id="main-row" class="row">
+            <div id="main-container" class="col-xs-12">
+              <div id="included-resolved-groups-row" class="row row-wrapper">
+                <div id="included-resolved-groups" class="col-xs-12">
+                  <div id="included-resolved-groups-info-row" class="row">
+                    <div id="included-resolved-groups-info-container" class="col-xs-12">
+                      <div id="included-resolved-groups-info-text" class="alert alert-info">
+                        <p>This is Income that has been released from Suspense, and that you want to be included in this period.</p>
+                        <p>NB If you do not want income released from Suspense to be reported, please set it back to Suspense in the Income db.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="included-resolved-groups-header-row" class="row">
+                    <div id="included-resolved-groups-header-container" class="col-xs-6">
+                      <div id="included-resolved-groups-header-group" class="form-group">
+                        <h4 id="included-resolved-groups-header-heading">Included Resolved Groups <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                            tooltip-template="This table displays all Resolved Groups that will be included in the period calculations"></i>
+                        </h4>
+                      </div>
+                    </div>
+                    <div id="included-resolved-groups-actions-row" class="col-xs-6 text-right">
+                      <button id="exclude-selected-resolved-groups-button" class="btn btn-default" ng-click="excludeSelectedResolvedGroups()" tooltips tooltip-class="wider"
+                        tooltip-template="This only excludes those Resolved Groups you have selected on this page below">Exclude Selected</button>
+                      <button id="exclude-all-resolved-groups-button" class="btn btn-primary" ng-click="excludeAllResolvedGroups()" tooltips tooltip-class="wider"
+                        tooltip-template="This excludes every Resolved Group, regardless of what you have selected">Exclude All</button>
+                    </div>
+                  </div>
+                  <div id="included-resolved-groups-table" class="table-responsive overflow-x-hidden">
+                    <table id="included-resolved-groups-data-table" class="table table-hover table-condensed dataTable no-footer">
+                      <thead id="included-resolved-groups-table-header">
+                        <tr id="included-resolved-groups-table-header-row">
+                          <th id="included-resolved-groups-table-header-checkbox" class="table-checkbox hidden-xs"><input type="checkbox" class="select-all"
+                            ng-click="selectAll(includedResolvedGroups)"></th>
+                          <th id="included-resolved-groups-table-header-name" ng-click="getSortedData('name')" ng-class="whatClassIsIt('name')">Name</th>
+                          <th id="included-resolved-groups-table-header-lines" ng-click="getSortedData('lines')" ng-class="whatClassIsIt('lines')">Lines</th>
+                          <th id="included-resolved-groups-table-header-createdAt" ng-click="getSortedData('createdAt')" ng-class="whatClassIsIt('createdAt')" class="hidden-xs">Created</th>
+                        </tr>
+                      </thead>
+                      <tbody id="included-resolved-groups-table-body">
+                        <tr sales-group-table-row id="included-resolved-group-{{$index}}" ng-repeat="includedResolvedGroup in includedResolvedGroups" sales-group="includedResolvedGroup" hide-type="true" edit="true"></tr>
+                      </tbody>
+                    </table>
+                    <div id="included-resolved-groups-pagination-row" class="row">
+                      <div id="included-resolved-groups-pagination-container" class="col-xs-12 text-center">
+                        <pagination id="included-resolved-groups-pagination" pages="includedResolvedGroupsPages" total="totalIncludedResolvedGroupsPages"
+                          current="currentIncludedResolvedGroupsPage" change-page="changeIncludedResolvedGroupsPage(page)">
+                        </pagination>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div id="excluded-resolved-groups" class="col-xs-12 m-t-50">
+                <div id="excluded-resolved-groups-header-row" class="row">
+                  <div id="excluded-resolved-groups-header-container" class="col-xs-6">
+                    <div id="excluded-resolved-groups-header-group" class="form-group">
+                      <h4 id="excluded-resolved-groups-header-heading">Excluded Resolved Groups <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                          tooltip-template="This table displays all Resolved Groups that WILL NOT be included in the period calculations. Any Resolved Groups that you want to be included should be selected using the buttons to the right"></i>
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+                <div id="excluded-resolved-groups-filters" class="row m-b-20">
+                  <div id="excluded-resolved-groups-filter-name" class="col-xs-6 col-md-4">
+                    <div id="excluded-resolved-groups-filter-name-group" class="form-group">
+                      <label id="excluded-resolved-groups-filter-name-label">Name</label>
+                      <input id="excluded-resolved-groups-filter-name-input" type="text" class="form-control" ng-model="resolvedGroupsFilter.text">
+                    </div>
+                  </div>
+                  <div id="excluded-resolved-groups-filter-created-after" class="col-xs-6 col-md-4">
+                    <div id="excluded-resolved-groups-filter-created-after-group" class="form-group">
+                      <label id="excluded-resolved-groups-filter-created-after-label">Created after</label>
+                      <div id="datepicker-component" class="form-group input-group date">
+                        <input id="excluded-resolved-groups-filter-created-after-input" type="text" class="form-control" ng-model="resolvedGroupsFilter.createdAfter"
+                          uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}"
+                          is-open="createdAfterPopup" ng-click="openCreatedAfterPopup()">
+                        <span id="excluded-resolved-groups-filter-created-after-calendar" class="input-group-addon" ng-click="openCreatedAfterPopup()">
+                          <i id="excluded-resolved-groups-filter-created-after-calendar-icon" class="fa fa-calendar"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="excluded-resolved-groups-filter-created-before" class="col-xs-6 col-md-4">
+                    <div id="excluded-resolved-groups-filter-created-before-group" class="form-group">
+                      <label id="excluded-resolved-groups-filter-created-before-label">Created before</label>
+                      <div id="datepicker-component" class="form-group input-group date">
+                        <input id="excluded-resolved-groups-filter-created-before-input" type="text" class="form-control" ng-model="resolvedGroupsFilter.createdBefore"
+                          uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}"
+                          is-open="createdBeforePopup" ng-click="openCreatedBeforePopup()">
+                        <span id="excluded-resolved-groups-filter-created-before-calendar" class="input-group-addon" ng-click="openCreatedBeforePopup()">
+                          <i id="excluded-resolved-groups-filter-created-before-calendar-icon" class="fa fa-calendar"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="excluded-resolved-groups-filter-actions" class="row">
+                  <div id="excluded-resolved-groups-filter-actions-container" class="col-xs-4 col-xs-offset-4 center">
+                    <button id="excluded-resolved-groups-filter-actions-filter" class="btn btn-complete" ng-click="filterExcludedResolvedGroups()"><i class="fa fa-search"></i>&nbsp;Filter</button>
+                  </div>
+                </div>
+                <div id="excluded-resolved-groups-actions-row" class="row m-t-20">
+                  <div id="excluded-resolved-groups-actions-container" class="col-xs-12 text-right">
+                    <button id="include-selected-resolved-groups-button" class="btn btn-success pull-right" ng-click="includeSelectedResolvedGroups()" tooltips
+                      tooltip-class="wider"
+                      tooltip-template="This only includes those Resolved Groups you have selected on this page below">Include Selected</button>
+                    <button id="include-filtered-resolved-groups-button" class="btn btn-default pull-right" ng-click="includeFilteredResolvedGroups()" tooltips
+                      tooltip-class="wider"
+                      tooltip-template="This includes every Resolved Group based on your filter parameters">Include Filtered</button>
+                  </div>
+                </div>
+                <div id="excluded-resolved-groups-table-container" class="table-responsive overflow-x-hidden">
+                  <table id="excluded-resolved-groups-table" class="table table-hover table-condensed dataTable no-footer">
+                    <thead id="excluded-resolved-groups-table-header">
+                      <tr id="excluded-resolved-groups-table-header-row">
+                        <th id="excluded-resolved-groups-table-header-checkbox" class="table-checkbox hidden-xs"><input type="checkbox" class="select-all" ng-click="selectAll(excludedResolvedGroups)"></th>
+                        <th id="excluded-resolved-groups-table-header-name" ng-click="getSortedData('name')" ng-class="whatClassIsIt('name')">Name</th>
+                        <th id="excluded-resolved-groups-table-header-lines" ng-click="getSortedData('lines')" ng-class="whatClassIsIt('lines')">Lines</th>
+                        <th id="excluded-resolved-groups-table-header-created" ng-click="getSortedData('createdAt')" ng-class="whatClassIsIt('createdAt')" class="hidden-xs">Created</th>
+                      </tr>
+                    </thead>
+                    <tbody id="excluded-resolved-groups-table-body">
+                      <tr sales-group-table-row id="excluded-resolved-group-table-row-{{$index}}" ng-repeat="excludedResolvedGroup in excludedResolvedGroups" sales-group="excludedResolvedGroup" hide-type="true" edit="true"></tr>
+                    </tbody>
+                  </table>
+                  <div id="excluded-resolved-groups-pagination-container" class="col-xs-12 text-center">
+                    <pagination id="excluded-resolved-groups-pagination" pages="excludedResolvedGroupsPages" total="totalExcludedResolvedGroupsPages"
+                      current="currentExcludedResolvedGroupsPage" change-page="changeExcludedResolvedGroupsPage(page)">
+                    </pagination>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="footer-actions" class="row m-t-20">
+            <div id="footer-actions-container" class="col-xs-12">
+              <a id="footer-action-next" ng-click="changePage('Included Costs')" class="btn btn-complete pull-right"
+                ng-if="period.contractType !== 'Mechanical' && clientType !== 'Publisher'">Next</a>
+              <a id="footer-action-calculate" ng-click="runCalculation()" class="btn btn-primary pull-right"
+                ng-if="period.contractType === 'Mechanical' || clientType === 'Publisher'">Calculate</a>
+              <a id="footer-action-save" ng-click="saveAndRevert()" class="btn btn-complete pull-right"
+                ng-if="period.runNo && (period.contractType === 'Mechanical' || clientType === 'Publisher')">Save</a>
+              <a id="footer-action-back" ng-click="changePage('Included Sales', false, true)" class="btn btn-default pull-right">Back</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="confirmationModal" class="modal fade stick-up" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="confirmationModalDialog" class="modal-dialog">
+    <div id="confirmationModalContent" class="modal-content">
+      <div id="confirmationModalHeader" class="modal-header clearfix text-left">
+        <button id="confirmationModalCloseButton" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i></button>
+        <h5 id="confirmationModalTitle">No Resolved Groups Selected</h5>
+      </div>
+      <div id="confirmationModalBody" class="modal-body">
+        <div id="confirmationModalBodyContent" class="row">
+          <div id="confirmationModalBodyText" class="col-xs-12 m-t-20">
+            <p id="confirmationModalBodyTextP">You have selected no Resolved Groups to calculate in this period. Are you sure you want to continue?</p>
+          </div>
+        </div>
+        <div id="confirmationModalFooter" class="row">
+          <div id="confirmationModalFooterContent" class="col-xs-12 m-t-20 text-right">
+            <button id="confirmationModalCancelButton" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="confirmationModalContinueButton" type="button" class="btn btn-complete m-t-5" data-dismiss="modal" ng-click="changePage('Included Costs',true)">Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,2 @@
+ID,Title,Version,Artist,Cat No,Barcode,Release Date,Format,Price Category,Dealer Price,MCPS ID,Exempt from Mechanicals,Release Alises,ID,Title,Version,Artist,ISRC,P Line,Track Aliases
+Leave blank if a new Release,,,,Must be unique,,DD/MM/YYYY,,,,,TRUE or FALSE,Separate multiple alises using a semi-colon (;),Leave blank if a new Track,,,,"Any dashes, spaces or other characters will be stripped out on import",,Separate multiple alises using a semi-colon (;)

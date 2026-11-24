@@ -1,0 +1,14 @@
+{
+  "name": "crm",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm --workspace apps/server run dev & npm --workspace apps/client run dev",
+    "dev:server": "npm --workspace apps/server run dev",
+    "dev:client": "npm --workspace apps/client run dev",
+    "build": "npm --workspace apps/server run build && npm --workspace apps/client run build",
+    "start": "npm --workspace apps/server run start"
+  }
+}

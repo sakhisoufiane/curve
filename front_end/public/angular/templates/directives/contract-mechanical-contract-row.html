@@ -1,0 +1,99 @@
+<div class="row border-bottom-dashed m-b-10 sm-m-b-15 contract-terms">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher'">
+        <label>Cat Type</label>
+        <select class="form-control" ng-model="term.catType" ng-options="item as item for item in catTypes" ng-disabled="edit != true"></select>
+      </div>
+      <div ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-1-5', false: 'form-group col-xs-6 col-sm-4 col-md-2' }[clientType != 'Publisher']">
+        <label>Cat Group</label>
+        <select class="form-control" ng-model="term.catalogueGroup" ng-options="item as item for item in catalogueGroups" ng-disabled="edit != true"></select>
+      </div>
+      <div ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-1-5', false: 'form-group col-xs-6 col-sm-4 col-md-2' }[clientType != 'Publisher']">
+        <label>Territory</label>
+        <ui-select ng-model="term.territory" ng-disabled="edit != true">
+          <ui-select-match>
+              <span ng-bind="$select.selected.name"></span>
+          </ui-select-match>
+          <ui-select-choices group-by="groupFind" repeat="country.code as country in countries | filter: $select.search">
+              <span class="country" ng-bind="country.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-1-5', false: 'form-group col-xs-6 col-sm-4 col-md-2' }[clientType != 'Publisher']">
+        <label>Channel</label>
+        <select class="form-control" ng-model="term.channel" ng-options="item.value as item.name for item in channels" ng-disabled="edit != true"></select>
+      </div>
+      <div ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-1-5', false: 'form-group col-xs-6 col-sm-4 col-md-2' }[clientType != 'Publisher']">
+        <label>Config</label>
+        <select class="form-control" ng-model="term.configuration" ng-options="item.value as item.name for item in configurations" ng-disabled="edit != true"></select>
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher'">
+        <label>Price Cat</label>
+        <select class="form-control" ng-model="term.priceCategory" ng-options="item.value as item.name for item in priceCategories" ng-disabled="edit != true"></select>
+      </div>
+      <div ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-1-5', false: 'form-group col-xs-6 col-sm-4 col-md-1-5' }[clientType != 'Publisher']">
+        <label>Source</label>
+        <select class="form-control" ng-model="term.source" ng-options="item.value as item.name for item in sources" ng-disabled="edit != true"></select>
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="escalationTrackers && escalationTrackers.length > 0 && termType === 'sale'">
+        <label>Esc. Trackers <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-side="left"
+            tooltip-template="By selecting an escalation tracker, any sales that match this term will be added to the tracking values"></i></label>
+        <ui-select multiple ng-model="term.escalationTrackers" theme="bootstrap" ng-disabled="edit != true">
+          <ui-select-match>
+            <span style="vertical-align:middle;">{{$item.name}}</span>
+          </ui-select-match>
+          <ui-select-choices repeat="item.name as item in escalationTrackers | filter: $select.search">
+            <span ng-bind="item.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+        <label>Basis <i class="fa fa-question-circle" tooltips tooltip-side="right" tooltip-class="wider" tooltip-template="How should the mechanical be calculated?<br/><b>Statutory Rate</b> - A rate set against each track, calculated based on duration<br/><b>Unit Rate</b> - Unit Rate assigned in contract terms, multiplied by no. of units. This is multiplied by rates if specified<br/><b>Fixed Unit Rate</b> - Unit Rate assigned in contract terms, multiplied by no. of units. This ignores any shares defined against the track or release<br/><b>Net Receipts</b> - A percentage based on the net receipts<br/><b>PPD</b> - Calculated as a percentage of the PPD set against the release<br/>"></i></label>
+        <select class="form-control" ng-model="term.type" ng-options="item as item for item in mechanicalTypes" ng-disabled="edit != true"></select>
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="currencies">
+        <label>Deduction Type <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="When should the mechanical be deducted?<br/><b>Pre-Calculation</b> - The mechanical is deducted before the royalty rate is run - netting down before the royalty is calculated<br/><b>Post-Calculation</b> - The mechanical is deducted from the calculated royalty - the payee bares the full cost of the mechanical"></i></label>
+        <select class="form-control" ng-model="term.deductionType" ng-options="item as item for item in deductionTypes" ng-disabled="edit != true"></select>
+      </div>
+      <div class="form-group required col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher' && (term.type === 'Statutory Rate' || term.type === 'Min Statutory Rate')">
+        <label>Rate Basis</label>
+        <select class="form-control" ng-model="term.rateBasis" ng-options="item as item for item in rateBasises" ng-disabled="edit != true"></select>
+      </div>
+      <div class="form-group required col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher' && (term.type === 'Unit Rate' || term.type === 'Fixed Unit Rate')">
+        <label>Unit Rate</label>
+        <input type="text" class="form-control" ng-model="term.unitRate" ng-disabled="edit != true">
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5">
+        <label>Rate %</label>
+        <input type="text" class="form-control" ng-model="term.rate" ng-disabled="edit != true">
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher' && !deduction">
+        <label>Reserve %</label>
+        <input type="text" class="form-control" ng-model="term.reserve" ng-disabled="edit != true">
+      </div>
+      <div class="form-group col-xs-6 col-sm-4 col-md-1-5" ng-if="clientType != 'Publisher' && !deduction && currencies">
+        <label>Currency</label>
+        <ui-select ng-model="term.currency" ng-disabled="edit != true">
+          <ui-select-match allow-clear="true">
+            <span ng-bind="$select.selected.code"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+            <span ng-bind-html="currency.code"></span>
+            <span> &nbsp; - &nbsp; </span>
+            <span ng-bind-html="currency.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="form-group col-xs-12 col-sm-12 col-md-2 two-cols-row">
+        <button ng-show="edit == true" class="btn btn-danger row-button m-xs-t-0 m-l-0" ng-click="delete({ term: term })"><i class="fa fa-trash"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12" ng-if="mechanical && features && features.escalations">
+    <contract-sales-escalation-row edit="edit" ng-repeat="escalation in term.escalations track by $index" escalation="escalation" index="$index" sales-types="salesTypes" sale="sale" escalation-trackers="escalationTrackers" client-type="clientType" rate-basises="rateBasises" mechanical-types="mechanicalTypes" mechanical="mechanical" delete="deleteEscalation(escalation)"></contract-sales-escalation-row>
+    <button ng-show="edit == true" class="btn btn-primary w-xs-100-p m-xs-l-0 m-l-m-9" ng-click="addEscalation()">+ Escalation</button>
+  </div>
+</div>

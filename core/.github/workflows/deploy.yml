@@ -1,0 +1,49 @@
+name: Deploy
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  changed-packages:
+    name: Detect Changed Packages
+    uses: ./.github/workflows/detect-changes.yml
+
+  # publish-package-models:
+  #   name: Publish Package - Models
+  #   needs: [changed-packages]
+  #   if: needs.changed-packages.outputs.package_models_changed == 'true'
+  #   uses: ./.github/workflows/publish-package.yml
+  #   with:
+  #     package: models
+  #   secrets: inherit
+
+  # publish-package-logger:
+  #   name: Publish Package - Logger
+  #   needs: [changed-packages]
+  #   if: needs.changed-packages.outputs.package_logger_changed == 'true'
+  #   uses: ./.github/workflows/publish-package.yml
+  #   with:
+  #     package: logger
+  #   secrets: inherit
+
+  # deploy-imports:
+  #   name: Deploy - Imports
+  #   needs: [changed-packages]
+  #   if: needs.changed-packages.outputs.app_imports_changed == 'true'
+  #   uses: ./.github/workflows/deploy-imports.yml
+  #   secrets: inherit
+
+  deploy-curve-app:
+    name: Deploy - Curve App
+    needs: [changed-packages]
+    if: needs.changed-packages.outputs.app_curve_app_changed == 'true'
+    uses: ./.github/workflows/deploy-curve-app.yml
+    secrets: inherit
+
+  deploy-storybook:
+    name: Deploy - Storybook
+    needs: [changed-packages]
+    if: needs.changed-packages.outputs.package_react_ui_library_changed == 'true'
+    uses: ./.github/workflows/deploy-storybook.yml
+    secrets: inherit

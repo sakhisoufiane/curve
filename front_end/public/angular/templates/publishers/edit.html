@@ -1,0 +1,396 @@
+<div id="CUR-hIBNCTZp" class="jumbotron" data-pages="parallax">
+  <div id="CUR-XiCWNamN" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-hBCvYXKA" class="inner">
+      <ul id="CUR-SEvhQdvw" class="breadcrumb">
+        <li id="CUR-QVlwzSFp">
+          <a id="CUR-kftJkCAH" href="/#/publishers">Publishers</a>
+        </li>
+        <li id="CUR-jcxHmemF" ng-show="!publisher._id">
+          <a id="CUR-OprCcRBN" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-QFIjYOuE" ng-show="publisher._id">
+          <a id="CUR-EZjhvqEV" href="/#/publishers/{{publisher._id}}" class="active">{{publisher.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-NQNPFrJM" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-iVfAayGA" class="row">
+    <div id="CUR-hrrYClJv" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-mvVYCWXR" ng-show="rights.catalogue == 'Edit'" ng-if="publisher._id" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+        <i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-ucwjCVbP" ng-show="rights.catalogue == 'Edit'" ng-if="publisher._id" class="btn btn-warning" ng-click="copy()"><i class="fa fa-copy"></i> Copy</button>
+      <button id="CUR-dWTsVAEi" ng-show="rights.catalogue == 'Edit'" class="btn btn-complete" ng-click="save()">
+        <i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-oshKRwMV" ng-show="deletionError" class="alert alert-danger">
+    <div id="CUR-WUoPAnHJ" ng-show="deletionError.releases">
+      <p>The following Releases need to be detached first:</p>
+      <p id="CUR-hUYsnIFU" ng-repeat="error in deletionError.releases track by $index">
+        <a id="CUR-upMCvjhW" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-CIbzSgQn" ng-show="deletionError.tracks">
+      <p>The following Tracks need to be detached first:</p>
+      <p id="CUR-dTVUlpbR" ng-repeat="error in deletionError.tracks track by $index">
+        <a id="CUR-ypSXjKQi" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-NjipKLJE" ng-show="deletionError.works">
+      <p>The following Works need to be detached first:</p>
+      <p id="CUR-gIFDxIXX" ng-repeat="error in deletionError.works track by $index">
+        <a id="CUR-lWjPtwPR" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-LzYZJwmf" ng-show="deletionError.composers">
+      <p>The following Composers need to be detached first:</p>
+      <p id="CUR-zNQdTdJR" ng-repeat="error in deletionError.composers track by $index">
+        <a id="CUR-IDUuScil" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-HrwFzJKx" ng-show="deletionError.publishers">
+      <p>The following Publishers need to be detached first:</p>
+      <p id="CUR-cPqBidFd" ng-repeat="error in deletionError.publishers track by $index">
+        <a id="CUR-RInWnVVo" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+  </div>
+
+  <div id="CUR-pnYdIbIO" class="row">
+    <div id="CUR-ZtIUpaPs" class="panel panel-transparent hidden-xs">
+      <!-- Nav tabs -->
+      <ul id="CUR-BZPNwaHR" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-YQCXWjHK" class="active" ng-click="setTab('overview')">
+          <a id="CUR-VtYURZBQ" data-toggle="tab" aria-expanded="true"><span id="CUR-kRImohIc">Overview</span></a>
+        </li>
+        <li id="CUR-WhzgKhVi" ng-if="clientType == 'Publisher'" ng-click="setTab('territories')">
+          <a id="CUR-bttzmDuc" data-toggle="tab" aria-expanded="true"><span id="CUR-nSEtkEbf">Territories</span></a>
+        </li>
+        <li ng-click="setTab('aliases')">
+          <a data-toggle="tab" aria-expanded="true"><span>Aliases</span></a>
+        </li>
+      </ul>
+      <div id="CUR-zyDrKWSK" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-phmBTEOu" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+        <div id="CUR-zqKKahzY" ng-show="activeTab === 'territories'" ng-include="'territories-tab.html'"></div>
+        <div ng-show="activeTab === 'aliases'" ng-include="'aliases-tab.html'"></div>
+      </div>
+    </div>
+    <div id="CUR-qthsgqLW" class="col-xs-12 visible-xs p-l-20 p-r-20" ng-if="showAccordions">
+      <uib-accordion close-others="true" ng-init="status1.open = true;">
+        <div id="CUR-ERwyyBKh" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>
+            Overview <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-hjaBpSyS" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div id="CUR-tYyvrZtl" uib-accordion-group ng-if="clientType == 'Publisher'" class="panel-default" is-open="status2.open">
+          <uib-accordion-heading>
+            Territories <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-hjVXaJOQ" ng-include="'territories-tab.html'"></div>
+        </div>
+        <div uib-accordion-group class="panel-default" is-open="status3.open">
+          <uib-accordion-heading>
+            Aliases <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"></i>
+          </uib-accordion-heading>
+          <div ng-include="'aliases-tab.html'"></div>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+
+  <script type="text/ng-template" id="overview-tab.html">
+    <div id="CUR-QBOzOFUo" class="row">
+      <div id="CUR-GnSJdlQz" class="col-xs-12 col-sm-6">
+        <div id="CUR-WkYNUMpw" class="panel panel-default">
+          <div id="CUR-jcXtetkV" class="panel-heading">
+            <div id="CUR-szYgIcNS" class="panel-title">
+              Overview <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-publishers/#overview"></documentation>
+            </div>
+          </div>
+          <div id="CUR-gBEbiWvK" class="panel-body p-t-15">
+            <div id="CUR-drBqLwAv" class="form-group">
+              <label id="CUR-OjWjLHbP">Interested Party ID <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The unique identifier assigned by Curve for use within CWR deliveries"></i></label>
+              <input id="CUR-pnppUYpc" type="text" class="form-control" ng-model="publisher.interestedPartyId" disabled>
+            </div>
+            <div id="CUR-hsnfPosF" class="form-group required">
+              <label id="CUR-DsCClnwz">Name</label>
+              <input id="CUR-uwDhIFdL" type="text" class="form-control" ng-model="publisher.name" ng-disabled="rights.catalogue != 'Edit'">
+            </div>
+            <div id="CUR-hsnfPosF" class="form-group required">
+              <label id="CUR-DsCClrgd">CWR Name <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Set a specific name for use in CWR. Leave blank and we will use the main name."></i></label>
+              <input id="CUR-uwDhIewrw" type="text" class="form-control" ng-model="publisher.cwrName" ng-disabled="rights.catalogue != 'Edit'">
+            </div>
+            <div id="CUR-uaCITqra" class="form-group">
+              <label id="CUR-Fhfwdpyb">Foreign ID <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Used for integrating into other systems, such as accounting systems"></i></label>
+              <input id="CUR-jBtFftsd" type="text" class="form-control" ng-model="publisher.foreignId" ng-disabled="rights.catalogue != 'Edit'">
+            </div>
+            <div id="CUR-ZJvdfHtu" class="form-group">
+              <label id="CUR-WWvMCQWh">CAE Number</label>
+              <input id="CUR-YGFKkpxE" type="text" class="form-control" ng-model="publisher.cae" ng-disabled="rights.catalogue != 'Edit'">
+            </div>
+            <div id="CUR-QLbJiIYi" class="form-group" ng-if="clientType == 'Publisher'">
+              <input id="CUR-vfiuIihP" type="checkbox" value="1" ng-model="publisher.controlled" ng-disabled="rights.catalogue != 'Edit'">
+              <label id="CUR-LUiFfQyL">Controlled</label>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-iZWXPDMJ" class="panel panel-default" ng-if="clientType == 'Publisher'">
+          <div id="CUR-XdNGUoeP" class="panel-heading">
+            <div id="CUR-SupLAPVv" class="panel-title">
+              Notes
+            </div>
+          </div>
+          <div id="CUR-osmVudPE" class="panel-body p-t-15">
+            <div id="CUR-FQUAyOOe" class="form-group">
+              <textarea class="form-control standard-textarea" ng-model="publisher.notes" ng-disabled="rights.catalogue != 'Edit'"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-SRGxUxuF" class="col-xs-12 col-sm-6">
+        <div id="CUR-ozxDOdcX" class="panel panel-default" ng-if="clientType == 'Publisher'">
+          <div id="CUR-dTNlUWtc" class="panel-heading">
+            <div id="CUR-KVCGGCES" class="panel-title">
+              Societies <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-publishers/#societies"></documentation>
+            </div>
+          </div>
+          <div id="CUR-JIohEaYK" class="panel-body p-t-15">
+            <div id="CUR-WdtDOKtP" class="row">
+              <div id="CUR-XeiFODga" class="col-xs-12 col-md-6">
+                <div id="CUR-BJYWMDiX" class="form-group">
+                  <label id="CUR-UCjpLeOD">Main Society</label>
+                  <ui-select ng-model="publisher.mainPro" ng-disabled="rights.catalogue != 'Edit'">
+                    <ui-select-match allow-clear="true">
+                      <span id="CUR-QLdflcKv" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item in pros | filter: $select.search track by $index">
+                      <span id="CUR-owyNjjiy" ng-bind="item"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-ZPKUzdYA" class="col-xs-12 col-md-6">
+                <div id="CUR-kPyzwVqc" class="form-group">
+                  <label id="CUR-BCbgELVp">Identifier</label>
+                  <input id="CUR-qxmuYAKg" type="text" class="form-control" ng-model="publisher.mainProIdentifier" ng-disabled="rights.catalogue != 'Edit'">
+                </div>
+              </div>
+            </div>
+            <div id="CUR-oINDERAq" class="row">
+              <div id="CUR-rmiyXzJy" class="col-xs-12 col-md-6">
+                <div id="CUR-BDOzWIyn" class="form-group">
+                  <label id="CUR-rBTvdnbs">Mechanical Society</label>
+                  <ui-select ng-model="publisher.mechanicalPro" ng-disabled="rights.catalogue != 'Edit'">
+                    <ui-select-match allow-clear="true">
+                      <span id="CUR-QnkUhXUn" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item in pros | filter: $select.search track by $index">
+                      <span id="CUR-XjEbDzRm" ng-bind="item"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-UDoVXgAG" class="col-xs-12 col-md-6">
+                <div id="CUR-SDcokPWE" class="form-group">
+                  <label id="CUR-EtHqLmwH">Identifier</label>
+                  <input id="CUR-eFOUNyYv" type="text" class="form-control" ng-model="publisher.mechanicalProIdentifier" ng-disabled="rights.catalogue != 'Edit'">
+                </div>
+              </div>
+            </div>
+            <div id="CUR-IFShyjJK" class="row">
+              <div id="CUR-maNwMpMS" class="col-xs-12 col-md-6">
+                <div id="CUR-eheCTMkY" class="form-group">
+                  <label id="CUR-FYfIAqqE">Performance Society</label>
+                  <ui-select ng-model="publisher.performancePro" ng-disabled="rights.catalogue != 'Edit'">
+                    <ui-select-match allow-clear="true">
+                      <span id="CUR-UJQeLzEl" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item in pros | filter: $select.search track by $index">
+                      <span id="CUR-nVSzixhb" ng-bind="item"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-sGcRwNOU" class="col-xs-12 col-md-6">
+                <div id="CUR-iuzCUMlB" class="form-group">
+                  <label id="CUR-ULNImbSM">Identifier</label>
+                  <input id="CUR-kyQBlQUX" type="text" class="form-control" ng-model="publisher.performanceProIdentifier" ng-disabled="rights.catalogue != 'Edit'">
+                </div>
+              </div>
+            </div>
+            <div id="CUR-NmWeojvW" class="row">
+              <div id="CUR-IhgXUXip" class="col-xs-12 col-md-6">
+                <div id="CUR-FRXPPtBN" class="form-group">
+                  <label id="CUR-nmxPTYkk">Sync Society</label>
+                  <ui-select ng-model="publisher.syncPro" ng-disabled="rights.catalogue != 'Edit'">
+                    <ui-select-match allow-clear="true">
+                      <span id="CUR-xyOcDKOC" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item in pros | filter: $select.search track by $index">
+                      <span id="CUR-AkAXSbBz" ng-bind="item"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-bKWaiMRE" class="col-xs-12 col-md-6">
+                <div id="CUR-eCXWVeWm" class="form-group">
+                  <label id="CUR-DwrnRhGp">Identifier</label>
+                  <input id="CUR-XmoSHHoD" type="text" class="form-control" ng-model="publisher.syncProIdentifier" ng-disabled="rights.catalogue != 'Edit'">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-snwZvsSp" class="panel panel-default" ng-if="clientType !== 'Publisher'">
+          <div id="CUR-sLKaDxuS" class="panel-heading">
+            <div id="CUR-NlEhQLgY" class="panel-title">
+              Linked Contracts <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-publishers/#linked-contracts"></documentation>
+            </div>
+          </div>
+          <div id="CUR-INFEeFLF" class="panel-body p-t-15">
+            <p id="CUR-znkwxogS" class="m-b-15">By linking contracts to your publishers, whenever you select the publisher in your mechanicals, the mechanical contract will be linked.</p>
+            <contract-row edit="rights.catalogue == 'Edit'" ng-repeat="contract in publisher.linkedContracts" hide-delete-button="true" contract-type="'Mechanical'" contract="contract" contracts="contracts" remove-percentage="true" delete="deleteContract(contract)"></contract-row>
+          </div>
+        </div>
+        <div id="CUR-lePuWHKc" class="panel panel-default" ng-if="clientType === 'Publisher'">
+          <div id="CUR-viJJcBJF" class="panel-heading">
+            <div id="CUR-xjPKJBxJ" class="panel-title">
+              Linked Contracts <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-publishers/#linked-contracts"></documentation>
+            </div>
+          </div>
+          <div id="CUR-tFraiXxW" class="panel-body p-t-15">
+            <p id="CUR-LYLpHhTP" class="m-b-15">By linking contracts to your publishers, whenever you select the publisher on your Work's IP Chain, the contract will be automatically added to the Work.</p>
+            <contract-row edit="rights.catalogue == 'Edit'" ng-repeat="contract in publisher.linkedContracts" contract="contract" contracts="contracts" remove-percentage="true" delete="deleteContract(contract)"></contract-row>
+            <button id="CUR-HsRqENlo" class="btn btn-complete" ng-click="addContract()" ng-show="rights.catalogue == 'Edit'">+ Contract</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-zzqmESGX" class="row">
+      <div id="CUR-YZypyCMY" class="col-xs-12">
+        <div id="CUR-uXCWhKna" class="panel panel-default" ng-if="clientType == 'Publisher'">
+          <div id="CUR-rvuRLedr" class="panel-heading">
+            <div id="CUR-fErKXtEF" class="panel-title">
+              Identifiers <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-publishers/#identifiers"></documentation>
+            </div>
+          </div>
+          <div id="CUR-AIYzAEgl" class="panel-body p-t-15">
+            <p id="CUR-UAGsSiqg" class="m-b-20">Set up your specific publisher names and identifiers for specific PROs, allowing you to switch out those values when delivering CWR to that society. Leave any value blank to use the default identifer and name for the publisher defined above.</p>
+            <territory-society-identifier-row edit="rights.catalogue == 'Edit'" ng-repeat="identifier in publisher.societies"
+              identifier="identifier" territories="territories" societies="pros" include-name="true" delete="deleteTerritorySocietyIdentifier(identifier)"
+              index="$index"></territory-society-identifier-row>
+            <button id="CUR-TybPpuFN" ng-show="rights.catalogue == 'Edit'" class="btn btn-complete" ng-click="addTerritorySocietyIdentifier()">+
+              Society</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-UtwBVmCN" class="row">
+      <div id="CUR-xtktoRWF" class="col-xs-12">
+        <div id="CUR-EfTADZDy" class="panel panel-default" ng-if="clientType == 'Publisher'">
+          <div id="CUR-joruCZFz" class="panel-heading">
+            <div id="CUR-NaTKTWxf" class="panel-title">
+              Sub-Publisher Agreements <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-publishers/#sub-publisher-agreements"></documentation>
+            </div>
+          </div>
+          <div id="CUR-GOpHSvUd" class="panel-body p-t-15">
+            <p id="CUR-EpcoKElY" class="m-b-20">Set up your Sub-Publishing agreements and their PRO specific identifiers. You can add the
+              same Sub-Publisher multiple times, setting the different agreement numbers for each PRO.</p>
+            <publisher-agreement-row edit="rights.catalogue == 'Edit'" ng-repeat="agreement in publisher.publisherAgreements track by $index"
+              agreement="agreement" territories="territories" societies="pros" agreement-types="agreementTypes"
+              delete="deletePublisherAgreement(agreement)" index="$index"></publisher-agreement-row>
+            <button id="CUR-tFKUgIMN" ng-show="rights.catalogue == 'Edit'" class="btn btn-complete m-xs-l-0 m-l-m-9" ng-click="addPublisherAgreement()">+
+              Agreement</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="aliases-tab.html">
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              Aliases
+            </div>
+          </div>
+          <div class="panel-body p-t-15">
+            <p class="m-b-15">Add alternative names for this publisher. These aliases will be used to match sales lines that you might require Specific Participation Rates to be applied for certain scenarios. Duplicate checks are case-insensitive, so 'ABC' and 'abc' are treated as the same alias.</p>
+            <alias-row ng-repeat="alias in displayAliases track by $index" alias="alias" delete="deleteAlias(alias)" edit="rights.catalogue == 'Edit'"></alias-row>
+            <button class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addAlias()">+ Alias</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="territories-tab.html">
+    <div id="CUR-fdyPRrOg" class="row">
+      <div id="CUR-yNbFddIw" class="col-xs-12 col-lg-12">
+        <div id="CUR-TrZBVYkf" class="panel panel-default">
+          <div id="CUR-GKacvuzw" class="panel-heading">
+            <div id="CUR-yWaCOWxW" class="panel-title">
+              Territories <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-works/#territories"></documentation>
+            </div>
+          </div>
+          <div id="CUR-qBMpvqgd" class="panel-body p-t-15">
+            <territory-checkboxes model="publisher.territories" edit="rights.catalogue == 'Edit'" hide-non-cisac="true"></territory-checkboxes>
+          </div>
+        </div>
+      </div>
+    </div>
+  </script>
+
+  <div id="CUR-rGXnrQtZ" class="row">
+    <div id="CUR-loPHOYNS" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-VvHIcIdU" ng-show="publisher.updatedAt">Last Updated on {{ publisher.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-QWdvymaQ" href="javascript:;" ng-if="publisher._id" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+<!--<div id="CUR-WOYydgrf" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-aaGNvXpp" class="row">
+    <div id="CUR-iMmFAfXp" class="col-sm-12 text-right">
+      <h6>Created By: {{publisher.createdBy.email}}</h6>
+      <h6>Last Modified By: {{publisher.lastModifiedBy.email}}</h6>
+    </div>
+  </div>
+</div>-->
+
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-TVBrlzpM" class="modal-dialog">
+    <div id="CUR-DJYuNpnX" class="modal-content">
+      <div id="CUR-jeUlQpfc" class="modal-header clearfix text-left">
+        <button id="CUR-gPRnwkAb" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-yEnttFYu">Delete Publisher</h5>
+      </div>
+      <div id="CUR-lhZNgUjm" class="modal-body">
+        <div id="CUR-mtZFznee" class="row">
+          <div id="CUR-SycbEWfa" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this publisher? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-FFDvOHEU" class="row">
+          <div id="CUR-yyIgdPUW" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-ZqcWXRrf" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-LnaBreyR" type="button" class="btn btn-danger m-t-5" ng-click="delete()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<model-history data="publisher.modelHistory"></model-history>

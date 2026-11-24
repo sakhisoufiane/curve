@@ -1,0 +1,212 @@
+<div id="CUR-WbuUagoJ" class="jumbotron" data-pages="parallax">
+  <div id="CUR-qMFzUegM" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-hBQoZRFI" class="inner">
+      <ul id="CUR-YPDKVAko" class="breadcrumb">
+        <li id="CUR-gaQaATHX"><a id="CUR-wrlJWgTI" href="/#/templates" class="active">Templates</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-LXbKkuAt" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-ygzOcBYw" class="row m-b-20">
+    <div id="CUR-pYZcnuUW" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-LSDynsSr" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-nutvrEwh" class="input-group transparent">
+          <input id="CUR-EXBGlARA" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-vrFvdbVm" class="input-group-addon pointer search-button" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-IhgnqNol" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-nWmxNiXW" class="sm-p-l-15 sm-p-r-15">
+        <!--       <button id="CUR-APguFRcm" class="btn btn-default" data-toggle="modal" data-target="#exportModal"><i class="fa fa-download"></i>&nbsp;Export</button>
+      <button id="CUR-tkDhsuWO" class="btn btn-default" data-toggle="modal" data-target="#importModal"><i class="fa fa-upload"></i>&nbsp;Import</button> -->
+        <button id="CUR-RYumwoor" ng-show="rights.sales == 'Edit'" class="btn btn-danger hidden-xs" data-toggle="modal"
+          data-target="#deleteModal"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+        <button id="CUR-CVBRKELx" ng-show="rights.sales == 'Edit'" class="btn btn-warning hidden-xs" data-toggle="modal"
+          data-target="#archiveModal"><i class="fa fa-lock"></i> Archive</button>
+        <div id="CUR-kiMpkCSP" class="btn-group  dropdown-default" ng-show="rights.sales == 'Edit' && !demoMode"> <a
+            class="btn dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false"><i
+              class="fa fa-plus"></i>&nbsp;Create <span id="CUR-oqhAItHo" class="caret"></span> </a>
+          <ul id="CUR-JYBhkKic" class="dropdown-menu w-xs-100-p">
+            <li id="CUR-nBSYVVvK">
+              <a id="CUR-tHSGHnBz" href="#/templates/new">From New</a>
+            </li>
+            <li id="CUR-BCyQPExj">
+              <a id="CUR-JaoYkyAD" href="javascript:void(0)" data-toggle="modal" data-target="#fromLibraryModal">From Library</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-bqFaalUo" class="row">
+    <div id="CUR-CbpUfgpe" class="col-xs-12 col-sm-3">
+      <div id="CUR-dffzEUPf" class="form-group sm-p-l-15 sm-p-r-15">
+        <label id="CUR-OPcLOayT">Archived</label>
+        <ui-select class="full-width" ng-model="filter.archived">
+          <ui-select-match allow-clear="true">
+            <span id="CUR-MpLakaHd" ng-bind="$select.selected.name"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item.value as item in archivedFilterValues | filter: $select.search">
+            <span id="CUR-zVVIzabi" ng-bind="item.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div id="CUR-uziiMmxU" class="form-group col-sm-3">
+      <label id="CUR-lAwupoef">Source</label>
+      <input id="CUR-lSEffsDx" type="text" class="form-control" data-ng-model="filter.source">
+    </div>
+    <div id="CUR-axXfGZnC" class="form-group col-sm-3">
+      <label id="CUR-yNYbqUri">Created After</label>
+      <div id="datepicker-component" class="form-group input-group date">
+        <input id="CUR-zHPMRdbX" type="text" class="form-control" ng-model="filter.createdAfter" uib-datepicker-popup="{{dateFormat}}"
+          ng-model-options="{timezone: 'utc'}" is-open="createdAfterPopup" ng-click="openCreatedAfterPopup()">
+        <span id="CUR-QrgyuwWJ" class="input-group-addon" ng-click="openCreatedAfterPopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+    <div id="CUR-dduDJBqF" class="form-group col-sm-3">
+      <label id="CUR-CLwqQHUc">Created Before</label>
+      <div id="datepicker-component" class="form-group input-group date">
+        <input id="CUR-OsNysGwt" type="text" class="form-control" ng-model="filter.createdBefore" uib-datepicker-popup="{{dateFormat}}"
+          ng-model-options="{timezone: 'utc'}" is-open="createdBeforePopup" ng-click="openCreatedBeforePopup()">
+        <span id="CUR-yTmWPWLI" class="input-group-addon" ng-click="openCreatedBeforePopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-VgUDscTV" class="row">
+    <div id="CUR-ruKiAHQr" class="col-sm-12 text-center">
+      <button id="CUR-WEUVjalu" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i> Filter</button>
+    </div>
+  </div>
+  <div id="CUR-ZcSjNVaO" class="row">
+    <div id="CUR-CudIatUp" class="col-sm-12">
+      <h5 id="CUR-lWgjEOfv" class="pull-right">Total: {{total? total : 0}}</h5>
+    </div>
+  </div>
+  <div id="CUR-GmmjhGkS" class="row">
+    <div id="CUR-iHHJscbr" class="col-xs-12">
+      <div id="CUR-GyYcBtKf" class="panel panel-default">
+        <div id="CUR-bkBQaleD" class="panel-heading">
+          <div id="CUR-ZafmAtFR" class="panel-title">
+            Templates <documentation link="http://guide.curveroyaltysystems.com/article/sales-templates/">
+            </documentation>
+          </div>
+        </div>
+        <div id="CUR-WNCyYxcz" class="panel-body">
+          <responsive-table headers="headers" data="salesTemplate" order-by="filter.orderBy" selectable="true"
+            sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-sofYVlTw" class="col-sm-12">
+    <div id="CUR-nCcwlaov" class="pull-right">
+      <span id="CUR-TIMCEspF" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <span id="CUR-WxEUUrYW" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-brdorohb" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-jWqyPXHf" class="row">
+    <div id="CUR-bDmCSLkT" class="col-xs-12 text-center">
+      <pagination id="CUR-GkwTSWcw" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-dtDxDNGn" class="modal-dialog">
+    <div id="CUR-XSNQhDwh" class="modal-content">
+      <div id="CUR-XKMklHJK" class="modal-header clearfix text-left">
+        <button id="CUR-BDgTJaDd" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-fJHKiVAH">Delete Templates</h5>
+      </div>
+      <div id="CUR-DtPjsuht" class="modal-body">
+        <div id="CUR-WpJVtpZi" class="row">
+          <div id="CUR-xQdxbWpn" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected templates? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-avhwmbxI" class="row">
+          <div id="CUR-bGfbrbAi" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-qAmVngJb" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-PQFHPWoY" type="button" class="btn btn-danger m-t-5" ng-click="deleteSelected()"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-AcjNqXMz" class="modal-dialog">
+    <div id="CUR-kUevostI" class="modal-content">
+      <div id="CUR-pKcLldBI" class="modal-header clearfix text-left">
+        <button id="CUR-ohQskStY" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-QWEIviPm">Archive Templates</h5>
+      </div>
+      <div id="CUR-sGsJSAtK" class="modal-body">
+        <div id="CUR-qxrVXTfE" class="row">
+          <div id="CUR-cvOttTwr" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to archive the selected templates?</p>
+          </div>
+        </div>
+        <div id="CUR-ViSUxbyn" class="row">
+          <div id="CUR-ANjxVrkV" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-jbnQhmYo" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-DNVlIwYA" type="button" class="btn btn-warning m-t-5" ng-click="archiveSelected()"><i class="fa fa-lock"></i>
+              Archive</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="fromLibraryModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-gnaVCRAE" class="modal-dialog">
+    <div id="CUR-PpNDGKJT" class="modal-content">
+      <div id="CUR-EUBipFyB" class="modal-header clearfix text-left">
+        <button id="CUR-TaOPXwdt" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-EjROCjcT">Create from Library</h5>
+      </div>
+      <div id="CUR-exSpQclm" class="modal-body">
+        <div id="CUR-bHhAiBFm" class="row">
+          <div id="CUR-LOqFYYQM" class="col-xs-12 m-t-20">
+            <p>Select which template you would like to load. This will create your own version of this template for you
+              to be able to customise to your needs.</p>
+            <ui-select ng-model="libraryTemplate._id">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-NsFwEEmc" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="template._id as template in libraryTemplates | filter: $select.search">
+                <span id="CUR-lJooSHlx" ng-bind-html="template.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div id="CUR-fTpIUcyn" class="row">
+          <div id="CUR-lJOWJStO" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-fqnUapVg" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-fKhMDFpM" type="button" class="btn btn-complete m-t-5" ng-click="createFromLibrary()"><i
+                class="fa fa-plus"></i>&nbsp;Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

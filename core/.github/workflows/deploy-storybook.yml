@@ -1,0 +1,37 @@
+name: Deploy Storybook to Cloudflare Pages
+
+on: workflow_call
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      deployments: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+          cache: npm
+
+      - run: npm install -g npm@11.10.0
+      - run: npm config set '//registry.npmjs.org/:_authToken' "${{ secrets.NPM_PUBLISH_TOKEN }}"
+
+      - run: npm ci
+
+      - name: Build Storybook
+        run: npm run build-storybook --workspace=packages/react-ui-library
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: storybook-core
+          directory: packages/react-ui-library/storybook-static
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref || github.ref_name }}

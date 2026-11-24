@@ -1,0 +1,136 @@
+<div class="row contract-row-layout ip-chain-col" ng-init="hide=workRightsChainLength > 5 && index !== 0">
+  <div class="row" style="margin: 0">
+    <div class="col-12 col-md-4 ip-chain-col">
+      <div class="form-group" style="padding: 15px">
+        <label>Territory</label>
+        <territory-name-field
+          ng-if="rightsChain.territoryCodes.name"
+          value="rightsChain.territory + ': ' + rightsChain.territoryCodes.name"
+          ng-click="editTerritory({ rightsChain })"
+          index="index"
+          edit="edit"
+        ></territory-name-field
+        ><territory-name-field
+          ng-if="!rightsChain.territoryCodes.name"
+          value="rightsChain.territory"
+          ng-click="editTerritory({ rightsChain })"
+          index="index"
+          edit="edit"
+        ></territory-name-field>
+      </div>
+    </div>
+    <div class="col-12 col-md-3 ip-chain-col">
+      <div class="form-group" style="padding: 15px">
+        <button
+          ng-show="edit == true"
+          class="btn btn-primary row-button sm-p-l-0 sm-p-r-0 m-l-0"
+          ng-click="hide = false; addChild(rightsChain, 'Publisher')"
+          tooltips
+          tooltip-template="Add Publisher"
+        >
+          + Pub
+        </button>
+        <button
+          ng-show="edit == true"
+          class="btn btn-primary row-button sm-p-l-0 sm-p-r-0 m-l-0"
+          ng-click="hide = false; addChild(rightsChain, 'Composer')"
+          tooltips
+          tooltip-template="Add Composer"
+        >
+          + Comp
+        </button>
+        <button
+          ng-if="canDuplicate"
+          ng-show="edit == true"
+          class="btn btn-warning row-button sm-p-l-0 sm-p-r-0 m-l-0"
+          ng-click="duplicateChain(rightsChain, isDefaultChain, partnerChainIndex)"
+          tooltips
+          tooltip-template="Copy Chain"
+        >
+          <i class="fa fa-copy"></i>
+        </button>
+        <button
+          ng-show="edit == true"
+          class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0"
+          ng-click="delete({ rightsChain: rightsChain })"
+        >
+          <i class="fa fa-trash"></i>
+        </button>
+      </div>
+    </div>
+    <div
+      class="col-12 col-md-5 pointer ip-chain-col"
+      style="height: 100%"
+      ng-click="hide = !hide"
+    >
+      <div class="form-group container-fluid">
+        <div
+          class="row m-t-45"
+          style="vertical-align: middle; text-align: center"
+        >
+          <div class="col-md-11">
+            <div class="col-md-3 ip-chain-col">
+              <label tooltips tooltip-template="Total Owned Mechanical"
+                >Mech. Own</label
+              >
+              <span
+                class="label"
+                ng-class="{'label-success': rightsChain.totalMechanicalOwnership >= 99.94 && rightsChain.totalMechanicalOwnership <= 100.06, 'label-danger': rightsChain.totalMechanicalOwnership < 99.94 || rightsChain.totalMechanicalOwnership > 100.06}"
+                >{{rightsChain.totalMechanicalOwnership}}</span
+              >
+            </div>
+            <div class="col-md-3 ip-chain-col">
+              <label tooltips tooltip-template="Total Owned Performance"
+                >Perf. Own</label
+              >
+              <span
+                class="label"
+                ng-class="{'label-success': rightsChain.totalPerformanceOwnership >= 99.94 && rightsChain.totalPerformanceOwnership <= 100.06, 'label-danger': rightsChain.totalPerformanceOwnership < 99.94 || rightsChain.totalPerformanceOwnership > 100.06}"
+                >{{rightsChain.totalPerformanceOwnership}}</span
+              >
+            </div>
+            <div class="col-md-3 ip-chain-col">
+              <label tooltips tooltip-template="Total Collected Mechanical"
+                >Col. Mech.</label
+              >
+              <span
+                class="label"
+                ng-class="{'label-success': rightsChain.totalMechanicalCollection >= 99.94 && rightsChain.totalMechanicalCollection <= 100.06, 'label-danger': rightsChain.totalMechanicalCollection < 99.94 || rightsChain.totalMechanicalCollection > 100.06}"
+                >{{rightsChain.totalMechanicalCollection}}</span
+              >
+            </div>
+            <div class="col-md-3 ip-chain-col">
+              <label tooltips tooltip-template="Total Collected Performace"
+                >Col. Perf.</label
+              >
+              <span
+                class="label"
+                ng-class="{'label-success': rightsChain.totalPerformanceCollection >= 99.94 && rightsChain.totalPerformanceCollection <= 100.06, 'label-danger': rightsChain.totalPerformanceCollection < 99.94 || rightsChain.totalPerformanceCollection > 100.06}"
+                >{{rightsChain.totalPerformanceCollection}}</span
+              >
+            </div>
+          </div>
+          <div class="col-md-1" tooltips tooltip-template="Show/Hide IP Chain">
+            <div>
+              <i ng-if="!hide" class="fa fa-chevron-down"></i>
+              <i ng-if="hide" class="fa fa-chevron-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <child-ip-chain
+    ng-if="!hide"
+    class="col-xs-12 first"
+    style="margin-top: -15px"
+    ng-repeat="child in rightsChain.children"
+    item="child"
+    composers="composers"
+    publishers="publishers"
+    parent="rightsChain"
+    on-change="onChange"
+    index="$index"
+    edit="edit"
+  ></child-ip-chain>
+</div>

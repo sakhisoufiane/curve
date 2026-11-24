@@ -1,0 +1,33 @@
+<td class="v-align-middle hidden-xs"><input id="contract-select-{{index}}" type="checkbox" class='select-unit' ng-model="ds.selected"></td>
+<td class="v-align-middle">
+	<a href="#/deliverySchedules/{{ ds._id }}/edit" ng-bind-html="ds.name"></a>
+</td>
+<td class="v-align-middle">
+	<a href="#/deliverySettings/deliveryPartners/{{ds.deliveryPartnerId._id}}/edit">
+		{{ ds.deliveryPartnerId.name }}
+	</a>
+</td>
+<td class="v-align-middle">{{ ds.createdAt | date : dateFormat : 'UTC' }}</td>
+<td class="v-align-middle">{{ scheduleDisplay }}</td>
+<td style="text-align: center;">
+	<span ng-if="ds.active">
+		<i 
+			style="font-size: 20px;" 
+			class="fa fa-circle text-success"
+			tooltips
+			tooltip-class="tooltips _top _steady _ready"
+			tooltip-side="left"
+			tooltip-template="Active"></i>
+	</span>
+	<span ng-if="!ds.active">
+		<i 
+			style="font-size: 20px;" 
+			class="fa fa-circle text-secondary" 
+			tooltips
+			tooltip-class="tooltips _top _steady _ready"
+			tooltip-side="left"
+			tooltip-template="Inactive"
+			>
+		</i>
+	</span>
+</td>

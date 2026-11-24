@@ -1,0 +1,1064 @@
+<div id="CUR-iaADohGU" class="jumbotron" data-pages="parallax">
+  <div id="CUR-LPCXoaFb" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-jASmOOJh" class="inner">
+      <ul id="CUR-rKdooBHE" class="breadcrumb">
+        <li id="CUR-rgJAsEIy"><a id="CUR-fwRnRWku" href="/#/statements">Statements</a></li>
+        <li id="CUR-JsLLfNBr" ng-show="!statement._id"><a id="CUR-VauPwVdA" href="" class="active">Create</a></li>
+        <li id="CUR-sGtwqUUf" ng-show="statement._id"><a id="CUR-RcpKJnbP" href="/#/statements/{{statement._id}}" class="active">{{statement.name}}</a></li>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-etPGBVxn" class="container container-fixed-lg" ng-if="statement.status != 'Processing' && statement.status != 'Errored'">
+  <div id="CUR-caMwvNpo" class="row">
+    <div id="CUR-VKSIaaab" class="col-xs-12 col-sm-6 sm-p-l-5 sm-p-r-5">
+      <h3 id="CUR-QwnGZauH">{{statement.name}}</h3>
+      <h5 id="CUR-VwgrUdKc">{{statement.accountingPeriod}}
+        <span id="CUR-NAZFWVyB" class="label label-success m-l-10" tooltips tooltip-template="Published"
+              ng-if="statement.status == 'Published' && userType == 'client'">P</span>
+        <span id="CUR-dymWcgcq" class="label label-danger m-l-10" tooltips tooltip-template="Unpublished"
+              ng-if="statement.status == 'Pending' && userType == 'client'">U</span>
+        <span id="CUR-VlFlzPov" class="label label-info m-l-10" tooltips tooltip-template="Sent"
+              ng-if="statement.sendings.length && userType == 'client'">S</span>
+      </h5>
+    </div>
+    <div id="CUR-MVrPdFwW" class="col-xs-12 col-sm-6 sm-p-l-5 sm-p-r-5 text-right two-cols-row">
+      <button id="CUR-Ekpjqicr" class="btn btn-success sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs" ng-click="pay()" ng-if="statement._id && userType == 'client' && clientAdminUser && features && features.payments && rights.periods == 'Edit'"><i class="fa fa-credit-card"></i> Pay</button>
+      <button id="CUR-FmOQNQRY" class="btn btn-complete sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs" data-target="#reprocessModal" data-toggle="modal" ng-show="rights.periods == 'Edit'" ng-if="!statement.locked && userType == 'client'"><i class="fa fa-refresh"></i> Reprocess</button>
+      <button id="CUR-kIzZgSXs" class="btn btn-complete sm-m-r-10 sm-p-l-0 sm-p-r-0" ng-show="rights.periods == 'Edit' || rights.periods == 'Approval'" ng-click="send()" ng-if="statement.status == 'Published' && userType == 'client'"><i class="fa fa-send"></i> Send</button>
+      <button id="CUR-cPMrKcIc" class="btn btn-success sm-m-r-10 sm-p-l-0 sm-p-r-0" ng-show="rights.periods == 'Edit' || rights.periods == 'Approval'" ng-click="publish()" ng-if="statement.status == 'Pending' && userType == 'client'"><i class="fa fa-unlock"></i> Publish</button>
+      <button id="CUR-CWUmpRiI" class="btn btn-danger sm-m-r-10 sm-p-l-0 sm-p-r-0" ng-show="rights.periods == 'Edit' || rights.periods == 'Approval'" ng-click="unpublish()" ng-if="statement.status == 'Published' && userType == 'client'"><i class="fa fa-lock"></i> Unpublish</button>
+      <div id="CUR-VAnnUYuQ" class="btn-group dropdown-default"> <a id="CUR-Uyxfadtv" class="btn dropdown-toggle w-xs-100-p" data-toggle="dropdown" style="width: 170px;" aria-expanded="false"><i class="fa fa-download"></i> Download <span id="CUR-brXypLev" class="caret"></span> </a>
+        <ul id="CUR-CBYJmomi" class="dropdown-menu w-xs-100-p" style="width: 170px;">
+          <li id="CUR-AxOFpzOG" ng-if="statement.allFilesZipPublicLink">
+            <a id="CUR-sQsgxXyW" target="_blank" href="{{statement.allFilesZipPublicLink}}"
+               ng-if="statement.allFilesZipPublicLink">Download All</a>
+          </li>
+          <li id="CUR-geCWtVUF" ng-if="statement.customStatementPublicLink">
+            <a id="CUR-vBhbbuIy" target="_blank" href="{{statement.customStatementPublicLink}}" ng-if="statement.customStatementPublicLink">Statement</a>
+          </li>
+          <li id="CUR-NjcjZcpd" ng-if="statement.pdfPublicLink">
+            <a id="CUR-DbKFKiHH" target="_blank" href="{{statement.pdfPublicLink}}" ng-if="statement.pdfPublicLink">PDF</a>
+          </li>
+          <li id="CUR-XVxQKaep" ng-if="statement.statementOfAccountPublicLink">
+            <a id="CUR-aFgrlkNh" target="_blank" href="{{statement.statementOfAccountPublicLink}}"
+               ng-if="statement.statementOfAccountPublicLink">Statement of Account</a>
+          </li>
+          <li id="CUR-gVejazBO" ng-if="statement.selfBillingInvoicePublicLink">
+            <a id="CUR-QayDRyTD" target="_blank" href="{{statement.selfBillingInvoicePublicLink}}"
+               ng-if="statement.selfBillingInvoicePublicLink">Self Billing Invoice</a>
+          </li>
+          <li id="CUR-gNHerqYw" ng-if="statement.feesInvoicePublicLink">
+            <a id="CUR-VdOIqHeW" target="_blank" href="{{statement.feesInvoicePublicLink}}" ng-if="statement.feesInvoicePublicLink">Fees
+              Invoice</a>
+          </li>
+          <li id="CUR-KQPMmQQS" ng-if="statement.salesCsvPublicLink">
+            <a id="CUR-BzKgHjmn" target="_blank" href="{{statement.salesCsvPublicLink}}" ng-if="statement.salesCsvPublicLink">
+              <span id="CUR-ZqdLYMrN" ng-if="clientType != 'Publisher'">All Sales CSV</span>
+              <span id="CUR-ALfyipnW" ng-if="clientType == 'Publisher'">All Income CSV</span>
+            </a>
+          </li>
+          <li id="CUR-HBpprWNx" ng-if="statement.costsCsvPublicLink">
+            <a id="CUR-igDwdvnR" target="_blank" href="{{statement.costsCsvPublicLink}}">All Costs CSV</a>
+          </li>
+          <li id="CUR-ZfivmBmN" ng-if="statement.platoonRevenueReportPublicLink">
+            <a id="CUR-GJHgHdyR" target="_blank" href="{{statement.platoonRevenueReportPublicLink}}" ng-if="statement.platoonRevenueReportPublicLink">Revenue Report</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-RQOKwTaT" class="row">
+    <div id="CUR-LKqtfSEO" class="panel panel-transparent hidden-xs">
+      <!-- Nav tabs -->
+      <ul id="CUR-fmGtHTfb" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-jQxZrISE" class="active" ng-click="setTab('overview')">
+          <a id="CUR-DTSnjSBG" data-toggle="tab" aria-expanded="true"><span id="CUR-ogKinOaT">Overview</span></a>
+        </li>
+        <li id="CUR-GbPfYJXV" ng-click="setTab('includedSales')" ng-if="userType == 'client'">
+          <a id="CUR-TMYsTEBr" data-toggle="tab" aria-expanded="false">
+            <span id="CUR-AjNorMvO" ng-if="clientType != 'Publisher'">Included Sales</span>
+            <span id="CUR-taParOTt" ng-if="clientType == 'Publisher'">Included Income</span>
+          </a>
+        </li>
+        <li id="CUR-GmAxzqPg" ng-click="setTab('includedCosts')" ng-if="userType == 'client' && clientType != 'Publisher'">
+          <a id="CUR-BcoDPzQR" data-toggle="tab" aria-expanded="false"><span id="CUR-GBcIElID">Included Costs</span></a>
+        </li>
+        <li id="CUR-JTRXzcXD" ng-click="setTab('sales')">
+          <a id="CUR-sgvlgyzY" data-toggle="tab" aria-expanded="false">
+            <span id="CUR-edGCWiEc" ng-if="clientType != 'Publisher'">Sales</span>
+            <span id="CUR-XULjGwlr" ng-if="clientType == 'Publisher'">Income</span>
+          </a>
+        </li>
+        <li id="CUR-HcfGPFCb" ng-click="setTab('communication')" ng-if="userType == 'client'">
+          <a id="CUR-gRqqKGYU" data-toggle="tab" aria-expanded="false"><span id="CUR-GNpbqGiI">Communication</span></a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-rgZtFCFd" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-uDqyfZMg" class="tab-pane active" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+        <div id="CUR-TxwwYfJj" ng-show="activeTab === 'includedSales'" ng-include="'include-sales-tab.html'" ng-if="userType == 'client'">
+        </div>
+        <div id="CUR-vAsdgxrB" ng-show="activeTab === 'includedCosts'" ng-include="'include-costs-tab.html'" ng-if="userType == 'client'">
+        </div>
+        <div id="CUR-KXJHLVqi" ng-show="activeTab === 'sales'" ng-include="'sales-tab.html'"></div>
+        <div id="CUR-pjSyNIHp" ng-show="activeTab === 'communication'" ng-include="'communication-tab.html'" ng-if="userType == 'client'"></div>
+      </div>
+    </div>
+    <div id="CUR-DMKNVBUD" class="col-xs-12 sm-p-l-5 sm-p-r-5 visible-xs" ng-if="showAccordions">
+      <uib-accordion close-others="true"
+                     ng-init="status1.open = true; status2.open = false; status3.open = false; status4.open = false;">
+        <div id="CUR-CaTdgqzI" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>
+            Overview <i class="pull-right glyphicon"
+                        ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-nRfxMgHP" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div id="CUR-YUeCoqMX" uib-accordion-group class="panel-default" is-open="status2.open" ng-if="userType == 'client'">
+          <uib-accordion-heading ng-if="clientType != 'Publisher'">
+            Included Sales <i class="pull-right glyphicon"
+                              ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <uib-accordion-heading ng-if="clientType == 'Publisher'">
+            Included Income <i class="pull-right glyphicon"
+                               ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-OfglIPYq" ng-include="'include-sales-tab.html'"></div>
+        </div>
+        <div id="CUR-DKxHFWyg" uib-accordion-group class="panel-default" is-open="status3.open"
+             ng-if="userType == 'client' && clientType != 'Publisher'">
+          <uib-accordion-heading>
+            Included Costs <i class="pull-right glyphicon"
+                              ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-uKBVMZMO" ng-include="'include-costs-tab.html'"></div>
+        </div>
+        <div id="CUR-ENUGNrog" uib-accordion-group class="panel-default" is-open="status4.open">
+          <uib-accordion-heading>
+            Sales <i class="pull-right glyphicon"
+                     ng-class="{'glyphicon-chevron-down': status4.open, 'glyphicon-chevron-right': !status4.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-lOhNtIdo" ng-include="'sales-tab.html'"></div>
+        </div>
+        <div id="CUR-WFFxPusz" uib-accordion-group class="panel-default" is-open="status5.open">
+          <uib-accordion-heading>
+            Communication <i class="pull-right glyphicon"
+                             ng-class="{'glyphicon-chevron-down': status5.open, 'glyphicon-chevron-right': !status5.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-sJBWeOMl" ng-include="'communication-tab.html'"></div>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+</div>
+
+<!--<div id="CUR-BEexilPk" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-gEkRLBfg" class="row">
+    <div id="CUR-MojKRkfq" class="col-sm-12 text-right">
+      <h6>Created By: {{statement.createdBy.email}}</h6>
+      <h6>Last Modified By: {{statement.lastModifiedBy.email}}</h6>
+    </div>
+  </div>
+</div>-->
+
+<!-- Loading Page -->
+<div id="CUR-cEyLUKYb" class="container-fluid container-fixed-lg" ng-if="statement.status == 'Processing'">
+  <div id="CUR-CJqLjxaL" class="row">
+    <div id="CUR-bQWdqiuN" class="col-xs-12 col-sm-6 col-sm-offset-3">
+      <div id="CUR-IsUNVJzO" class="panel panel-default text-center">
+        <div id="CUR-irCachVo" class="panel-body p-t-15">
+          <h3 id="CUR-uHpAwhNk">Statement is {{statement.status}}...</h3>
+
+          <div id="CUR-kCipVPjS" class="row">
+            <div id="CUR-kxjciyUD" class="col-xs-10 col-xs-offset-1 progress-checklist text-left">
+              <ul id="CUR-xhjvZbYJ">
+                <li id="CUR-OWoYimqG" ng-repeat="name in processingStatuses track by $index">
+                  <period-processing-status-element name="name" index="$index" current-status="currentStatusIndex"
+                                                    errored-status="erroredStatusIndex"></period-processing-status-element>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Error Page -->
+<div id="CUR-WNsBFwez" class="container-fluid container-fixed-lg" ng-if="statement.status == 'Errored'">
+  <div id="CUR-GZguNCBU" class="row">
+    <div id="CUR-gquGrDEN" class="col-xs-12 col-sm-6 col-sm-offset-3">
+      <div id="CUR-LlRZyNjo" class="panel panel-default text-center">
+        <div id="CUR-OaCjELzr" class="panel-body p-t-15">
+          <h3 id="CUR-EKCCKgzq">Statement has Errored</h3>
+          <p>Please Contact Support</p>
+          <a id="CUR-NmPxioDU" href="mailto:support@curveroyaltysystems.com" target="_blank">support@curveroyaltysystems.com</a>
+          <div id="CUR-bZdDDJTM" class="row">
+            <div id="CUR-VbRgxqIx" class="col-xs-10 col-xs-offset-1 progress-checklist text-left">
+              <!-- To be added back in after log has been amended -->
+              <!-- <p>{{statement.calculationError}}</p> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="reprocessModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-KmoYlrlW" class="modal-dialog">
+    <div id="CUR-WYYOAxfW" class="modal-content">
+      <div id="CUR-Rrhtvvpw" class="modal-header clearfix text-left">
+        <button id="CUR-ezzOhEPU" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-DuryeJJd">Reprocess Statement</h5>
+      </div>
+      <div id="CUR-CUTsmFWj" class="modal-body">
+        <div id="CUR-YzJyqPmS" class="row">
+          <div id="CUR-VAkwaPKu" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to reprocess this statement? If you have made any changes to contracts and the association of catalogue to contracts, you will need to ensure you run all affected statements, otherwise you risk double accounting.</p>
+          </div>
+        </div>
+        <div id="CUR-XYxoIeqA" class="row">
+          <div id="CUR-JGFnZHXW" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-LcpducRS" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-jcwyIHlo" type="button" class="btn btn-complete m-t-5 hidden-xs" ng-click="runCalculation()" data-dismiss="modal" ng-show="rights.periods == 'Edit'" ng-if="!statement.locked && userType == 'client'"><i class="fa fa-refresh"></i> Reprocess</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="reportRoyaltiesModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-kmXIDpvq" class="modal-dialog">
+    <div id="CUR-vqzNJSQw" class="modal-content">
+      <div id="CUR-aZJZYlNU" class="modal-header clearfix text-left">
+        <button id="CUR-sezzYVMx" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-kxmPvKZU">Report Royalties On Statement</h5>
+      </div>
+      <div id="CUR-rgOMuQbg" class="modal-body">
+        <div id="CUR-bUInJbid" class="row">
+          <div id="CUR-OdibRWBv" class="col-xs-12 m-t-20">
+            <p>You can report royalties on from this statement by ingesting into your own Curve client.
+              Select the client which you would like to ingest these sales into below.</p>
+            <ui-select ng-model="export.clientId" ng-if="userClients.length !== 0">
+              <ui-select-match>
+                <span id="CUR-hHBLTgQU" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item.clientId as item in (userClients | filter: $select.search)">
+                <span id="CUR-uXTSsCyc" ng-bind="item.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-12 m-t-15">
+            <input type="checkbox" ng-model="exportWithCatalogue">
+            <label style="position: relative; top: -3px;">Import Catalogue into Account</label>
+          </div>
+        </div> 
+        <div id="CUR-IFuXkDfe" class="row">
+          <div id="CUR-zXcdpsFM" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-FoHbrauw" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <!-- <a id="CUR-PPeKdVsr" class="btn btn-success m-t-5" href="/signup">Sign Up for Curve</a> -->
+            <button id="CUR-UqsLdMHk" type="button" class="btn btn-complete m-t-5 hidden-xs" ng-click="exportIntoOtherClient()" data-dismiss="modal" ng-if="export.clientId"><i class="fa fa-upload"></i> Import into Other Client</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="overview-tab.html">
+  <!-- Royalty Recording Deal Type -->
+  <div id="CUR-eUJtpPJL" class="row" ng-if="userType == 'client' && clientType != 'Publisher' && statement.contractType != 'Profit Share' && statement.contractType != 'Profit Share - Flexible' && statement.periodType != 'Mechanical'">
+    <div id="CUR-FTrUEUAI" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-JApGjHcC" class="panel panel-default height-100 bg-success">
+        <div id="CUR-VujzpVCJ" class="panel-heading">
+          <div id="CUR-YzCfSXVw" class="panel-title text-white">
+            Gross Revenue >
+          </div>
+        </div>
+        <div id="CUR-oCoCYUxD" class="panel-body bg-transparent">
+          <h3 id="CUR-VgkrHtNr" class="text-white no-margin"><span id="CUR-qDBYgSrY" class="semi-bold">{{currencySymbol}}{{statement.grossAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+      <div id="CUR-xIKRrFZw" class="panel panel-default height-100 bg-complete sm-m-t-5 m-b-10">
+        <div id="CUR-vYFssozP" class="panel-heading">
+          <div id="CUR-URmdaxyZ" class="panel-title text-white">
+            Net Revenue >
+          </div>
+        </div>
+        <div id="CUR-iMuIZUJb" class="panel-body bg-transparent">
+          <h3 id="CUR-jrskThyG" class="text-white no-margin"><span id="CUR-BtqSgUrR" class="semi-bold">{{currencySymbol}}{{statement.netAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-nIYpihMS" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-JoFbCjHk" class="panel panel-default height-100 bg-primary-darker">
+        <div id="CUR-RECnXTwV" class="panel-heading">
+          <div id="CUR-qXNuLtkK" class="panel-title text-white">
+            Gross Costs >
+          </div>
+        </div>
+        <div id="CUR-VTgkhmOw" class="panel-body bg-transparent">
+          <h3 id="CUR-bNErpeZJ" class="no-margin text-white">
+            <span id="CUR-riAKinIT" class="semi-bold">{{currencySymbol}}{{statement.grossCosts | number: 2 || 0}}</span>
+          </h3>
+        </div>
+      </div>
+      <div id="CUR-QCAaPSAL" class="panel panel-default height-100 bg-primary-light sm-m-t-5 m-b-10">
+        <div id="CUR-nAXjedKp" class="panel-heading">
+          <div id="CUR-iYawQlLZ" class="panel-title text-white">
+            Recharged Costs >
+          </div>
+        </div>
+        <div id="CUR-NQKiIPSV" class="panel-body bg-transparent">
+          <h3 id="CUR-pGJMGRBO" class="no-margin text-white">
+            <span id="CUR-qathisVj" class="semi-bold">{{currencySymbol}}{{statement.netCosts | number: 2 || 0}}</span>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-tOmxwPpz" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-jQNrUxwe" class="panel panel-default height-100 bg-info-darker">
+        <div id="CUR-rtAqUZiF" class="panel-heading">
+          <div id="CUR-SiviRPBn" class="panel-title text-white">
+            Reserves Withheld >
+          </div>
+        </div>
+        <div id="CUR-kOiDenHs" class="panel-body bg-transparent">
+          <h3 id="CUR-vgCTnxsq" class="no-margin text-white">
+            <span id="CUR-ciIuYeIW" class="semi-bold">{{currencySymbol}}{{statement.reservesWithheld | number: 2 || 0}}</span>
+          </h3>
+        </div>
+      </div>
+      <div id="CUR-fKjINbxJ" class="panel panel-default height-100 bg-info-light sm-m-t-5 m-b-10">
+        <div id="CUR-CbMrxxvD" class="panel-heading">
+          <div id="CUR-KNKKSrZb" class="panel-title text-white">
+            Reserves Released >
+          </div>
+        </div>
+        <div id="CUR-UBzYZzhF" class="panel-body bg-transparent">
+          <h3 id="CUR-jSgQFiif" class="no-margin text-white">
+            <span id="CUR-CuJjIxPZ" class="semi-bold">{{currencySymbol}}{{statement.reservesReleased | number: 2 || 0}}</span>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-XFdfBhwB" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-OgCRefcu" class="panel panel-default height-100 bg-success-green-dark">
+        <div id="CUR-kzKVnGEf" class="panel-heading">
+          <div id="CUR-ySORnFhU" class="panel-title text-white">
+            Opening Balance >
+          </div>
+        </div>
+        <div id="CUR-tYAaSDRp" class="panel-body bg-transparent">
+          <h3 id="CUR-VQXfFJsA" class="no-margin text-white"><span id="CUR-oMPbWRQH" class="semi-bold">{{currencySymbol}}{{statement.openingBalance | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+      <div id="CUR-UXTzvtDt" class="panel panel-default height-100 bg-success-green sm-m-t-5 m-b-10">
+        <div id="CUR-XOyoFsRV" class="panel-heading">
+          <div id="CUR-wFsUoeyS" class="panel-title text-white">
+            Closing Balance >
+          </div>
+        </div>
+        <div id="CUR-soWjxjQG" class="panel-body bg-transparent">
+          <h3 id="CUR-nBFLHruS" class="no-margin text-white"><span id="CUR-nHfmLoVH" class="semi-bold">{{currencySymbol}}{{statement.closingBalance | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-XzUjFnro" class="col-xs-12 text-right m-b-10">
+      <a id="CUR-DNRXmmsV" class="pointer" data-target="#reportRoyaltiesModal" data-toggle="modal" ng-if="userClients.length !== 0">Need to report these royalties on? Import into your client here</a>
+    </div>
+  </div>
+  <!-- Profit Share Recording Deal Type for Client and Payee -->
+  <div id="CUR-KWwtFGCC" class="row" ng-if="clientType != 'Publisher' && (statement.contractType == 'Profit Share' || statement.contractType == 'Profit Share - Flexible')">
+    <div id="CUR-rtRhdRdW" class="col-xs-12 col-sm-6 col-lg-4 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-jxsxyGaI" class="panel panel-default height-100 bg-success-green">
+        <div id="CUR-YDjyZZsm" class="panel-heading">
+          <div id="CUR-wklFWdAY" class="panel-title text-white">
+            Opening Balance >
+          </div>
+        </div>
+        <div id="CUR-SPEVEXRo" class="panel-body bg-transparent">
+          <h3 id="CUR-hxXNtfVl" class="no-margin text-white"><span id="CUR-cRvFNzbY" class="semi-bold">{{currencySymbol}}{{statement.openingBalance | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+      <div id="CUR-PoyGLHcb" class="panel panel-default height-100 bg-complete sm-m-t-5">
+        <div id="CUR-ZbYOVeiE" class="panel-heading">
+          <div id="CUR-lkmNlyrK" class="panel-title text-white">
+            Earning This Period >
+          </div>
+        </div>
+        <div id="CUR-OXlJJpiv" class="panel-body bg-transparent">
+          <h3 id="CUR-RPJhTfaO" class="text-white no-margin"><span id="CUR-QGwhMOId" class="semi-bold">{{currencySymbol}}{{statement.netAmount - statement.netCosts - statement.reservesWithheld + statement.reservesReleased | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-QIxpXLzN" class="col-xs-12 col-sm-6 col-lg-4 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-vRODDbKf" class="panel panel-default height-100 bg-info-darker">
+        <div id="CUR-gfSeZaOT" class="panel-heading">
+          <div id="CUR-CDYkGZeH" class="panel-title text-white">
+            Recouped Advance >
+          </div>
+        </div>
+        <div id="CUR-VbnOHjNg" class="panel-body bg-transparent">
+          <h3 id="CUR-vhbdntKh" class="no-margin text-white">
+            <span id="CUR-ODSmhLVm" class="semi-bold">{{currencySymbol}}{{statement.profitShareAdvanceRecouped | number: 2 || 0}}</span>
+          </h3>
+        </div>
+      </div>
+      <div id="CUR-GLiZpfbZ" class="panel panel-default height-100 bg-info-light sm-m-t-5">
+        <div id="CUR-pxVHaWkb" class="panel-heading">
+          <div id="CUR-hsOGrTnu" class="panel-title text-white">
+            Advance Remaining >
+          </div>
+        </div>
+        <div id="CUR-wQNaSQVa" class="panel-body bg-transparent">
+          <h3 id="CUR-iPrQYQgC" class="no-margin text-white">
+            <span id="CUR-pSiChbsj" class="semi-bold">{{currencySymbol}}{{statement.profitShareUnrecoupedAdvanceStart + statement.profitShareAdvanceRecouped | number: 2 || 0}}</span>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-rBDGgucb" class="col-xs-12 col-sm-6 col-lg-4 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-dKhtlAmD" class="panel panel-default height-100 bg-primary-light">
+        <div id="CUR-dwTVfEuO" class="panel-heading">
+          <div id="CUR-dqHLVflK" class="panel-title text-white">
+            Profit Share Net Amount >
+          </div>
+        </div>
+        <div id="CUR-jsQIodUq" class="panel-body bg-transparent">
+          <h3 id="CUR-aQqlpqNJ" class="no-margin text-white"><span id="CUR-xADYvGzg" class="semi-bold">{{currencySymbol}}{{statement.profitShareNetAmount | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+      <div id="CUR-GcnCmkaA" class="panel panel-default height-100 bg-success-green sm-m-t-5 m-b-10">
+        <div id="CUR-hWEUIJKt" class="panel-heading">
+          <div id="CUR-EbRlwLDL" class="panel-title text-white">
+            Closing Balance >
+          </div>
+        </div>
+        <div id="CUR-iMGWgtbV" class="panel-body bg-transparent">
+          <h3 id="CUR-OeIwVdGZ" class="no-margin text-white"><span id="CUR-PMwfRxHq" class="semi-bold">{{currencySymbol}}{{statement.closingBalance | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-jswZGRgV" class="col-xs-12 text-right m-b-10">
+      <a id="CUR-wZfjbzId" class="pointer" data-target="#reportRoyaltiesModal" data-toggle="modal" ng-if="userClients.length !== 0">Need to report these royalties on? Import into your client here</a>
+    </div>
+  </div>
+  <!-- Publishing Deal Type -->
+  <div id="CUR-tByZtIrO" class="row" ng-if="userType == 'client' && clientType == 'Publisher'">
+    <div id="CUR-esUHWUOn" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-vgaEUrEX" class="panel panel-default height-100 bg-info m-b-10">
+        <div id="CUR-YIpslQzB" class="panel-heading">
+          <div id="CUR-mujSCwnz" class="panel-title text-white">
+            Opening Balance >
+          </div>
+        </div>
+        <div id="CUR-HGTozpFm" class="panel-body bg-transparent">
+          <h3 id="CUR-CDxqPfyp" class="no-margin text-white"><span id="CUR-jnlJGZSz" class="semi-bold">{{currencySymbol}}{{statement.openingBalance | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-TWAiSTtS" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-ikRiimaz" class="panel panel-default height-100 bg-success m-b-10">
+        <div id="CUR-DFRCJGXO" class="panel-heading">
+          <div id="CUR-kqpVKIzM" class="panel-title text-white">
+            Gross Revenue >
+          </div>
+        </div>
+        <div id="CUR-ThasDsgi" class="panel-body bg-transparent">
+          <h3 id="CUR-tjduXxTh" class="text-white no-margin"><span id="CUR-ZmCANGuh" class="semi-bold">{{currencySymbol}}{{statement.grossAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-CCEENCDG" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-ptuDzZVc" class="panel panel-default height-100 bg-complete sm-m-t-5 m-b-10">
+        <div id="CUR-BDJvgsUy" class="panel-heading">
+          <div id="CUR-eqOOxrrI" class="panel-title text-white">
+            Net Revenue >
+          </div>
+        </div>
+        <div id="CUR-oZymQxaW" class="panel-body bg-transparent">
+          <h3 id="CUR-CJIloAgW" class="text-white no-margin"><span id="CUR-AyDEwMJj" class="semi-bold">{{currencySymbol}}{{statement.netAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-dlzdWXhX" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-LQBQXTLE" class="panel panel-default height-100 bg-success-green sm-m-t-5 m-b-10">
+        <div id="CUR-cBVPoERn" class="panel-heading">
+          <div id="CUR-RELntrCq" class="panel-title text-white">
+            Closing Balance >
+          </div>
+        </div>
+        <div id="CUR-uuzHPOgl" class="panel-body bg-transparent">
+          <h3 id="CUR-PpEAGglk" class="no-margin text-white"><span id="CUR-xJwkoRTQ" class="semi-bold">{{currencySymbol}}{{statement.closingBalance | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-ZNGnhYIA" class="col-xs-12 text-right m-b-10">
+      <a id="CUR-gFEskTvI" class="pointer" data-target="#reportRoyaltiesModal" data-toggle="modal" ng-if="userClients.length !== 0">Need to report these royalties on? Import into your client here</a>
+    </div>
+  </div>
+  <!-- Payee Royalty Deal -->
+  <div id="CUR-IUWPwROJ" class="row" ng-if="userType == 'payee' && clientType != 'Publisher' && statement.contractType != 'Profit Share'&& statement.contractType != 'Profit Share - Flexible' && statement.periodType != 'Mechanical'">
+    <div id="CUR-XhviJcIC" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-JtaAJkjf" class="panel panel-default height-100 bg-info">
+        <div id="CUR-gnkCcLDF" class="panel-heading">
+          <div id="CUR-OwkjaZlh" class="panel-title text-white">
+            Opening Balance >
+          </div>
+        </div>
+        <div id="CUR-fUAXbTTb" class="panel-body bg-transparent">
+          <h3 id="CUR-rEIIxBfV" class="no-margin text-white"><span id="CUR-ilqQhsbN" class="semi-bold">{{currencySymbol}}{{statement.openingBalance | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-tXXNFPyC" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-DXCvlzRT" class="panel panel-default height-100 bg-complete sm-m-t-5">
+        <div id="CUR-EWinQdyx" class="panel-heading">
+          <div id="CUR-OhnJteNK" class="panel-title text-white">
+            Net Revenue >
+          </div>
+        </div>
+        <div id="CUR-FSgnBqqJ" class="panel-body bg-transparent">
+          <h3 id="CUR-qtrZAiYF" class="text-white no-margin"><span id="CUR-jTCEBcMc" class="semi-bold">{{currencySymbol}}{{statement.netAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+      <div id="CUR-VNmpwBpd" class="panel panel-default height-100 bg-primary-light sm-m-t-5 m-b-10">
+        <div id="CUR-YmVWOYAN" class="panel-heading">
+          <div id="CUR-stFjTDRa" class="panel-title text-white">
+            Net Costs >
+          </div>
+        </div>
+        <div id="CUR-idxZZRBZ" class="panel-body bg-transparent">
+          <h3 id="CUR-YmJDJNBL" class="no-margin text-white">
+            <span id="CUR-WMSzJHze" class="semi-bold">{{currencySymbol}}{{statement.netCosts | number: 2 || 0}}</span>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-zyGxymUy" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-kyQlCpdo" class="panel panel-default height-100 bg-info-darker">
+        <div id="CUR-KoTCyKsw" class="panel-heading">
+          <div id="CUR-kXhiSTtB" class="panel-title text-white">
+            Reserves Withheld >
+          </div>
+        </div>
+        <div id="CUR-XnAZRtVm" class="panel-body bg-transparent">
+          <h3 id="CUR-DdSLTnTg" class="no-margin text-white">
+            <span id="CUR-AEUaRAPN" class="semi-bold">{{currencySymbol}}{{statement.reservesWithheld | number: 2 || 0}}</span>
+          </h3>
+        </div>
+      </div>
+      <div id="CUR-Gjgnhhqg" class="panel panel-default height-100 bg-info-light sm-m-t-5 m-b-10">
+        <div id="CUR-oxTiocKj" class="panel-heading">
+          <div id="CUR-UcuLUTsT" class="panel-title text-white">
+            Reserves Released >
+          </div>
+        </div>
+        <div id="CUR-FMqvkySv" class="panel-body bg-transparent">
+          <h3 id="CUR-ZslrlsMd" class="no-margin text-white">
+            <span id="CUR-UoIMpWOK" class="semi-bold">{{currencySymbol}}{{statement.reservesReleased | number: 2 || 0}}</span>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-OSjuhAzO" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-bgVFBmjf" class="panel panel-default height-100 bg-success-green sm-m-t-5 m-b-10">
+        <div id="CUR-PBJHKXCC" class="panel-heading">
+          <div id="CUR-MBbNPWKE" class="panel-title text-white">
+            Closing Balance >
+          </div>
+        </div>
+        <div id="CUR-uzOGbUNJ" class="panel-body bg-transparent">
+          <h3 id="CUR-PgZKmqWY" class="no-margin text-white"><span id="CUR-dEGHqRdL" class="semi-bold">{{currencySymbol}}{{statement.closingBalance | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-TKbcLUSH" class="col-xs-12 text-right m-b-10">
+      <a id="CUR-DJwNsxCq" class="pointer" data-target="#reportRoyaltiesModal" data-toggle="modal" ng-if="userClients.length !== 0">Need to report these royalties on? Import into your client here</a>
+    </div>
+  </div>
+  <!-- Payee Publishing Deal Type -->
+  <div id="CUR-iNeDAexH" class="row" ng-if="userType == 'payee' && clientType == 'Publisher'">
+    <div id="CUR-juIAzgzP" class="col-xs-12 col-sm-6 col-lg-4 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-aCLfLzNW" class="panel panel-default height-100 bg-info m-b-10">
+        <div id="CUR-atZbWlcr" class="panel-heading">
+          <div id="CUR-ivSipBEb" class="panel-title text-white">
+            Opening Balance >
+          </div>
+        </div>
+        <div id="CUR-cRmBhlTx" class="panel-body bg-transparent">
+          <h3 id="CUR-hkrWwGAW" class="no-margin text-white"><span id="CUR-lKbBIsPI" class="semi-bold">{{currencySymbol}}{{statement.openingBalance | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-VcOzmJST" class="col-xs-12 col-sm-6 col-lg-4 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-dPOvAGll" class="panel panel-default height-100 bg-complete sm-m-t-5 m-b-10">
+        <div id="CUR-zOxAZhha" class="panel-heading">
+          <div id="CUR-dosMchoG" class="panel-title text-white">
+            Net Revenue >
+          </div>
+        </div>
+        <div id="CUR-JtwmYBSn" class="panel-body bg-transparent">
+          <h3 id="CUR-viWMStjP" class="text-white no-margin"><span id="CUR-upwvgybN" class="semi-bold">{{currencySymbol}}{{statement.netAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-GXPcRxpB" class="col-xs-12 col-sm-6 col-lg-4 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-NgRMJuZW" class="panel panel-default height-100 bg-success-green sm-m-t-5 m-b-10">
+        <div id="CUR-Jshialyg" class="panel-heading">
+          <div id="CUR-JkHwKrDg" class="panel-title text-white">
+            Closing Balance >
+          </div>
+        </div>
+        <div id="CUR-cUbFQQix" class="panel-body bg-transparent">
+          <h3 id="CUR-YsRvmpfM" class="no-margin text-white"><span id="CUR-kRidqepE" class="semi-bold">{{currencySymbol}}{{statement.closingBalance | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-vhzpVYhB" class="col-xs-12 text-right m-b-10">
+      <a id="CUR-EalTyNsd" class="pointer" data-target="#reportRoyaltiesModal" data-toggle="modal" ng-if="userClients.length !== 0">Need to report these royalties on? Import into your client here</a>
+    </div>
+  </div>
+  <!-- Mechanicals -->
+  <div id="CUR-rdmjnaXR" class="row" ng-if="statement.periodType == 'Mechanical'">
+    <div id="CUR-gUYzZLfN" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-iijzlbkD" class="panel panel-default height-100 bg-complete sm-m-t-5">
+        <div id="CUR-kdErlhkc" class="panel-heading">
+          <div id="CUR-qVTddnQH" class="panel-title text-white">
+            Net Revenue >
+          </div>
+        </div>
+        <div id="CUR-pKrPenmr" class="panel-body bg-transparent">
+          <h3 id="CUR-FbcpeYEt" class="text-white no-margin"><span id="CUR-oiJyqOWe" class="semi-bold">{{currencySymbol}}{{statement.netAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-hwEaXTtd" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-vyXBrJaS" class="panel panel-default height-100 bg-info-darker">
+        <div id="CUR-YaPyBtrq" class="panel-heading">
+          <div id="CUR-LFMAiamG" class="panel-title text-white">
+            Reserves Withheld >
+          </div>
+        </div>
+        <div id="CUR-ysXWVKTu" class="panel-body bg-transparent">
+          <h3 id="CUR-zFcaZlgN" class="no-margin text-white">
+            <span id="CUR-KnUoBAkm" class="semi-bold">{{currencySymbol}}{{statement.reservesWithheld | number: 2 || 0}}</span>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-ExMBEbVF" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-RzCuhPBm" class="panel panel-default height-100 bg-info-light sm-m-t-5 m-b-10">
+        <div id="CUR-zkHxaBsa" class="panel-heading">
+          <div id="CUR-SkEuppqC" class="panel-title text-white">
+            Reserves Released >
+          </div>
+        </div>
+        <div id="CUR-ZpMEuoAN" class="panel-body bg-transparent">
+          <h3 id="CUR-XuQUWUIV" class="no-margin text-white">
+            <span id="CUR-VoZXcAir" class="semi-bold">{{currencySymbol}}{{statement.reservesReleased | number: 2 || 0}}</span>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-AEyezkQI" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-RdQqEewl" class="panel panel-default height-100 bg-success-green sm-m-t-5 m-b-10">
+        <div id="CUR-cTtTIHAx" class="panel-heading">
+          <div id="CUR-XvQjrYcC" class="panel-title text-white">
+            Closing Balance >
+          </div>
+        </div>
+        <div id="CUR-NMOOxjZL" class="panel-body bg-transparent">
+          <h3 id="CUR-tdUsADiI" class="no-margin text-white"><span id="CUR-WEzsUrvU" class="semi-bold">{{currencySymbol}}{{statement.closingBalance | number: 2 || 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-lUfSAZJs" class="col-xs-12 text-right m-b-10">
+      <a id="CUR-SJKTwRgD" class="pointer" data-target="#reportRoyaltiesModal" data-toggle="modal" ng-if="userClients.length !== 0">Need to report these royalties on? Import into your client here</a>
+    </div>
+  </div>
+  <!-- Main Analytics -->
+  <div id="CUR-UMtsgdtt" class="row">
+    <div id="CUR-XDaufTBY" class="col-xs-12 sm-p-l-5 sm-p-r-5">
+      <standard-graphs analysis-data="analytics" basis="'net'"></standard-graphs>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="include-sales-tab.html">
+  <div id="CUR-zLfTGHZW" class="row">
+    <div id="CUR-yTeyrSqO" class="col-xs-12">
+      <div id="CUR-EnoujWcs" class="panel panel-default">
+        <div id="CUR-CXeDbEDO" class="panel-heading">
+          <div id="CUR-yIENTtYE" class="panel-title">
+            Sales
+          </div>
+        </div>
+        <div id="CUR-mPMxhqHU" class="panel-body">
+          <div id="CUR-LWkQuZTC" class="table-responsive">
+            <table id="CUR-zRqWWJuw" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+              <tr id="CUR-ySbQSnRl">
+                <th>Name</th>
+                <th class="hidden-xs">Invoice</th>
+                <th class="hidden-xs">Target</th>
+                <th class="hidden-xs">Account</th>
+                <th>Gross</th>
+                <th>Net</th>
+                <th class="hidden-xs">Unmapped Lines</th>
+                <th class="hidden-xs"></th>
+              </tr>
+              </thead>
+              <tbody id="CUR-ScRPEpip">
+              <tr id="CUR-OyXJHPai" sales-file-table-row ng-repeat="sale in includedSalesFiles" sale="sale" no-links="true" no-checkbox="true"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="CUR-BxCltFdE" class="row">
+            <div id="CUR-kqDlreVm" class="col-xs-12 text-center">
+              <pagination id="CUR-qQkkEdor" pages="salesFilePages" total="totalSalesFilePages" current="currentSalesFilePage" change-page="changeSalesFilePage(page)"></pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="include-costs-tab.html">
+  <div id="CUR-KhgNmzbT" class="row">
+    <div id="CUR-ZIQByEmm" class="col-xs-12">
+      <div id="CUR-MBbMtBEz" class="panel panel-default">
+        <div id="CUR-MGCmAWGW" class="panel-heading">
+          <div id="CUR-KtqjBKyR" class="panel-title">
+            Costs
+          </div>
+        </div>
+        <div id="CUR-oQWMSAYq" class="panel-body">
+          <div id="CUR-wkZiguoN" class="table-responsive">
+            <table id="CUR-zQIPGKeY" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+              <tr id="CUR-Qveiduie">
+                <th>Name</th>
+                <th>Amount</th>
+                <th class="hidden-xs">Currency</th>
+                <th class="hidden-xs">Description</th>
+                <th class="hidden-xs">Period</th>
+                <th class="hidden-xs">Type</th>
+                <th class="hidden-xs">Created</th>
+                <th class="hidden-xs">Reported</th>
+              </tr>
+              </thead>
+              <tbody id="CUR-WOfOmtch">
+              <tr id="CUR-hBJkVUGq" cost-table-row ng-repeat="cost in includedCosts" cost="cost" no-links="true" no-checkbox="true"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="CUR-ratatYsZ" class="row">
+            <div id="CUR-xInaGGhb" class="col-xs-12 text-center">
+              <pagination id="CUR-owmXHeXh" pages="costPages" total="totalCostPages" current="currentCostPage" change-page="changeCostPage(page)"></pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="sales-tab.html">
+  <div id="CUR-MFJhrrZz" class="row m-t-40 sm-m-t-10" ng-if="clientType != 'Publisher'">
+    <div id="CUR-ekzlChdZ" class="col-xs-12 col-sm-6">
+      <div id="CUR-LUHaOcGh" class="form-group required">
+        <label id="CUR-vpoEdXks">Release <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Which specific releases are you interested in? You can select multiple releases below"></i></label>
+        <ui-select multiple ng-model="filter.releaseIds">
+          <ui-select-match>
+            <span id="CUR-QQiEwkET" style="vertical-align:middle;">{{releaseString($item)}}</span>
+            <span id="CUR-QbWPBoTn" ng-bind="$select.selected.title"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item._id as item in releases | filter: $select.search" refresh="searchReleases($select)" refresh-delay="500">
+            <span id="CUR-duqNaXIW" ng-bind="releaseString(item)"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div id="CUR-oPgSYdvU" class="col-xs-12 col-sm-6">
+      <div id="CUR-ZiAdSSps" class="form-group required">
+        <label id="CUR-nxTwwdKz">Track <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Which specific tracks are you interested in? You can select multiple tracks below"></i></label>
+        <ui-select multiple ng-model="filter.trackIds" theme="bootstrap" ng-disabled="false">
+          <ui-select-match>
+            <span id="CUR-dwDFHCBD" style="vertical-align:middle;">{{$item.isrc}} - {{$item.title}}</span>
+            <span id="CUR-wUeuCKvM" ng-bind="$select.selected.title"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item._id as item in tracks | filter:$select.search" refresh="searchTracks($select)" refresh-delay="500">
+            <span id="CUR-uhKEtCDD" ng-bind="item.isrc + ' - ' + item.title"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-fspIEpId" class="row m-t-40 sm-m-t-10" ng-if="clientType == 'Publisher'">
+    <div id="CUR-CeJgqlHy" class="col-xs-12">
+      <div id="CUR-UieYCXSl" class="form-group required">
+        <label id="CUR-BNmqnCyq">Work <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Which specific works are you interested in? You can select multiple works below"></i></label>
+        <ui-select multiple ng-model="filter.workIds" theme="bootstrap" ng-disabled="false">
+          <ui-select-match>
+            <span id="CUR-iGImjThi" style="vertical-align:middle;">{{$item.title}} - {{$item.composers}}</span>
+            <span id="CUR-hKswoIiB" ng-bind="$select.selected.title"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item._id as item in works | filter:$select.search"
+                             refresh="searchWorks($select)" refresh-delay="500">
+            <span id="CUR-saZKtRdF" ng-bind="item.title + ' - ' + item.composers"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-QSrFfSPp" class="row">
+    <div id="CUR-MDOVkOaF" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-lVWkjUXo" class="form-group">
+        <label id="CUR-RPiWeOAr">Cat Type
+          <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Are you just interested in releases or tracks? Filtering by a release without setting the Cat Type may include track data that is associated with that release"></i>
+        </label>
+        <ui-select ng-model="filter.catType">
+          <ui-select-match allow-clear="true">
+            <span id="CUR-naQRxtoP" ng-bind="$select.selected"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item in (['Release', 'Track', 'Contract'] | filter: $select.search)">
+            <span id="CUR-sNBsoTHI" ng-bind="item"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div id="CUR-kPrYnamL" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-VyZPKPpC" class="form-group required">
+        <label id="CUR-KsqZCrkv">Channel
+          <i ng-if="clientType != 'Publisher'" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is the headline consumption model, so think Digital, Physical, Licensing, etc. This will vary depending on how the system has been configured"></i>
+          <i ng-if="clientType == 'Publisher'" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is the headline consumption model, so think Performance, Mechanical, Sync, etc. This will vary depending on how the system has been configured"></i>
+        </label>
+        <ui-select multiple ng-model="filter.distributionChannels" theme="bootstrap">
+          <ui-select-match>{{$item}}</ui-select-match>
+          <ui-select-choices repeat="channel in channels | filter:$select.search track by $index">
+            {{channel}}
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div id="CUR-ghXltNYW" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-gEjbTqNG" class="form-group required">
+        <label id="CUR-TndNnueT">Configuration
+          <i ng-if="clientType != 'Publisher'" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is the specific consumption model, so think CD, Download, Streaming, etc. This will vary depending on how the system has been configured"></i>
+          <i ng-if="clientType == 'Publisher'" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is the specific consumption model, so think Radio, Streaming, etc. This will vary depending on how the system has been configured"></i>
+        </label>
+        <ui-select multiple ng-model="filter.configurations" theme="bootstrap">
+          <ui-select-match>{{$item}}</ui-select-match>
+          <ui-select-choices repeat="config in configs | filter:$select.search track by $index">
+            {{config}}
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div id="CUR-UTJHcojw" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-OdJnrvPG" class="form-group required">
+        <label id="CUR-wsNnryxH">Territory <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Select which specific territories you'd like to export the data for"></i></label>
+        <ui-select multiple ng-model="filter.territories" theme="bootstrap">
+          <ui-select-match>{{$item.name}}</ui-select-match>
+          <ui-select-choices group-by="groupFind" repeat="country.code as country in territories | filter: $select.search track by $index">
+            <span id="CUR-zmiyaviS" class="country" ng-bind="country.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div id="CUR-usLIQmSM" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-gQzFXEzi" class="form-group required">
+        <label id="CUR-rKkCbgrc">Source <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Sources are free text search, so you will want to get an idea of the specific sources in your data. Sources can be specific distributors or specific stores and DSPs"></i></label>
+        <input id="CUR-YWqFholy" type="text" class="form-control" ng-model="filter.source">
+      </div>
+    </div>
+    <div id="CUR-aXGoyIrl" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-KOIONEEQ" class="form-group required">
+        <label id="CUR-hFqrFsKN">Subsource <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Sub-Sources are free text search, so you will want to get an idea of the specific sources in your data. Sub-Sources can be specific distributors or specific stores and DSPs"></i></label>
+        <input id="CUR-ZipgrERR" type="text" class="form-control" ng-model="filter.subSource">
+      </div>
+    </div>
+  </div>
+  <!-- Buttons and Total -->
+  <div id="CUR-kXnDLQbj" class="row">
+    <div id="CUR-wuRANDNo" class="col-xs-12 center two-cols-row">
+      <button id="CUR-EOJjIlqQ" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i>&nbsp;Filter</button>
+    </div>
+  </div>
+  <div id="CUR-buVyarGz" class="row">
+    <div id="CUR-pRWFUoDF" class="col-xs-6">
+    </div>
+    <div id="CUR-PfeXjEFE" class="col-xs-6">
+      <h5 id="CUR-ktsQhNMB" class="pull-right">Total Rows: {{total}}</h5>
+    </div>
+  </div>
+  <div id="CUR-SdKpaOHe" class="row">
+    <div id="CUR-zuymYLmw" class="col-xs-12">
+      <div id="CUR-rtfIOEnb" class="panel panel-default xs-border-none">
+        <div id="CUR-eUcquUHb" class="panel-body sm-p-l-0 sm-p-r-0 sm-p-t-0 sm-p-b-0">
+          <div id="CUR-wwGxrNVC" class="table-responsive">
+            <table id="CUR-wgVvoKrR" class="table table-hover table-condensed dataTable no-footer sales-table sales-table-with-checkbox">
+              <thead>
+              <tr id="CUR-krCaKzER" ng-if="clientType != 'Publisher'">
+                <th ng-click="getSortedData('saleDate')" ng-class="whatClassIsIt('saleDate')">Sale date</th>
+                <th ng-click="getSortedData('transactionDate')" ng-class="whatClassIsIt('transactionDate')">Transaction date</th>
+                <th ng-click="getSortedData('catType')" ng-class="whatClassIsIt('catType')">Cat type</th>
+                <th ng-click="getSortedData('catalogueReleaseTitle')" ng-class="whatClassIsIt('catalogueReleaseTitle')">Release title</th>
+                <th ng-click="getSortedData('catalogueReleaseArtist')" ng-class="whatClassIsIt('catalogueReleaseArtist')">Release artist</th>
+                <th ng-click="getSortedData('catalogueBarcode')" ng-class="whatClassIsIt('catalogueBarcode')">Barcode</th>
+                <th ng-click="getSortedData('catalogueCatNo')" ng-class="whatClassIsIt('catalogueCatNo')">Cat no</th>
+                <th ng-click="getSortedData('catalogueTrackTitle')" ng-class="whatClassIsIt('catalogueTrackTitle')">Track title</th>
+                <th ng-click="getSortedData('catalogueTrackArtist')" ng-class="whatClassIsIt('catalogueTrackArtist')">Track artist</th>
+                <th ng-click="getSortedData('isrc')" ng-class="whatClassIsIt('isrc')">ISRC</th>
+                <th ng-click="getSortedData('distributionChannel')" ng-class="whatClassIsIt('distributionChannel')">Dist Channel</th>
+                <th ng-click="getSortedData('configuration')" ng-class="whatClassIsIt('configuration')">Configuration</th>
+                <th ng-click="getSortedData('priceCategory')" ng-class="whatClassIsIt('priceCategory')">Price cat</th>
+                <th ng-click="getSortedData('source')" ng-class="whatClassIsIt('source')">Source</th>
+                <th ng-click="getSortedData('subSource')" ng-class="whatClassIsIt('subSource')">Subsource</th>
+                <th ng-click="getSortedData('territory')" ng-class="whatClassIsIt('territory')">Territory</th>
+                <th ng-click="getSortedData('units')" ng-class="whatClassIsIt('units')">Units</th>
+                <th ng-click="getSortedData('originalCurrency')" ng-class="whatClassIsIt('originalCurrency')">Original currency</th>
+                <th ng-click="getSortedData('exchangeRate')" ng-class="whatClassIsIt('exchangeRate')">Ex Rate</th>
+                <th ng-click="getSortedData('homeCurrencyPerUnitRate')" ng-class="whatClassIsIt('homeCurrencyPerUnitRate')">Unit Rate</th>
+                <th ng-click="getSortedData('homeCurrencyGrossAmount')" ng-class="whatClassIsIt('homeCurrencyGrossAmount')">Gross</th>
+                <th ng-click="getSortedData('homeCurrencyNetAmount')" ng-class="whatClassIsIt('homeCurrencyNetAmount')">Net</th>
+                <th ng-click="getSortedData('calculationOutput')" ng-class="whatClassIsIt('calculationOutput')">Royalty</th>
+              </tr>
+              <tr id="CUR-mPEjbLBp" ng-if="clientType == 'Publisher'">
+                <th ng-click="getSortedData('catType')" ng-class="whatClassIsIt('catType')">Cat type</th>
+                <th ng-click="getSortedData('distributionChannel')" ng-class="whatClassIsIt('distributionChannel')">Channel</th>
+                <th ng-click="getSortedData('configuration')" ng-class="whatClassIsIt('configuration')">Configuration</th>
+                <th ng-click="getSortedData('source')" ng-class="whatClassIsIt('source')">Source</th>
+                <th ng-click="getSortedData('subSource')" ng-class="whatClassIsIt('subSource')">Subsource</th>
+                <th ng-click="getSortedData('territory')" ng-class="whatClassIsIt('territory')">Territory</th>
+                <th ng-click="getSortedData('originalWorkTitle')" ng-class="whatClassIsIt('originalWorkTitle')">Title</th>
+                <th ng-click="getSortedData('originalComposers')" ng-class="whatClassIsIt('originalComposers')">Composers</th>
+                <th ng-click="getSortedData('production')" ng-class="whatClassIsIt('production')">Production</th>
+                <th ng-click="getSortedData('description')" ng-class="whatClassIsIt('description')">Description</th>
+                <th ng-click="getSortedData('Episode')" ng-class="whatClassIsIt('episode')">Episode</th>
+                <th ng-click="getSortedData('catalogueIdentifier')" ng-class="whatClassIsIt('catalogueIdentifier')">Identifier</th>
+                <th ng-click="getSortedData('catalogueIswc')" ng-class="whatClassIsIt('catalogueIswc')">ISWC</th>
+                <th ng-click="getSortedData('catalogueTunecode')" ng-class="whatClassIsIt('catalogueTunecode')">Tunecode</th>
+                <th ng-click="getSortedData('barcode')" ng-class="whatClassIsIt('barcode')">Barcode</th>
+                <th ng-click="getSortedData('catNo')" ng-class="whatClassIsIt('catNo')">Cat no</th>
+                <th ng-click="getSortedData('isrc')" ng-class="whatClassIsIt('isrc')">ISRC</th>
+                <th ng-click="getSortedData('units')" ng-class="whatClassIsIt('units')">Units</th>
+                <th ng-click="getSortedData('exchangeRate')" ng-class="whatClassIsIt('exchangeRate')">Ex Rate</th>
+                <th ng-click="getSortedData('homeCurrencyGrossAmount')" ng-class="whatClassIsIt('homeCurrencyGrossAmount')">Gross</th>
+                <th ng-click="getSortedData('homeCurrencyNetAmount')" ng-class="whatClassIsIt('homeCurrencyNetAmount')">Net</th>
+                <th ng-click="getSortedData('calculationOutput')" ng-class="whatClassIsIt('calculationOutput')">Royalty</th>
+              </tr>
+              </thead>
+              <tbody id="CUR-FrVmsmfR">
+              <tr id="CUR-NcIfsYmi" ng-if="clientType != 'Publisher'" output-sales-table-row ng-repeat="sale in outputSales" sale="sale"></tr>
+              <tr id="CUR-qWAPuGUM" class="totals-row" ng-if="clientType != 'Publisher'">
+                <td id="CUR-KWSjpWFo">Total:</td>
+                <td id="CUR-bfBgTxQD"></td>
+                <td id="CUR-gOYMHSMc"></td>
+                <td id="CUR-DjYltPdi"></td>
+                <td id="CUR-bYrBsuDn"></td>
+                <td id="CUR-RvAGZkQN"></td>
+                <td id="CUR-gqFqpbaL"></td>
+                <td id="CUR-qGjGOIbg"></td>
+                <td id="CUR-YPkzuDzj"></td>
+                <td id="CUR-AqSEvOCE"></td>
+                <td id="CUR-eClwLMGj"></td>
+                <td id="CUR-rzkdFowE"></td>
+                <td id="CUR-lxLmDSUW"></td>
+                <td id="CUR-FOzNmWxq"></td>
+                <td id="CUR-pFRzSGPS"></td>
+                <td id="CUR-CSrQEbBE"></td>
+                <td id="CUR-aeQJhoIW">{{ outputTotals.units | number: 0 }}</td>
+                <td id="CUR-lnyjcPQB"></td>
+                <td id="CUR-aBbuanoV"></td>
+                <td id="CUR-Lmgnuwuy"></td>
+                <td id="CUR-IuUJYbGO"></td>
+                <td id="CUR-ttMpZvhi">{{ outputTotals.homeCurrencyNetAmount | number: 2 }}</td>
+                <td id="CUR-toXAqZHa">{{ outputTotals.calculationOutput | number: 2 }}</td>
+              </tr>
+              <tr id="CUR-EduzGZFW" ng-if="clientType == 'Publisher'" output-publishing-sales-table-row ng-repeat="sale in outputSales" sale="sale"></tr>
+              <tr id="CUR-iVHcLOsA" class="totals-row" ng-if="clientType == 'Publisher'">
+                <td id="CUR-hRWTCayv">Total:</td>
+                <td id="CUR-RZNgPKBS"></td>
+                <td id="CUR-TmnPbJTt"></td>
+                <td id="CUR-cHXPsJkI"></td>
+                <td id="CUR-fwiVXMEA"></td>
+                <td id="CUR-YcWoQysw"></td>
+                <td id="CUR-FWAslzeD"></td>
+                <td id="CUR-OkcHyACm"></td>
+                <td id="CUR-MZfyEwrT"></td>
+                <td id="CUR-URbvOmrR"></td>
+                <td id="CUR-PGUOWhcm"></td>
+                <td id="CUR-IzRxLwSV"></td>
+                <td id="CUR-JhLiGLCA"></td>
+                <td id="CUR-GuHLuvZg"></td>
+                <td id="CUR-dZLvJUmZ"></td>
+                <td id="CUR-nJpFnbPu"></td>
+                <td id="CUR-JqrfICFf"></td>
+                <td id="CUR-CDsejWhf">{{ outputTotals.units | number: 0 }}</td>
+                <td id="CUR-mwVOkSyX"></td>
+                <td id="CUR-zxLszOOU"></td>
+                <td id="CUR-LJHOmVmh">{{ outputTotals.homeCurrencyNetAmount | number: 2 }}</td>
+                <td id="CUR-uVVNXLWq">{{ outputTotals.calculationOutput | number: 2 }}</td>
+                <td id="CUR-vVhPaJQe"></td>
+                <td id="CUR-fFNxvmvA"></td>
+                <td id="CUR-LSiqUsqk"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="CUR-OEILSoIt" class="row">
+            <div id="CUR-qjplXaXB" class="col-xs-12 text-center">
+              <pagination id="CUR-OinOjlph" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="communication-tab.html">
+  <div id="CUR-LNomHJDl" class="row">
+    <div id="CUR-IsKTPqfU" class="col-xs-12">
+      <div id="CUR-muDVNbjc" class="panel panel-default">
+        <div id="CUR-RszvHuzt" class="panel-heading">
+          <div id="CUR-SEcwIXfO" class="panel-title">
+            Communication
+          </div>
+        </div>
+        <div id="CUR-RqbpCjwV" class="panel-body">
+          <div id="CUR-jENsVJzD" class="table-responsive">
+            <table id="CUR-JjHckbya" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+              <tr id="CUR-RYsTMHaJ">
+                <th>Date</th>
+                <th>Email</th>
+              </tr>
+              </thead>
+              <tbody id="CUR-xVANOFvI">
+              <tr id="CUR-hKtwtjPU" ng-repeat="com in statement.sendings track by $index">
+                <td id="CUR-scZUOfWW">
+                  {{com.date}}
+                </td>
+                <td id="CUR-VZgmMzaC">
+                  {{com.email}}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

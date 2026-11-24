@@ -1,0 +1,2053 @@
+<div id="CUR-yCBETIdP" class="jumbotron" data-pages="parallax">
+  <div id="CUR-hWHGvNZe" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-FyxklNhn" class="inner">
+      <ul id="CUR-bEehosBj" class="breadcrumb">
+        <li id="CUR-mResKqHA"><a id="CUR-UKAbLtiY" href="/#/settings">Settings</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-IxdUeTmw" class="container-fluid container-fixed-lg">
+  <div id="CUR-pGfPiNCY" class="row">
+    <div id="CUR-hvdJPmjK" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-rZPDYyzN" class="btn btn-default hidden-xs" data-toggle="modal" data-target="#settingsImportModal"
+        ng-if="userRole === 'client' && activeTab === 'configuration'"><i
+          class="fa fa-download"></i>&nbsp;Import</button>
+      <button id="CUR-XbCaWLaC" type="button" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="saveSettings()"><i
+          class="fa fa-check"></i>
+        Save</button>
+    </div>
+  </div>
+  <div id="CUR-gJgfmwiV" class="row">
+    <div id="CUR-YyKUnIEk" class="panel panel-transparent hidden-xs">
+      <ul id="CUR-FMjqIpEd" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-DwijuWUQ" class="active" ng-click="setTab('overview')">
+          <a id="CUR-XAwELSfi" data-toggle="tab" aria-expanded="true"><span id="CUR-rnuyFjUE">Overview</span></a>
+        </li>
+        <li id="CUR-tqxRHyMu" ng-if="userRole === 'client'" ng-click="setTab('configuration')">
+          <a id="CUR-rfhSOGGB" data-toggle="tab" aria-expanded="false"><span id="CUR-zfwLctsq">Configuration</span></a>
+        </li>
+        <li id="CUR-NcnIIgra"
+          ng-if="userRole === 'client' && clientType != 'Publisher' && features && features.mechanicals"
+          ng-click="setTab('mechanicals')">
+          <a id="CUR-GNMvbKty" data-toggle="tab" aria-expanded="false"><span id="CUR-GtvDfgYt">Mechanicals</span></a>
+        </li>
+        <li id="CUR-GNUddDpj" ng-if="userRole === 'client'" ng-click="setTab('statement')">
+          <a id="CUR-btVoGZzZ" data-toggle="tab" aria-expanded="false"><span id="CUR-ksXuMnYT">Statement
+              Design</span></a>
+        </li>
+        <li id="CUR-OpIdgCAV" ng-if="userRole === 'client'" ng-click="setTab('communication')">
+          <a id="CUR-TDbnFaAQ" data-toggle="tab" aria-expanded="false"><span id="CUR-flUbqwpG">Communication</span></a>
+        </li>
+        <li id="CUR-MIvfHjbY"
+          ng-if="userRole == 'client' && rights.periods != 'None' && features && (features.payments || features.paymentSetup) && clientAdminUser"
+          ng-click="setTab('payments')">
+          <a id="CUR-QpQmOsls" data-toggle="tab" aria-expanded="false"><span id="CUR-fOteRkzp">Payments</span></a>
+        </li>
+        <li id="CUR-CRNUxcvc" ng-if="userRole === 'client'" ng-click="setTab('duplicates')">
+          <a id="CUR-vNjMRwib" data-toggle="tab" aria-expanded="false"><span id="CUR-MsLdtmCS">Duplicate
+              Identifiers</span></a>
+        </li>
+        <li id="CUR-rxRrgYIC" ng-if="userRole === 'client' && displayGL" ng-click="setTab('glConfig')">
+          <a id="CUR-MjeEsEdf" data-toggle="tab" aria-expanded="false"><span id="CUR-TDqEdbCw">GL Config</span></a>
+        </li>
+        <li id="CUR-BNkkDrVA" ng-if="userRole === 'client' && features && features.accounting"
+          ng-click="setTab('accountingMapping')">
+          <a id="CUR-MlXbVyxe" data-toggle="tab" aria-expanded="false"><span id="CUR-Zkrxixuh">Accounting</span></a>
+        </li>
+        <li id="CUR-EVENT-NOTIFICATIONS"
+          ng-if="userRole === 'client' && (features && features.payments && client.paymentProviders.selectedPaymentProvider === 'Curve Pay' || (clientType == 'Publisher' || clientType == 'Label'))"
+          ng-click="setTab('event')">
+          <a id="CUR-EVENT-NOTIFICATIONS-TAB" data-toggle="tab" aria-expanded="false">
+            <span id="CUR-NEW-TAB-SPAN">Event Notifications</span>
+          </a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-HzhwlfsO" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-wuDelRqn" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+        <div id="CUR-yRiFRUsk" ng-show="activeTab === 'configuration'" ng-include="'configuration-tab.html'"></div>
+        <div id="CUR-bBXWSLJz" ng-show="activeTab === 'mechanicals'" ng-include="'mechanicals-tab.html'"></div>
+        <div id="CUR-mYGeWnwp" ng-show="activeTab === 'statement'" ng-include="'statement-tab.html'"></div>
+        <div id="CUR-fLdSxXgb" ng-show="activeTab === 'communication'" ng-include="'communication-tab.html'"></div>
+        <div id="CUR-yLgtDJuW" ng-show="activeTab === 'payments' && features && (features.payments || features.paymentSetup)"
+          ng-include="'payments-tab.html'"></div>
+        <div id="CUR-WGiSjxiu" ng-show="activeTab === 'duplicates'" ng-include="'duplicates-tab.html'"></div>
+        <div id="CUR-POwBlDyb" ng-show="activeTab === 'glConfig'" ng-include="'general-ledger-tab.html'"></div>
+        <div id="CUR-UIcYZrLo" ng-show="activeTab === 'accountingMapping'" ng-include="'accounting-mapping-tab.html'">
+        </div>
+        <div id="CUR-EVENT-NOTIFICATIONS-CONTENT" ng-show="activeTab === 'event'"
+          ng-include="'event-notifications-tab.html'"></div>
+      </div>
+    </div>
+    <div id="CUR-rVWKBXrH" class="col-xs-12 visible-xs p-l-20 p-r-20" ng-if="showAccordions">
+      <uib-accordion close-others="true"
+        ng-init="status1.open = true; status2.open = false; status3.open = false; status4.open = false; status5.open = false; status6.open = false; status7.open = false; status8.open = false; status9.open = false; status10.open = false;">
+        <div id="CUR-lFmTrwOj" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>
+            Overview <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-aWsEgUAo" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div id="CUR-swzwSRSY" uib-accordion-group class="panel-default" is-open="status2.open"
+          ng-if="userRole === 'client'">
+          <uib-accordion-heading>
+            Configuration <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-blVfpzbN" ng-include="'configuration-tab.html'"></div>
+        </div>
+        <div id="CUR-SRxinyPH" uib-accordion-group class="panel-default" is-open="status3.open"
+          ng-if="userRole === 'client'">
+          <uib-accordion-heading>
+            Mechanicals <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-EeKEXuQf" ng-include="'mechanicals-tab.html'"></div>
+        </div>
+        <div id="CUR-aaksziTX" uib-accordion-group class="panel-default" is-open="status4.open"
+          ng-if="userRole === 'client'">
+          <uib-accordion-heading>
+            Statement Design <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status4.open, 'glyphicon-chevron-right': !status4.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-bnFEPFXY" ng-include="'statement-tab.html'"></div>
+        </div>
+        <div id="CUR-WuQjnuKN" uib-accordion-group class="panel-default" is-open="status5.open"
+          ng-if="userRole === 'client'">
+          <uib-accordion-heading>
+            Communication <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status5.open, 'glyphicon-chevron-right': !status5.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-VteBqWMO" ng-include="'communication-tab.html'"></div>
+        </div>
+        <div id="CUR-MHxPPYPe" uib-accordion-group class="panel-default" is-open="status6.open"
+          ng-if="userRole == 'client' && rights.periods != 'None' && features && features.payments && clientAdminUser">
+          <uib-accordion-heading>
+            Payments <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status6.open, 'glyphicon-chevron-right': !status6.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-pQxPhGCd" ng-include="'payments-tab.html'"></div>
+        </div>
+        <div id="CUR-ZhkhamRH" uib-accordion-group class="panel-default" is-open="status7.open"
+          ng-if="userRole === 'client' && clientType != 'Publisher'">
+          <uib-accordion-heading>
+            Duplicate Identifiers <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status7.open, 'glyphicon-chevron-right': !status7.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-gIlAruZQ" ng-include="'duplicates-tab.html'"></div>
+        </div>
+        <div id="CUR-PoMaZKdh" uib-accordion-group class="panel-default" is-open="status8.open"
+          ng-if="userRole === 'client' && displayGL">
+          <uib-accordion-heading>
+            GL Config <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status8.open, 'glyphicon-chevron-right': !status8.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-lFEQdeDa" ng-include="'general-ledger-tab.html'"></div>
+        </div>
+        <div id="CUR-WxMppqhK" uib-accordion-group class="panel-default" is-open="status9.open"
+          ng-if="userRole === 'client' && features && features.accounting">
+          <uib-accordion-heading>
+            Accounting <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status9.open, 'glyphicon-chevron-right': !status9.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-OnufvDLJ" ng-include="'accounting-mapping-tab.html'"></div>
+        </div>
+        <div id="CUR-aaksziTX" uib-accordion-group class="panel-default" is-open="status10.open"
+          ng-if="userRole === 'client' && (clientType == 'Publisher' || clientType == 'Label')">
+          <uib-accordion-heading>
+            Event Notifications <i class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status10.open, 'glyphicon-chevron-right': !status10.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-bnFEPFXY" ng-include="'event-notifications-tab.html'"></div>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+</div>
+<!-- Script tags that contain in-file html for the tabs -->
+<script type="text/ng-template" id="overview-tab.html">
+  <!-- user is logged in as a client -->
+<div id="CUR-bCPPFmJu" ng-if="userRole === 'client'" class="row">
+  <div id="CUR-QlFESeqv" class="col-xs-12 col-sm-6">
+    <div id="CUR-FSjkiqqf">
+      <div id="CUR-fxXIptKH" class="panel panel-default">
+        <div id="CUR-HwrgYmIT" class="panel-heading">
+          <div id="CUR-vUTrmTzv" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-vJtckLtP" class="panel-body p-t-15">
+          <div id="CUR-ncfipcot" class="form-group required">
+            <label id="CUR-HKEfiqmB">Company Name</label>
+            <input id="CUR-aHfdrfGV" type="text" class="form-control" ng-model="client.companyName"
+              ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-kqhhKJzO" class="form-group">
+            <label id="CUR-JDQBPoJm">Address</label>
+            <textarea class="form-control standard-textarea" ng-model="client.address"
+              ng-disabled="rights.contracts != 'Edit'"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-KHBQgOlh" class="panel panel-default">
+      <div id="CUR-PKYeVuIm" class="panel-heading">
+        <div id="CUR-RmVlEaJu" class="panel-title">
+          Date Format
+        </div>
+      </div>
+      <div id="CUR-MVKIRepu" class="panel-body p-t-15">
+        <div id="CUR-NIEfDpZG" class="form-group">
+          <label id="CUR-ATsFhoPJ">Date Format</label>
+          <ui-select ng-model="client.dateFormat">
+            <ui-select-match>
+              <span id="CUR-vBuXbmVs" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices group-by="groupFind"
+              repeat="dateFormat.format as dateFormat in dateFormats | filter: $select.search">
+              <span id="CUR-dMYAZEDR" ng-bind="dateFormat.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-RQAwMhSc" class="panel panel-default">
+      <div id="CUR-RAhpmDSk" class="panel-heading">
+        <div id="CUR-sYwtABFg" class="panel-title">
+          Notifications <documentation link="http://guide.curveroyaltysystems.com/article/settings/#notification">
+          </documentation>
+        </div>
+      </div>
+      <div id="CUR-XzojQuLf" class="panel-body p-t-15">
+        <div id="CUR-AiSKkDHq" class="form-group">
+          <label id="CUR-utZAcAdO">Notifications</label>
+          <ui-select ng-model="user.notifications" ng-disabled="rights.contracts != 'Edit'">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-vlpZFJLh" ng-bind="$select.selected"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item as item in notifications | filter: $select.search">
+              <div id="CUR-rOpmOohh" ng-bind-html="item | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-QPtXQtEr" class="panel panel-default" ng-if="clientType == 'Publisher'">
+      <div id="CUR-MxNhmSxx" class="panel-heading">
+        <div id="CUR-smuePxrn" class="panel-title">
+          Issue Identifier
+        </div>
+      </div>
+      <div id="CUR-IaSVzVLj" class="panel-body p-t-15">
+        <div id="CUR-BkReNygx" class="form-group required">
+          <input id="CUR-nyeMrdjn" type="checkbox" value="1" ng-model="client.issueIdentifier"
+            ng-disabled="rights.contracts != 'Edit'">
+          <label id="CUR-YSRpkwzv">Issue Identifier <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+              tooltip-template="Curve will issue an identifier on create of each work"></i></label>
+        </div>
+        <div id="CUR-uIJwRqtW" class="form-group">
+          <label id="CUR-EcwNGWGV">Identifier Prefix <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+              tooltip-template="Adds a prefix to the identifier when it is being created"></i></label>
+          <input id="CUR-AzMtkOFD" type="text" class="form-control" ng-model="client.identifierPrefix"
+            ng-disabled="rights.contracts != 'Edit'">
+        </div>
+        <div id="CUR-wJWqMgaa" class="form-group">
+          <label id="CUR-yDsxeAzk">Identifier Start From <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+              tooltip-template="From which number should Curve start to issue the new identifiers from?"></i></label>
+          <input id="CUR-yWsIdHkc" type="number" class="form-control" ng-model="client.identifierStartFrom"
+            ng-disabled="rights.contracts != 'Edit'">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-vbaFKVHp" class="col-xs-12 col-sm-6">
+    <div id="CUR-cMWvSEYg" class="panel panel-default">
+      <div id="CUR-XhOKkSCU" class="panel-heading">
+        <div id="CUR-YkYAZYAg" class="panel-title">
+          User configuration
+        </div>
+      </div>
+      <div id="CUR-JNXTNcri" class="panel-body p-t-15">
+        <form id="CUR-settings-password-client">
+          <div id="CUR-AHxSeHdi" class="form-group required">
+            <label id="CUR-XcnBvWgB">Email</label>
+            <input id="CUR-JFUiCGMH" type="text" class="form-control" placeholder="Email" ng-model="user.email"
+              ng-disabled="true">
+          </div>
+          <div id="CUR-JUDBHEPk" class="form-group required">
+            <label id="CUR-FUAjMuLN">Current Password</label>
+            <input id="CUR-DCcbpawk" type="password" class="form-control" autocomplete="new-password" name="currentPassword"
+              placeholder="Current password" ng-model="user.currentPassword">
+            <div id="CUR-jjZNUXBL" ng-show="user.newPassword && !user.currentPassword" class="m-t-8">
+              <span id="CUR-yWbqKVYH" class="block text-error">Current password is required to change your
+                password</span>
+            </div>
+          </div>
+          <div id="CUR-oCyjsUsT" class="form-group required">
+            <label id="CUR-nfxyzhid">Update Password</label>
+            <input id="CUR-KaggXVtd" type="password" class="form-control" autocomplete="off" name="password"
+              placeholder="Password" ng-model="user.newPassword">
+            <div id="CUR-taMNIGrz" ng-show="passErrors.show" class="m-t-8">
+              <span id="CUR-AbHwZkCg">Your password must have: </span>
+              <span id="CUR-pMxheJHG" ng-class="passErrors.error1 ? 'text-error' : 'text-success'" class="block">8 or
+                more characters</span>
+              <span id="CUR-gVwAYFFL" ng-class="passErrors.error2 ? 'text-error' : 'text-success'" class="block">At
+                least one lowercase letter</span>
+              <span id="CUR-TSymGfGP" ng-class="passErrors.error3 ? 'text-error' : 'text-success'" class="block">At
+                least one Uppercase letter</span>
+              <span id="CUR-EJkfDiOv" ng-class="passErrors.error4 ? 'text-error' : 'text-success'" class="block">At
+                least one number</span>
+              <span id="CUR-zUNpiTrp" ng-class="passErrors.error5 ? 'text-error' : 'text-success'" class="block">At
+                least one symbol</span>
+            </div>
+          </div>
+          <div id="CUR-COMitQmK" class="form-group required">
+            <label id="CUR-Uyjokcxz">Confirm Password</label>
+            <input id="CUR-GtLtxbZo" type="password" class="form-control" autocomplete="off" name="confirmPassword"
+              placeholder="Confirm password" ng-model="user.confirmNewPassword">
+            <div id="CUR-hqKSglcY" ng-show="passConfirmError" class="m-t-8">
+              <span id="CUR-GtxKTazv" class="block text-error">Must match the updated password</span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="CUR-wnDugitk" class="panel panel-default"
+      ng-if="user.authenticationType !== 'OneLogin' && user.authenticationType !== 'OKTA' ">
+      <div id="CUR-CotIZGAw" class="panel-heading">
+        <div id="CUR-bomMJlXn" class="panel-title">
+          Multi Factor Authentication
+        </div>
+      </div>
+      <div id="CUR-fLvIdaJF" class="panel-body p-t-15">
+        <p>
+          Enabling Multi Factor Authentication will require you to confirm your identity using your email address. Upon
+          logging in, we will send you an email to confirm your identity.
+        </p>
+        <div id="CUR-TwlsJbOh" class="form-group required">
+          <input id="CUR-mLSWlxEZ" type="checkbox" value="1" ng-model="user.multiFactorAuthentication" ng-change="requestQRCode()">
+          <label id="CUR-UxcYaqFG">Enable Multi Factor Authentication</label>
+        </div>
+        <div id="CUR-aFvdtGKr" class="form-group" ng-if="user.multiFactorAuthentication">
+          <label id="CUR-yPuqGseA">Type</label>
+          <ui-select ng-model="user.multiFactorAuthenticationType" ng-change="requestQRCode()">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-sAsOtgWe" ng-bind="$select.selected"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item as item in ['Email', 'Authenticator App'] | filter: $select.search">
+              <div id="CUR-gPEcHcVJ" ng-bind-html="item | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+        <div id="CUR-nEIoJXvs" ng-if="displayQrCode && qrcode && user.multiFactorAuthenticationType === 'Authenticator App'">
+          <img data-ng-src="{{qrcode}}">
+          <p>Scan this code into the Authenticator app and then enter the Token below to complete the setup.</p>
+          <input id="CUR-authenticator-token-input" type="text" placeholder="Token" class="form-control" autocomplete="off" ng-model="user.multiFactorAuthenticationSetupToken">
+        </div>
+
+        <div id="CUR-ugXBdJBw" class="p-t-15" ng-if="user.multiFactorAuthenticationType === 'Email' && displayEmailToken">
+          <div ng-if="emailCodeRequested">
+            <p>Enter the Email Token below to complete the setup.</p>
+            <input id="CUR-authenticator-token-input" type="text" placeholder="Token" class="form-control" autocomplete="off" ng-model="user.multiFactorAuthenticationSetupToken">
+          </div>
+          <div id="CUR-SzDMbwVU" class="p-t-15" ng-if="!emailCodeRequested">
+            <button id="CUR-UXciuPMj" type="button" class="btn btn-complete" ng-click="requestEmailCode()">Request Token</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- / user is logged in as a client -->
+<div id="CUR-nnJpEzem" ng-if="userRole === 'internal'">
+  <!-- user is logged in as a parent or a payee user -->
+  <div id="CUR-WjBjBRvF" class="row">
+    <div id="CUR-yXmzSxWk" class="col-xs-12 col-sm-6">
+      <div id="CUR-ndbPAMEJ" class="panel panel-default">
+        <div id="CUR-kHuqVISx" class="panel-heading">
+          <div id="CUR-dpWqdnUp" class="panel-title">
+            User configuration
+          </div>
+        </div>
+        <div id="CUR-ObFvLQby" class="panel-body p-t-15">
+          <form id="CUR-settings-password-internal">
+            <div id="CUR-JnUYbGsk" class="form-group required">
+              <label id="CUR-iTsFMlEy">Email</label>
+
+              <input id="CUR-LSoEDWgD" type="text" class="form-control" placeholder="Email" ng-model="user.email"
+                ng-disabled="true">
+            </div>
+            <div id="CUR-RoHSyeAn" class="form-group required">
+              <label id="CUR-eLJzPNIa">Current Password</label>
+              <input id="CUR-nGufHeqt" type="password" autocomplete="off" class="form-control" name="currentPassword"
+                placeholder="Current password" ng-model="user.currentPassword">
+              <div id="CUR-hcVUCytt" ng-show="user.newPassword && !user.currentPassword" class="m-t-8">
+                <span id="CUR-lVOuXCOh" class="block text-error">Current password is required to change your
+                  password</span>
+              </div>
+            </div>
+            <div id="CUR-oCyjsUsT" class="form-group required">
+              <label id="CUR-nfxyzhid">Update Password</label>
+              <input id="CUR-KaggXVtd" type="password" class="form-control" autocomplete="off" name="password"
+                placeholder="Password" ng-model="user.newPassword">
+              <div id="CUR-taMNIGrz" ng-show="passErrors.show" class="m-t-8">
+                <span id="CUR-AbHwZkCg">Your password must have: </span>
+                <span id="CUR-pMxheJHG" ng-class="passErrors.error1 ? 'text-error' : 'text-success'" class="block">12 or
+                  more characters</span>
+                <span id="CUR-gVwAYFFL" ng-class="passErrors.error2 ? 'text-error' : 'text-success'" class="block">At
+                  least one lowercase letter</span>
+                <span id="CUR-TSymGfGP" ng-class="passErrors.error3 ? 'text-error' : 'text-success'" class="block">At
+                  least one Uppercase letter</span>
+                <span id="CUR-EJkfDiOv" ng-class="passErrors.error4 ? 'text-error' : 'text-success'" class="block">At
+                  least one number</span>
+                <span id="CUR-zUNpiTrp" ng-class="passErrors.error5 ? 'text-error' : 'text-success'" class="block">At
+                  least one symbol</span>
+              </div>
+            </div>
+            <div id="CUR-PcELQYRS" class="form-group required">
+              <label id="CUR-tafXZIzp">Confirm Password</label>
+              <input id="CUR-JAsWCgGN" type="password" class="form-control" autocomplete="off" name="confirmPassword"
+                placeholder="Confirm password" ng-model="user.confirmNewPassword">
+              <div id="CUR-xzaOvFfz" ng-show="passConfirmError" class="m-t-8">
+                <span id="CUR-anlUktsw" class="block text-error">Must match the updated password</span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="CUR-SGytOfpv" class="panel panel-default"
+        ng-if="user.authenticationType !== 'OneLogin' && user.authenticationType !== 'OKTA'">
+        <div id="CUR-kLNOCrMm" class="panel-heading">
+          <div id="CUR-eCAschyi" class="panel-title">
+            Multi Factor Authentication
+          </div>
+        </div>
+        <div id="CUR-yAgzmQTn" class="panel-body p-t-15">
+          <p>
+            Enabling Multi Factor Authentication will require you to confirm your identity using your email address or
+            Authenticator app.
+            Upon logging in, we will require you to enter in the code from your email or Authenticator app to complete
+            your login.
+          </p>
+          <div id="CUR-slvZEKEf" class="form-group required">
+            <input id="CUR-jGqWRChq" type="checkbox" value="1" ng-model="user.multiFactorAuthentication" ng-change="requestQRCode()">
+            <label id="CUR-wOFdBWBm">Enable Multi Factor Authentication</label>
+          </div>
+          <div id="CUR-mUHAElEN" class="form-group" ng-if="user.multiFactorAuthentication">
+            <label id="CUR-KkMEVyRA">Type</label>
+            <ui-select ng-model="user.multiFactorAuthenticationType" ng-change="requestQRCode()">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-XzEPnboT" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item as item in ['Email', 'Authenticator App'] | filter: $select.search">
+                <div id="CUR-YibCphhG" ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-ugXBdJBv" ng-if="displayQrCode && qrcode && user.multiFactorAuthenticationType === 'Authenticator App'">
+            <img data-ng-src="{{qrcode}}">
+            <p>Scan this code into the Authenticator app and then enter the Token below to complete the setup.</p>
+            <input id="CUR-authenticator-token-input" type="text" placeholder="Token" class="form-control" autocomplete="off" ng-model="user.multiFactorAuthenticationSetupToken">
+          </div>
+
+          <div id="CUR-ugXBdJBw" class="p-t-15" ng-if="user.multiFactorAuthenticationType === 'Email' && displayEmailToken">
+            <div ng-if="emailCodeRequested">
+              <p>Enter the Email Token below to complete the setup.</p>
+              <input id="CUR-authenticator-token-input" type="text" placeholder="Token" class="form-control" autocomplete="off" ng-model="user.multiFactorAuthenticationSetupToken">
+            </div>
+            <div id="CUR-SzDMbwVU" class="p-t-15" ng-if="!emailCodeRequested">
+              <button id="CUR-UXciuPMj" type="button" class="btn btn-complete" ng-click="requestEmailCode()">Request Token</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+<script type="text/ng-template" id="configuration-tab.html">
+  <div id="CUR-iqwUpcVc" ng-if="userRole === 'client' && features && features.settingsConfigurationArea">
+        <!-- user is logged in as a client -->
+        <div id="CUR-fqSYOIyH" class="row">
+            <div id="CUR-WtFevkHV" class="col-xs-12 col-sm-6">
+                <div id="CUR-wqpkjQJF" class="panel panel-default">
+                    <div id="CUR-SIwirtCP" class="panel-heading">
+                        <div id="CUR-RUMGcfIR" class="panel-title">
+                            Currency
+                        </div>
+                    </div>
+                    <div id="CUR-GyYreQmW" class="panel-body p-t-15">
+                        <div id="CUR-TzaVQlPZ" class="form-group">
+                            <label id="CUR-uAYPAwMB">Home Currency <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The main currency your company operates in"></i></label>
+                            <ui-select ng-model="client.homeCurrency" ng-disabled="rights.contracts != 'Edit'">
+                                <ui-select-match allow-clear="false">
+                                    <span id="CUR-AZpXekAS" ng-bind="$select.selected.code"></span>
+                                </ui-select-match>
+                                <ui-select-choices
+                                        repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                                    <span id="CUR-ZsUuNzpa" ng-bind-html="currency.code"></span>
+                                    <span id="CUR-AbQvCXTM"> &nbsp; - &nbsp; </span>
+                                    <span id="CUR-IUnVlwEr" ng-bind-html="currency.name"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div id="CUR-LEMnreSw" class="form-group" ng-if="features && features.multicurrency">
+                            <label id="CUR-xpiZXFhK">Multi Currency 2 <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Use these multi currency options if you need to report to your artists in other currencies than your home currency"></i></label>
+                            <ui-select ng-model="client.currency2" ng-disabled="rights.contracts != 'Edit'">
+                                <ui-select-match allow-clear="true">
+                                    <span id="CUR-BNeBjadp" ng-bind="$select.selected.code"></span>
+                                </ui-select-match>
+                                <ui-select-choices
+                                        repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                                    <span id="CUR-DUHVlLLO" ng-bind-html="currency.code"></span>
+                                    <span id="CUR-EjbGKOcC"> &nbsp; - &nbsp; </span>
+                                    <span id="CUR-cmhdehjY" ng-bind-html="currency.name"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div id="CUR-VUgQcvVq" class="form-group" ng-if="features && features.multicurrency">
+                            <label id="CUR-koYUwkvt">Multi Currency 3</label>
+                            <ui-select ng-model="client.currency3" ng-disabled="rights.contracts != 'Edit'">
+                                <ui-select-match allow-clear="true">
+                                    <span id="CUR-ymIVZwVb" ng-bind="$select.selected.code"></span>
+                                </ui-select-match>
+                                <ui-select-choices
+                                        repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                                    <span id="CUR-ElcSAvWr" ng-bind-html="currency.code"></span>
+                                    <span id="CUR-PXiDrCJX"> &nbsp; - &nbsp; </span>
+                                    <span id="CUR-MjHxdPrR" ng-bind-html="currency.name"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div id="CUR-XOlydBIH" class="form-group" ng-if="features && features.multicurrency">
+                            <label id="CUR-lyTYfkDM">Multi Currency 4</label>
+                            <ui-select ng-model="client.currency4" ng-disabled="rights.contracts != 'Edit'">
+                                <ui-select-match allow-clear="true">
+                                    <span id="CUR-fTNToeDH" ng-bind="$select.selected.code"></span>
+                                </ui-select-match>
+                                <ui-select-choices
+                                        repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                                    <span id="CUR-lvVfhRzA" ng-bind-html="currency.code"></span>
+                                    <span id="CUR-rxpMqGJa"> &nbsp; - &nbsp; </span>
+                                    <span id="CUR-EsPCqtNA" ng-bind-html="currency.name"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="CUR-BcpwLEzi" class="col-xs-12 col-sm-6">
+                <div id="CUR-MdkWVMOb" class="panel panel-default">
+                    <div id="CUR-KflgxVQV" class="panel-heading">
+                        <div id="CUR-SygJfpJW" class="panel-title">
+                            Accounting Period Types <documentation link="http://guide.curveroyaltysystems.com/article/settings/#accountingPeriodTypes"></documentation>
+                        </div>
+                    </div>
+                    <div id="CUR-HDRPiyAZ" class="panel-body p-t-15">
+                        <accounting-period-type-row ng-repeat="type in displayAccountingPeriodTypes track by $index" type="type" delete="deleteAccountingPeriodType(type)" edit="rights.contracts == 'Edit'"></accounting-period-type-row>
+                        <div id="CUR-SzDMbwVU" class="two-cols-row">
+                            <button id="CUR-UXciuPMi" type="button" class="btn btn-complete" ng-click="addAccountingPeriodType()" ng-if="rights.contracts == 'Edit'">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="CUR-qtTjEtea" class="row">
+            <div id="CUR-vxovfIxK" class="col-xs-12 col-sm-4">
+                <div id="CUR-RmpIWrNm" class="panel panel-default">
+                    <div id="CUR-tqdLGaUB" class="panel-heading">
+                        <div id="CUR-WiTwKpln" class="panel-title">
+                            Distribution Channels
+                        </div>
+                    </div>
+                    <div id="CUR-mVnFNavW" class="panel-body p-t-15">
+                        <distribution-channels-row ng-repeat="channel in displayDistributionChannels track by $index"
+                                                   channel="channel" delete="deleteDistributionChannel(channel)" edit="rights.contracts == 'Edit'"></distribution-channels-row>
+                        <div id="CUR-ynsrChjB" class="two-cols-row">
+                            <button id="CUR-vanqVexK" type="button" class="btn btn-complete" ng-click="addDistributionChannel()" ng-if="rights.contracts == 'Edit'">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="CUR-nracJAyN" class="col-xs-12 col-sm-4">
+                <div id="CUR-SGTiaWiu" class="panel panel-default">
+                    <div id="CUR-xqdJlzOD" class="panel-heading">
+                        <div id="CUR-NcIEqMey" class="panel-title">
+                            Configurations
+                        </div>
+                    </div>
+                    <div id="CUR-zsMqRVhz" class="panel-body p-t-15">
+                        <configurations-row ng-repeat="configuration in displayConfigurations track by $index"
+                                            configuration="configuration" delete="deleteConfiguration(configuration)" edit="rights.contracts == 'Edit'"></configurations-row>
+                        <div id="CUR-gZcYPRYq" class="two-cols-row">
+                            <button id="CUR-PVapdTUI" type="button" class="btn btn-complete" ng-click="addConfiguration()" ng-if="rights.contracts == 'Edit'">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="CUR-ScxEWAPs" class="col-xs-12 col-sm-4" ng-if="clientType != 'Publisher'">
+                <div id="CUR-QpORNTal" class="panel panel-default">
+                    <div id="CUR-WEYOFFkv" class="panel-heading">
+                        <div id="CUR-zazhWYra" class="panel-title">
+                            Price Categories
+                        </div>
+                    </div>
+                    <div id="CUR-SssQpyem" class="panel-body p-t-15">
+                        <price-category-row ng-repeat="category in displayPriceCategories track by $index" category="category" delete="deletePriceCategory(category)" edit="rights.contracts == 'Edit'"></price-category-row>
+                        <div id="CUR-gZMXXQoA" class="two-cols-row">
+                            <button id="CUR-nFeigaBb" type="button" class="btn btn-complete" ng-click="addPriceCategory()" ng-if="rights.contracts == 'Edit'">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="CUR-QlqbLKaL" class="row">
+            <div id="CUR-RbbTkRiG" class="col-xs-12 col-sm-4">
+                <div id="CUR-shMmADYD" class="panel panel-default">
+                    <div id="CUR-uWapacCc" class="panel-heading">
+                        <div id="CUR-JtjtHBvs" class="panel-title">
+                            Catalogue Groups
+                        </div>
+                    </div>
+                    <div id="CUR-hBnePYLI" class="panel-body p-t-15">
+                        <catalogue-groups-row ng-repeat="group in displayCatalogueGroups track by $index" group="group" delete="deleteCatalogueGroup(group)" edit="rights.contracts == 'Edit'"></catalogue-groups-row>
+                        <div id="CUR-gvtDYnmw" class="two-cols-row">
+                            <button id="CUR-KIJKDlFj" type="button" class="btn btn-complete" ng-click="addCatalogueGroup()" ng-if="rights.contracts == 'Edit'">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="CUR-JSJioeQZ" class="col-xs-12 col-sm-4" ng-if="clientType != 'Publisher'">
+                <div id="CUR-zIHruqHJ" class="panel panel-default">
+                    <div id="CUR-qbtHtgVU" class="panel-heading">
+                        <div id="CUR-xgAYmZKX" class="panel-title">
+                            Cost Types
+                        </div>
+                    </div>
+                    <div id="CUR-IxcRZyXL" class="panel-body p-t-15">
+                        <cost-types-row ng-repeat="type in displayCostTypes track by $index" type="type"
+                                        delete="deleteCostType(type)" edit="rights.contracts == 'Edit'"></cost-types-row>
+                        <div id="CUR-JkMgMUNE" class="two-cols-row">
+                            <button id="CUR-VBIPGqzW" type="button" class="btn btn-complete" ng-click="addCostType()" ng-if="rights.contracts == 'Edit'">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="CUR-pTGohnaG" class="col-xs-12 col-sm-4">
+                <div id="CUR-XiIUawFN" class="panel panel-default">
+                    <div id="CUR-AcCrtTBW" class="panel-heading">
+                        <div id="CUR-dBjmMSky" class="panel-title">
+                            Sources
+                        </div>
+                    </div>
+                    <div id="CUR-WrzJNNUp" class="panel-body p-t-15">
+                        <source-row ng-repeat="source in displaySources track by $index" source="source"
+                                    delete="deleteSource(source)" edit="rights.contracts == 'Edit'"></source-row>
+                        <div id="CUR-oHSaFyVF" class="two-cols-row">
+                            <button id="CUR-VkmnVCYN" type="button" class="btn btn-complete" ng-click="addSource()" ng-if="rights.contracts == 'Edit'">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="CUR-LNoOMXVa" class="row">
+            <div id="CUR-IgmesoNu" class="col-xs-12 col-sm-4">
+                <div id="CUR-udRbiKhf" class="panel panel-default">
+                    <div id="CUR-uXxvxmvN" class="panel-heading">
+                        <div id="CUR-FhiBtVul" class="panel-title">
+                            Payee Categories <documentation link="http://guide.curveroyaltysystems.com/article/settings/#payeeCategories"></documentation>
+                        </div>
+                    </div>
+                    <div id="CUR-wjxYmGju" class="panel-body p-t-15">
+                        <payee-type-row ng-repeat="type in displayPayeeTypes track by $index" type="type" delete="deletePayeeType(type)" edit="rights.contracts == 'Edit'"></payee-type-row>
+                        <div id="CUR-zWzZNltu" class="two-cols-row">
+                            <button id="CUR-GLPJtuem" type="button" class="btn btn-complete" ng-click="addPayeeType()" ng-if="rights.contracts == 'Edit'">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="CUR-zpjdSWEZ" class="col-xs-12 col-sm-4">
+                <div id="CUR-cYZWcdeW" class="panel panel-default">
+                    <div id="CUR-LiInFDTF" class="panel-heading">
+                        <div id="CUR-uIpxoudN" class="panel-title">
+                            Contract Categories <documentation link="http://guide.curveroyaltysystems.com/article/settings/#contractCategories"></documentation>
+                        </div>
+                    </div>
+                    <div id="CUR-YAZScsPv" class="panel-body p-t-15">
+                        <contract-type-row ng-repeat="type in displayContractTypes track by $index" type="type" delete="deleteContractType(type)" edit="rights.contracts == 'Edit'"></contract-type-row>
+                        <div id="CUR-WPyXByGk" class="two-cols-row">
+                            <button id="CUR-gVVhjIam" type="button" class="btn btn-complete" ng-click="addContractType()" ng-if="rights.contracts == 'Edit'">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- user is logged in as a client -->
+  
+    <div id="CUR-YppdYOmR" ng-if="userRole === 'client' && (!features || !features.settingsConfigurationArea)">
+      <div id="CUR-dHXLSkCf" class="row">
+        <div id="CUR-MHFTVKpI" class="col-xs-12 col-sm-6">
+            <div id="CUR-lbOJLlRK" class="panel panel-default">
+                <div id="CUR-HwVylJAD" class="panel-heading">
+                    <div id="CUR-tetNlsNM" class="panel-title">
+                        Currency
+                    </div>
+                </div>
+                <div id="CUR-rOLlAzoz" class="panel-body p-t-15">
+                    <div id="CUR-xqnvGXdM" class="form-group">
+                        <label id="CUR-KAGLtIgu">Home Currency <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                tooltip-template="The main currency your company operates in"></i></label>
+                        <ui-select ng-model="client.homeCurrency" ng-disabled="rights.contracts != 'Edit'">
+                            <ui-select-match allow-clear="false">
+                                <span id="CUR-fmXyyxGD" ng-bind="$select.selected.code"></span>
+                            </ui-select-match>
+                            <ui-select-choices
+                                repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                                <span id="CUR-HULihmWR" ng-bind-html="currency.code"></span>
+                                <span id="CUR-VHsBUlSi"> &nbsp; - &nbsp; </span>
+                                <span id="CUR-MiqaSIGG" ng-bind-html="currency.name"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div id="CUR-UIhKVLOA" class="form-group" ng-if="features && features.multicurrency">
+                        <label id="CUR-AvfURwoB">Multi Currency 2 <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                tooltip-template="Use these multi currency options if you need to report to your artists in other currencies than your home currency"></i></label>
+                        <ui-select ng-model="client.currency2" ng-disabled="rights.contracts != 'Edit'">
+                            <ui-select-match allow-clear="true">
+                                <span id="CUR-hUoSWzcK" ng-bind="$select.selected.code"></span>
+                            </ui-select-match>
+                            <ui-select-choices
+                                repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                                <span id="CUR-hkgYIPDP" ng-bind-html="currency.code"></span>
+                                <span id="CUR-nmmhNPNU"> &nbsp; - &nbsp; </span>
+                                <span id="CUR-MYzdoLZI" ng-bind-html="currency.name"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div id="CUR-PESSEvtX" class="form-group" ng-if="features && features.multicurrency">
+                        <label id="CUR-cnpuDKun">Multi Currency 3</label>
+                        <ui-select ng-model="client.currency3" ng-disabled="rights.contracts != 'Edit'">
+                            <ui-select-match allow-clear="true">
+                                <span id="CUR-vlnDBAQX" ng-bind="$select.selected.code"></span>
+                            </ui-select-match>
+                            <ui-select-choices
+                                repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                                <span id="CUR-GdKnkREa" ng-bind-html="currency.code"></span>
+                                <span id="CUR-sjkiaBVW"> &nbsp; - &nbsp; </span>
+                                <span id="CUR-qOrmwrBi" ng-bind-html="currency.name"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div id="CUR-MriwIZnU" class="form-group" ng-if="features && features.multicurrency">
+                        <label id="CUR-jOzZjRva">Multi Currency 4</label>
+                        <ui-select ng-model="client.currency4" ng-disabled="rights.contracts != 'Edit'">
+                            <ui-select-match allow-clear="true">
+                                <span id="CUR-whpsuKjw" ng-bind="$select.selected.code"></span>
+                            </ui-select-match>
+                            <ui-select-choices
+                                repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+                                <span id="CUR-VsESqVfJ" ng-bind-html="currency.code"></span>
+                                <span id="CUR-FDSZPAme"> &nbsp; - &nbsp; </span>
+                                <span id="CUR-SdZcZVbG" ng-bind-html="currency.name"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="CUR-rWMkZhQS" class="col-xs-12 col-sm-6">
+            <div id="CUR-EAAiUQeD" class="panel panel-default">
+                <div id="CUR-RkSvefyU" class="panel-heading">
+                    <div id="CUR-XEYMKJRT" class="panel-title">
+                        Catalogue Groups
+                    </div>
+                </div>
+                <div id="CUR-ZQqkSHoY" class="panel-body p-t-15">
+                    <catalogue-groups-row ng-repeat="group in displayCatalogueGroups track by $index" group="group"
+                        delete="deleteCatalogueGroup(group)" edit="rights.contracts == 'Edit'"></catalogue-groups-row>
+                    <div id="CUR-ODAPTJSb" class="two-cols-row">
+                        <button id="CUR-LwAPgarv" type="button" class="btn btn-complete" ng-click="addCatalogueGroup()"
+                            ng-if="rights.contracts == 'Edit'">+ Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="CUR-WSUIYSOx" class="row">
+        <div id="CUR-BkjJSmqX" class="col-xs-12 col-sm-6">
+            <div id="CUR-TDQbXuqL" class="panel panel-default">
+                <div id="CUR-UEkhquzs" class="panel-heading">
+                    <div id="CUR-SUdGljaF" class="panel-title">
+                        Payee Categories <documentation
+                            link="http://guide.curveroyaltysystems.com/article/settings/#payeeCategories"></documentation>
+                    </div>
+                </div>
+                <div id="CUR-dAvsKfqZ" class="panel-body p-t-15">
+                    <payee-type-row ng-repeat="type in displayPayeeTypes track by $index" type="type"
+                        delete="deletePayeeType(type)" edit="rights.contracts == 'Edit'"></payee-type-row>
+                    <div id="CUR-vgEqgmCJ" class="two-cols-row">
+                        <button id="CUR-ytCFnyOq" type="button" class="btn btn-complete" ng-click="addPayeeType()"
+                            ng-if="rights.contracts == 'Edit'">+ Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="CUR-uBijcGOX" class="col-xs-12 col-sm-6">
+            <div id="CUR-gxKSYLVp" class="panel panel-default">
+                <div id="CUR-MHtUqSzs" class="panel-heading">
+                    <div id="CUR-qEbCWNMH" class="panel-title">
+                        Contract Categories <documentation
+                            link="http://guide.curveroyaltysystems.com/article/settings/#contractCategories">
+                        </documentation>
+                    </div>
+                </div>
+                <div id="CUR-OYtoxOKw" class="panel-body p-t-15">
+                    <contract-type-row ng-repeat="type in displayContractTypes track by $index" type="type"
+                        delete="deleteContractType(type)" edit="rights.contracts == 'Edit'"></contract-type-row>
+                    <div id="CUR-LDTMnxQm" class="two-cols-row">
+                        <button id="CUR-ajoMEHXk" type="button" class="btn btn-complete" ng-click="addContractType()"
+                            ng-if="rights.contracts == 'Edit'">+ Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="mechanicals-tab.html">
+  <div id="CUR-hdcuEhqk" ng-if="userRole === 'client' && clientType != 'Publisher'">
+    <!-- user is logged in as a client -->
+    <div id="CUR-SBiymetR" class="row">
+      <div id="CUR-mEiSHFE" class="col-xs-12 col-md-6">
+        <div id="CUR-psFalptER" class="panel panel-default sm-m-b-20">
+          <div id="CUR-ULvS65g" class="panel-heading">
+            <div id="CUR-BxeegfE" class="panel-title">Mechanical Defaults</div>
+          </div>
+          <div id="CUR-RzAwgree" class="panel-body p-t-15">
+            <p>When a new Track is created, the following defaults will be applied, unless they are otherwise specified (via Excel imports or within the interface)</p>
+            <div id="CUR-NIEfDter" class="form-group">
+              <label id="CUR-bfEdgwWEJ">Mechanical Basis</label>
+              <ui-select ng-model="client.defaultMechanicalBasis">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-AEdBSBRSGEF" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in ['Sale Date', 'Custom'] | filter: $select.search">
+                  <span id="CUR-MVijMsdfsdv" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-qNpRgdfgdE" class="form-group">
+              <input id="CUR-IWcgRFWDS" type="checkbox" value="1" ng-model="client.defaultReportMechanicals">
+              <label id="CUR-kzKHLFEWWD">Report Mechanicals</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-SBiymWsw" class="row">
+      <div id="CUR-mEiSVJWF" class="col-xs-12 col-md-12">
+        <div id="CUR-psFaYEtf" class="panel panel-default sm-m-b-20">
+          <div id="CUR-ULvSjqdv" class="panel-heading">
+            <div id="CUR-BxeeGCzu" class="panel-title">US Mechanical Stat Rates</div>
+          </div>
+          <div id="CUR-RzAwQjET" class="panel-body p-t-15">
+            <statutory-rate-row ng-repeat="statRate in client.usStatRates track by $index" stat-rate="statRate" delete="deleteUsStatRate(statRate)" date-format="client.dateFormat" edit="internal"></statutory-rate-row>
+            <div id="CUR-xRsLZukG" class="two-cols-row p-t-10">
+              <button id="CUR-TXHPUsTe" type="button" class="btn btn-complete" ng-click="addUsStatRate()" ng-if="internal">+ Stat Rate</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-WFYAyiVQ" class="col-xs-12 col-md-12">
+        <div id="CUR-RKedmLgz" class="panel panel-default sm-m-b-20">
+          <div id="CUR-SFRcDRSX" class="panel-heading">
+            <div id="CUR-sJcLhEHx" class="panel-title">CA Mechanical Stat Rates</div>
+          </div>
+          <div id="CUR-zcxSWKqH" class="panel-body p-t-15">
+            <statutory-rate-row ng-repeat="statRate in client.caStatRates track by $index" stat-rate="statRate" delete="deleteCaStatRate(statRate)" date-format="client.dateFormat" edit="internal"></statutory-rate-row>
+            <div id="CUR-favEzrKL" class="two-cols-row p-t-10">
+              <button id="CUR-WTjHIpPA" type="button" class="btn btn-complete" ng-click="addCaStatRate()" ng-if="internal">+ Stat Rate</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- user is logged in as a client -->
+</script>
+
+<script type="text/ng-template" id="statement-tab.html">
+  <div id="CUR-ivZTaQBV" ng-if="userRole === 'client'">
+        <!-- user is logged in as a client -->
+        <div id="CUR-wPYtflPZ" class="row">
+            <div id="CUR-uPTHPqhy" class="col-xs-12 col-sm-6">
+                <div id="CUR-WzXgNFYX" class="panel panel-default">
+                    <div id="CUR-uJLbMtlD" class="panel-heading">
+                        <div id="CUR-mdnqSnWY" class="panel-title">
+                            Statement Design
+                        </div>
+                    </div>
+                    <div id="CUR-rYxUoyKv" class="panel-body p-t-15">
+                        <div id="CUR-VLgyyXdj" class="form-group required">
+                            <label id="CUR-AsDEkXiw">Email for statements</label>
+                            <input id="CUR-feyJsklS" type="text" class="form-control" ng-model="client.email" ng-disabled="rights.contracts != 'Edit'">
+                        </div>
+                        <div id="CUR-onvXidiW" class="form-group required">
+                            <label id="CUR-kuiVbjsz">Statement Custom Text <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                                            tooltip-template="Appears at the bottom of the statement PDF"></i></label>
+                            <textarea class="form-control standard-textarea" ng-model="client.statementCustomText" ng-disabled="rights.contracts != 'Edit'"></textarea>
+                        </div>
+                        <div id="CUR-kIXbVQQO" class="form-group required">
+                            <label id="CUR-vCffAWiK">Statement of Account Custom Text <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                                                       tooltip-template="Appears at the bottom of the statement of account PDF"></i></label>
+                            <textarea class="form-control standard-textarea"
+                                      ng-model="client.statementOfAccountCustomText" ng-disabled="rights.contracts != 'Edit'"></textarea>
+                        </div>
+                        <div id="CUR-sUyghQxH" class="form-group required">
+                            <label id="CUR-WPKdwMqK">Self Billing Tax Text <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                                            tooltip-template="What word should be used to describe the tax being taken? Eg. VAT, GST or Sales Tax"></i></label>
+                            <input id="CUR-mghGszfQ" type="text" class="form-control" ng-model="client.selfBillingTaxText" ng-disabled="rights.contracts != 'Edit'">
+                        </div>
+                        <div id="CUR-CRaMnWhF" class="form-group required">
+                            <label id="CUR-qzRSLvHh">Self Billing Custom Text <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                                               tooltip-template="Appears at the bottom of the self billing invoice"></i></label>
+                            <textarea class="form-control standard-textarea" ng-model="client.selfBillingTaxCustomText" ng-disabled="rights.contracts != 'Edit'"></textarea>
+                        </div>
+                        <div id="payee-textfield-balances" class="form-group required" ng-show="features && features.payeeBalances">
+                            <label id="CUR-qzRSLvHh">Payee Statement Text <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                                               tooltip-template="Appears at the bottom of a Payee PDF Statement"></i></label>
+                            <textarea class="form-control standard-textarea" ng-model="client.payeeSummaryText" ng-disabled="rights.contracts != 'Edit'"></textarea>
+                        </div>
+                        <div id="CUR-YCROTBUK" class="form-group required">
+                            <label id="CUR-JgCSxhpq">VAT No</label>
+                            <input id="CUR-DButQaoL" type="text" class="form-control" ng-model="client.vatNo" ng-disabled="rights.contracts != 'Edit'">
+                        </div>
+                        <div id="CUR-kjkkQlft" class="alert alert-info" ng-if="client.statementDesign.includes('Extended')">
+                            <p>Please be aware, using the extended statement design takes significantly longer in statement creation due to all the sales lines being written to the PDF. Only use this when absolutely required, and if only required on specific statements, use a company to configure and target those statements.</p>
+                          </div>
+                        <div id="CUR-EVbSCFmN" class="form-group">
+                            <label id="CUR-ZJDAsHsR">Statement Design</label>
+                            <ui-select ng-model="client.statementDesign" ng-disabled="rights.contracts != 'Edit'">
+                                <ui-select-match allow-clear="true">
+                                    <span id="CUR-AExZtjVF" ng-bind="$select.selected"></span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="item in statementDesigns | filter: $select.search">
+                                    <span id="CUR-MVijMXDQ" ng-bind="item"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div id="CUR-carGKmdC" class="form-group">
+                            <label id="CUR-AOHwmJCo">Statement Header Design</label>
+                            <ui-select ng-model="client.statementHeaderType" ng-disabled="rights.contracts != 'Edit'">
+                                <ui-select-match allow-clear="true">
+                                    <span id="CUR-oCaqpWGF" ng-bind="$select.selected"></span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="item in ['Standard', 'Include Payee Address'] | filter: $select.search">
+                                    <span id="CUR-zHjnjRZm" ng-bind="item"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div id="CUR-KqKwxvWY" class="form-group" ng-if="internal">
+                            <label id="CUR-KRCfLdQg">Sales CSV Design</label>
+                            <ui-select ng-model="client.salesReportTemplate" ng-disabled="rights.contracts != 'Edit'">
+                                <ui-select-match allow-clear="true">
+                                    <span id="CUR-FNRVKqYW" ng-bind="$select.selected.name"></span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="item._id as item in salesReports | filter: $select.search">
+                                    <span id="CUR-yUMNATzy" ng-bind="item.name"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div id="CUR-oZJzIKfQ" class="form-group" ng-if="clientType != 'Publisher' && internal">
+                            <label id="CUR-iFviXJRu">Costs CSV Design</label>
+                            <ui-select ng-model="client.costsReportTemplate" ng-disabled="rights.contracts != 'Edit'">
+                                <ui-select-match allow-clear="true">
+                                    <span id="CUR-kSKrAzLa" ng-bind="$select.selected.name"></span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="item._id as item in costsReports | filter: $select.search">
+                                    <span id="CUR-jQdChHnx" ng-bind="item.name"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div id="CUR-qNpRGMfj" class="form-group">
+                            <input id="CUR-IWcPxINw" type="checkbox" value="1" ng-model="client.statementIncludeTotalsRow">
+                            <label id="CUR-kzKTHXaw">Include Totals Rows on CSV</label>
+                        </div>
+                        <div id="CUR-xiEyuOCT" class="form-group">
+                            <input id="CUR-gFaGxZvT" type="checkbox" value="1" ng-model="client.suppressZeroValueInExport">
+                            <label id="CUR-EXlIXwCn">Suppress 0 Value Royalties on CSV</label>
+                        </div>
+                        <div id="CUR-yNdlqLdj" class="form-group">
+                            <input id="CUR-lOPtsOdM" type="checkbox" value="1" ng-model="client.suppressStatementOfAccount">
+                            <label id="CUR-vJveELdc">Suppress Statement of Account Creation</label>
+                        </div>
+                        <div id="CUR-gFawScYV" class="form-group" ng-if="features && features.complexSalesTerms">
+                            <input id="CUR-nsebxcNL" type="checkbox" value="1" ng-model="client.displaySeparatedDeductions">
+                            <label id="CUR-sCtfqedf">Display Separated Deductions <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                              tooltip-template="This displays deductions separately on PDF statements, allowing you to display deductions and label as a separate line item."></i></label>
+                        </div>
+                        <div id="CUR-fIWHCpLW" class="form-group" ng-if="client.displaySeparatedDeductions">
+                          <label id="CUR-XdnUbNBS">Deduction Name</label>
+                          <input id="CUR-BehdbFxZ" type="text" class="form-control" ng-model="client.customDeductionName" ng-disabled="rights.contracts != 'Edit'">
+                        </div>
+                        <div id="CUR-yNdlqLej" class="form-group">
+                            <input id="CUR-lOPtsOdM" type="checkbox" value="1" ng-model="client.suppressZeroTaxLine" ng-disabled="rights.contracts != 'Edit'">
+                            <label id="CUR-vJveELdc">Suppress Zero Tax Line <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                                tooltip-template="Exclude tax lines with zero value from generated PDF files"></i></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="CUR-dUuxKsko" class="col-xs-12 col-sm-6">
+                <div id="CUR-WoanMTFN" class="panel panel-default">
+                    <div id="CUR-NpODCraA" class="panel-heading">
+                        <div id="CUR-yPneFIZF" class="panel-title">
+                            Logo
+                        </div>
+                    </div>
+                    <div id="CUR-JWHRdLJc" class="panel-body p-t-15">
+                        <div id="CUR-xcvWqMDm" class="client-logo">
+                            <img ng-src="{{client.publicLogo}}">
+                        </div>
+                        <div id="CUR-TEigFlrI" class="form-group required">
+                            <input type="file" ngf-select ngf-max-size="2MB" ngf-max-width="500" ngf-max-height="500" ngf-change="validateImage($file, $invalidFile)" ngf-allow-dir="false" accept="image/x-png,image/jpg,image/jpeg" ng-model="client.file" ng-disabled="rights.contracts != 'Edit'" ngf-model-invalid="errorFile">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="CUR-dUuxKsko" class="col-xs-12 col-sm-6">
+                <div id="CUR-WoanMTFN" class="panel panel-default">
+                    <div id="CUR-NpODCraA" class="panel-heading">
+                        <div id="CUR-yPneFIZF" class="panel-title">Fees Invoice</div>
+                    </div>
+
+                    <div id="CUR-rYxUayKv" class="panel-body p-t-15">
+                        <div id="CUR-VLayyXdj" class="form-group">
+                        <label id="CUR-vaffAWiK">Custom Text <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Appears at the bottom of the Fees Invoice PDF"></i></label>
+                        <textarea class="form-control standard-textarea" ng-model="client.feesInvoiceCustomText" ng-disabled="rights.contracts != 'Edit'"></textarea>
+                        </div>
+                    </div>
+
+                    <div id="CUR-BDzXa708" class="panel-body p-t-15" ng-show="clientType == 'Distributor'">
+                      <div id="CUR-7KkXRV4h" class="form-group">
+                      <label id="CUR-A2pmW1be">Custom Fees Invoice Title & Description Line <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This will default to “Distribution Fees” unless specified below"></i></label>
+                      <input id="CUR-feyNOhPG" type="text" class="form-control" ng-model="client.customFeesInvoiceTitle" ng-disabled="rights.contracts != 'Edit'">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- user is logged in as a client -->
+</script>
+<script type="text/ng-template" id="communication-tab.html">
+  <div id="CUR-zRaQCbws" ng-if="userRole === 'client'">
+        <!-- user is logged in as a client -->
+        <div id="CUR-GPZIeRBL" class="row">
+            <div id="CUR-qidjhLLx" class="col-xs-12 col-sm-6">
+                <div id="CUR-NNjcWLLP" class="panel panel-default">
+                    <div id="CUR-AkvApAIb" class="panel-heading">
+                        <div id="CUR-tDalzpDW" class="panel-title">
+                            Communication Configuration <documentation link="http://guide.curveroyaltysystems.com/article/settings/#communication"></documentation>
+                        </div>
+                    </div>
+                    <div id="CUR-WwiUVnko" class="panel-body p-t-15">
+                        <div id="CUR-nLKoyTXn" class="form-group required">
+                            <label id="CUR-MQNNJHBZ">CC Communications <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Fill in if you want all communications with your clients to copy someone in at your company"></i></label>
+                            <input id="CUR-otyixzFu" type="text" class="form-control" name="ccCommunicationEmail" ng-model="client.ccCommunicationEmail" ng-disabled="rights.contracts != 'Edit'">
+                        </div>
+                        <div id="CUR-rrYVYOZQ" class="form-group required">
+                            <label id="CUR-mkZnuOmF">Support Email <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The email that will appear on the communications for people to get in contact should they have any issues"></i></label>
+                            <input id="CUR-dLPsoRBY" type="text" class="form-control" name="customSupportEmail" ng-model="client.customSupportEmail" ng-disabled="rights.contracts != 'Edit'">
+                        </div>
+                        <div id="CUR-zijgKNmr" class="form-group">
+                            <label id="CUR-HVpCVrwo">Invite Email Custom Text <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Custom text that will appear in the invite email to your clients. Please use HTML for the formatting of this text"></i></label>
+                            <textarea class="form-control standard-textarea" name="inviteEmailCustomText" ng-model="client.inviteEmailCustomText" ng-disabled="rights.contracts != 'Edit'"></textarea>
+                        </div>
+                        <div id="CUR-FJICVlgk" class="form-group">
+                            <label id="CUR-alcADQwP">Statement Email Custom Text <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Custom text that will appear on the statement ready email to your clients. Please use HTML for the formatting of this text"></i></label>
+                            <textarea class="form-control standard-textarea" name="statementEmailCustomText" ng-model="client.statementEmailCustomText" ng-disabled="rights.contracts != 'Edit'"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- user is logged in as a client -->
+</script>
+<script type="text/ng-template" id="duplicates-tab.html">
+    <div id="CUR-MdgwZoVT" ng-if="userRole === 'client'">
+      <!-- user is logged in as a client -->
+      <div id="CUR-RdSyDatF" class="row">
+        <div id="CUR-DtZCQoyc" class="col-xs-12">
+          <div id="CUR-OtCxstGI" class="panel panel-default" ng-if="clientType != 'Publisher'">
+              <div id="CUR-BNjyfNqZ" class="panel-heading">
+                <div id="CUR-xsgKNFni" class="panel-title">
+                  Release Duplicates
+                </div>
+              </div>
+              <div id="CUR-joHGkjMa" class="panel-body p-t-15">
+                <p>Use this configuration to manage exceptions to the mapping rules, such as duplicate cat nos being reported. Set the Cat No, and something specific in the title so we can identify it, and tell us which release to map it to.</p>
+                <div id="CUR-UCKdAiKq" class="row">
+                  <div id="CUR-imzwOqoS" class="col-xs-3">
+                    <div id="CUR-MHStLPig" class="form-group required">
+                      <label id="CUR-DSeCWLFn">Cat No</label>
+                    </div>
+                  </div>
+                  <div id="CUR-hfTFWoaG" class="col-xs-4">
+                    <div id="CUR-BuNlNuKj" class="form-group required">
+                      <label id="CUR-fORToLSq">Title Includes</label>
+                    </div>
+                  </div>
+                  <div id="CUR-AfMcRqES" class="col-xs-4">
+                    <div id="CUR-hUqHumRQ" class="form-group required">
+                      <label id="CUR-zdMuezib">Map To</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" ng-repeat="duplicate in client.duplicateReleases" ng-init="itemIndex = $index">
+                  <div id="CUR-eYACsAUI-{{itemIndex}}" class="col-xs-3">
+                    <div id="CUR-VkbIrWtJ-{{itemIndex}}" class="form-group required">
+                      <input id="CUR-KbHHdOma-{{itemIndex}}" type="text" class="form-control" ng-model="duplicate.catNo" ng-disabled="rights.catalogue != 'Edit'">
+                    </div>
+                  </div>
+                  <div id="CUR-BzhyEoFb-{{itemIndex}}" class="col-xs-4">
+                    <div id="CUR-caAlRfzC-{{itemIndex}}" class="form-group required">
+                      <input id="CUR-YczivpJr-{{itemIndex}}" type="text" class="form-control" ng-model="duplicate.title" ng-disabled="rights.catalogue != 'Edit'">
+                    </div>
+                  </div>
+                  <div id="CUR-mSnoDHrg-{{itemIndex}}" class="col-xs-4">
+                    <release-select-field edit="rights.catalogue == 'Edit'" index="{{itemIndex}}" value="duplicate.output"></release-select-field>
+                  </div>
+                  <div id="CUR-FLLRTEIb-{{itemIndex}}" class="col-xs-1">
+                    <button id="CUR-lWWsqdyD-{{itemIndex}}" type="button" class="btn btn-danger" ng-click="deleteDuplicateRelease(duplicate)" ng-show="rights.catalogue == 'Edit'"><i class="fa fa-trash"></i></button>
+                  </div>
+                </div>
+                <div id="CUR-CaMMzTiq" class="row">
+                  <div id="CUR-aGfcmTBT" class="col-xs-12">
+                    <button id="CUR-eqxWZbKu" type="button" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addDuplicateRelease()">+ Duplicate</button>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div id="CUR-lAVkHbKN" class="panel panel-default" ng-if="clientType != 'Publisher'">
+              <div id="CUR-YChtFXCe" class="panel-heading">
+                <div id="CUR-rgWOJXmZ" class="panel-title">
+                  Track Duplicates
+                </div>
+              </div>
+              <div id="CUR-gRiXaQvM" class="panel-body p-t-15">
+                <p>Use this configuration to manage exceptions to the mapping rules, such as duplicate ISRCs being reported. Set the ISRC, and something specific in the title so we can identify it, and tell us which track to map it to.</p>
+                <div id="CUR-BLkWShlM" class="row">
+                  <div id="CUR-qvVWcRkj" class="col-xs-3">
+                    <div id="CUR-nOtoaeAH" class="form-group required">
+                      <label id="CUR-vvvidmPV">ISRC</label>
+                    </div>
+                  </div>
+                  <div id="CUR-zoWvYqMZ" class="col-xs-4">
+                    <div id="CUR-TVQAssRh" class="form-group required">
+                      <label id="CUR-QSGreiAq">Title Includes</label>
+                    </div>
+                  </div>
+                  <div id="CUR-mxsrMcdJ" class="col-xs-4">
+                    <div id="CUR-dyhpznjX" class="form-group required">
+                      <label id="CUR-toOGEjBL">Map To</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" ng-repeat="duplicate in client.duplicateTracks | limitTo: 25: duplicateTracksIndex track by $index" ng-init="itemIndex = $index">
+                  <div id="CUR-pBbWknvJ-{{itemIndex}}" class="col-xs-3">
+                    <div id="CUR-FBLGOcJN-{{itemIndex}}" class="form-group required">
+                      <input id="CUR-XlbOMQMg-{{itemIndex}}" type="text" class="form-control" ng-model="duplicate.isrc" ng-disabled="rights.catalogue != 'Edit'">
+                    </div>
+                  </div>
+                  <div id="CUR-ylBNGCSp-{{itemIndex}}" class="col-xs-4">
+                    <div id="CUR-sXaAtkXu-{{itemIndex}}" class="form-group required">
+                      <input id="CUR-ZkpIOPra-{{itemIndex}}" type="text" class="form-control" ng-model="duplicate.title" ng-disabled="rights.catalogue != 'Edit'">
+                    </div>
+                  </div>
+                  <div id="CUR-WqbpqpEp-{{itemIndex}}" class="col-xs-4">
+                    <track-select-field edit="rights.catalogue == 'Edit'" index="{{itemIndex}}" value="duplicate.output"></track-select-field>
+                  </div>
+                  <div id="CUR-AFWiXdTY-{{itemIndex}}" class="col-xs-1">
+                    <button id="CUR-IHPsbBia-{{itemIndex}}" type="button" class="btn btn-danger" ng-click="deleteDuplicateTrack(duplicate)" ng-show="rights.catalogue == 'Edit'"><i class="fa fa-trash"></i></button>
+                  </div>
+                </div>
+                <div id="CUR-CyfAcpKJ" class="row">
+                  <div id="CUR-RSBnnlzR" class="col-xs-12">
+                    <button id="CUR-CqRyjwZg" type="button" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addDuplicateTrack()">+ Duplicate</button>
+                  </div>
+                </div>
+                 <div id="CUR-lGZXvSsA" class="row m-b-20" ng-if="client.duplicateTracks && client.duplicateTracks.length > 25">
+              <div id="CUR-RrblSheR" class="col-xs-4 col-xs-offset-4 text-center">
+                <div id="CUR-PvZwlkCk" class="btn-group">
+                  <button id="CUR-TqsMkRPy" type="button" class="btn btn-default" ng-disabled="duplicateTracksIndex == 0" ng-click="minusFromIndex('duplicateTracksIndex', 25)"><</button>
+                  <button id="CUR-peWfXKfd" type="button" class="btn btn-default" ng-disabled="numberOfPagesLeft(client.duplicateTracks, duplicateTracksIndex)" ng-click="addToIndex('duplicateTracksIndex', 25)">></button>
+                </div>
+              </div>
+              <div id="CUR-PnGWVVst" class="col-xs-4 text-right">
+                Showing {{duplicateTracksIndex + 1}} to {{lowestValue(duplicateTracksIndex + 25, client.duplicateTracks.length)}} of {{client.duplicateTracks.length}}
+              </div>
+            </div>
+              </div>
+          </div>
+          <div id="CUR-ylBifHTW" class="panel panel-default" ng-if="clientType == 'Publisher'">
+              <div id="CUR-VfSxfpcF" class="panel-heading">
+                <div id="CUR-ZHBfMyik" class="panel-title">
+                  Work Duplicates
+                </div>
+              </div>
+              <div id="CUR-cqOilJfP" class="panel-body p-t-15">
+                <p>Use this configuration to manage exceptions to the mapping rules, such as duplicate ISRCs being reported. Set the ISRC, and something specific in the title so we can identify it, and tell us which track to map it to.</p>
+                <div id="CUR-crmUZubm" class="row">
+                  <div id="CUR-uDVCLxej" class="col-xs-3">
+                    <div id="CUR-pJHcizDD" class="form-group required">
+                      <label id="CUR-XhIgyGsu">Identifier</label>
+                    </div>
+                  </div>
+                  <div id="CUR-dlPLxeHn" class="col-xs-4">
+                    <div id="CUR-UAEzdozb" class="form-group required">
+                      <label id="CUR-eApoudvf">Title Includes</label>
+                    </div>
+                  </div>
+                  <div id="CUR-yUWlMvnn" class="col-xs-4">
+                    <div id="CUR-TqOTfKJl" class="form-group required">
+                      <label id="CUR-kWoovZYt">Map To</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" ng-repeat="duplicate in client.duplicateWorks" ng-init="itemIndex = $index">
+                  <div id="CUR-rsVATuVU-{{itemIndex}}" class="col-xs-3">
+                    <div id="CUR-LLeHRRTD-{{itemIndex}}" class="form-group required">
+                      <input id="CUR-rTqqtmBs-{{itemIndex}}" type="text" class="form-control" ng-model="duplicate.identifier" ng-disabled="rights.catalogue != 'Edit'">
+                    </div>
+                  </div>
+                  <div id="CUR-EwShoBWi-{{itemIndex}}" class="col-xs-4">
+                    <div id="CUR-dORnOhBj-{{itemIndex}}" class="form-group required">
+                      <input id="CUR-XyPZSJzx-{{itemIndex}}" type="text" class="form-control" ng-model="duplicate.title" ng-disabled="rights.catalogue != 'Edit'">
+                    </div>
+                  </div>
+                  <div id="CUR-XzsyMjdm-{{itemIndex}}" class="col-xs-4">
+                    <work-select-field edit="rights.catalogue == 'Edit'" index="{{itemIndex}}" value="duplicate.output"></work-select-field>
+                  </div>
+                  <div id="CUR-VWHFBBcp-{{itemIndex}}" class="col-xs-1">
+                    <button id="CUR-CEDuqAsW-{{itemIndex}}" type="button" class="btn btn-danger" ng-click="deleteDuplicateWork(duplicate)" ng-show="rights.catalogue == 'Edit'"><i class="fa fa-trash"></i></button>
+                  </div>
+                </div>
+                <div id="CUR-yQioVXbz" class="row">
+                  <div id="CUR-eCeJHKrm" class="col-xs-12">
+                    <button id="CUR-XIzBetWI" type="button" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addDuplicateWork()">+ Duplicate</button>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- user is logged in as a client -->
+</script>
+<script type="text/ng-template" id="payments-tab.html">
+  <div id="CUR-zJRxEEqp" ng-if="userRole == 'client' && rights.periods != 'None' && features && (features.payments  || features.paymentSetup) && clientAdminUser">
+        <!-- user is logged in as a client -->
+        <div id="CUR-wrgOtliN" class="row">
+          <div id="CUR-pbnvIwgi" class="col-xs-12 col-sm-6">
+            <div id="CUR-DLfxzQrt" class="panel panel-default">
+              <div id="CUR-sLlgSZyh" class="panel-heading">
+                <div id="CUR-wyslgUef" class="panel-title">
+                  Payments Configuration
+                </div>
+              </div>
+              <div id="CUR-JiPoWvGe" class="panel-body p-t-15">
+                <div id="CUR-jMssdTvD" class="form-group">
+                  <label id="CUR-WFMyWXTD">Payment Provider</label>
+                  <ui-select ng-model="client.paymentProviders.selectedPaymentProvider" ng-disabled="!internal">
+                    <ui-select-match allow-clear="true">
+                      <span ng-bind="$select.selected.label"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.value as item in paymentProviderOptions | filter: $select.search track by item.value">
+                      <div ng-bind-html="item.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+                <!-- Curve Pay -->
+                <div id="CUR-AQaSaFzZ" ng-if="client.paymentProviders.selectedPaymentProvider === 'Curve Pay' && internal" class="form-group">
+                  <label id="CUR-bCLKUCPc">Api Key</label>
+                  <input id="CUR-FqAdahSw" type="text" class="form-control" ng-model="client.paymentProviders.curvePay.apiKey"
+                    ng-disabled="!(userRole == 'client' && rights.periods != 'None' && features && features.payments && clientAdminUser)">
+                </div>
+                <!-- Tipalti -->
+                <div id="CUR-wzNaqosE" ng-if="client.paymentProviders.selectedPaymentProvider === 'Tipalti'" class="form-group">
+                  <label id="CUR-NSmrlYyY">Tipalti Payer Name</label>
+                  <input id="CUR-AGstpXhd" type="text" class="form-control" ng-model="client.paymentProviders.tipalti.payerName"
+                    ng-disabled="!(userRole == 'client' && rights.periods != 'None' && features && features.payments && clientAdminUser)">
+                </div>
+                <div id="CUR-AQaSaFzZ" ng-if="client.paymentProviders.selectedPaymentProvider === 'Tipalti'" class="form-group">
+                  <label id="CUR-bCLKUCPc">Tipalti Api Key</label>
+                  <input id="CUR-FqAdahSw" type="text" class="form-control" ng-model="client.paymentProviders.tipalti.apiKey"
+                    ng-disabled="!(userRole == 'client' && rights.periods != 'None' && features && features.payments && clientAdminUser)">
+                </div>
+                <div id="CUR-AQaSajdS" ng-if="client.paymentProviders.selectedPaymentProvider === 'Tipalti'" class="form-group">
+                  <label id="CUR-bCFDDUCPc">Income Type</label>
+                  <ui-select ng-model="client.paymentProviders.tipalti.incomeType">
+                    <ui-select-match>
+                      <span id="CUR-XanMLKDNZY" ng-bind="$select.selected.label"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.value as item in (incomeTypes | filter: $select.search)">
+                      <span id="CUR-WeCzlqMK" ng-bind="item.label"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+                <div id="CUR-qNpMNdfj" ng-if="client.paymentProviders.selectedPaymentProvider === 'Tipalti'" class="form-group m-t-20">
+                  <input id="CUR-IWcPdlNw" type="checkbox" value="1" ng-model="client.paymentProviders.tipalti.crossPayeeDetails">
+                  <label id="CUR-kzKTHXmn">Allow Crossing Payee Details <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                    tooltip-template="This allows you to select a different Tipalti payee to make payments to. If you do this, please ensure you have selected the correct payee as this will affects who receives payments"></i></label>
+                </div>
+                <!-- Wise -->
+                <div id="CUR-DdcRkYMT" ng-if="client.paymentProviders.selectedPaymentProvider === 'Wise'" class="form-group">
+                  <label id="CUR-dFyOmYAh">Wise Api Key</label>
+                  <input id="CUR-bHDULcWu" type="text" class="form-control" ng-model="client.paymentProviders.wise.apiKey"
+                    ng-disabled="!(userRole == 'client' && rights.periods != 'None' && features && features.payments && clientAdminUser)">
+                </div>
+                <div id="CUR-GWKrRVIN" ng-if="client.paymentProviders.selectedPaymentProvider === 'Wise' && wiseProfiles" class="form-group">
+                  <label id="CUR-sVUFbzOu">Wise profile</label>
+                  <div ng-repeat="profile in wiseProfiles" ng-init="itemIndex = $index">
+                    <div id="CUR-GxozpqJi-{{itemIndex}}" ng-if="profile">
+                      <input id="CUR-yprWWPXP-{{itemIndex}}" type="radio" ng-value="profile.id" ng-model="client.paymentProviders.wise.profileId" />
+                      {{profile.name}} ({{profile.type}} account)
+                    </div>
+                  </div>
+                </div>
+                <div id="CUR-qNpMNdfj" ng-if="client.paymentProviders.selectedPaymentProvider === 'Wise'" class="form-group m-t-20">
+                  <input id="CUR-IWcPdlNw" type="checkbox" value="1" ng-model="client.paymentProviders.wise.autoPayment">
+                  <label id="CUR-kzKTHXmn">Bypass manual payment approval in Wise <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                    tooltip-template="Enabling this will bypass the manual approval process in your Wise account, meaning as soon as you click Pay on Curve, the funds will leave your Wise account and this cannot be reverted"></i></label>
+                </div>
+                <div id="CUR-DdcRkdCC" ng-if="client.paymentProviders.selectedPaymentProvider === 'Wise'" class="form-group">
+                  <label id="CUR-dFyOmYAh">Who pays the payment fees?</label>
+                  <ui-select ng-model="client.paymentProviders.wise.feesPaidBy">
+                    <ui-select-match>
+                      <span id="CUR-XanMLNZY" ng-bind="$select.selected.label"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.value as item in (whoPaysTheFees | filter: $select.search)">
+                      <span id="CUR-WeCzmqBc" ng-bind="item.label"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- user is logged in as a client -->
+</script>
+<script type="text/ng-template" id="general-ledger-tab.html">
+  <div id="CUR-TROrFpwn" ng-if="userRole === 'client'">
+        <!-- user is logged in as a client -->
+        <div id="CUR-tIpLmSjk" class="row">
+            <div id="CUR-eAvCzhYW" class="col-xs-12">
+                <div id="CUR-RdhYQRih" class="panel panel-default">
+                    <div id="CUR-unpHbETz" class="panel-heading">
+                        <div id="CUR-YIumznXq" class="panel-title">
+                            General Ledger Configuration
+                        </div>
+                    </div>
+                    <div id="CUR-ypoSmuOM" class="panel-body p-t-15">
+                        <contract-sales-row ng-repeat="sale in client.glAccounts" cat-types="catTypes" catalogue-groups="catalogueGroups" sale="sale" countries="countries" channels="distributionChannels" configurations="configurations" price-categories="priceCategories" sales-types="salesTypes" sources="sources" index="$index" delete="deleteGLRow(sale)" client-type="clientType" general-ledger="true" edit="true"></contract-sales-row>
+                        <button id="CUR-BQsNBlTp" type="button" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addGLRow()">+ Target</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- user is logged in as a client -->
+</script>
+<script type="text/ng-template" id="accounting-mapping-tab.html">
+  <div id="CUR-PuiNTpXk" ng-if="userRole === 'client'">
+    <div id="CUR-sdydPvLe" class="row">
+      <div id="CUR-imzgURaY" class="col-xs-12 col-sm-6">
+        <div id="CUR-THMKvtXU" class="panel panel-default">
+          <div id="CUR-OnVMoAFk" class="panel-heading">
+            <div id="CUR-nJdtbpZK" class="panel-title">
+              Accounting System
+            </div>
+          </div>
+          <div id="CUR-ZQxzDzfs" class="panel-body p-t-15">
+            <div id="CUR-pIigVeBm" class="form-group">
+              <label id="CUR-umIdVHGw">Accounting System</label>
+              <ui-select ng-model="client.accountingSystem">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-hDLgIlVv" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in accountingSystems | filter: $select.search">
+                  <span id="CUR-frORGPHT" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-ZnkqUSGT" class="row">
+      <div id="CUR-feLVwqQO" class="col-xs-12 col-sm-6">
+        <div id="CUR-RQmZWoal" class="panel panel-default">
+          <div id="CUR-aeAcpnxC" class="panel-heading">
+            <div id="CUR-SDkSzHPI" class="panel-title">
+              Channel Mapping
+            </div>
+          </div>
+          <div id="CUR-maGosRiP" class="panel-body p-t-15">
+            <div id="CUR-TaSHfrSL" class="row">
+              <div id="CUR-WVRKTGFp" class="col-xs-5">
+                <div id="CUR-gYUwuoOS" class="form-group">
+                  <label id="CUR-ZtBcAUwc">Map From</label>
+                </div>
+              </div>
+              <div id="CUR-nZkUqPDp" class="col-xs-7">
+                <div id="CUR-PGGpxLRB" class="form-group">
+                  <label id="CUR-XSgJJqIt">Map To</label>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-repeat="item in client.accountingPeriodMappings.distributionChannels" ng-init="itemIndex = $index">
+              <div id="CUR-skKMUJPD-{{itemIndex}}" class="form-group col-xs-5">
+                <div id="CUR-aqhhhlMV-{{itemIndex}}" class="form-group">
+                  <ui-select ng-model="item.from">
+                    <ui-select-match>
+                      <span id="CUR-ICLdlFeh-{{itemIndex}}" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="distributionChannel in client.distributionChannels | filter: $select.search">
+                      <span ng-bind="distributionChannel"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-PHkNOGlm-{{itemIndex}}" class="form-group col-xs-4">
+                <input id="CUR-MgGDYHFX-{{itemIndex}}" type="text" class="form-control" ng-model="item.to">
+              </div>
+              <div id="CUR-zRQoIRnX-{{itemIndex}}" class="form-group col-xs-3">
+                <button id="CUR-nXTcgYLk-{{itemIndex}}" type="button" class="btn btn-danger" ng-click="deleteMapping(client.accountingPeriodMappings.distributionChannels, item)"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+            <button id="CUR-AUxjRljh" type="button" class="btn btn-complete w-xs-100-p" ng-click="addMapping(client.accountingPeriodMappings.distributionChannels)">+ Channel</button>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-TVjXOgBo" class="col-xs-12 col-sm-6">
+        <div id="CUR-eqtdPygZ" class="panel panel-default">
+          <div id="CUR-UAxjwFpJ" class="panel-heading">
+            <div id="CUR-HHjwtkvQ" class="panel-title">
+              Configuration Mapping
+            </div>
+          </div>
+          <div id="CUR-uYbsXmZz" class="panel-body p-t-15">
+            <div id="CUR-BdMxJsWR" class="row">
+              <div id="CUR-YNMFyKhk" class="col-xs-5">
+                <div id="CUR-OAAGuEKH" class="form-group">
+                  <label id="CUR-YnFNxBUw">Map From</label>
+                </div>
+              </div>
+              <div id="CUR-IXLkyGOm" class="col-xs-7">
+                <div id="CUR-CHDOavzd" class="form-group">
+                  <label id="CUR-oBILVDRV">Map To</label>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-repeat="item in client.accountingPeriodMappings.configurations" ng-init="itemIndex = $index">
+              <div id="CUR-HtMFcQeE-{{itemIndex}}" class="form-group col-xs-5">
+                <div id="CUR-PudfeyrR-{{itemIndex}}" class="form-group">
+                  <ui-select ng-model="item.from">
+                    <ui-select-match>
+                      <span id="CUR-ONYXUvoM-{{itemIndex}}" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="configuration in client.configurations | filter: $select.search">
+                      <span ng-bind="configuration"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-rQagjDTu-{{itemIndex}}" class="form-group col-xs-4">
+                <input id="CUR-IAPkZqmW-{{itemIndex}}" type="text" class="form-control" ng-model="item.to">
+              </div>
+              <div id="CUR-ncxYPKAW-{{itemIndex}}" class="form-group col-xs-3">
+                <button id="CUR-SqQovTsi-{{itemIndex}}" type="button" class="btn btn-danger" ng-click="deleteMapping(client.accountingPeriodMappings.configurations, item)"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+            <button id="CUR-KqWIAima" type="button" class="btn btn-complete w-xs-100-p" ng-click="addMapping(client.accountingPeriodMappings.configurations)">+ Config</button>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-UDfKbwzu" class="col-xs-12 col-sm-6">
+        <div id="CUR-fGUokCYo" class="panel panel-default">
+          <div id="CUR-SWeLKmnS" class="panel-heading">
+            <div id="CUR-IGaKyTMK" class="panel-title">
+              Price Category Mapping
+            </div>
+          </div>
+          <div id="CUR-kcVQvbKO" class="panel-body p-t-15">
+            <div id="CUR-sbdOFCLK" class="row">
+              <div id="CUR-dIVXnzmN" class="col-xs-5">
+                <div id="CUR-zsKfaKhM" class="form-group">
+                  <label id="CUR-rFTbvVFb">Map From</label>
+                </div>
+              </div>
+              <div id="CUR-EQSqOjPZ" class="col-xs-7">
+                <div id="CUR-UayWQzQD" class="form-group">
+                  <label id="CUR-rHTPklxA">Map To</label>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-repeat="item in client.accountingPeriodMappings.priceCategories" ng-init="itemIndex = $index">
+              <div id="CUR-khDZmIVG-{{itemIndex}}" class="form-group col-xs-5">
+                <div id="CUR-XPXDrHis-{{itemIndex}}" class="form-group">
+                  <ui-select ng-model="item.from">
+                    <ui-select-match>
+                      <span id="CUR-BAzskDHk-{{itemIndex}}" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="priceCategory in client.priceCategories | filter: $select.search">
+                      <span ng-bind="priceCategory"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-tvZlGOOY-{{itemIndex}}" class="form-group col-xs-4">
+                <input id="CUR-gKKzDBdx-{{itemIndex}}" type="text" class="form-control" ng-model="item.to">
+              </div>
+              <div id="CUR-RUduyup-{{itemIndex}}" class="form-group col-xs-3">
+                <button id="CUR-MntocLuS-{{itemIndex}}" type="button" class="btn btn-danger" ng-click="deleteMapping(client.accountingPeriodMappings.priceCategories, item)"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+            <button id="CUR-yQxuybrk" type="button" class="btn btn-complete w-xs-100-p" ng-click="addMapping(client.accountingPeriodMappings.priceCategories)">+ Category</button>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-yssadskq" class="col-xs-12 col-sm-6">
+        <div id="CUR-sgAfoPux" class="panel panel-default">
+          <div id="CUR-gFwtCeLc" class="panel-heading">
+            <div id="CUR-tiFHYnnR" class="panel-title">
+              Source Mapping
+            </div>
+          </div>
+          <div id="CUR-UOufwjKf" class="panel-body p-t-15">
+            <div id="CUR-RGCKgzgj" class="row">
+              <div id="CUR-abpPhpMA" class="col-xs-5">
+                <div id="CUR-QwRYNdCT" class="form-group">
+                  <label id="CUR-vUDKklzG">Map From</label>
+                </div>
+              </div>
+              <div id="CUR-PjiiLkDH" class="col-xs-7">
+                <div id="CUR-cRClDZLt" class="form-group">
+                  <label id="CUR-PovKrafC">Map To</label>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-repeat="item in client.accountingPeriodMappings.sources" ng-init="itemIndex = $index">
+              <div id="CUR-KJeFoCTY-{{itemIndex}}" class="form-group col-xs-5">
+                <input id="CUR-yFFRLJsh-{{itemIndex}}" type="text" class="form-control" ng-model="item.from">
+              </div>
+              <div id="CUR-jogLraWb" class="form-group col-xs-4">
+                <input id="CUR-lpbgXECZ-{{itemIndex}}" type="text" class="form-control" ng-model="item.to">
+              </div>
+              <div id="CUR-vaPRBInt" class="form-group col-xs-3">
+                <button id="CUR-LSKyDpFl-{{itemIndex}}" type="button" class="btn btn-danger" ng-click="deleteMapping(client.accountingPeriodMappings.sources, item)"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+            <button id="CUR-tlKptgjS" type="button" class="btn btn-complete w-xs-100-p" ng-click="addMapping(client.accountingPeriodMappings.sources)">+ Source</button>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-bHpTsQMe" class="col-xs-12 col-sm-6">
+        <div id="CUR-nlTMyGzo" class="panel panel-default">
+          <div id="CUR-eAKeTFAl" class="panel-heading">
+            <div id="CUR-hwvMHPKE" class="panel-title">
+              Sub Source Mapping
+            </div>
+          </div>
+          <div id="CUR-XewvIWqP" class="panel-body p-t-15">
+            <div id="CUR-cXyHlIvC" class="row">
+              <div id="CUR-arAXGAoC" class="col-xs-5">
+                <div id="CUR-cpfFOssS" class="form-group">
+                  <label id="CUR-sfCIoGTY">Map From</label>
+                </div>
+              </div>
+              <div id="CUR-YxiQGlKN" class="col-xs-7">
+                <div id="CUR-GrpFqgVt" class="form-group">
+                  <label id="CUR-pQQBDFGT">Map To</label>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-repeat="item in client.accountingPeriodMappings.subSources" ng-init="itemIndex = $index">
+              <div id="CUR-VZBBCJAV-{{itemIndex}}" class="form-group col-xs-5">
+                <input id="CUR-XKStjRLk-{{itemIndex}}" type="text" class="form-control" ng-model="item.from">
+              </div>
+              <div id="CUR-VrCIcnKU-{{itemIndex}}" class="form-group col-xs-4">
+                <input id="CUR-TyBtewRn-{{itemIndex}}" type="text" class="form-control" ng-model="item.to">
+              </div>
+              <div id="CUR-cOAmdnfd-{{itemIndex}}" class="form-group col-xs-3">
+                <button id="CUR-faGusXCk-{{itemIndex}}" type="button" class="btn btn-danger" ng-click="deleteMapping(client.accountingPeriodMappings.subSources, item)"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+            <button id="CUR-KpQVydyW" type="button" class="btn btn-complete w-xs-100-p" ng-click="addMapping(client.accountingPeriodMappings.subSources)">+ Sub Source</button>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-JRkHSJpj" class="col-xs-12 col-sm-6">
+        <div id="CUR-CQhSCDEm" class="panel panel-default">
+          <div id="CUR-RBlwnzpc" class="panel-heading">
+            <div id="CUR-WOjkIOwg" class="panel-title">
+              Cost Mapping
+            </div>
+          </div>
+          <div id="CUR-jdeXMnTd" class="panel-body p-t-15">
+            <div id="CUR-znYRuRlj" class="row">
+              <div id="CUR-koVzDJsi" class="col-xs-5">
+                <div id="CUR-JDWxirOW" class="form-group">
+                  <label id="CUR-PWmSxQmu">Map From</label>
+                </div>
+              </div>
+              <div id="CUR-qqWyecHW" class="col-xs-7">
+                <div id="CUR-OUhatUEf" class="form-group">
+                  <label id="CUR-OqycVZqO">Map To</label>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-repeat="item in client.accountingPeriodMappings.costs" ng-init="itemIndex = $index">
+              <div id="CUR-DAKaGRBu-{{itemIndex}}" class="form-group col-xs-5">
+                <div id="CUR-qpKMaVpI-{{itemIndex}}" class="form-group">
+                  <ui-select ng-model="item.from">
+                    <ui-select-match>
+                      <span id="CUR-mStwMgiw-{{itemIndex}}" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="costType in client.costTypes | filter: $select.search">
+                      <span ng-bind="costType"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-TOLsftmq-{{itemIndex}}" class="form-group col-xs-4">
+                <input id="CUR-mwgwqUhY-{{itemIndex}}" type="text" class="form-control" ng-model="item.to">
+              </div>
+              <div id="CUR-MgjnNivA-{{itemIndex}}" class="form-group col-xs-3">
+                <button id="CUR-cBAUbMiA-{{itemIndex}}" type="button" class="btn btn-danger" ng-click="deleteMapping(client.accountingPeriodMappings.costs, item)"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+            <button id="CUR-mwBqZnFQ" type="button" class="btn btn-complete w-xs-100-p" ng-click="addMapping(client.accountingPeriodMappings.costs)">+ Cost</button>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-kaLumaxs" class="col-xs-12 col-sm-6">
+        <div id="CUR-BSEKdZDR" class="panel panel-default">
+          <div id="CUR-VEnUYLtB" class="panel-heading">
+            <div id="CUR-mYJRejox" class="panel-title">
+              Distribution Fee Mapping
+            </div>
+          </div>
+          <div id="CUR-jLwbVfhV" class="panel-body p-t-15">
+            <div id="CUR-abXqpufp" class="row">
+              <div id="CUR-nGATWwYP" class="col-xs-5">
+                <div id="CUR-qQasVcjI" class="form-group">
+                  <label id="CUR-PYxMeewx">Map From</label>
+                </div>
+              </div>
+              <div id="CUR-AGHCcIUC" class="col-xs-7">
+                <div id="CUR-hmjsuWSd" class="form-group">
+                  <label id="CUR-TQDoqzUo">Map To</label>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-repeat="item in client.accountingPeriodMappings.distributionFees" ng-init="itemIndex = $index">
+              <div id="CUR-dQLFvdqZ-{{itemIndex}}" class="form-group col-xs-5">
+                <div id="CUR-drlRLDhh-{{itemIndex}}" class="form-group">
+                  <ui-select ng-model="item.from">
+                    <ui-select-match>
+                      <span id="CUR-KRxfIQgG-{{itemIndex}}" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="distributionChannel in client.distributionChannels | filter: $select.search">
+                      <span ng-bind="distributionChannel"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-MxHAPaqV-{{itemIndex}}" class="form-group col-xs-4">
+                <input id="CUR-JhFBVmjx-{{itemIndex}}" type="text" class="form-control" ng-model="item.to">
+              </div>
+              <div id="CUR-lEHygnMN-{{itemIndex}}" class="form-group col-xs-3">
+                <button id="CUR-SFCRwXuU-{{itemIndex}}" type="button" class="btn btn-danger" ng-click="deleteMapping(client.accountingPeriodMappings.distributionFees, item)"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+            <button id="CUR-LvCwlUzr" type="button" class="btn btn-complete w-xs-100-p" ng-click="addMapping(client.accountingPeriodMappings.distributionFees)">+ Channel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-vQWbVOAn" class="row">
+      <div id="CUR-gLIlJKek" class="col-xs-12">
+        <div id="CUR-cUgovXvU" class="panel panel-default">
+          <div id="CUR-XMPxAlBt" class="panel-heading">
+            <div id="CUR-agpoKWCv" class="panel-title">
+              Account Mapping
+            </div>
+          </div>
+          <div id="CUR-HGELBSaT" class="panel-body p-t-15">
+            <div id="CUR-aftCKupl" class="row">
+              <div id="CUR-FnuVyQtL" class="col-xs-2">
+                <div id="CUR-BwHRpJWQ" class="form-group">
+                  <label id="CUR-EzNkfhcF">Sub Source</label>
+                </div>
+              </div>
+              <div id="CUR-lSsxOfHI" class="col-xs-2">
+                <div id="CUR-QLzEobvM" class="form-group">
+                  <label id="CUR-RTZBAVky">Channel</label>
+                </div>
+              </div>
+              <div id="CUR-GmVEaneE" class="col-xs-2">
+                <div id="CUR-IWfOdqdW" class="form-group">
+                  <label id="CUR-cebKwmRt">Territory</label>
+                </div>
+              </div>
+              <div id="CUR-JrARCFqR" class="col-xs-6">
+                <div id="CUR-kZEYkRsc" class="form-group">
+                  <label id="CUR-IyqJuhzG">Map To</label>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-repeat="item in client.accountingPeriodMappings.accounts" ng-init="itemIndex = $index">
+              <div id="CUR-cEUPNTdX-{{itemIndex}}" class="form-group col-xs-2">
+                <input id="CUR-CASZcmLU-{{itemIndex}}" type="text" class="form-control" ng-model="item.source">
+              </div>
+              <div id="CUR-XfHBEgjH-{{itemIndex}}" class="form-group col-xs-2">
+                <div id="CUR-sheCPrJz-{{itemIndex}}" class="form-group">
+                  <ui-select ng-model="item.channel">
+                    <ui-select-match>
+                      <span id="CUR-pdGPBPHM-{{itemIndex}}" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="distributionChannel in client.distributionChannels | filter: $select.search">
+                      <span ng-bind="distributionChannel"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-ammwfLLx-{{itemIndex}}" class="form-group col-xs-2">
+                <div id="CUR-DOXxgFWN-{{itemIndex}}" class="form-group">
+                  <ui-select ng-model="item.territory">
+                    <ui-select-match>
+                        <span id="CUR-cOpZfVJE-{{itemIndex}}" ng-bind="$select.selected.name"></span>
+                    </ui-select-match>
+                    <ui-select-choices group-by="groupFind" repeat="country.code as country in countries | filter: $select.search">
+                        <span class="country" ng-bind="country.name"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-nCgAmCjJ-{{itemIndex}}" class="form-group col-xs-4">
+                <input id="CUR-igeTXPZg-{{itemIndex}}" type="text" class="form-control" ng-model="item.to">
+              </div>
+              <div id="CUR-GtGSQgid-{{itemIndex}}" class="form-group col-xs-2">
+                <button id="CUR-rGhnZxPT-{{itemIndex}}" type="button" class="btn btn-danger" ng-click="deleteMapping(client.accountingPeriodMappings.accounts, item)"><i class="fa fa-trash"></i></button>
+              </div>
+            </div>
+            <button id="CUR-UcaUYJVg" type="button" class="btn btn-complete w-xs-100-p" ng-click="addMapping(client.accountingPeriodMappings.accounts)">+ Account Mapping</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="event-notifications-tab.html">
+  <div id="CUR-zRaQCbws"  class="col-xs-12 col-sm-6" ng-show="userRole === 'client' && (features && features.payments && client.paymentProviders.selectedPaymentProvider === 'Curve Pay' || (clientType == 'Publisher' || clientType == 'Label'))">
+    <div id="CUR-NNjcWLLP" class="panel panel-default">
+      <div id="CUR-AkvApAIb" class="panel-heading">
+        <div id="CUR-tDalzpDW" class="panel-title">
+            Contract Notifications
+        </div>
+      </div>
+      <!-- Contract End Dates -->
+      <div id="CUR-WwiUVnko" class="panel-body p-t-15" ng-if="(clientType == 'Publisher' || clientType == 'Label')">
+        <div>
+          <p>Add email addresses below to receive a notification in advance of:</p>
+        </div>
+        <div id="CUR-nLKoyTXn" class="form-group required p-t-15">
+          <label id="CUR-MQNNJHBZ">Contract End Dates</label>
+          <div id="CUR-div-panel-body-fg-email-form-input-container" class="row" ng-repeat="email in eventTriggeredNotifications.contractEndDate track by $index">
+            <div class="col-xs-8">
+              <input type="text" class="form-control" ng-model="email" disabled>
+            </div>
+            <div class="col-xs-4">
+              <button id="CUR-div-panel-body-fg-email-form-delete-button" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="deleteEventNotificationEmail(email, 'contractEndDate')">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="row" ng-show="eventTriggeredNotifications.contractEndDate.length < 10">
+            <div class="col-xs-8">
+              <input type="email" class="form-control" ng-model="eventNotificationEmailForm.contractEndDate" placeholder="Enter new email">
+            </div>
+            <div class="col-xs-4">
+              <button class="btn btn-primary sm-p-l-0 sm-p-r-0 m-l-0" ng-click="addEventNotificationEmail('contractEndDate')" ng-disabled="eventTriggeredNotifications.contractEndDate.length >= 10">
+                <i class="fa fa-plus"></i> Add Email
+              </button>
+            </div>
+          </div>
+          <div class="row" ng-show="eventTriggeredNotifications.contractEndDate.length >= 10">
+            <div class="col-xs-12">
+              <p class="text-danger">You have reached the maximum of 10 email addresses.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Collection Dates -->
+      <div id="CUR-WwiUVnko" class="panel-body" ng-if="clientType == 'Publisher'">
+        <div id="CUR-nLKoyTXn" class="form-group required">
+          <label id="CUR-MQNNJHBZ">Collection End Dates</label>
+          <div id="CUR-div-panel-body-fg-email-form-input-container" class="row" ng-repeat="email in eventTriggeredNotifications.collectionEndDate track by $index">
+            <div class="col-xs-8">
+              <input type="text" class="form-control" ng-model="email" disabled>
+            </div>
+            <div class="col-xs-4">
+              <button id="CUR-div-panel-body-fg-email-form-delete-button" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="deleteEventNotificationEmail(email, 'collectionEndDate')">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="row" ng-show="eventTriggeredNotifications.collectionEndDate.length < 10">
+            <div class="col-xs-8">
+              <input type="email" class="form-control" ng-model="eventNotificationEmailForm.collectionEndDate" placeholder="Enter new email">
+            </div>
+            <div class="col-xs-4">
+              <button class="btn btn-primary sm-p-l-0 sm-p-r-0 m-l-0" ng-click="addEventNotificationEmail('collectionEndDate')" ng-disabled="eventTriggeredNotifications.collectionEndDate.length >= 10">
+                <i class="fa fa-plus"></i> Add Email
+              </button>
+            </div>
+          </div>
+          <div class="row" ng-show="eventTriggeredNotifications.collectionEndDate.length >= 10">
+            <div class="col-xs-12">
+              <p class="text-danger">You have reached the maximum of 10 email addresses.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Retention Period End Date -->
+      <div id="CUR-WwiUVnko" class="panel-body" ng-if="clientType == 'Publisher'">
+        <div id="CUR-nLKoyTXn" class="form-group required">
+          <label id="CUR-MQNNJHBZ">Retention Period End Dates</label>
+          <div id="CUR-div-panel-body-fg-email-form-input-container" class="row" ng-repeat="email in eventTriggeredNotifications.retentionPeriodEndDate track by $index">
+            <div class="col-xs-8">
+              <input type="text" class="form-control" ng-model="email" disabled>
+            </div>
+            <div class="col-xs-4">
+              <button id="CUR-div-panel-body-fg-email-form-delete-button" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="deleteEventNotificationEmail(email, 'retentionPeriodEndDate')">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="row" ng-show="eventTriggeredNotifications.retentionPeriodEndDate.length < 10">
+            <div class="col-xs-8">
+              <input type="email" class="form-control" ng-model="eventNotificationEmailForm.retentionPeriodEndDate" placeholder="Enter new email">
+            </div>
+            <div class="col-xs-4">
+              <button class="btn btn-primary sm-p-l-0 sm-p-r-0 m-l-0" ng-click="addEventNotificationEmail('retentionPeriodEndDate')" ng-disabled="eventTriggeredNotifications.retentionPeriodEndDate.length >= 10">
+                <i class="fa fa-plus"></i> Add Email
+              </button>
+            </div>
+          </div>
+          <div class="row" ng-show="eventTriggeredNotifications.retentionPeriodEndDate.length >= 10">
+            <div class="col-xs-12">
+              <p class="text-danger">You have reached the maximum of 10 email addresses.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="CUR-WjBjBRvF" class="row">
+    <div id="CUR-yXmzSxWk" class="col-xs-12 col-sm-6">
+      <div id="CUR-NNjcWLLP" class="panel panel-default">
+        <div id="CUR-AkvApAIb" class="panel-heading">
+          <div id="CUR-tDalzpDW" class="panel-title">
+              Payment Notifications
+          </div>
+        </div>
+
+        <!-- Payee Payment Details Added -->
+        <div id="CUR-WwiUVnko" class="panel-body" ng-if="(features && features.payments && client.paymentProviders.selectedPaymentProvider === 'Curve Pay')">
+          <div id="CUR-nLKoyTXn" class="form-group required">
+            <label id="CUR-MQNNJHBZ">Payee Payment Details Added</label>
+            <div id="CUR-div-panel-body-fg-email-form-input-container" class="row" ng-repeat="email in eventTriggeredNotifications.payeePaymentDetailsAdded track by $index">
+              <div class="col-xs-8">
+                <input type="text" class="form-control" ng-model="email" disabled>
+              </div>
+              <div class="col-xs-4">
+                <button id="CUR-div-panel-body-fg-email-form-delete-button" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="deleteEventNotificationEmail(email, 'payeePaymentDetailsAdded')">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row" ng-show="eventTriggeredNotifications.payeePaymentDetailsAdded.length < 10">
+              <div class="col-xs-8">
+                <input type="email" class="form-control" ng-model="eventNotificationEmailForm.payeePaymentDetailsAdded" placeholder="Enter new email">
+              </div>
+              <div class="col-xs-4">
+                <button class="btn btn-primary sm-p-l-0 sm-p-r-0 m-l-0" ng-click="addEventNotificationEmail('payeePaymentDetailsAdded')" ng-disabled="eventTriggeredNotifications.payeePaymentDetailsAdded.length >= 10">
+                  <i class="fa fa-plus"></i> Add Email
+                </button>
+              </div>
+            </div>
+            <div class="row" ng-show="eventTriggeredNotifications.payeePaymentDetailsAdded.length >= 10">
+              <div class="col-xs-12">
+                <p class="text-danger">You have reached the maximum of 10 email addresses.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payee Payment Details Updated -->
+        <div id="CUR-WwiUVnko" class="panel-body" ng-if="(features && features.payments && client.paymentProviders.selectedPaymentProvider === 'Curve Pay')">
+          <div id="CUR-nLKoyTXn" class="form-group required">
+            <label id="CUR-MQNNJHBZ">Payee Payment Details Updated</label>
+            <div id="CUR-div-panel-body-fg-email-form-input-container" class="row" ng-repeat="email in eventTriggeredNotifications.payeePaymentDetailsUpdated track by $index">
+              <div class="col-xs-8">
+                <input type="text" class="form-control" ng-model="email" disabled>
+              </div>
+              <div class="col-xs-4">
+                <button id="CUR-div-panel-body-fg-email-form-delete-button" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="deleteEventNotificationEmail(email, 'payeePaymentDetailsUpdated')">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row" ng-show="eventTriggeredNotifications.payeePaymentDetailsUpdated.length < 10">
+              <div class="col-xs-8">
+                <input type="email" class="form-control" ng-model="eventNotificationEmailForm.payeePaymentDetailsUpdated" placeholder="Enter new email">
+              </div>
+              <div class="col-xs-4">
+                <button class="btn btn-primary sm-p-l-0 sm-p-r-0 m-l-0" ng-click="addEventNotificationEmail('payeePaymentDetailsUpdated')" ng-disabled="eventTriggeredNotifications.payeePaymentDetailsUpdated.length >= 10">
+                  <i class="fa fa-plus"></i> Add Email
+                </button>
+              </div>
+            </div>
+            <div class="row" ng-show="eventTriggeredNotifications.payeePaymentDetailsUpdated.length >= 10">
+              <div class="col-xs-12">
+                <p class="text-danger">You have reached the maximum of 10 email addresses.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Failed -->
+        <div id="CUR-WwiUVTXn" class="panel-body" ng-if="(features && features.payments && client.paymentProviders.selectedPaymentProvider === 'Curve Pay')">
+          <div id="CUR-nLKoynko" class="form-group required">
+            <label id="CUR-MQNNJHBZ">Payment Failures</label>
+            <div id="CUR-div-panel-body-fg-email-form-input-container" class="row" ng-repeat="email in eventTriggeredNotifications.paymentFailed track by $index">
+              <div class="col-xs-8">
+                <input type="text" class="form-control" ng-model="email" disabled>
+              </div>
+              <div class="col-xs-4">
+                <button id="CUR-div-panel-body-fg-email-form-delete-button" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="deleteEventNotificationEmail(email, 'paymentFailed')">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row" ng-show="eventTriggeredNotifications.paymentFailed.length < 10">
+              <div class="col-xs-8">
+                <input type="email" class="form-control" ng-model="eventNotificationEmailForm.paymentFailed" placeholder="Enter new email">
+              </div>
+              <div class="col-xs-4">
+                <button class="btn btn-primary sm-p-l-0 sm-p-r-0 m-l-0" ng-click="addEventNotificationEmail('paymentFailed')" ng-disabled="eventTriggeredNotifications.paymentFailed.length >= 10">
+                  <i class="fa fa-plus"></i> Add Email
+                </button>
+              </div>
+            </div>
+            <div class="row" ng-show="eventTriggeredNotifications.paymentFailed.length >= 10">
+              <div class="col-xs-12">
+                <p class="text-danger">You have reached the maximum of 10 email addresses.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Funds Added -->
+        <div id="CUR-WwiUVTXn" class="panel-body" ng-if="(features && features.payments && client.paymentProviders.selectedPaymentProvider === 'Curve Pay')">
+          <div id="CUR-nLKoynko" class="form-group required">
+            <label id="CUR-MQNNJHBZ">Funds Added</label>
+            <div id="CUR-div-panel-body-fg-email-form-input-container" class="row" ng-repeat="email in eventTriggeredNotifications.fundsAdded track by $index">
+              <div class="col-xs-8">
+                <input type="text" class="form-control" ng-model="email" disabled>
+              </div>
+              <div class="col-xs-4">
+                <button id="CUR-div-panel-body-fg-email-form-delete-button" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="deleteEventNotificationEmail(email, 'fundsAdded')">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row" ng-show="eventTriggeredNotifications.fundsAdded.length < 10">
+              <div class="col-xs-8">
+                <input type="email" class="form-control" ng-model="eventNotificationEmailForm.fundsAdded" placeholder="Enter new email">
+              </div>
+              <div class="col-xs-4">
+                <button class="btn btn-primary sm-p-l-0 sm-p-r-0 m-l-0" ng-click="addEventNotificationEmail('fundsAdded')" ng-disabled="eventTriggeredNotifications.fundsAdded.length >= 10">
+                  <i class="fa fa-plus"></i> Add Email
+                </button>
+              </div>
+            </div>
+            <div class="row" ng-show="eventTriggeredNotifications.fundsAdded.length >= 10">
+              <div class="col-xs-12">
+                <p class="text-danger">You have reached the maximum of 10 email addresses.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</script>
+
+
+
+<div class="modal fade stick-up" id="settingsImportModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-KDrsdkoL" class="modal-dialog">
+    <div id="CUR-KrYKnqPI" class="modal-content">
+      <div id="CUR-kiJPoSfX" class="modal-header clearfix text-left">
+        <button id="CUR-lttMOmKZ" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+            class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-nsBCNPRO">Import Settings</h5>
+      </div>
+      <div id="CUR-mviUIiCU" class="modal-body">
+        <div id="CUR-vcYOVxje" class="panel-body p-t-15">
+          <label>Type</label>
+          <ui-select ng-model="importSettingSelect" on-select="setImportSelect($item)">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-KVhsloDI" ng-bind="importSettingSelect.type"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item in (importTypes | filter: $select.search)">
+              <span id="CUR-oMOIhrQi" ng-bind="item.type"></span>
+            </ui-select-choices>
+          </ui-select>
+
+          <textarea ng-show="importSettingSelect" style="margin-top: 20px;" ng-model="importValues"
+            class="form-control standard-textarea"
+            placeholder="Ensure that there is one setting {{importSettingSelect.type}} per line"></textarea>
+        </div>
+        <div id="CUR-HenIsdcm" class="row" ng-if="importErrors">
+          <div id="CUR-RdfSKoup" class="col-sm-12">
+            <ul id="CUR-qSeJTTIw">
+              <li id="CUR-TxDzFgyA" ng-repeat="error in importErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-iPlZHPRv" class="row">
+          <div id="CUR-ETkxWjeT" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-CRXtzZiQ" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-PfMsRKsg" type="button" class="btn btn-complete m-t-5" ng-click="importConfig()"><i
+                class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

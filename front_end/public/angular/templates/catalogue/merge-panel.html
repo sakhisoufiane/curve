@@ -1,0 +1,27 @@
+<div class="row" ng-attr-id="merge-panel-{{ title }}">
+  <div class="col-xs-12">
+    <div class="panel panel-default">
+      <div
+        class="panel-heading"
+        ng-init="panelHidden = true"
+        ng-click="panelHidden = !panelHidden"
+      >
+        <div class="panel-title pull-left">{{ title }}</div>
+        <button
+          type="button"
+          class="btn btn-default btn-xs pull-right panel-toggle"
+          aria-expanded="false"
+        >
+          <span
+            ng-class="{'fa fa-chevron-up': !panelHidden, 'fa fa-chevron-down': panelHidden }"
+          ></span>
+        </button>
+      </div>
+      <div class="panel-body">
+        <div class="form-group" ng-show="!panelHidden">
+          <div ng-transclude></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

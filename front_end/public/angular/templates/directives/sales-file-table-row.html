@@ -1,0 +1,43 @@
+<td ng-if="!noCheckbox" class="v-align-middle hidden-xs">
+  <input id="sales-file-select-{{index}}" type="checkbox" ng-model="sale.selected" ng-if="edit">
+</td>
+<td class="v-align-middle table-cell-overflow-hidden">
+  <a id="sales-file-{{index}}" ng-if="!noLinks && sale.status === 'Complete'" href="#/sales/{{ sale._id }}/ingestion_complete" title="{{sale.name}}" ng-bind-html="sale.name"></a>
+  <a id="sales-file-{{index}}" ng-if="!noLinks && sale.status !== 'Complete' && sale.status !== 'Deleting'" href="#/sales/{{ sale._id }}/edit" title="{{sale.name}}" ng-bind-html="sale.name"></a>
+  <span ng-if="noLinks || sale.status === 'Deleting'" title="{{sale.name}}"> {{ sale.name }} </span>
+  <span ng-if="!sale.viewed" class="label label-sm label-success">New</span>
+  <i ng-if="sale.locked" class="fa fa-lock text-danger m-l-10"></i>
+</td>
+<td class="v-align-middle hidden-xs">{{ sale.invoiceNo }}</td>
+<td class="v-align-middle hidden-xs">{{ sale.targetPeriod }}</td>
+<td class="v-align-middle hidden-xs">{{ sale.salesAccountName }}</td>
+<td class="v-align-middle hidden-xs">{{ sale.homeCurrencyGrossAmount | number: 2 }}</td>
+<td class="v-align-middle">{{ sale.homeCurrencyNetAmount | number: 2 }}</td>
+<td class="v-align-middle" ng-show="showCreatedAt">{{ sale.createdAt | date : dateFormat : 'UTC' }}</td>
+<td class="v-align-middle hidden-xs">{{ sale.invalidLines }}</td>
+<td class="v-align-middle width-70 hidden-xs index-icons">
+  <i ng-if="!sale.duplicateSalesFileId && sale.status === 'Complete'" class="fa fa-check text-success" tooltips tooltip-side="top" tooltip-template="Complete"></i>
+  <i ng-if="!sale.duplicateSalesFileId && sale.status === 'Errored'" class="fa fa-times text-danger" tooltips tooltip-side="top" tooltip-template="Errored"></i>
+  <i ng-if="sale.status === 'Ingesting'" class="fa fa-refresh" tooltips tooltip-side="top" tooltip-template="Ingesting"></i>
+  <i ng-if="sale.status === 'Revalidating'" class="fa fa-flag" tooltips tooltip-side="top" tooltip-template="Revalidating"></i>
+  <i ng-if="sale.status === 'Waiting'" class="fa fa-clock-o" tooltips tooltip-side="top" tooltip-template="Queued for Ingestion"></i>
+  <i ng-if="!sale.duplicateSalesFileId && sale.status === 'Setup'" class="fa fa-pencil" tooltips tooltip-side="top" tooltip-template="Editing"></i>
+  <i ng-if="sale.status === 'Unrecognised'" class="fa fa-exclamation-triangle text-warning" tooltips tooltip-side="top" tooltip-template="Unrecognised Template"></i>
+  <i ng-if="!['Ingesting', 'Errored', 'Unrecognised', 'Complete', 'Waiting', 'Setup', 'Revalidating', 'Deleting'].includes(sale.status)" class="fa fa-question" tooltips tooltip-side="top" tooltip-template="Unknown Status"></i>
+  
+  <i ng-if="!sale.duplicateSalesFileId && sale.valid && sale.status === 'Complete'" class="fa fa-thumbs-o-up text-success" tooltips tooltip-side="top" tooltip-template="Valid"></i>
+  <i ng-if="!sale.duplicateSalesFileId && !sale.valid && sale.status === 'Complete'" class="fa fa-thumbs-o-down text-danger" tooltips tooltip-side="top" tooltip-template="Invalid"></i>
+  <!-- Duplicate Links -->
+  <i ng-if="sale.duplicateSalesFileId && (sale.status !== 'Deleting' || sale.status !== 'Ingesting' || sale.status !== 'Revalidating')" class="fa fa-thumbs-o-down text-danger" style="opacity: 0;"></i>
+  <a ng-if="sale.duplicateSalesFileId && sale.duplicateSalesFileId !== 'No ID Found'" href="#/sales/{{ sale.duplicateSalesFileId }}/edit" title="{{sale.name}}"><i class="fa fa-chain text-info" tooltips tooltip-side="top" tooltip-template="Click to view the original (duplicated) file"></i></a>
+
+  <i ng-if="sale.status === 'Ingesting'" class="fa fa-refresh text-warning" tooltips tooltip-side="top" tooltip-template="Ingesting"></i>
+  <i ng-if="sale.status === 'Revalidating'" class="fa fa-refresh text-warning" tooltips tooltip-side="top" tooltip-template="Revalidating"></i>
+  <!-- Final Icons -->
+  <span ng-if="sale.status === 'Deleting'" class="label label-sm label-danger">Deleting</span>
+  <span class="badge badge-success" ng-if="!sale.duplicateSalesFileId && sale.reportedStatus === 'Complete'" tooltips tooltip-side="top" tooltip-template="Fully Reported">F</span>
+  <span class="badge badge-warning" ng-if="!sale.duplicateSalesFileId && sale.reportedStatus === 'Partially Complete'" tooltips tooltip-side="top" tooltip-template="Partially Reported">P</span>
+  <span class="badge badge-danger" ng-if="!sale.duplicateSalesFileId && sale.reportedStatus === 'Unreported' && sale.status != 'Unrecognised' && sale.status != 'Deleting'" tooltips tooltip-side="top" tooltip-template="Unreported">U</span>
+
+  <span class="badge badge-info" ng-if="sale.duplicateSalesFileId && (sale.status !== 'Deleting' || sale.status !== 'Ingesting' || sale.status !== 'Revalidating')" tooltips tooltip-side="top" tooltip-template="Duplicate Exists">D</span>
+</td>

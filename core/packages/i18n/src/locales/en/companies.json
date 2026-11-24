@@ -1,0 +1,108 @@
+{
+  "title": "Companies",
+  "searchPlaceholder": "Search companies",
+  "entityName": "Company",
+  "entityNamePlural": "Companies",
+  "entityNameLower": "company",
+  "entityNameLowerPlural": "companies",
+  "export": "Export",
+  "emptyState": {
+    "title": "No companies yet",
+    "description": "Get started by creating your first company."
+  },
+  "noResults": "No companies match your search.",
+  "deleteSelected": "Delete Selected",
+  "columns": {
+    "name": "Name",
+    "createdAt": "Created"
+  },
+  "exportToast": {
+    "successTitle": "Export requested",
+    "successDescription": "Your export will be sent to you via email shortly.",
+    "errorTitle": "Export failed",
+    "errorDescription": "Please try again."
+  },
+  "deleteToast": {
+    "successTitle_one": "1 Company deleted",
+    "successTitle_other": "{{count}} Companies deleted",
+    "errorTitle": "Delete failed",
+    "errorDescription": "Please try again."
+  },
+  "deleteDialog": {
+    "description": "This action cannot be undone."
+  },
+  "importToast": {
+    "successTitle": "Companies are importing",
+    "successDescription": "A report will be sent to you shortly."
+  },
+  "edit": {
+    "create": "Create Company",
+    "selectPlaceholder": "Select…",
+    "overview": {
+      "title": "Overview"
+    },
+    "logo": {
+      "title": "Logo",
+      "uploadLabel": "Logo image",
+      "hint": "Maximum 500×500px and 2MB to ensure it displays properly on statements.",
+      "errors": {
+        "size": "File size is too large. Please upload a file that is no more than 2MB.",
+        "dimensions": "Image should be a maximum of 500×500px to ensure it displays properly on the statements."
+      }
+    },
+    "feesInvoice": {
+      "title": "Fees Invoice"
+    },
+    "statementDetails": {
+      "title": "Statement Details"
+    },
+    "fields": {
+      "name": { "label": "Name" },
+      "foreignId": { "label": "Foreign ID" },
+      "feesInvoiceCustomText": {
+        "label": "Custom Text",
+        "hint": "Appears at the bottom of the Fees Invoice PDF."
+      },
+      "companyName": { "label": "Company Name" },
+      "address": { "label": "Address" },
+      "email": { "label": "Email for Statements" },
+      "statementCustomText": {
+        "label": "Statement Custom Text",
+        "hint": "Appears at the bottom of the statement PDF."
+      },
+      "statementOfAccountCustomText": {
+        "label": "Statement of Account Custom Text",
+        "hint": "Appears at the bottom of the statement of account PDF."
+      },
+      "selfBillingTaxText": {
+        "label": "Self Billing Tax Text",
+        "hint": "What word should be used to describe the tax being taken? E.g. VAT, GST or Sales Tax."
+      },
+      "selfBillingTaxCustomText": {
+        "label": "Self Billing Custom Text",
+        "hint": "Appears at the bottom of the self billing invoice."
+      },
+      "vatNo": { "label": "VAT No" },
+      "statementDesign": { "label": "Statement Design" },
+      "statementHeaderType": { "label": "Statement Header Design" },
+      "salesReportTemplate": { "label": "Sales CSV Design" },
+      "costsReportTemplate": { "label": "Costs CSV Design" },
+      "statementIncludeTotalsRow": { "label": "Include Totals Rows on CSV" },
+      "suppressZeroValueInExport": { "label": "Suppress 0 Value Royalties on CSV" },
+      "suppressStatementOfAccount": { "label": "Suppress Statement of Account Creation" },
+      "displaySeparatedDeductions": {
+        "label": "Display Separated Deductions",
+        "hint": "Displays deductions separately on PDF statements, allowing you to display and label deductions as a separate line item."
+      },
+      "customDeductionName": { "label": "Deduction Name" }
+    },
+    "menu": {
+      "delete": "Delete"
+    },
+    "toast": {
+      "created": "Company successfully created",
+      "saved": "Company successfully saved",
+      "error": "The company has not been saved. Please try again or contact support."
+    }
+  }
+}

@@ -1,0 +1,50 @@
+<td class="v-align-middle hidden-xs" ng-if="!noCheckboxes"><input id="contract-select-{{index}}" type="checkbox" class='select-unit' ng-model="contract.selected" ng-if="!noLinks && edit"></td>
+<td class="v-align-middle">
+  <div style="display: inline-flex; align-items: center;">
+		<a id="contract-{{index}}" ng-if="!noLinks" href="#/contracts/{{ contract._id }}/edit" ng-bind-html="contract.name" style="margin-right: 10px;"></a>
+	 <span ng-if="noLinks" ng-bind-html="contract.name" style="margin-right: 10px;"></span>
+  <div class="label label-sm label-default" ng-if="!contract.active">Inactive</div>
+ </div>
+</td>
+<td class="v-align-middle">
+	<span class="label label-sm label-success" ng-if="contract.type === 'Royalty' && contract.contractType != 'Mechanical'">{{ contract.type }}</span>
+	<span class="label label-sm label-primary" ng-if="contract.type === 'Profit Share' && contract.contractType != 'Mechanical'">Profit Share - Classic</span>
+	<span class="label label-sm label-primary" ng-if="contract.type === 'Profit Share - Flexible' && contract.contractType != 'Mechanical'">{{ contract.type }}</span>
+	<span class="label label-sm label-danger" ng-if="contract.contractType === 'Mechanical'">Mechanical</span>
+</td>
+<td ng-show="showDetails" style="text-align:center;">
+  <span class="label label-sm" ng-if="labelDetails" ng-class="labelDetails.class" style="display:inline-block; width:80px;">
+    {{ labelDetails.text }}
+  </span>
+</td>
+<td class="v-align-middle">
+	<span class="label label-sm label-default table-label" ng-repeat="category in contract.contractCategories">
+		{{category}}
+	</span>
+</td>
+<td ng-show="showPayeeShare">{{share}} %</td>
+<td class="v-align-middle">
+	{{ contract.createdAt | date : dateFormat : 'UTC' }}
+</td>
+<td>
+	<span ng-if="contract.valid">
+		<i 
+			style="font-size: 20px; margin-left: 15px;" 
+			class="fa fa-circle text-success"
+			tooltips
+			tooltip-class="wider"
+			tooltip-side="left"
+			tooltip-template="This Contract is valid."></i>
+	</span>
+	<span ng-if="!contract.valid">
+		<i 
+			style="font-size: 20px; margin-left: 15px;" 
+			class="fa fa-circle text-danger" 
+			tooltips
+			tooltip-class="wider"
+			tooltip-side="left"
+			tooltip-template="This Contract is incomplete, check the Contract's page for details"
+			>
+		</i>
+	</span>
+</td>

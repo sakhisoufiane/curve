@@ -1,0 +1,65 @@
+{
+  "name": "@curveroyaltysystems/curve-shared-logic",
+  "version": "3.3.0",
+  "description": "Repository for shared logic across the Curve ecosystem",
+  "author": "Curve Royalty Systems",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./config": "./dist/config.json",
+    "./templates/*": "./dist/templates/*",
+    "./controllers/*": "./dist/controllers/*"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "rimraf dist && tsc && npm run copyfiles",
+    "copyfiles": "copyfiles -u 1 \"src/templates/**/*\" dist/",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "lint": "eslint \"src/**/*.[ts|js]*\"",
+    "lint:quiet": "eslint \"src/**/*.[ts|js]*\" --quiet",
+    "test": "jest --runInBand --no-cache",
+    "test:unit": "jest --testMatch='<rootDir>/src/**/*.unit.test.{ts,js}' --runInBand --no-cache",
+    "test:int": "jest --testMatch='<rootDir>/src/**/*.integration.test.{ts,js}' --runInBand --no-cache",
+    "test:coverage": "jest --coverage",
+    "prepublishOnly": "npm run build",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@curveroyaltysystems/models": "*",
+    "@curveroyaltysystems/platform-shared-utils": "*",
+    "app-root-dir": "1.0.2",
+    "async": "3.2.6",
+    "csv-write-stream": "2.0.0",
+    "lodash": "4.18.1",
+    "moment": "2.30.1",
+    "mongodb": "6.21.0",
+    "mongoose": "8.23.0"
+  },
+  "devDependencies": {
+    "@curveroyaltysystems/eslint-config": "*",
+    "@curveroyaltysystems/prettier-config": "*",
+    "@curveroyaltysystems/test-config": "*",
+    "@curveroyaltysystems/typescript-config": "*",
+    "@types/jest": "30.0.0",
+    "copyfiles": "2.4.1",
+    "husky": "9.1.7",
+    "nyc": "15.1.0",
+    "rimraf": "3.0.2"
+  },
+  "prettier": "@curveroyaltysystems/prettier-config",
+  "jest": {
+    "preset": "@curveroyaltysystems/test-config",
+    "globalSetup": "<rootDir>/jest.globalSetup.ts",
+    "globalTeardown": "<rootDir>/jest.globalTeardown.ts",
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.ts"
+    ],
+    "testTimeout": 60000,
+    "maxWorkers": 4
+  }
+}

@@ -1,0 +1,16 @@
+FROM cypress/included:12.17.3
+
+WORKDIR /app
+
+COPY . /app
+
+# Copy sound driver config to avoid alsa lib errors 
+COPY asound.conf /etc/asound.conf
+
+RUN npm install
+
+RUN npm install cypress@12.17.3 -g
+
+RUN ./node_modules/.bin/cypress install --force
+
+ENTRYPOINT ["npx", "cypress", "run", "--spec", "cypress/e2e/Regression/TestSuites"]

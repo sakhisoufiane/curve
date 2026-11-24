@@ -1,0 +1,48 @@
+{
+  "name": "@curveroyaltysystems/curve-shared-logic",
+  "version": "1.0.47",
+  "description": "Repository for shared logic across the Curve ecosystem",
+  "type__": "module",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:quiet": "eslint . --quiet",
+    "test": "jest",
+    "test:unit": "jest ./test/unit/**/*.test.js",
+    "test:int": "jest ./test/integration/**/*.test.js",
+    "test:coverage": "jest --coverage",
+    "prepare": "husky"
+  },
+  "engines": {
+    "node": "22.14.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CurveRoyalties/curve-shared-logic.git"
+  },
+  "author": "Curve Royalty Systems",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/CurveRoyalties/curve-shared-logic/issues"
+  },
+  "homepage": "https://github.com/CurveRoyalties/curve-shared-logic#readme",
+  "dependencies": {
+    "@curveroyaltysystems/platform-shared-utils": "^3.2.20",
+    "app-root-dir": "^1.0.2",
+    "async": "^3.2.4",
+    "csv-write-stream": "^2.0.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "mongodb": "^6.9.0",
+    "mongoose": "^6.5.0"
+  },
+  "devDependencies": {
+    "chai": "^4.4.1",
+    "eslint": "^8.17.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^28.8.0",
+    "husky": "^9.1.7",
+    "jest": "^29.7.0"
+  }
+}

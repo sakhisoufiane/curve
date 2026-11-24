@@ -1,0 +1,587 @@
+<div id="CUR-CgrzarDE" class="jumbotron" data-pages="parallax">
+  <div id="CUR-yETuIggj" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-ChbaYNzl" class="inner">
+      <ul id="CUR-CTNuZWmV" class="breadcrumb">
+        <li id="CUR-AypXNYcY"><a id="CUR-kuMqEEya" href="/#/releases" class="active">Releases</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-fvjdzXLb" class="container-fluid container-fixed-lg release-container">
+  <!-- Search and Buttons -->
+  <div id="CUR-kOiazkwG" class="row m-b-20">
+    <div id="CUR-KcDuwxGL" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-utyDfWYh" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-YKLgZOIN" class="input-group transparent">
+          <input id="CUR-tDdlTTJF" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-HpriPRoN" class="input-group-addon pointer" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-gHSzhTRY" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-XcvmLsiT" class="sm-p-l-15 sm-p-r-15 btn-ctrl-group">
+        <div id="CUR-kFiDycRK" class="btn-group dropdown-default" ng-show="rights.catalogue == 'Edit' && clientType != 'Publisher'"> <a
+            class="btn dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false"><i
+              class="fa fa-repeat">&nbsp;</i>Bulk Update <span id="CUR-koHTheXh" class="caret"></span> </a>
+          <ul id="CUR-IFfZnwpH" class="dropdown-menu w-xs-100-p">
+            <li id="CUR-wlXDMMfb">
+              <a id="CUR-iPIxPRfw" href="javascript:void(0)" data-toggle="modal" data-target="#proRataContractsModal">&nbsp;Pro Rata
+                Contracts</a>
+            </li>
+            <li id="CUR-nzhANKWH">
+              <a id="CUR-wvxreJFo" href="javascript:void(0)" data-toggle="modal" data-target="#inheritMechanicalsModal">&nbsp;Inherit
+                Mechanicals</a>
+            </li>
+          </ul>
+        </div>
+        <div id="CUR-EHKwJHlq" class="btn-group  dropdown-default" ng-if="paymentTier !== 'Lite'">
+          <a id="CUR-lUYMGNkz" class="btn btn-default dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-upload"></i>&nbsp;Export <span id="CUR-PUSXRyiA" class="caret"></span>
+          </a>
+          <ul id="CUR-ZoihDsOy" class="dropdown-menu w-xs-100-p">
+            <li id="CUR-VYQyVjdR">
+              <a id="CUR-vWLuJEmj" href="javascript:void(0)" ng-click="export('v1')">Combined</a>
+            </li>
+            <li id="CUR-rJJpQBoK">
+              <a id="CUR-SCVPTxVX" href="javascript:void(0)" ng-click="export('v2')">Separated</a>
+            </li>
+            <li id="CUR-rJJpQBmd" ng-show="isInternal">
+              <a id="CUR-SCV23dxVX" href="javascript:void(0)" ng-click="rawExport()">Raw Export</a>
+            </li>
+          </ul>
+        </div>
+        <button id="CUR-kvdWTlzO" class="btn btn-default hidden-xs" ng-if="paymentTier === 'Lite'" ng-show="rights.catalogue == 'Edit'" ng-click="export()"><i class="fa fa-upload"></i>&nbsp;Export</button>
+        <div id="CUR-kROpFrXC" class="btn-group  dropdown-default">
+          <a id="CUR-Fxnitnnw" class="btn btn-default dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false" style="width: 175px;">
+            <i class="fa fa-upload"></i>&nbsp;Import <span id="CUR-EfKNCEFL" class="caret"></span>
+          </a>
+          <ul id="CUR-vkoptQjf" class="dropdown-menu w-xs-100-p">
+            <li id="CUR-IlybuMTy" ng-show="isInternal">
+              <a id="CUR-rpIsMLLw" href="javascript:void(0)" data-toggle="modal" data-target="#updateCatalogueModal">Bulk Update Cat No</a>
+            </li>
+            <li id="CUR-xEQPGVKT">
+              <a id="CUR-LFkJLNSz" href="javascript:void(0)" data-toggle="modal" data-target="#importModal">Bulk Import</a>
+            </li>
+            <li id="CUR-hDVIChIY">
+              <a id="CUR-pdncYmqM" href="javascript:void(0)" data-toggle="modal" data-target="#spotifyModal">Import From Spotify</a>
+            </li>
+          </ul>
+        </div>
+        <div id="CUR-JXvVnjpo" class="btn-group  dropdown-default" ng-show="rights.catalogue == 'Edit'">
+          <a id="CUR-UfmuPmLj" class="btn btn-danger dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-trash"></i>&nbsp;Delete <span id="CUR-SAWlSOMG" class="caret"></span>
+          </a>
+          <ul id="CUR-fwnLFTAv" class="dropdown-menu w-xs-100-p">
+            <li id="CUR-WsANssEV">
+              <a id="CUR-reIkYBvt" href="javascript:void(0)" data-toggle="modal" data-target="#deleteModal">Selected</a>
+            </li>
+            <li id="CUR-auxMCzqP">
+              <a id="CUR-fYLbeQvy" href="javascript:void(0)" data-toggle="modal" data-target="#deleteBulkModal">Bulk</a>
+            </li>
+          </ul>
+        </div>
+        <a id="CUR-yRegqFKK" href="#/releases/new" class="btn btn-complete" ng-show="rights.catalogue == 'Edit' && !demoMode"><i
+            class="fa fa-plus"></i>&nbsp;Create</a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-bTVGvnCo" class="row">
+    <div id="CUR-RtBPEQWC" class="form-group col-sm-3">
+      <label id="CUR-AquqnNYV">Cat Group</label>
+      <ui-select multiple ng-model="filter.catalogueGroups" close-on-select="true">
+        <ui-select-match>{{$item}}</ui-select-match>
+        <ui-select-choices repeat="group in catalogueGroups | filter:$select.search">
+          {{group}}
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-KRwOzQqO" class="form-group col-sm-3" ng-if="clientType != 'Publisher'">
+      <label id="CUR-wueYzfyd">Contract</label>
+      <ui-select multiple ng-model="filter.contractIds" close-on-select="true">
+        <ui-select-match>
+          <span id="CUR-baYoJGWb" style="vertical-align:middle;">{{$item.name}}</span>
+          <span id="CUR-UGehitIZ" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in contracts | filter:$select.search"
+          refresh="searchContracts($select)" refresh-delay="500">
+          <div id="CUR-QAxIbYZk">
+            <div id="CUR-kviVzeGc" class="clear">
+              <div id="CUR-IAYKXmEE" ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-yvJjWBnO" class="form-group col-sm-3">
+      <label id="CUR-yJUDpSWI">Created After</label>
+      <div id="datepicker-component" class="form-group input-group date">
+        <input id="CUR-PwVGYguM" type="text" class="form-control" ng-model="filter.createdAfter" uib-datepicker-popup="{{dateFormat}}"
+          ng-model-options="{timezone: 'utc'}" is-open="createdAfterPopup" ng-click="openCreatedAfterPopup()">
+        <span id="CUR-WFsTBdmV" class="input-group-addon" ng-click="openCreatedAfterPopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+    <div id="CUR-GUqaepOF" class="form-group col-sm-3">
+      <label id="CUR-kZVaHCNi">Created Before</label>
+      <div id="datepicker-component" class="form-group input-group date">
+        <input id="CUR-ahBDiZSy" type="text" class="form-control" ng-model="filter.createdBefore" uib-datepicker-popup="{{dateFormat}}"
+          ng-model-options="{timezone: 'utc'}" is-open="createdBeforePopup" ng-click="openCreatedBeforePopup()">
+        <span id="CUR-rXWnnWPJ" class="input-group-addon" ng-click="openCreatedBeforePopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-HUdkNjWt" class="row">
+    <div id="CUR-YbqFWcaZ" class="form-group col-sm-3" ng-if="clientType != 'Publisher'">
+      <label id="CUR-SfFFuXOt">Participation</label>
+      <filter-equal-less-and-greater-than filter="filter.participation" />
+    </div>
+    <div id="CUR-wNTyiofD" class="form-group col-sm-3">
+      <label id="CUR-CxLinpKm">Complete</label>
+      <ui-select class="full-width" ng-model="filter.valid">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-nTHcMIvG" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item.value as item in validFilterValues | filter: $select.search">
+          <span id="CUR-maFiHRMQ" ng-bind="item.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-filter-label" class="form-group col-sm-3">
+      <label id="CUR-filter-label-label">Label</label>
+      <input id="CUR-filter-label-textbox" type="text" class="form-control" data-ng-model="filter.label">
+    </div>
+    <div id="CUR-filter-company" class="form-group col-sm-3" ng-if="clientType != 'Publisher'">
+      <label id="CUR-filter-company-label">Company</label>
+      <ui-select id="CUR-filter-company-select" multiple ng-model="filter.companyIds" close-on-select="true">
+        <ui-select-match id="CUR-filter-company-match">{{$item.name}}</ui-select-match>
+        <ui-select-choices id="CUR-filter-company-choices" repeat="company._id as company in companies | filter:$select.search">
+          <span id="CUR-filter-company-item-{{$index}}">{{company.name}}</span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+  <div id="CUR-filter-row3" class="row">
+    <div id="CUR-filter-artist" class="form-group col-sm-3">
+      <label id="CUR-filter-artist-label">Artist</label>
+      <input id="CUR-filter-artist-textbox" type="text" class="form-control" data-ng-model="filter.artist">
+    </div>
+    <div id="CUR-filter-distributionChannel" class="form-group col-sm-3">
+      <label id="CUR-filter-distributionChannel-label">Distribution Channel</label>
+      <ui-select id="CUR-filter-distributionChannel-select" multiple ng-model="filter.distributionChannels" close-on-select="true">
+        <ui-select-match id="CUR-filter-distributionChannel-match">{{$item}}</ui-select-match>
+        <ui-select-choices id="CUR-filter-distributionChannel-choices" repeat="distributionChannel in distributionChannels | filter:$select.search">
+          <span id="CUR-filter-distributionChannel-item-{{$index}}">{{distributionChannel}}</span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-filter-format" class="form-group col-sm-3">
+      <label id="CUR-filter-format-label">Format</label>
+      <ui-select id="CUR-filter-format-select" multiple ng-model="filter.formats" close-on-select="true">
+        <ui-select-match id="CUR-filter-format-match">{{$item}}</ui-select-match>
+        <ui-select-choices id="CUR-filter-format-choices" repeat="configuration in configurations | filter:$select.search">
+          <span id="CUR-filter-format-item-{{$index}}">{{configuration}}</span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-filter-mechnicalContracts" class="form-group col-sm-3" ng-if="clientType != 'Publisher'">
+      <label id="CUR-filter-mechnicalContracts-label">Mechanical Contract</label>
+      <ui-select id="CUR-filter-mechnicalContracts-select" multiple ng-model="filter.mechanicalContractIds" close-on-select="true">
+        <ui-select-match id="CUR-filter-mechnicalContracts-select-match">
+          <span id="CUR-filter-mechnicalContracts-item-name-{{$index}}" style="vertical-align:middle;">{{$item.name}}</span>
+          <span ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices id="CUR-filter-mechnicalContracts-select-choices" repeat="item._id as item in mechanicalContracts | filter:$select.search"
+          refresh="searchMechanicalContracts($select)" refresh-delay="500">
+          <div id="CUR-filter-mechnicalContracts-choices-{{$index}}">
+            <div id="CUR-filter-mechnicalContracts-choices-clear-{{$index}}" class="clear">
+              <div id="CUR-filter-mechnicalContracts-choices-item-{{$index}}" ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+
+  <div id="CUR-HuHDFyiu" class="row m-t-10">
+    <div id="CUR-aHOyxlRc" class="col-sm-12 text-center">
+      <button id="CUR-sLXpvhlg" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i> Filter</button>
+    </div>
+  </div>
+  <div id="CUR-hpZMNNNV" class="row">
+    <div id="CUR-tFJHxVMB" class="col-sm-12">
+      <h5 id="CUR-qggqdKZY" class="pull-right">Total: {{total? total : 0}}</h5>
+    </div>
+  </div>
+  <div id="CUR-jJHxLJvI" class="row">
+    <div id="CUR-bgPfLCXJ" class="col-xs-12">
+      <div id="CUR-SEpdoVsz" class="panel panel-default">
+        <div id="CUR-MDhACAHm" class="panel-heading">
+          <div id="CUR-XGPJzxHS" class="panel-title">
+            Releases <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-releases/">
+            </documentation>
+          </div>
+        </div>
+        <div id="CUR-hUtnzncr" class="panel-body">
+          <responsive-table headers="headers" data="releases" selectable="rights.catalogue == 'Edit'"
+            sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-EbYpOeLt" class="col-sm-12">
+    <div id="CUR-oxqwpCVX" class="pull-right">
+      <span id="CUR-SSuEqzVV" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <span id="CUR-nHkrhVSI" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-inBvwqZt" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-cNdZugQJ" class="row">
+    <div id="CUR-QJVEhKyl" class="col-xs-12 text-center">
+      <pagination id="CUR-zxMeUsPp" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-yilSVeDG" class="modal-dialog">
+    <div id="CUR-OEatNeHz" class="modal-content">
+      <div id="CUR-ZEGqqWpx" class="modal-header clearfix text-left">
+        <button id="CUR-UDrNwPUI" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-zLDhbOPB">Delete Releases</h5>
+      </div>
+      <div id="CUR-tKxycQFI" class="modal-body">
+        <div id="CUR-hilYPTfn" class="row">
+          <div id="CUR-oDNQQrpJ" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected releases? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-yyzMFQOd" class="row">
+          <div id="CUR-mxnwlcYo" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-oguOJklr" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-wCPDdSSn" type="button" class="btn btn-danger m-t-5" ng-click="delete('selected')"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteBulkModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-INVGLUeD" class="modal-dialog">
+    <div id="CUR-NfKRbHtw" class="modal-content">
+      <div id="CUR-LONHfsjI" class="modal-header clearfix text-left">
+        <button id="CUR-rHNGFunX" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-OlEvSmLR">Delete Releases</h5>
+      </div>
+      <div id="CUR-kSqbzCkG" class="modal-body">
+        <div id="CUR-ZjwakAmh" class="row">
+          <div id="CUR-KfXGdcwS" class="col-xs-12 m-t-20">
+            <p>
+              Paste the release IDs below to bulk delete. You can get these IDs from the first column of the export.
+              Ensure that there is one ID per line, and be sure you want to delete these releases, as this cannot be
+              undone.
+            </p>
+          </div>
+        </div>
+        <div id="CUR-hRezUnIW" class="row">
+          <div id="CUR-rnxPOgci" class="col-xs-12 m-t-20">
+            <form id="CUR-BLUroOdX">
+              <div id="CUR-BHZeGLgn" class="form-group">
+                <label id="CUR-rIglXuZG">Releases IDs</label>
+                <textarea class="form-control standard-textarea" ng-model="bulkDeleteIds"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-VpUQvexu" class="row">
+          <div id="CUR-VdYtEpyW" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-TUiUyTlx" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-vGvIsMrw" type="button" class="btn btn-danger m-t-5" ng-click="delete('bulk')"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="updateCatalogueModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-mcKXHNQg" class="modal-dialog">
+    <div id="CUR-yFhSTEDR" class="modal-content">
+      <div id="CUR-QzBWtIek" class="modal-header clearfix text-left">
+        <button id="CUR-BGxCUmjY" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-KRiERteG">Update Catalogue Number</h5>
+        <div id="CUR-buhVpacZ" >
+          <p>Please use the 'Separated Export' Template!</p>
+        </div>
+      </div>
+      <div id="CUR-idvTwFSh" class="modal-body">
+        <div id="CUR-kayMNbjr" class="row">
+          <div id="CUR-SCPPzRII" class="col-xs-12 m-t-20">
+            <form id="CUR-UdhVVGMm">
+              <div id="CUR-XEYAREwj" class="form-group">
+                <label id="CUR-dqJueWNm" for="email">File</label>
+                <input id="CUR-bvLoxCzx" type="file" ng-model="importFile" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-xXpPaueN" class="row">
+          <div id="CUR-odaPcbaI" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-rGhVzrth" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-QKEmPtqB" type="button" class="btn btn-complete m-t-5" ng-click="updateCatalogue()"><i
+                class="fa fa-download"></i>&nbsp;Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade stick-up" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-KONPHdfD" class="modal-dialog">
+    <div id="CUR-NxwjobrF" class="modal-content">
+      <div id="CUR-PaPovXyP" class="modal-header clearfix text-left">
+        <button id="CUR-LeKfIYRo" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-GgkHxLcL">Import Releases</h5>
+      </div>
+      <div id="CUR-uIDIbzjf" class="modal-body">
+        <div id="CUR-DMFgMTOx" class="row">
+          <div id="CUR-UrjvRuyM" class="col-xs-12 m-t-20">
+            <form id="CUR-JuogczCQ">
+              <div id="CUR-kYDkAGqg" class="form-group">
+                <label id="CUR-NfSqqePP" for="email">File</label>
+                <input id="CUR-MtdyXOFS" type="file" ng-model="importFile" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-kUjhhpNI" class="row" ng-if="paymentTier !== 'Lite'">
+          <div id="CUR-QkCgGsDD" class="col-xs-6 m-t-20">
+            <div id="CUR-HsXEsOWa" class="form-group">
+              <label id="CUR-UzLjOuIw">Import Type <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                  tooltip-template="Select which template type you are uploading"></i></label>
+              <ui-select ng-model="importType.version" close-on-select="true">
+                <ui-select-match>
+                  <span id="CUR-wOczJpTx" ng-bind="$select.selected.label"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item.version as item in importType.options | filter:$select.search">
+                  {{item.label}}
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-uUzzBtsS" class="row">
+          <div id="CUR-LNbJXIUw" class="col-xs-12 m-t-20">
+            <form id="CUR-oSZahzPi">
+              <div id="CUR-gubIbHQW" class="form-group">
+                <input type="checkbox" ng-model="overwriteBlanks" id="overwriteblanks">
+                <label id="CUR-yaIYnCpg" for="overwriteblanks">Overwrite Blank Values <i class="fa fa-question-circle" tooltips
+                    tooltip-class="wider"
+                    tooltip-template="Blank values in the template will overwrite and delete data on Curve when this box is checked"></i></label>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-klvwVjpA" class="row" ng-if="importErrors">
+          <div id="CUR-jruMWcUV" class="col-sm-12">
+            <ul id="CUR-afHWbKXT">
+              <li id="CUR-MliUBQnI" ng-repeat="error in importErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-hupMqwCP" class="row">
+          <div id="CUR-yKHAomqG" class="col-xs-12 m-t-20 text-right">
+            <a id="CUR-KPcJbQTg" class="btn btn-success m-t-5" ng-click="downloadTemplate()">Download Template</a>
+            <button id="CUR-gacocSlK" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-PMFZXgrJ" type="button" class="btn btn-complete m-t-5" ng-click="import()"><i
+                class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="proRataContractsModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-CkLQhXqH" class="modal-dialog">
+    <div id="CUR-wUfyMHLI" class="modal-content">
+      <div id="CUR-OULEwkXH" class="modal-header clearfix text-left">
+        <button id="CUR-gZPlJuZi" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-vlqjLUqh">Pro Rata Track Contracts for Releases</h5>
+      </div>
+      <div id="CUR-OymxBKkW" class="modal-body">
+        <div id="CUR-NjYFpros" class="row">
+          <div id="CUR-NLNMuuBT" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to pro rata track contracts for all selected or filtered releases? This cannot be
+              undone.</p>
+            <p>If you have selected releases, only these will be updated, otherwise all releases in your current filter
+              will be updated.</p>
+          </div>
+        </div>
+        <div id="CUR-DoXEJtYn" class="row">
+          <div id="CUR-epCYNSLf" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-meFKcpOg" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-UPPsLBSD" type="button" class="btn btn-danger m-t-5" ng-click="proRataContracts()"><i
+                class="fa fa-repeat"></i>&nbsp;Pro Rata Contracts</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="inheritMechanicalsModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-HdTQlLkI" class="modal-dialog">
+    <div id="CUR-sdRJOaqB" class="modal-content">
+      <div id="CUR-tymqYDHo" class="modal-header clearfix text-left">
+        <button id="CUR-AHMVWdkE" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-bssXpScp">Inherit Mechanicals for Releases</h5>
+      </div>
+      <div id="CUR-KeLIulPh" class="modal-body">
+        <div id="CUR-wbZNJlqu" class="row">
+          <div id="CUR-EQglftdW" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to inherit mechanicals for all selected or filtered releases? This cannot be
+              undone.</p>
+            <p>If you have selected releases, only these will be updated, otherwise all releases in your current filter
+              will be updated.</p>
+          </div>
+        </div>
+        <div id="CUR-gfhgcwxE" class="row">
+          <div id="CUR-AogSEVJd" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-ycZkCZma" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-bBaHXzuE" type="button" class="btn btn-danger m-t-5" ng-click="inheritMechanicals()"><i
+                class="fa fa-repeat"></i>&nbsp;Inherit Mechanicals</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="spotifyModal" class="modal fade stick-up" ng-class="{'spotify-modal-backdrop': isSpotifyConfirmationModalOpen}" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-HXMUHTRi" class="modal-dialog" style="width: 1100px;">
+    <div id="CUR-RqvVedPg" class="modal-content">
+      <div id="CUR-GymDwqNT" class="modal-header clearfix text-left">
+        <button id="CUR-jNLmDTiU" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-hGCFTioz">Import Releases From Spotify</h5>
+      </div>
+      <div id="CUR-DFSFkZCy" class="modal-body">
+        <div id="CUR-lXHMcQYg" class="row">
+          <!-- Title Input -->
+          <div id="CUR-zLjOuQFs" class="form-group col-sm-12 col-md-4 col-lg-4 col-lg-offset-4">
+            <label id="CUR-AqPzQLri">Keyword</label>
+            <input type="text" class="form-control" placeholder="Search by Keyword" ng-model="spotifyFilter.searchTerm">
+          </div>
+        </div>
+        <div id="CUR-MkDUFGTl" class="row">
+          <!-- Label Input -->
+          <div id="CUR-hJOCzDdH" class="form-group col-sm-12 col-md-4 col-lg-4 col-lg-offset-2">
+            <label id="CUR-FdFQLpFB">Label</label>
+            <input type="text" class="form-control" placeholder="Search by Label" ng-model="spotifyFilter.label">
+          </div>
+          <!-- Artist Input -->
+          <div id="CUR-TBCDDkLb" class="form-group col-sm-12 col-md-4 col-lg-4">
+            <label id="CUR-VMQSFFNQ">Artist</label>
+            <input type="text" class="form-control" placeholder="Search by Artist" ng-model="spotifyFilter.artist">
+          </div>
+          <div id="CUR-Xogwubgq" class="row m-t-10">
+            <div id="CUR-XASYyjiT" class="col-xs-12 m-t-20 col-sm-12 text-center">
+              <div id="CUR-YtHowOEr" class="col-sm-12 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+                <button id="CUR-ddFsrxgq" class="btn btn-spotify" ng-click="searchSpotify()">
+                  <div id="CUR-gewHkqrY"style="display: flex; align-items: center; gap: 10px;">
+                      <i class="fa fa-spotify fa-2x"></i>
+                      <span>Search Spotify</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div id="CUR-OfWuCzFy" class="row m-t-10">
+            <div id="CUR-NblPPEGl" class="col-sm-12 col-lg-offset-10" style="margin-top: 30px;">
+              <!-- <button id="CUR-FxUoIyXi" class="btn btn-complete" ng-click="setSpotifyOpTypeAndReleasesCount('allSpotify')"><i class="fa fa-plus"></i> Add All</button> -->
+              <button id="CUR-IZhrOCLV" class="btn btn-complete" ng-if="showAddSelectedButton" ng-click="setSpotifyOpTypeAndReleasesCount('selectedSpotify')"><i class="fa fa-plus"></i> Add Selected</button>
+            </div>
+          </div>
+        </div>
+          <div id="CUR-rObOKtDl">
+            <h5 id="CUR-gkntToAq" class="pull-right" style="margin-right: 20px;">
+              {{spotifyTotal >= 1000 ? '1000+' : (spotifyTotal ? spotifyTotal : 0)}} 
+              Result{{spotifyTotal !== 1 ? 's' : ''}}
+            </h5>
+          </div>
+        <div id="CUR-bYgIVqLo" class="panel-body">
+          <spotify-responsive-table headers="spotifyHeaders" data="spotifyReleases" selectable="rights.catalogue == 'Edit'"></spotify-responsive-table>
+            <div id="CUR-KoZxlsvQ" class="col-sm-12">
+              <div id="CUR-cozMOYRi" class="pull-right">
+                <span id="CUR-utWmMKDi" class="inline-block" ng-if="!isShowingAllSpotify">Showing 25 Per Page </span>
+                <!-- <span id="CUR-FnRJrHYG" class="inline-block" ng-if="isShowingAllSpotify">Showing {{spotifyFilter.limit}} Per Page</span> -->
+                <!-- <a id="CUR-OypaYpaa" class="p-l-5" ng-if="!isShowingAllSpotify" ng-click="showAllSpotify()">Show All</a> -->
+              </div>
+            </div>
+            <div id="CUR-mmKzpUpG" class="row">
+              <div id="CUR-nZhQfaqy" class="col-xs-12 text-center">
+                <pagination id="CUR-XoUJzITq" pages="spotifyPages" total="totalSpotifyPages" current="currentSpotifyPage" change-page="changeSpotifyPage(page)"></pagination>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="spotifyConfirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-FBWpBkGc" class="modal-dialog">
+    <div id="CUR-PZJrsrfq" class="modal-content">
+      <div id="CUR-AcaOSxxj" class="modal-header clearfix text-left">
+        <button id="CUR-JRiyyKQl" type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="isSpotifyConfirmationModalOpen = false">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h3 id="CUR-MmUcMNWS">Import {{spotifyReleasesToAdd}} Release{{spotifyReleasesToAdd !== 1 ? 's' : ''}}</h3>
+        <h5 id="CUR-vVJOhHBy">Are you sure you want to import {{spotifyReleasesToAdd}} Release{{spotifyReleasesToAdd !== 1 ? 's' : ''}} to Curve?</h5>
+      </div>
+      <div id="CUR-uvfoGbbN" class="modal-body" style="padding-bottom: 1px;">
+        <div id="CUR-yrYZzjRg" class="row">
+          <div id="CUR-UwNDDVIG" class="col-xs-12 m-t-20 m-b-5">
+            <form id="CUR-LEcbWqRw">
+              <div id="CUR-hIFjGyqh" class="form-group">
+                <div class="row">
+                  <div class="col-xs-12 col-sm-6 col-md-6">
+                    <input type="checkbox" ng-model="overwriteReleases" id="overwriteReleases" style="margin-right: 0%; vertical-align: text-top;">
+                    <label id="CUR-cUJlQGhr" for="overwriteReleases">Overwrite Pre-existing Releases</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <span id="CUR-lxTqsWjN" class="error">If you check this box, Curve will look up Releases via barcode and Tracks via ISRC and overwrite your existing data</span><br>
+                  </div>
+                </div>
+                <div id="CUR-HyWgRIms" class="row">
+                  <div id="CUR-yKHMDSmqG" class="col-xs-12 m-t-20 text-right">
+                    <button id="CUR-oZDKwYnp" type="button" class="btn btn-danger" ng-click="showSpotifySearchModal()">Cancel</button>
+                    <button id="CUR-ysRPQgaH" type="button" class="btn btn-confirm" ng-click="executeSpotifyOperation(false)">Confirm</button>
+                    <button id="CUR-OiaknkSk" type="button" class="btn btn-confirm" ng-click="executeSpotifyOperation(true)">Confirm & Load Next</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

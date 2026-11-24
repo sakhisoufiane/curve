@@ -1,0 +1,420 @@
+openapi: 3.1.0
+info:
+  title: Delivery Profiles API
+  version: 1.10.0
+
+paths:
+  /deliveryProfiles:
+    get:
+      tags:
+        - Delivery Profiles
+      summary: Retrieve all delivery profiles
+      description: Returns a paginated list of delivery profiles. Requires read access to catalogue.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Search text to filter by name
+      responses:
+        '200':
+          description: Successfully retrieved delivery profiles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deliveryProfiles:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DeliveryProfile'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+    post:
+      tags:
+        - Delivery Profiles
+      summary: Create a new delivery profile
+      description: Creates a new delivery profile. Requires write access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryProfileInput'
+      responses:
+        '200':
+          description: Successfully created delivery profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryProfile'
+        '400':
+          description: No Delivery Profile name specified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Name is required"
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /deliveryProfiles/{id}:
+    get:
+      tags:
+        - Delivery Profiles
+      summary: Retrieve a specific delivery profile
+      description: Returns details for a specific delivery profile by ID. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery profile ID
+      responses:
+        '200':
+          description: Successfully retrieved delivery profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryProfile'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Delivery profile not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Delivery Profile with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+    put:
+      tags:
+        - Delivery Profiles
+      summary: Update a delivery profile
+      description: Updates a delivery profile's details. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery profile ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryProfileInput'
+      responses:
+        '200':
+          description: Successfully updated delivery profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryProfile'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Delivery profile not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Delivery Profile with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+    delete:
+      tags:
+        - Delivery Profiles
+      summary: Delete a delivery profile
+      description: Deletes a delivery profile. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery profile ID
+      responses:
+        '200':
+          description: Successfully deleted delivery profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryProfile'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Delivery profile not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Delivery Profile with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+components:
+  schemas:
+    DeliveryProfile:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the delivery profile
+          example: "68502e51e46156389f04e45e"
+        name:
+          type: string
+          example: "Delivery Profile"
+        clientId:
+          type: string
+          example: "64e8a4652dc5ac9aa6b5e3a9"
+        composerIds:
+          type: array
+          items:
+            type: string
+          example: ["650403c36100b825323abd74"]
+        publisherIds:
+          type: array
+          items:
+            type: string
+          example: ["6502e622eb1829a9db2d875a"]
+        catalogueGroups:
+          type: array
+          items:
+            type: string
+          example: ["C002"]
+        workIds:
+          type: array
+          items:
+            type: string
+          example: []
+        excludeCatalogueGroups:
+          type: array
+          items:
+            type: string
+          example: []
+        excludeWorkIds:
+          type: array
+          items:
+            type: string
+          example: []
+        excludePublishers:
+          type: array
+          items:
+            type: string
+          example: []
+        excludeComposers:
+          type: array
+          items:
+            type: string
+          example: []
+        createdBy:
+          type: string
+          example: "659bd254570a93d6ceadc6c4"
+        lastModifiedBy:
+          type: string
+          example: "659bd254570a93d6ceadc6c4"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-06-16T14:46:41.315Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2025-06-16T14:46:50.827Z"
+        deliveryStatus:
+          type: string
+        notDeliveredTo:
+          type: string
+        territory:
+          type: string
+
+    DeliveryProfileInput:
+      description: Input schema for creating or updating a delivery profile
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: "Delivery Profile"
+        composerIds:
+          type: array
+          items:
+            type: string
+          example: ["650403c36100b825323abd74"]
+        publisherIds:
+          type: array
+          items:
+            type: string
+          example: ["6502e622eb1829a9db2d875a"]
+        catalogueGroups:
+          type: array
+          items:
+            type: string
+          example: ["C002"]
+        workIds:
+          type: array
+          items:
+            type: string
+          example: []
+        excludeCatalogueGroups:
+          type: array
+          items:
+            type: string
+          example: []
+        excludeWorkIds:
+          type: array
+          items:
+            type: string
+          example: []
+        excludePublishers:
+          type: array
+          items:
+            type: string
+          example: []
+        excludeComposers:
+          type: array
+          items:
+            type: string
+          example: []
+        deliveryStatus:
+          type: string
+        notDeliveredTo:
+          type: string
+        territory:
+          type: string

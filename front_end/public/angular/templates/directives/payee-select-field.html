@@ -1,0 +1,30 @@
+<div ng-if="edit" class="row select-field">
+    <div class="form-group col-xs-12 col-sm-12">
+        <input
+            id="CUR-payee-select-field"
+            type="text" 
+            ng-model="getterSetter"
+            ng-model-options="{getterSetter: true}"
+            typeahead-min-length="3" 
+            typeahead-loading="loadingLocations" 
+            typeahead-no-results="noResults" 
+            typeahead-focus-on-select="false"
+            typeahead-on-select="setValueToSelected($item, $model, $label);" 
+            ng-click="clickOnSelect()" 
+            ng-blur="blurSelect()"
+            uib-typeahead="item as item.label for item in getPayees($viewValue)" 
+            typeahead-wait-ms="500" 
+            class="form-control input-field"
+            placeholder="Type to Search"
+            tooltip-enable="{{(tempValue.label.length > 25) ? 'true':'false'}}"
+            tooltip-placement="top" 
+            tooltip-animation="true"
+            uib-tooltip="{{tempValue.label}}">
+    </div>
+    <div ng-if="allowClear && showClear" class="form-group clear-button-wrapper">
+        <button type="submit" data-ng-click="clearSelect()" class="clear-button">
+            <span class="fa fa-times"></span>
+        </button>
+    </div>
+</div>
+<read-only-field ng-if="!edit" parent-field="tempValue" field="'label'"></read-only-field>

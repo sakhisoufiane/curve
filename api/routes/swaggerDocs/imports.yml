@@ -1,0 +1,683 @@
+openapi: 3.0.3
+info:
+  title: Imports API
+  version: 1.0.0
+  description: API for managing Imports
+paths:
+  /imports:
+    get:
+      tags:
+        - Imports
+      summary: Retrieve imports
+      description: Returns a paginated list of imports. Requires read access to catalogue.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Filter by status
+        - in: query
+          name: transferringSystem
+          schema:
+            type: string
+          description: Filter by transferring system. If not provided, excludes 'CWR' and 'Catalogue Shipment' by default
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Search by name or ID (supports both text search in names and exact ObjectId matching)
+      responses:
+        200:
+          description: Successfully retrieved imports
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imports:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Import'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags:
+        - Imports
+      summary: Create an import
+      description: Creates a new import. Requires read access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ImportInput'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportInput'
+      responses:
+        200:
+          description: Successfully created import
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Import'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /imports/{id}:
+    get:
+      tags:
+        - Imports
+      summary: Retrieve a specific import
+      description: Returns details for a specific import by ID. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import ID
+      responses:
+        200:
+          description: Successfully retrieved import
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Import'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+    put:
+      tags:
+        - Imports
+      summary: Update an import
+      description: Updates an import by ID. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportInput'
+      responses:
+        200:
+          description: Successfully updated import
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Import'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags:
+        - Imports
+      summary: Delete an import
+      description: Deletes an import by ID. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import ID
+      responses:
+        200:
+          description: Successfully deleted import
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Import'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /imports/{id}/history:
+    get:
+      tags:
+        - Imports
+      summary: Retrieve import history
+      description: Returns the modification history for a specific import. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import ID
+      responses:
+        200:
+          description: Successfully retrieved import history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                          format: date-time
+                        author:
+                          type: object
+                          properties:
+                            email:
+                              type: string
+                        ops:
+                          type: array
+                          items:
+                            type: object
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /imports/{id}/get_upload_credentials/{type}:
+    put:
+      tags:
+        - Imports
+      summary: Get upload credentials
+      description: Returns upload credentials for a specific import and file type. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import ID
+        - in: path
+          name: type
+          required: true
+          schema:
+            type: string
+          description: File type (e.g., royaltorRatesFile, royaltorProductsFile, productManagerFile, publishingCatalogueExport)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  description: Name of the file to upload
+              required:
+                - filename
+      responses:
+        200:
+          description: Successfully retrieved upload credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  fields:
+                    type: object
+                  completePath:
+                    type: string
+        400:
+          description: Bad request, missing filename
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /imports/{id}/files_validation:
+    put:
+      tags:
+        - Imports
+      summary: Validate import files
+      description: Validates files for a specific import based on the transferring system. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import ID
+      responses:
+        200:
+          description: Successfully validated files
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /imports/{id}/upload_complete/{type}:
+    put:
+      tags:
+        - Imports
+      summary: Complete file upload
+      description: Completes the upload process for a specific import and file type. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import ID
+        - in: path
+          name: type
+          required: true
+          schema:
+            type: string
+          description: File type (e.g., royaltorRatesFile, royaltorProductsFile, productManagerFile, publishingCatalogueExport)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key:
+                  type: string
+                  description: Key of the uploaded file
+              required:
+                - key
+      responses:
+        200:
+          description: Successfully completed upload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: "Complete"
+                  message:
+                    type: string
+                    example: "The file is successfully uploaded"
+        400:
+          description: Bad request, missing key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a key to be supplied"]
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /imports/{id}/start_ingestion:
+    put:
+      tags:
+        - Imports
+      summary: Start import ingestion
+      description: Starts the ingestion process for a specific import. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import ID
+      responses:
+        200:
+          description: Successfully started ingestion
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Your Ingestion Is Running"
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /imports/{id}/export_errors:
+    get:
+      tags:
+        - Imports
+      summary: Export import errors
+      description: Exports errors for a specific import as a CSV file. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import ID
+      responses:
+        200:
+          description: Successfully exported errors as CSV file
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+              description: 'attachment; filename="Import Errors {id}.csv"'
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+                description: CSV file containing import errors
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+components:
+  schemas:
+    Import:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the import
+        name:
+          type: string
+          description: Name of the import
+        clientId:
+          type: string
+          description: Client ID
+        setupStage:
+          type: string
+          description: Setup stage
+        transferringSystem:
+          type: string
+          description: Type of transferring system
+        transferringParty:
+          type: string
+          description: Transferring party
+        contractId:
+          type: string
+          description: Contract ID
+        catalogueGroups:
+          type: array
+          items:
+            type: object
+          description: Catalogue groups
+        errors:
+          type: array
+          items:
+            type: object
+          description: Errors encountered during import
+        status:
+          type: string
+          description: Status of the import
+        counterpointFiles:
+          type: object
+          properties:
+            royaltorsFile:
+              type: string
+            royaltorRatesFile:
+              type: string
+            royaltorProductsFile:
+              type: string
+            soundRecordingsFile:
+              type: string
+            productManagerFile:
+              type: string
+            productAKAsFile:
+              type: string
+            publishingCatalogueExport:
+              type: string
+            publishingRatesExport:
+              type: string
+            publishingComposers:
+              type: string
+            publishingPublishers:
+              type: string
+            publishingBalances:
+              type: string
+            publishingTerritoryManager:
+              type: string
+          description: Counterpoint files
+        valuesForMapping:
+          type: object
+          properties:
+            territories:
+              type: array
+              items:
+                type: object
+            distributionChannels:
+              type: array
+              items:
+                type: object
+            configurations:
+              type: array
+              items:
+                type: object
+            priceCategories:
+              type: array
+              items:
+                type: object
+            capacities:
+              type: array
+              items:
+                type: object
+            societies:
+              type: array
+              items:
+                type: object
+            publishingRates:
+              type: array
+              items:
+                type: object
+          description: Values for mapping
+        mappings:
+          type: object
+          properties:
+            territories:
+              type: object
+            distributionChannels:
+              type: object
+            configurations:
+              type: object
+            priceCategories:
+              type: object
+            societies:
+              type: object
+            capacities:
+              type: object
+            publishingRates:
+              type: object
+          description: Mappings
+        defaults:
+          type: object
+          properties:
+            costContractTerms:
+              type: array
+              items:
+                type: object
+            reserveContractTerms:
+              type: array
+              items:
+                type: object
+            accountingPeriod:
+              type: string
+            contracts:
+              type: array
+              items:
+                type: object
+            catalogueGroups:
+              type: array
+              items:
+                type: object
+            territoryGroupId:
+              type: string
+            territories:
+              type: array
+              items:
+                type: object
+            claimingParty:
+              type: object
+            setMainIdentifier:
+              type: boolean
+            setPublisherInterestedParty:
+              type: boolean
+            setComposerInterestedParty:
+              type: boolean
+            ingestionTerritory:
+              type: string
+          description: Default values
+        ingestedPayees:
+          type: integer
+          description: Number of ingested payees
+        ingestedContracts:
+          type: integer
+          description: Number of ingested contracts
+        ingestedReleases:
+          type: integer
+          description: Number of ingested releases
+        ingestedTracks:
+          type: integer
+          description: Number of ingested tracks
+        ingestedWorks:
+          type: integer
+          description: Number of ingested works
+        ingestedComposers:
+          type: integer
+          description: Number of ingested composers
+        ingestedPublishers:
+          type: integer
+          description: Number of ingested publishers
+        errorMessage:
+          type: string
+          description: Error message
+        importPartnerId:
+          type: string
+          description: Import partner ID
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was last updated
+    ImportInput:
+      type: object
+      required:
+        - name
+        - transferringSystem
+      properties:
+        name:
+          type: string
+          description: Name of the import
+        transferringSystem:
+          type: string
+          description: Type of transferring system
+          enum: [Counterpoint Recordings, Counterpoint Publishing, Linked Publishing, SR1 Publishing, CWR, Maestro 400 Catalogue Shipment, Catalogue Shipment]
+        importPartnerId:
+          type: string
+          description: ID of the import partner
+        defaults:
+          type: object
+          description: Default settings for the import
+  responses:
+    Forbidden:
+      description: Forbidden, the user does not have sufficient rights
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Forbidden
+    NotFound:
+      description: Import not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Could not find Import with ID 123456789012
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Internal error, please try again

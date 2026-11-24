@@ -1,0 +1,424 @@
+<div id="CUR-bApNrfrX" class="jumbotron" data-pages="parallax">
+  <div id="CUR-mttGWRWL" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-hYozJTFz" class="inner">
+      <ul id="CUR-VqbUNRew" class="breadcrumb">
+        <li id="CUR-QEefPYUz"><a id="CUR-MwPfmXzd" href="/#/tracks">Tracks</a></li>
+        <li id="CUR-YKVdsEtf" ng-show="!track._id"><a id="CUR-CWbpTpVL" href="" class="active">Create</a></li>
+        <li id="CUR-rZzuDyrL" ng-show="track._id"><a id="CUR-VaOezJFW" href="/#/tracks/{{track._id}}/edit" class="active">{{track.title}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-apfhGTSb" class="container-fluid container-fixed-lg tracks-edit-container">
+  <div id="CUR-AGBSnLzk" class="row">
+    <div id="CUR-WfqOIaFh" class="col-xs-12 text-right header-btn-group">
+      <button id="CUR-YLCMDySu" class="btn btn-danger" ng-show="rights.catalogue == 'Edit'" data-toggle="modal" data-target="#deleteModal" ng-show="track._id"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-fwdGaDkq" class="btn btn-warning" ng-show="rights.catalogue == 'Edit'" ng-click="copy()" ng-show="track._id"><i class="fa fa-copy"></i> Copy</button>
+      <button id="CUR-UaNimHCt" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="save()"><i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+
+  <div id="CUR-XdkCDHog" ng-show="deletionError" class="alert alert-danger">
+    <div id="CUR-MTmVxhIB" ng-show="deletionError.sales">
+      <p>The following Sales Files need to be deleted first:</p>
+      <p id="CUR-UfyFfFmt" ng-repeat="error in deletionError.sales track by $index">
+        <a id="CUR-dYmFzHkk" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-bKWgUaVD" ng-show="deletionError.costs">
+      <p>The following Costs need to be deleted first:</p>
+      <p id="CUR-wxqWoCPU" ng-repeat="error in deletionError.costs track by $index">
+        <a id="CUR-awVFIdmE" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-bKWgUaVD" ng-show="deletionError.releases">
+      <p>The track needs to be deleted from the following releases first:</p>
+      <p id="CUR-wxqWoCPU" ng-repeat="error in deletionError.releases track by $index">
+        <a id="CUR-awVFIdmE" href="#/{{error.link}}">{{error.name}}</a>
+      </p>
+    </div>
+    <div id="CUR-ZTRfvcCG" ng-show="deletionError.clients">
+      <p>There are Duplicate Identifiers associated with this track, click <a id="CUR-bDMGXpAT" href="#/{{deletionError.clients[0].link}}">here</a> to go to the settings page</p>
+    </div>
+  </div>
+
+  <div id="CUR-GCylQpls" ng-show="track.validationErrors && track.validationErrors.length !== 0 " class="alert alert-warning">
+    <p id="CUR-GCyl912DN"><b>This track has some issues that may affect its ability to match sales and report royalties
+        -</b></p>
+    <ul id="CUR-GCy9DSDFnN">
+      <li ng-repeat="error in track.validationErrors track by $index">
+        {{error}}
+      </li>
+    </ul>
+  </div>
+
+  <div id="CUR-GCylQZnN" class="row">
+    <div id="CUR-SJGtgoAZ" class="panel panel-transparent hidden-xs">
+      <!-- Nav tabs -->
+      <ul id="CUR-VqUtstZN" class="nav nav-tabs hidden-xs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-acbtaaWt" class="active" ng-click="setTab('overview')">
+          <a id="CUR-uZeTbBes" data-toggle="tab" aria-expanded="true"><span id="CUR-BpKgzLNW">Overview</span></a>
+        </li>
+        <li id="CUR-zeTEchJn" ng-click="setTab('rights')" ng-show="clientType !== 'Publisher'">
+          <a id="CUR-HtCcvMVh" data-toggle="tab" aria-expanded="false"><span id="CUR-gXGXUiea">Rights</span></a>
+        </li>
+        <li id="CUR-CfMGQxQR" ng-click="setTab('aliases')">
+          <a id="CUR-aFlwBNam" data-toggle="tab" aria-expanded="false"><span id="CUR-PlqNkNEc">Aliases</span></a>
+        </li>
+        <li id="CUR-tnakHMEB" ng-click="setTab('mechanicals')" ng-if="features && features.mechanicals && clientType !== 'Publisher'">
+          <a id="CUR-afJzcyPB" data-toggle="tab" aria-expanded="false"><span id="CUR-AlBKIGVm">Mechanicals</span></a>
+        </li>
+        <li id="CUR-yzXynBvs" ng-click="setTab('releases')">
+          <a id="CUR-KPAjECsp" data-toggle="tab" aria-expanded="false"><span id="CUR-IqtkAHcl">Releases</span></a>
+        </li>
+        <li id="CUR-hJHbJoNO" ng-click="setTab('analytics')">
+          <a id="CUR-UyyDppIE" data-toggle="tab" aria-expanded="false"><span id="CUR-XCPvsoAc">Analytics</span></a>
+        </li>
+      </ul>
+      <div id="CUR-yhIrPnlz" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-ObJjEzqf" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+        <div id="CUR-tTonDsPR" ng-show="activeTab === 'rights'" ng-include="'rights-tab.html'"></div>
+        <div id="CUR-tryIyPca" ng-show="activeTab === 'aliases'" ng-include="'aliases-tab.html'"></div>
+        <div id="CUR-PSVRDElM" ng-show="activeTab === 'mechanicals'" ng-include="'mechanicals-tab.html'"></div>
+        <div id="CUR-zhKwqXqL" ng-show="activeTab === 'releases'" ng-include="'releases-tab.html'"></div>
+        <div id="CUR-VumYPsXl" ng-show="activeTab === 'analytics'">
+          <analytics-suite analytics-config="analyticsConfig"></analytics-suite>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-QxQsXgoR" class="col-xs-12 visible-xs p-l-20 p-r-20" ng-if="showAccordions">
+      <uib-accordion close-others="true" ng-init="status1.open = true; status2.open = false; status3.open = false; status4.open = false; status5.open = false; status6.open = false;">
+        <div id="CUR-rjiaGAjA" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>
+            Overview <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-mhUxsLNe" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div id="CUR-oITbySZq" uib-accordion-group class="panel-default" is-open="status2.open">
+          <uib-accordion-heading>
+            Rights <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-gNuLTcTL" ng-include="'rights-tab.html'"></div>
+        </div>
+        <div id="CUR-ujDSvWQY" uib-accordion-group class="panel-default" is-open="status3.open">
+          <uib-accordion-heading>
+            Aliases <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-WhzvDwMv" ng-include="'aliases-tab.html'"></div>
+        </div>
+        <div id="CUR-LTTFmmIs" uib-accordion-group class="panel-default" is-open="status4.open">
+          <uib-accordion-heading>
+            Mechanicals <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status4.open, 'glyphicon-chevron-right': !status4.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-iavDolnI" ng-include="'mechanicals-tab.html'"></div>
+        </div>
+        <div id="CUR-bLPfrXaO" uib-accordion-group class="panel-default" is-open="status5.open">
+          <uib-accordion-heading>
+            Releases <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status5.open, 'glyphicon-chevron-right': !status5.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-mopQFIMc" ng-include="'releases-tab.html'"></div>
+        </div>
+        <div id="CUR-jMmhAxkN" uib-accordion-group class="panel-default" is-open="status6.open">
+          <uib-accordion-heading>
+            Analytics <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status6.open, 'glyphicon-chevron-right': !status6.open}"></i>
+          </uib-accordion-heading>
+          <analytics-suite analytics-config="analyticsConfig" analytics-mobile-sections="true"></analytics-suite>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+  <div id="CUR-ayWWowkZ" class="row">
+    <div id="CUR-nfJOEJNH" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-xQfoDGcT" ng-show="track.updatedAt">Last Updated on {{ track.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-wRVFpPOY" href="javascript:;" ng-if="track._id" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+<!--<div id="CUR-bhMVnViH" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-SGErdXcZ" class="row">
+    <div id="CUR-LaEzSWwQ" class="col-sm-12 text-right">
+      <h6>Created By: {{track.createdBy.email}}</h6>
+      <h6>Last Modified By: {{track.lastModifiedBy.email}}</h6>
+    </div>
+  </div>
+</div>-->
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-mouGgnki" class="modal-dialog">
+    <div id="CUR-tZsKiKSg" class="modal-content">
+      <div id="CUR-XzmMASIo" class="modal-header clearfix text-left">
+        <button id="CUR-UhGhjAVW" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-OUmWAOid">Delete Track</h5>
+      </div>
+      <div id="CUR-gFhEhelC" class="modal-body">
+        <div id="CUR-lUjDLLMn" class="row">
+          <div id="CUR-xybjnxvr" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this track? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-sMslhYag" class="row">
+          <div id="CUR-WKKXmHiP" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-nrmiZZia" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-tOCyBdOF" type="button" class="btn btn-danger m-t-5" ng-click="delete()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/ng-template" id="overview-tab.html">
+  <div id="CUR-JHsDaqZc" class="row">
+    <div id="CUR-wuHDDxij" class="col-xs-12 col-md-6">
+      <div id="CUR-bmjiEsvS" class="panel panel-default">
+        <div id="CUR-FbGXahOP" class="panel-heading">
+          <div id="CUR-kfioMgkq" class="panel-title">
+            Overview <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-tracks/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-gwYWQctp" class="panel-body p-t-15">
+          <div id="CUR-SbBWbZaR" class="form-group required">
+            <label id="CUR-ecQhTXcp">Title</label>
+            <input id="CUR-aJwaQxhr" type="text" class="form-control" ng-model="track.title" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-pmpMLykF" class="form-group required">
+            <label id="CUR-jvkPsglJ">Version</label>
+            <input id="CUR-kQslEfhD" type="text" class="form-control" ng-model="track.version" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-xZAlSHmL" class="form-group required">
+            <label id="CUR-UEibBhLA">Artist</label>
+            <input id="CUR-MbNpDepo" type="text" class="form-control" ng-model="track.artist" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-CYAlRKNm" class="form-group required">
+            <label id="CUR-gAckvKmX">Foreign ID <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Used for integrating into other systems, such as accounting systems"></i></label>
+            <input id="CUR-YwEVxbHr" type="text" class="form-control" ng-model="track.foreignId" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-projectId" class="form-group required">
+            <label id="CUR-projectId-label">Project ID</label>
+            <input id="CUR-projectId-input" type="text" class="form-control" ng-model="track.projectId" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-NAaHhNEh" class="form-group required" ng-show="!track.useAlternativeId">
+            <label id="CUR-paLjCkZg">ISRC</label>
+            <input id="CUR-cOegSfmz" type="text" class="form-control" ng-model="track.isrc" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div class="form-group required" ng-if="canUseAlternativeId" ng-show="track.useAlternativeId">
+            <label for="CUR-alternativeId">Alternative ID</label>
+            <input id="CUR-alternativeId" type="text" class="form-control" ng-model="track.alternativeId">
+          </div>
+          <div class="form-group required" ng-if="canUseAlternativeId" ng-show="track.useAlternativeId">
+            <label for="CUR-linkedIsrc">Linked ISRC</label>
+            <input id="CUR-linkedIsrc" type="text" class="form-control" ng-model="track.linkedIsrc">
+          </div>
+          <div class="form-group required" ng-if="canUseAlternativeId">
+            <input id="CUR-useAlternativeId" type="checkbox" value="1" ng-model="track.useAlternativeId">
+            <label for="CUR-useAlternativeId">Use Alternative ID <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Add an alternative track ID. Alternative IDs can be used in the sales ingestion to map to a Track."></i></label>
+          </div>
+          <div id="CUR-WrCEmtgU" class="form-group required">
+              <label id="CUR-SaVhrmEL">Label</label>
+              <input id="CUR-XGvXfkQh" type="text" class="form-control" ng-model="track.label" ng-disabled="rights.catalogue != 'Edit'">
+            </div>
+          <div id="CUR-EFLHDzPX" class="form-group required">
+            <label id="CUR-NMvyqOxb">P Line</label>
+            <input id="CUR-FALBZvqH" type="text" class="form-control" ng-model="track.pLine" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-yEeRJoBC" class="form-group required">
+            <label id="CUR-unBJAUEZ">Duration (In Seconds)</label>
+            <input id="CUR-egOoZEpB" type="text" class="form-control" ng-model="track.duration" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-NhvxiLQS" class="col-xs-12 col-md-6">
+      <div id="CUR-CrnOsawE" class="panel panel-default sm-m-b-5">
+        <div id="CUR-BVdkqLMN" class="panel-heading">
+          <div id="CUR-ruBJVzaq" class="panel-title">
+            Catalogue Groups <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-tracks/#catgroups"></documentation>
+          </div>
+        </div>
+        <div id="CUR-vcYOVxje" class="panel-body p-t-15">
+          <ui-select multiple ng-model="track.catalogueGroups" close-on-select="true" ng-disabled="rights.catalogue != 'Edit'">
+            <ui-select-match>{{$item}}</ui-select-match>
+            <ui-select-choices repeat="group in catalogueGroups | filter:$select.search">
+              {{group}}
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-fIVlAboV" class="panel panel-default sm-m-b-5">
+        <div id="CUR-JaBlGoxz" class="panel-heading">
+          <div id="CUR-GTmhSZgW" class="panel-title">
+            Default Release <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-tracks/#defaultrelease"></documentation>
+          </div>
+        </div>
+        <div id="CUR-LoDZMCXK" class="panel-body p-t-15">
+          <p>When ingesting your sales, where release information is not available, you can use this setting to set a default release for this track, that will appear in your outbound statements.</p>
+          <release-select-field value="track.defaultReleaseId" edit="rights.catalogue == 'Edit'" allow-clear="true"></release-select-field>
+        </div>
+      </div>
+      <div id="CUR-huVRbdoi" class="panel panel-default sm-m-b-5">
+        <div id="CUR-sqiujPfM" class="panel-heading">
+          <div id="CUR-PBVuVgAX" class="panel-title">
+            Release Specific Foreign IDs
+          </div>
+        </div>
+        <div id="CUR-OVMviYBW" class="panel-body p-t-15">
+          <p>Set specific Foreign IDs per Release. Reporting will include the correct Foreign ID based on the specific release, or fall back onto the main Foreign ID.</p>
+          <release-specific-foreign-id-row ng-repeat="item in displayReleaseSpecificForeignIds track by $index" index="$index" item="item" edit="rights.catalogue == 'Edit'" delete="deleteReleaseSpecificForeignId(item)"></release-specific-foreign-id-row>
+          <button id="CUR-tcfIPPpP" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addReleaseSpecificForeignId()">+ Foreign ID</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="rights-tab.html">
+  <div id="CUR-taeUnmSL" class="tab-inner-content">
+    <div id="CUR-zwCBjIhT" class="row">
+      <div id="CUR-fUtCaTos" class="col-xs-12">
+        <div id="CUR-nznNmWfD" class="panel panel-transparent">
+          <div id="CUR-NKnjZTUT" class="panel-body">
+            <h3 id="CUR-ZYKgLuGN">Participation Rates <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-rights/"></documentation></h3>
+            <p>Participation Rates are used to associate a contract with a catalogue item, and set the percentage of revenue that flows through to the contract. You can assign multiple contracts to an item, and can assign different contracts for Sales/Returns and Costs.</p>
+            <p>If you're unsure of what rate to set, the standard rate would be 100% - this would ensure all revenue is taken into account when calculating the royalty payment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-WhnswqnY" class="row">
+      <div id="CUR-KonDkJCY" class="col-xs-12 col-md-6">
+        <div id="CUR-pMuOAzrH" class="panel panel-default sm-m-b-5">
+          <div id="CUR-qyqAXJkc" class="panel-heading">
+            <div id="CUR-zYOSftEP" class="panel-title">
+              Sales/Returns <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-rights/#salescosts"></documentation>
+            </div>
+          </div>
+          <div id="CUR-JKCESshK" class="panel-body p-t-15">
+            <contract-row ng-repeat="contract in track.salesReturnsRights track by $index" contract-type="'Artist'" index="$index" contract="contract" contracts="contracts" edit="rights.catalogue == 'Edit'" delete="deleteSalesReturnsRights(contract)"></contract-row>
+            <button id="CUR-lwiBgRup" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addSalesReturnsRights()">+ Contract</button>
+          </div>
+        </div>
+        <div id="CUR-QdNGBJhO" class="panel panel-default sm-m-b-5">
+          <div id="CUR-ayLyNDPS" class="panel-heading">
+            <div id="CUR-sqNBmMng" class="panel-title">
+              Release Specific Sales/Returns <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-rights/#relspecificsalesrets"></documentation>
+            </div>
+          </div>
+          <div id="CUR-NUWGxZzf" class="panel-body p-t-15">
+            <p>Set your contracts here for any release specific contracts, where a track should be matched to different contracts depending on which release it is from</p>
+            <contract-row contract-type="'Artist'" ng-repeat="contract in track.releaseSpecificSalesReturnsRights track by $index" index="$index" contract="contract" contracts="contracts" include-release="true" edit="rights.catalogue == 'Edit'" delete="deleteReleaseSpecificSalesReturnsRights(contract)"></contract-row>
+            <button id="CUR-jrmjEQaJ" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addReleaseSpecificSalesReturnsRights()">+ Contract</button>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-MryxEPZU" class="col-xs-12 col-md-6">
+        <div id="CUR-DJNirpLZ" class="panel panel-default">
+          <div id="CUR-zYGefGBA" class="panel-heading">
+            <div id="CUR-WsjuoIut" class="panel-title">
+              Costs <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-rights/#salescosts"></documentation>
+            </div>
+          </div>
+          <div id="CUR-qWltFbKq" class="panel-body p-t-15">
+            <contract-row ng-repeat="contract in track.costsRights track by $index" index="$index" contract-type="'Artist'" contract="contract" contracts="contracts" edit="rights.catalogue == 'Edit'" delete="deleteCostsRights(contract)"></contract-row>
+            <button id="CUR-OATHYilB" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addCostsRights()">+ Contract</button>
+            <button id="CUR-BcOUjdbs" class="btn btn-primary pull-right" ng-show="rights.catalogue == 'Edit'" ng-click="copySalesContractsToCosts()">< Copy from Sales</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="aliases-tab.html">
+  <div id="CUR-EJCkMHsh" class="row">
+    <div id="CUR-BSFUYAhI" class="col-xs-12 col-md-6">
+      <div id="CUR-lpuSjscE" class="panel panel-default">
+        <div id="CUR-nlQlcvIw" class="panel-heading">
+          <div id="CUR-pxHiFvYF" class="panel-title">
+            Aliases <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-aliases/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-vamgGAnH" class="panel-body p-t-15">
+          <alias-row ng-repeat="alias in displayAliases track by $index" alias="alias" edit="rights.catalogue == 'Edit'" delete="deleteAlias(alias)"></alias-row>
+          <button id="CUR-itvZqDuE" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addAlias()">+ Alias</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="mechanicals-tab.html">
+  <div id="CUR-eAOGEjvk" class="row">
+    <div id="CUR-wERlHunH" class="col-xs-12 col-md-6">
+      <div id="CUR-WmISeEQh" class="panel panel-default">
+        <div id="CUR-szSJNQpZ" class="panel-heading">
+          <div id="CUR-pGVyXTdN" class="panel-title">
+            Mechanical Basis <documentation link="http://guide.curveroyaltysystems.com/article/mechanicals#track-mechanicals"></documentation>
+          </div>
+        </div>
+        <div id="CUR-MiPOcfUL" class="panel-body p-t-15">
+          <p>Curve will automatically fill in the statutory rate of your mechanicals if you have entered a duration. You can override this by filling in the field below.</p>
+          <div id="CUR-lCgBDBVK" class="form-group required">
+            <label id="CUR-JrPYRgbZ">Mechanical Basis</label>
+            <ui-select ng-model="track.mechanicalCalculationBasis" ng-disabled="rights.catalogue != 'Edit'">
+              <ui-select-match>
+                <span id="CUR-XanMLNZY" ng-bind="$select.selected.label"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in (mechanicalCalculationBasisTypes | filter: $select.search)">
+                <span id="CUR-WeCzmqBc" ng-bind="item.label"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-RDpVbTDS" class="form-group required" ng-if="track.mechanicalCalculationBasis == 'Custom'">
+            <label id="CUR-VJdhDPYH">Custom US Statutory Rate</label>
+            <input id="CUR-ijTEtiQw" type="number" class="form-control" ng-model="track.statutoryRate" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-KVGusYNA" class="form-group required"  ng-if="track.mechanicalCalculationBasis == 'Custom'">
+            <label id="CUR-iFMeeRwI">Custom Canadian Statutory Rate</label>
+            <input id="CUR-QoJCFXhB" type="number" class="form-control" ng-model="track.canadianStatutoryRate" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-NXfVHffI" class="form-group">
+            <input id="CUR-JSwZEJMp" ng-disabled="rights.catalogue != 'Edit'" type="checkbox" value="1" ng-model="track.reportMechanicals">
+            <label id="CUR-bRYBIOed">Report Mechanicals <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Should mechanicals be reported on this track?"></i></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-teoIVadq" class="row">
+    <div id="CUR-fLPZeDRw" class="col-xs-12">
+      <div id="CUR-BMJuTgEM" class="panel panel-default">
+        <div id="CUR-ZtggvhVw" class="panel-heading">
+          <div id="CUR-yKxBcaZn" class="panel-title">
+            Mechanical Licenses
+          </div>
+        </div>
+        <div id="CUR-Wovouqxo" class="panel-body p-t-15">
+          <div id="CUR-cdrNMXzj" class="row">
+            <div id="CUR-hVUnYtgx" class="col-xs-12">
+              <button id="CUR-tCeIwPTI" class="btn pull-right" ng-if="mechanicalsShowToggleButton" ng-class="{'editing':'btn-secondary', 'readOnly':'btn-complete'}[mechanicalsRowsMode]" ng-show="rights.catalogue == 'Edit'" ng-click="toggleMechanicalLicensesEdit()">
+                <i class="fa" ng-class="{'editing':'fa-lock', 'readOnly':'fa-pencil'}[mechanicalsRowsMode]"></i> 
+                {{mechanicalsRowsMode === 'editing' ? 'Read Only' : 'Edit Mechanicals'}}
+              </button>
+            </div>
+          </div>
+          <mechanical-license-row ng-repeat="license in track.mechanicalLicenses track by $index" license="license" index="$index" show-cap-override-field="false" edit="rights.catalogue == 'Edit'" contracts="mechanicalContracts" delete="deleteMechanicalLicense(license)" new= "newMechanicalLicenses[$index]" mode="mechanicalsRowsMode" toggle="mechanicalsShowToggleButton"></mechanical-license-row>
+          <button id="CUR-FOECOCHF" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'" ng-click="addMechanicalLicense()">+ License</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="releases-tab.html">
+  <div id="CUR-DKzfOAHT" class="row">
+    <div id="CUR-Pijpbozh" class="col-xs-12">
+      <div id="CUR-kfvTZJWh" class="panel panel-default">
+        <div id="CUR-InJrItoW" class="panel-heading">
+          <div id="CUR-gyelmPbY" class="panel-title">
+            Releases
+          </div>
+        </div>
+        <div id="CUR-aOvhYNDr" class="panel-body">
+          <responsive-table headers="headersReleases" data="releases" selectable="false" sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<model-history data="track.modelHistory"></model-history>

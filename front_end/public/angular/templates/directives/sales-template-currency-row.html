@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="form-group col-xs-5">
+    <ui-select ng-model="currency.name" ng-disabled="edit != true">
+      <ui-select-match>
+          <span ng-bind="$select.selected.code"></span>
+      </ui-select-match>
+      <ui-select-choices group-by="groupFind" repeat="item.code as item in currencies | filter: $select.search">
+        <span ng-bind-html="item.code"></span>
+        <span> &nbsp; - &nbsp; </span>
+        <span ng-bind-html="item.name"></span>
+      </ui-select-choices>
+    </ui-select>
+  </div>
+  <div class="form-group col-xs-4">
+    <input type="text" class="form-control" ng-model="currency.map" ng-disabled="edit != true"> 
+  </div> 
+  <div class="form-group col-xs-3">
+    <button class="btn btn-danger" ng-show="edit == true" ng-click="delete({ currency: currency })"><i class="fa fa-trash"></i></button>
+  </div> 
+</div> 

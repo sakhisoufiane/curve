@@ -1,0 +1,133 @@
+<div id="CUR-sales-groups-index" class="jumbotron" data-pages="parallax">
+  <div id="CUR-sales-groups-breadcrumb-comtainer" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div class="inner">
+      <ul id="CUR-sales-groups-breadcrumb" class="breadcrumb">
+        <li id="CUR-sales-groups-breadcrumb-li1">
+          <a id="CUR-sales-groups-breadcrumb-a1" href="/#/sales/salesGroups" class="active">Groups</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-sales-groups-container" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-sales-groups-row1" class="row m-b-20">
+    <div id="CUR-sales-groups-search-container" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-sales-groups-search-form" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-sales-groups-search-group" class="input-group transparent">
+          <input id="CUR-sales-groups-search-input" type="text" class="form-control" placeholder="Search" ng-model="filter.text" />
+          <span id="CUR-sales-groups-search-span" class="input-group-addon pointer search-button" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-sales-groups-buttons-container" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-sales-groups-buttons" class="sm-p-l-15 sm-p-r-15">
+        <button id="CUR-sales-groups-delete-button" class="btn btn-danger hidden-xs" data-toggle="modal" data-target="#deleteModal" ng-show="rights.sales == 'Edit'">
+          <i class="fa fa-trash"></i>&nbsp;Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="CUR-sales-groups-row2" class="row">
+    <div id="CUR-ESYUobfx" class="col-xs-12 col-sm-3">
+      <div id="CUR-yTOQugBr" class="form-group sm-p-l-15 sm-p-r-15">
+        <label id="CUR-FHufgwGM">Type</label>
+        <ui-select class="full-width" ng-model="filter.type">
+          <ui-select-match allow-clear="true">
+            <span id="CUR-zSdcfRPU" ng-bind="$select.selected.name"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item.value as item in salesGroupTypes | filter: $select.search">
+            <span id="CUR-byhYXwZC" ng-bind="item.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-cMjhxOUv" class="row">
+    <div id="CUR-NFCxZlpj" class="col-xs-12 col-sm-12 text-center">
+      <button id="CUR-NlTTzTrO" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i> Filter</button>
+    </div>
+  </div>
+  <div id="CUR-deletionAssociations" ng-show="deletionAssociations" class="alert alert-danger p-15 m-t-20">
+    <p><strong>These groups cannot be deleted as they contain lines that have been included in one or more locked periods:</strong></p>
+    <div class="m-t-10" ng-repeat="group in deletionAssociations">
+      <h5 class="m-t-5 m-b-5" style="font-weight: 400; font-size: 1em">{{group.name}}</h5>
+      <ul class="p-l-20 m-b-5" ng-repeat="period in group.lockedPeriods">
+        <li style="line-height: 18px"><a href="#/periods/{{period.id}}/complete">{{period.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="CUR-kpJGHAIo" class="col-sm-12">
+    <h5 id="CUR-tVQnCwEU" class="pull-right">Total: {{total? total : 0}}</h5>
+  </div>
+  <div id="CUR-WtcrGOXD" class="row">
+    <div id="CUR-GQUnIdpg" class="col-xs-12">
+      <div id="CUR-eqmNmElM" class="panel panel-default">
+        <div id="CUR-ziwOnRWO" class="panel-heading">
+          <div id="CUR-sAiuTKJC" class="panel-title">Groups</div>
+        </div>
+        <div id="CUR-WOKaQxzP" class="panel-body">
+          <div id="CUR-RKtAMVsX" class="table-responsive">
+            <table id="CUR-yprfVOlM" class="table table-hover dataTable no-footer table-condensed">
+              <thead>
+                <tr id="CUR-RoSJGqwU">
+                  <th class="table-checkbox hidden-xs">
+                    <input type="checkbox" class="select-all" ng-checked="selectAllChecked" ng-click="selectAll(salesGroups)" />
+                  </th>
+                  <th ng-click="getSortedData('name')" ng-class="whatClassIsIt('name')">Name</th>
+                  <th ng-click="getSortedData('type')" ng-class="whatClassIsIt('type')">Type</th>
+                  <th ng-click="getSortedData('totalSalesLines')" ng-class="whatClassIsIt('totalSalesLines')">Lines</th>
+                  <th ng-click="getSortedData('createdAt')" ng-class="whatClassIsIt('createdAt')" class="hidden-xs">Created</th>
+                </tr>
+              </thead>
+              <tbody id="CUR-UhaRrVoZ">
+                <tr sales-group-table-row ng-repeat="salesGroup in salesGroups" index="{{$index}}" sales-group="salesGroup" edit="rights.sales == 'Edit'"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="CUR-MwhVUPNL" class="col-sm-12">
+    <div id="CUR-futVclPP" class="pull-right">
+      <span id="CUR-IWSvPjoH" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <span id="CUR-IJmWNrYD" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-BkCOnitR" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-JWsLAovT" class="row">
+    <div id="CUR-wZuWMqiC" class="col-xs-12 text-center">
+      <pagination id="CUR-QhcYhgAr" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-sales-groups-delete-modal-dialog" class="modal-dialog">
+    <div id="CUR-sales-groups-delete-modal-modal-dialog" class="modal-content">
+      <div id="CUR-sales-groups-delete-modal-header" class="modal-header clearfix text-left">
+        <button id="CUR-sales-groups-delete-modal-button-close" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i></button>
+        <h5 id="CUR-sales-groups-delete-modal-title">Delete Sales Groups</h5>
+      </div>
+      <div id="CUR-sales-groups-delete-modal-body" class="modal-body">
+        <div id="CUR-sales-groups-delete-modal-body-row1" class="row">
+          <div id="CUR-sales-groups-delete-modal-text" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected sales groups? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-sales-groups-delete-modal-body-row2" class="row">
+          <div id="CUR-sales-groups-delete-modal-footer" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-sales-groups-delete-modal-button-cancel" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-sales-groups-delete-modal-button-delete" type="button" class="btn btn-danger m-t-5" ng-click="deleteSelected()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,168 @@
+openapi: 3.0.3
+info:
+  title: Invoices API
+  version: 1.0.0
+  description: API for managing invoices
+paths:
+  /invoices:
+    get:
+      tags:
+        - Invoices
+      summary: Retrieve invoices
+      description: Returns a paginated list of invoices. Requires read access to contracts.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Search by invoice name (case-insensitive text search)
+      responses:
+        200:
+          description: Successfully retrieved invoices
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  invoices:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Invoice'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /invoices/{id}:
+    get:
+      tags:
+        - Invoices
+      summary: Retrieve a specific invoice
+      description: Returns details for a specific invoice by ID. Requires read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Invoice ID
+      responses:
+        200:
+          description: Successfully retrieved invoice
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+components:
+  schemas:
+    Invoice:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the invoice
+        clientId:
+          type: string
+          description: Client ID associated with the invoice
+        name:
+          type: string
+          description: Invoice name
+        billingInfo:
+          type: object
+          description: Billing information object
+        usage:
+          type: object
+          description: Usage information
+        date:
+          type: string
+          format: date-time
+          description: Invoice date
+        file:
+          type: string
+          description: File path or S3 key
+        publicLink:
+          type: string
+          description: Public link to the invoice file
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the invoice was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the invoice was last updated
+      required:
+        - _id
+        - clientId
+        - name
+        - date
+        - file
+  responses:
+    Forbidden:
+      description: Forbidden, the user does not have sufficient rights
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Forbidden
+    NotFound:
+      description: Invoice not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Could not find Invoice with ID {id}
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Internal error, please try again

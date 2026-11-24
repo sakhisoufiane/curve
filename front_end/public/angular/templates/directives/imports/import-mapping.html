@@ -1,0 +1,357 @@
+<div class="container-fluid container-fixed-lg">
+  <div class="row">
+    <div class="col-xs-12 col-md-10 col-md-offset-1">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row m-b-20">
+            <div class="col-xs-12">
+              <ul class="breadcrumb wizard-breadcrumb">
+                <li>
+                  <a ng-click="changePage('Setup')">Setup</a>
+                </li>
+                <li>
+                  <a ng-click="changePage('Files')">Files</a>
+                </li>
+                <li>
+                  <a class="active">Mapping</a>
+                </li>
+                <li ng-if="import.transferringSystem === 'Counterpoint Recordings'">Defaults</li>
+                <li>Complete</li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <form name="formMapping" role="form">
+              <div class="col-xs-12">
+                <div class="alert alert-danger" role="alert" ng-if="MappingErrors.length>0">
+                  <strong>Mapping Errors:</strong>
+                  <br/>
+                  <ul>
+                    <li ng-repeat="error in MappingErrors">{{ error }}</li>
+                  </ul>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="panel-title">
+                      Territories
+                    </div>
+                  </div>
+                  <div class="panel-body p-t-15">
+                    <div class="row m-b-20">
+                      <div class="col-xs-12">
+                        <h5 class="pull-right">Total: {{import.valuesForMapping['territories'].length}}</h5>
+                      </div>
+                    </div>
+                    <div ng-repeat="item in import.valuesForMapping['territories'] | limitTo: 25: territoryMappingIndex track by $index">
+                      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <ui-select required ng-model="import.mappings.territories[item]" theme="bootstrap" title="Choose territory">
+                          <ui-select-match allow-clear="true">
+                            <span ng-bind="$select.selected.name"></span>
+                          </ui-select-match>
+                          <ui-select-choices group-by="groupFind" repeat="country.code as country in territories | filter: $select.search">
+                            <span class="country" ng-bind="country.name"></span>
+                          </ui-select-choices>
+                        </ui-select>
+                      </div>
+                      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control disabled" ng-model="item" ng-disabled="true">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-b-20" ng-if="import.valuesForMapping['territories'] && import.valuesForMapping['territories'].length > 25">
+                      <div class="col-xs-4">
+                        Showing {{territoryMappingIndex + 1}} to {{lowestValue(territoryMappingIndex + 25, import.valuesForMapping['territories'].length)}} of {{import.valuesForMapping['territories'].length}}
+                      </div>
+                      <div class="col-xs-4 text-center">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showPrev(territoryMappingIndex, 25)}" ng-click="minusFromIndex('territoryMappingIndex', 25)"><</button>
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showNext(territoryMappingIndex, 25, 'territories')}" ng-click="addToIndex('territoryMappingIndex', 25, 'territories')">></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default" ng-if="import.transferringSystem === 'Counterpoint Recordings'">
+                  <div class="panel-heading">
+                    <div class="panel-title">
+                      Distribution Channels
+                    </div>
+                  </div>
+                  <div class="panel-body p-t-15">
+                    <div class="row m-b-20">
+                      <div class="col-xs-12">
+                        <h5 class="pull-right">Total: {{import.valuesForMapping['distributionChannels'].length}}</h5>
+                      </div>
+                    </div>
+                    <div ng-repeat="item in import.valuesForMapping['distributionChannels'] | limitTo: 25: distributionChannelMappingIndex track by $index">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <select class="form-control" ng-model="import.mappings.distributionChannels[item]" ng-options="item.value as item.name for item in channels"></select>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control disabled" ng-model="item" ng-disabled="true">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-b-20" ng-if="import.valuesForMapping['distributionChannels'] && import.valuesForMapping['distributionChannels'].length > 25">
+                      <div class="col-xs-4">
+                        Showing {{distributionChannelMappingIndex + 1}} to {{lowestValue(distributionChannelMappingIndex + 25, import.valuesForMapping['distributionChannels'].length)}} of {{import.valuesForMapping['distributionChannels'].length}}
+                      </div>
+                      <div class="col-xs-4 text-center">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showPrev(distributionChannelMappingIndex, 25)}" ng-click="minusFromIndex('distributionChannelMappingIndex', 25)"><</button>
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showNext(distributionChannelMappingIndex, 25, 'distributionChannels')}" ng-click="addToIndex('distributionChannelMappingIndex', 25, 'distributionChannels')">></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default" ng-if="import.transferringSystem === 'Counterpoint Recordings'">
+                  <div class="panel-heading">
+                    <div class="panel-title">
+                      Configurations
+                    </div>
+                  </div>
+                  <div class="panel-body p-t-15">
+                    <div class="row m-b-20">
+                      <div class="col-xs-12">
+                        <h5 class="pull-right">Total: {{import.valuesForMapping['configurations'].length}}</h5>
+                      </div>
+                    </div>
+                    <div ng-repeat="item in import.valuesForMapping['configurations'] | limitTo: 25: configurationMappingIndex track by $index">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <select class="form-control" ng-model="import.mappings.configurations[item]" ng-options="item.value as item.name for item in configs"></select>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control disabled" ng-model="item" ng-disabled="true">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-b-20" ng-if="import.valuesForMapping['configurations'] && import.valuesForMapping['configurations'].length > 25">
+                      <div class="col-xs-4">
+                        Showing {{configurationMappingIndex + 1}} to {{lowestValue(configurationMappingIndex + 25, import.valuesForMapping['configurations'].length)}} of {{import.valuesForMapping['configurations'].length}}
+                      </div>
+                      <div class="col-xs-4 text-center">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showPrev(configurationMappingIndex, 25)}" ng-click="minusFromIndex('configurationMappingIndex', 25)"><</button>
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showNext(configurationMappingIndex, 25, 'configurations')}" ng-click="addToIndex('configurationMappingIndex', 25, 'configurations')">></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default" ng-if="import.transferringSystem === 'Counterpoint Recordings'">
+                  <div class="panel-heading">
+                    <div class="panel-title">
+                      Price Categories
+                    </div>
+                  </div>
+                  <div class="panel-body p-t-15">
+                    <div class="row m-b-20">
+                      <div class="col-xs-12">
+                        <h5 class="pull-right">Total: {{import.valuesForMapping['priceCategories'].length}}</h5>
+                      </div>
+                    </div>
+                    <div ng-repeat="item in import.valuesForMapping['priceCategories'] | limitTo: 25: priceCategoryMappingIndex track by $index">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <select class="form-control" ng-model="import.mappings.priceCategories[item]" ng-options="item.value as item.name for item in prices"></select>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control disabled" ng-model="item" ng-disabled="true">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-b-20" ng-if="import.valuesForMapping['priceCategories'] && import.valuesForMapping['priceCategories'].length > 25">
+                      <div class="col-xs-4">
+                        Showing {{priceCategoryMappingIndex + 1}} to {{lowestValue(priceCategoryMappingIndex + 25, import.valuesForMapping['priceCategories'].length)}} of {{import.valuesForMapping['priceCategories'].length}}
+                      </div>
+                      <div class="col-xs-4 text-center">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showPrev(priceCategoryMappingIndex, 25)}" ng-click="minusFromIndex('priceCategoryMappingIndex', 25)"><</button>
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showNext(priceCategoryMappingIndex, 25, 'priceCategories')}" ng-click="addToIndex('priceCategoryMappingIndex', 25, 'priceCategories')">></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default" ng-if="import.transferringSystem === 'Counterpoint Publishing' || import.transferringSystem === 'SR1 Publishing' || import.transferringSystem === 'Linked Publishing' || import.transferringSystem === 'Catalogue Shipment'">
+                  <div class="panel-heading">
+                    <div class="panel-title">
+                      Capacities
+                    </div>
+                  </div>
+                  <div class="panel-body p-t-15">
+                    <div class="row m-b-20">
+                      <div class="col-xs-12">
+                        <h5 class="pull-right">Total: {{import.valuesForMapping['capacities'].length}}</h5>
+                      </div>
+                    </div>
+                    <div ng-repeat="item in import.valuesForMapping['capacities'] | limitTo: 25: capacityMappingIndex track by $index">
+                      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <ui-select required ng-model="import.mappings.capacities[item]" theme="bootstrap" title="Choose capacity">
+                          <ui-select-match allow-clear="true">
+                            <span ng-bind="$select.selected"></span>
+                          </ui-select-match>
+                          <ui-select-choices repeat="capacity in capacities | filter:$select.search">
+                            {{capacity}}
+                          </ui-select-choices>
+                        </ui-select>
+                      </div>
+                      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control disabled" ng-model="item" ng-disabled="true">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-b-20" ng-if="import.valuesForMapping['capacities'] && import.valuesForMapping['capacities'].length > 25">
+                      <div class="col-xs-4">
+                        Showing {{capacityMappingIndex + 1}} to {{lowestValue(capacityMappingIndex + 25, import.valuesForMapping['capacities'].length)}} of {{import.valuesForMapping['capacities'].length}}
+                      </div>
+                      <div class="col-xs-4 text-center">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showPrev(capacityMappingIndex, 25)}" ng-click="minusFromIndex('capacityMappingIndex', 25)"><</button>
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showNext(capacityMappingIndex, 25, 'capacities')}" ng-click="addToIndex('capacityMappingIndex', 25, 'capacities')">></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default" ng-if="import.transferringSystem === 'Counterpoint Publishing' || import.transferringSystem === 'SR1 Publishing' || import.transferringSystem === 'Linked Publishing' || import.transferringSystem === 'Catalogue Shipment'">
+                  <div class="panel-heading">
+                    <div class="panel-title">
+                      Societies
+                    </div>
+                  </div>
+                  <div class="panel-body p-t-15">
+                    <div class="row m-b-20">
+                      <div class="col-xs-12">
+                        <h5 class="pull-right">Total: {{import.valuesForMapping['societies'].length}}</h5>
+                      </div>
+                    </div>
+                    <div ng-repeat="item in import.valuesForMapping['societies'] | limitTo: 25: societyMappingIndex track by $index">
+                      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <ui-select required ng-model="import.mappings.societies[item]" theme="bootstrap" title="Choose society">
+                          <ui-select-match allow-clear="true">
+                            <span ng-bind="$select.selected"></span>
+                          </ui-select-match>
+                          <ui-select-choices repeat="pro in pros | filter:$select.search">
+                            {{pro}}
+                          </ui-select-choices>
+                        </ui-select>
+                      </div>
+                      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                          <input type="text" class="form-control disabled" ng-model="item" ng-disabled="true">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-b-20" ng-if="import.valuesForMapping['societies'] && import.valuesForMapping['societies'].length > 25">
+                      <div class="col-xs-4">
+                        Showing {{societyMappingIndex + 1}} to {{lowestValue(societyMappingIndex + 25, import.valuesForMapping['societies'].length)}} of {{import.valuesForMapping['societies'].length}}
+                      </div>
+                      <div class="col-xs-4 text-center">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showPrev(societyMappingIndex, 25)}" ng-click="minusFromIndex('societyMappingIndex', 25)"><</button>
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showNext(societyMappingIndex, 25, 'societies')}" ng-click="addToIndex('societyMappingIndex', 25, 'societies')">></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default" ng-if="import.transferringSystem === 'Counterpoint Publishing' || import.transferringSystem === 'Linked Publishing'">
+                  <div class="panel-heading">
+                    <div class="panel-title">
+                      Rates
+                    </div>
+                  </div>
+                  <div class="panel-body p-t-15">
+                    <div class="row m-b-20">
+                      <div class="col-xs-12">
+                        <h5 class="pull-right">Total: {{import.valuesForMapping['publishingRates'].length}}</h5>
+                      </div>
+                    </div>
+                    <div ng-repeat="item in import.valuesForMapping['publishingRates'] | limitTo: 25: publishingRateMappingIndex track by $index">
+                      <div class="row border-bottom-dashed m-b-10 sm-m-b-15">
+                        <div class="col-sm-12">
+                          <div class="form-group">
+                            <label>Ingested Rate</label>
+                            <div class="form-group">
+                              <input type="text" class="form-control disabled" ng-model="item" ng-disabled="true">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <label>Territory</label>
+                            <ui-select ng-model="import.mappings.publishingRates[item]['territory']" theme="bootstrap" title="Choose territory">
+                              <ui-select-match allow-clear="true">
+                                <span ng-bind="$select.selected.name"></span>
+                              </ui-select-match>
+                              <ui-select-choices group-by="groupFind" repeat="country.code as country in territories | filter: $select.search">
+                                <span class="country" ng-bind="country.name"></span>
+                              </ui-select-choices>
+                            </ui-select>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <label>Channel</label>
+                            <select class="form-control" ng-model="import.mappings.publishingRates[item]['channel']" ng-options="item.value as item.name for item in channels"></select>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <label>Config</label>
+                            <select class="form-control" ng-model="import.mappings.publishingRates[item]['config']" ng-options="item.value as item.name for item in configs"></select>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <label>Source</label>
+                            <input type="text" class="form-control disabled" ng-model="import.mappings.publishingRates[item]['source']">
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <label>Deal Type</label>
+                            <select class="form-control" ng-model="import.mappings.publishingRates[item]['type']" ng-options="item for item in dealTypes"></select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-b-20" ng-if="import.valuesForMapping['publishingRates'] && import.valuesForMapping['publishingRates'].length > 25">
+                      <div class="col-xs-4">
+                        Showing {{publishingRateMappingIndex + 1}} to {{lowestValue(publishingRateMappingIndex + 25, import.valuesForMapping['publishingRates'].length)}} of {{import.valuesForMapping['publishingRates'].length}}
+                      </div>
+                      <div class="col-xs-4 text-center">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showPrev(publishingRateMappingIndex, 25)}" ng-click="minusFromIndex('publishingRateMappingIndex', 25)"><</button>
+                          <button type="button" class="btn btn-default" ng-class="{'disabled': !showNext(publishingRateMappingIndex, 25, 'publishingRates')}" ng-click="addToIndex('publishingRateMappingIndex', 25, 'publishingRates')">></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="row m-t-20">
+            <div class="col-xs-12">
+              <a ng-click="validateMappingStep(formMapping)" class="btn btn-complete pull-right">Next</a>
+              <a ng-click="changePage('Files')" class="btn btn-default pull-right">Back</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

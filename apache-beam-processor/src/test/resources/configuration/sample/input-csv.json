@@ -1,0 +1,14 @@
+{
+  "fileSource": {
+    "type": "GCS",
+    "inputFileBucketLocation": "apache-beam-test-sam",
+    "inputFileName": "simpleMappingTest.tsv"
+  },
+  "fileType": {
+    "type": "csv",
+    "startingRow": 4,
+    "startingColumn": 3,
+    "encoding": "UTF-8",
+    "delimiter": ":"
+  }
+}

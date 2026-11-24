@@ -1,0 +1,616 @@
+<div class="jumbotron" data-pages="parallax">
+  <div class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div class="inner">
+      <ul class="breadcrumb">
+        <li>
+          <a ng-click="cancelBulkEdit()">Sales</a>
+        </li>
+        <li>
+          <a class="active">Bulk Edit</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="container-fluid container-fixed-lg">
+  <!-- Edit -->
+  <div ng-show="tab === 'edit'">
+    <div class="row">
+      <div class="col-xs-12 col-md-10 col-md-offset-1">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              Bulk Updating {{files.length}} File(s)
+            </div>
+          </div>
+          <div class="panel-body p-t-15">
+            <!-- Dates -->
+            <div class="form-group">
+              <!-- Only Update Missing Toggle -->
+              <div class="row m-b-10">
+                <div class="col-xs-12">
+                  <div
+                    class="form-group"
+                    ng-click="onlyUpdateMissing = !onlyUpdateMissing"
+                  >
+                    <input
+                      type="checkbox"
+                      value="1"
+                      ng-model="onlyUpdateMissing"
+                    />
+                    <label style="cursor: pointer"
+                      >Only Update Missing Values</label
+                    >
+                  </div>
+                  <div class="row m-b-5">
+                    <div class="col-xs-12">
+                      <p>
+                        When <i>Only Update Missing Values</i> is selected, the
+                        fields below will only be updated with the new values
+                        when they are not present on the selected Sales Files.
+                      </p>
+                      <p>
+                        If this option is disabled, existing fields will be
+                        overwritten with the new values below.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <!-- Transaction Date -->
+                <div class="form-group col-xs-4">
+                  <label>Transaction Date</label>
+                  <div
+                    id="datepicker-component"
+                    class="form-group input-group date"
+                  >
+                    <input
+                      type="text"
+                      class="form-control"
+                      ng-model="newTransactionDate"
+                      uib-datepicker-popup="{{dateFormat}}"
+                      ng-model-options="{timezone: 'utc'}"
+                      placeholder="DD/MM/YYYY"
+                      is-open="datePickerOpen"
+                      ng-click="datePickerOpen = true"
+                    />
+                    <span
+                      class="input-group-addon"
+                      ng-click="datePickerOpen = true"
+                    >
+                      <i class="fa fa-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+                <!-- Sale Date -->
+                <div class="form-group col-xs-4">
+                  <label>Sale Date</label>
+                  <div
+                    id="datepicker-component"
+                    class="form-group input-group date"
+                  >
+                    <input
+                      type="text"
+                      class="form-control"
+                      ng-model="newSaleDate"
+                      datepicker-options="dateOptions"
+                      uib-datepicker-popup="{{dateFormat}}"
+                      ng-model-options="{timezone: 'utc'}"
+                      placeholder="DD/MM/YYYY"
+                      is-open="datePickerSaleDateOpen"
+                      ng-click="datePickerSaleDateOpen = true"
+                    />
+                    <span
+                      class="input-group-addon"
+                      ng-click="datePickerSaleDateOpen = true"
+                    >
+                      <i class="fa fa-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+                <!-- Target Period -->
+                <div class="form-group col-xs-4">
+                  <label>Target Period</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ng-model="newTargetPeriod"
+                    placeholder="YYYYQ1"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- Exchange Rates -->
+            <div class="form-group">
+              <ul class="nav nav-tabs">
+                <li class="active">
+                  <a ng-click="platformTab = 'default'" data-toggle="tab"
+                    >All Platforms</a
+                  >
+                </li>
+                <li
+                  ng-show="bulkEditData.platform.apple.salesFileIds.length > 0"
+                >
+                  <a ng-click="platformTab = 'apple'" data-toggle="tab"
+                    >Apple Music/iTunes</a
+                  >
+                </li>
+              </ul>
+              <div class="tab-content m-t-3">
+                <!-- Default -->
+                <div
+                  class="tab-pane active"
+                  ng-show="platformTab === 'default'"
+                >
+                  <label>Exchange Rates</label>
+                  <div
+                    class="m-b-20"
+                    ng-show="(
+                    onlyUpdateMissing && bulkEditData.platform.default.exchangeRates.invalid.length > 0) 
+                    || (!onlyUpdateMissing && bulkEditData.platform.default.exchangeRates.existing.length > 0
+                  )"
+                  >
+                    <p>
+                      Manually input {{ onlyUpdateMissing ?
+                      bulkEditData.platform.default.exchangeRates.invalid.length
+                      :
+                      bulkEditData.platform.default.exchangeRates.existing.length
+                      }} exchange rate(s) below or autofill based on the
+                      transaction or todays date:
+                    </p>
+                    <!-- Prefill Exchange Rate Buttons -->
+                    <div class="row m-t-20">
+                      <div class="col-xs-12">
+                        <div class="btn-group">
+                          <div
+                            tooltips
+                            tooltip-template="Manually added rates will be cleared"
+                          >
+                            <button
+                              type="button"
+                              class="btn btn-default"
+                              ng-click="addExchangesRatesTransactionDate()"
+                              ng-disabled="!newTransactionDate || loadingExchangeRates || isFutureDate(newTransactionDate)"
+                            >
+                              Use Transaction Date
+                            </button>
+                          </div>
+                        </div>
+                        <div class="btn-group">
+                          <div
+                            tooltips
+                            tooltip-template="Manually added rates will be cleared"
+                          >
+                            <button
+                              type="button"
+                              class="btn btn-default"
+                              ng-click="addExchangeRatesToday()"
+                              ng-disabled="loadingExchangeRates"
+                            >
+                              Use Today's Date — {{ dateToday | date:
+                              'mediumDate' }}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Exchange Rate Inputs -->
+                    <div class="row m-t-20">
+                      <div class="col-xs-12">
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <label for="input1">Currency Code</label>
+                          </div>
+                          <div class="col-sm-6">
+                            <label for="input2">Exchange Rate</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="col-xs-12"
+                        ng-repeat="rate in bulkEditData.platform.default.exchangeRates[onlyUpdateMissing ? 'invalid' : 'existing']"
+                      >
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <input
+                                id="input1"
+                                type="text"
+                                class="form-control"
+                                ng-model="rate.currencyCode"
+                                ng-disabled="true"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <input
+                                id="input2"
+                                type="number"
+                                class="form-control"
+                                ng-model="rate.rate"
+                                placeholder="0.83"
+                                ng-disabled="loadingExchangeRates"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="alert alert-warning text-center"
+                    ng-if="onlyUpdateMissing && bulkEditData.platform.default.exchangeRates.invalid.length === 0"
+                  >
+                    No missing exchange rates found for the selected files
+                  </div>
+                </div>
+                <!-- Apple -->
+                <div class="tab-pane active" ng-show="platformTab === 'apple'">
+                  <label
+                    >Financial File
+                    <documentation
+                      link="http://guide.curveroyaltysystems.com/article/sales-uploading-apple-sales-files/"
+                    ></documentation
+                  ></label>
+                  <!-- Upload Financial File -->
+                  <div clas="m-b-20">
+                    <p>
+                      Apple Sales Files require a Financial File to apply the
+                      exchange rates. Please upload the Financial File below to
+                      set the exchange rates for the Apple Sales Files in your
+                      selection.
+                    </p>
+                    <p>
+                      The Financial File will be attached to <b>all</b> Apple
+                      Sales Files selected.
+                    </p>
+                    <label class="btn" class="m-t-10">
+                      <i class="fa fa-upload"></i> Upload Financial File
+                      <input
+                        type="file"
+                        style="display: none"
+                        ngf-select
+                        ngf-allow-dir="false"
+                        ngf-change="uploadFinancialFile()"
+                        ng-model="appleFinancialFile"
+                      />
+                    </label>
+                    <div ng-show="appleFinancialFile" class="m-t-10">
+                      Uploaded Financial File:
+                      <b>{{ appleFinancialFile.name }}</b>
+                    </div>
+                  </div>
+                  <!-- Exchange Rates -->
+                  <div>
+                    <label class="m-t-40">Exchange Rates</label>
+                    <div
+                      class="m-b-20"
+                      ng-show="bulkEditData.platform.apple.exchangeRates.invalid.length > 0 || bulkEditData.platform.apple.exchangeRates.existing.length > 0"
+                    >
+                      <p>
+                        If Apple pays you in currencies other than your Home
+                        Currency, they will appear below. Apply an exchange rate
+                        to convert these amounts to your Home Currency using the
+                        Transaction Date or Today’s Date buttons, or enter rates
+                        manually.
+                      </p>
+                      <!-- Prefill Exchange Rate Buttons -->
+                      <div
+                        class="row m-t-20"
+                        ng-show="bulkEditData.platform.apple.hasFinancialFile && appleFinancialFile"
+                      >
+                        <div class="col-xs-12">
+                          <div class="btn-group">
+                            <div
+                              tooltips
+                              tooltip-template="Manually added rates will be cleared"
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="addExchangesRatesTransactionDate('apple')"
+                                ng-disabled="!newTransactionDate || loadingExchangeRates || isFutureDate(newTransactionDate)"
+                              >
+                                Use Transaction Date
+                              </button>
+                            </div>
+                          </div>
+                          <div class="btn-group">
+                            <div
+                              tooltips
+                              tooltip-template="Manually added rates will be cleared"
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="addExchangeRatesToday('apple')"
+                                ng-disabled="loadingExchangeRates"
+                              >
+                                Use Today's Date — {{ dateToday | date:
+                                'mediumDate' }}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Exchange Rate Inputs -->
+                      <div
+                        class="row m-t-20"
+                        ng-show="bulkEditData.platform.apple.hasFinancialFile && appleFinancialFile"
+                      >
+                        <div class="col-xs-12">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <label for="apple-input1">Currency Code</label>
+                            </div>
+                            <div class="col-sm-6">
+                              <label for="apple-input2">Exchange Rate</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="col-xs-12"
+                          ng-repeat="rate in bulkEditData.platform.apple.exchangeRates[onlyUpdateMissing ? 'invalid' : 'existing']"
+                        >
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <input
+                                  id="apple-input1"
+                                  type="text"
+                                  class="form-control"
+                                  ng-model="rate.currencyCode"
+                                  ng-disabled="true"
+                                />
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <input
+                                  id="apple-input2"
+                                  type="number"
+                                  class="form-control"
+                                  ng-model="rate.rate"
+                                  placeholder="0.83"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="m-b-20 alert alert-warning text-center"
+                      ng-show="bulkEditData.platform.apple.hasFinancialFile && (bulkEditData.platform.apple.exchangeRates.invalid.length === 0 && bulkEditData.platform.apple.exchangeRates.existing.length === 0)"
+                    >
+                      No missing exchange rates found for the selected files
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Buttons -->
+            <div class="row m-t-20">
+              <div class="col-xs-12">
+                <button
+                  type="button"
+                  class="btn btn-complete m-t-5 pull-right m-l-10"
+                  ng-click="setTab('review')"
+                >
+                  Review Changes
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-default m-t-5 pull-right"
+                  ng-click="cancelBulkEdit()"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Review -->
+  <div ng-show="tab === 'review'">
+    <div class="row">
+      <div class="col-xs-12 col-md-10 col-md-offset-1">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">Overview</div>
+          </div>
+          <div class="panel-body p-t-15">
+            <p>
+              The following {{files.length}} sale(s) files will be updated with
+              the values shown:
+            </p>
+            <div
+              class="alert alert-warning"
+              ng-if="onlyUpdateMissing && (newTransactionDate || newSaleDate)"
+            >
+              Please Note: As <b>Only Update Missing Values</b> is selected,
+              only missing Transaction & Sale dates will be updated with the new
+              values shown below.
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Sales File</th>
+                    <th>Existing Target Period</th>
+                    <th>New Target Period</th>
+                    <th>New Transaction Date</th>
+                    <th>New Sale Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="row in changeRows">
+                    <td>
+                      <a
+                        ng-href="#/sales/{{ row.salesFileId }}/edit"
+                        target="_blank"
+                        >{{row.salesFileName}}</a
+                      >
+                    </td>
+                    <td class="review-no-change">
+                      <i>{{row.existingTargetPeriod}}</i>
+                    </td>
+                    <td
+                      ng-class="row.newTargetPeriod === 'No Change' ? 'review-no-change' : 'review-success'"
+                    >
+                      {{row.newTargetPeriod}}
+                    </td>
+                    <td class="review-success" ng-if="row.newTransactionDate">
+                      {{row.newTransactionDate | date: dateFormat:'UTC'}}
+                    </td>
+                    <td
+                      class="review-no-change"
+                      ng-if="!row.newTransactionDate"
+                    >
+                      No Change
+                    </td>
+                    <td class="review-success" ng-if="row.newSaleDate">
+                      {{row.newSaleDate | date: dateFormat:'UTC'}}
+                    </td>
+                    <td class="review-no-change" ng-if="!row.newSaleDate">
+                      No Change
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div
+            class="panel-body p-t-0"
+            ng-show="bulkEditData.platform.default.exchangeRates[onlyUpdateMissing ?
+          'invalid' : 'existing'].length > 0"
+          >
+            <p>
+              The following {{bulkEditData.exchangeRates[onlyUpdateMissing ?
+              'invalid' : 'existing'].length}} exchange rates will be updated
+              for their corresponding Sales Files with the values shown:
+            </p>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Sales Files</th>
+                    <th>Currency Code</th>
+                    <th>Exchange Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    ng-repeat="row in bulkEditData.platform.default.exchangeRates[onlyUpdateMissing ? 'invalid' : 'existing'] track by $index"
+                  >
+                    <td>
+                      <div ng-repeat="id in row.salesFileIds">
+                        <a ng-href="#/sales/{{ id }}/edit" target="_blank"
+                          >{{ getFileNameFromId(id) }}</a
+                        >
+                      </div>
+                    </td>
+                    <td>{{row.currencyCode}}</td>
+                    <td class="review-success">{{row.rate}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div
+            class="panel-body p-t-0"
+            ng-show="bulkEditData.platform.apple.exchangeRates[onlyUpdateMissing ?
+          'invalid' : 'existing'].length > 0"
+          >
+            <p>
+              The following
+              {{bulkEditData.platform.apple.exchangeRates[onlyUpdateMissing ?
+              'invalid' : 'existing'].length}} exchange rates will be updated
+              for <b>Apple Sales Files</b> with the values shown:
+            </p>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Sales Files</th>
+                    <th>Currency Code</th>
+                    <th>Exchange Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    ng-repeat="row in bulkEditData.platform.apple.exchangeRates[onlyUpdateMissing ? 'invalid' : 'existing'] track by $index"
+                  >
+                    <td>
+                      <div ng-repeat="id in row.salesFileIds">
+                        <a ng-href="#/sales/{{ id }}/edit" target="_blank"
+                          >{{ getFileNameFromId(id) }}</a
+                        >
+                      </div>
+                    </td>
+                    <td>{{row.currencyCode}}</td>
+                    <td class="review-success">{{row.rate}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel-body p-t-0">
+            <p
+              ng-show="bulkEditData.platform.apple.hasFinancialFile && bulkEditData.platform.apple.salesFileIds.length > 0"
+            >
+              To apply the Apple Financial File Exchange rates, you need to
+              click Update & Reingest. Note, this will only re-ingest Apple
+              Files. Any other files will be updated in any event.
+            </p>
+            <div class="row m-t-40">
+              <div class="col-xs-12">
+                <button
+                  type="button"
+                  class="btn btn-primary m-t-5 pull-right m-l-10"
+                  ng-click="updateSalesFiles('reingest')"
+                  ng-show="bulkEditData.platform.apple.hasFinancialFile && bulkEditData.platform.apple.salesFileIds.length > 0"
+                >
+                  Update & Reingest
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary m-t-5 pull-right m-l-10"
+                  ng-click="updateSalesFiles('revalidate')"
+                >
+                  Update & Revalidate
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-complete m-t-5 pull-right m-l-10"
+                  ng-click="updateSalesFiles()"
+                >
+                  <i class="fa fa-check"></i>&nbsp;Update {{files.length}} Sales
+                  {{ files.length > 1 ? 'Files' : 'File'}}
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-default m-t-5 pull-right m-l-10"
+                  ng-click="setTab('edit')"
+                >
+                  <i class="fa fa-arrow-return"></i>&nbsp;Back to Edit
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-default m-t-5 pull-right"
+                  ng-click="cancelBulkEdit()"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

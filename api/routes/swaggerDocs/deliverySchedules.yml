@@ -1,0 +1,482 @@
+openapi: 3.0.0
+paths:
+  /deliverySchedules:
+    get:
+      tags:
+        - "Delivery Schedules"
+      summary: Retrieve all delivery schedules
+      description: Returns a paginated list of delivery schedules. Requires read access to catalogue.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Search text to filter by name
+      responses:
+        '200':
+          description: Successfully retrieved delivery schedules
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deliverySchedules:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DeliverySchedule'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    post:
+      tags:
+        - "Delivery Schedules"
+      summary: Create a new delivery schedule
+      description: Creates a new delivery schedule. Requires write access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryScheduleInput'
+      responses:
+        '200':
+          description: Successfully created delivery schedule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverySchedule'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unfortunately we couldn't complete your request. Please try again, or contact the support team."
+
+  /deliverySchedules/{id}:
+    get:
+      tags:
+        - "Delivery Schedules"
+      summary: Retrieve a specific delivery schedule
+      description: Returns details for a specific delivery schedule by ID. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery Schedule ID
+      responses:
+        '200':
+          description: Successfully retrieved delivery schedule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverySchedule'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Delivery Schedule not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Delivery Schedule with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    put:
+      tags:
+        - "Delivery Schedules"
+      summary: Update a delivery schedule
+      description: Updates a delivery schedule's details. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery Schedule ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryScheduleInput'
+      responses:
+        '200':
+          description: Successfully updated delivery schedule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverySchedule'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Delivery Schedule not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Delivery Schedule with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+    delete:
+      tags:
+        - "Delivery Schedules"
+      summary: Delete a delivery schedule
+      description: Deletes a delivery schedule. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery Schedule ID
+      responses:
+        '200':
+          description: Successfully deleted delivery schedule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverySchedule'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Delivery Schedule not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Delivery Schedule with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /deliverySchedules/{id}/history:
+    get:
+      tags:
+        - "Delivery Schedules"
+      summary: Retrieve history for a delivery schedule
+      description: Returns the modification history for a specific delivery schedule. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery Schedule ID
+      responses:
+        '200':
+          description: Successfully retrieved delivery schedule history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                          format: date-time
+                        author:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            email:
+                              type: string
+                        ops:
+                          type: array
+                          items:
+                            type: object
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '404':
+          description: Delivery Schedule not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Could not find Delivery Schedule with ID 123456789012"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+  /deliverySchedules/{id}/queuedWorks:
+    get:
+      tags:
+        - "Delivery Schedules"
+      summary: Retrieve queued works for a delivery schedule
+      description: Returns the works queued for delivery in a specific delivery schedule. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery Schedule ID
+        - in: query
+          name: tableFilter[page]
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: tableFilter[limit]
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: tableFilter[orderBy]
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: tableFilter[orderDir]
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+      responses:
+        '200':
+          description: Successfully retrieved queued works
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  queuedWorks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Work'
+                  uncontrolledWorks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Work'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forbidden"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal error, please try again"
+
+components:
+  schemas:
+    DeliverySchedule:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the delivery schedule
+        name:
+          type: string
+          description: Name of the delivery schedule
+        clientId:
+          type: string
+          description: Client ID associated with the delivery schedule
+        deliveryPartnerId:
+          type: string
+          description: ID of the delivery partner
+        active:
+          type: boolean
+          description: Whether the delivery schedule is active
+        scheduleType:
+          type: string
+          enum: [daily, weekly, monthly, quarterly]
+        scheduleDay:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the delivery schedule was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the delivery schedule was last updated
+    DeliveryScheduleInput:
+      type: object
+      required:
+        - name
+        - deliveryPartnerId
+        - scheduleType
+      properties:
+        name:
+          type: string
+          description: Name of the delivery schedule
+        deliveryPartnerId:
+          type: string
+          description: ID of the delivery partner
+          example: "6670672a2b3c4d5e6f7g8h9i"
+        active:
+          type: boolean
+          description: Whether the delivery schedule is active
+        scheduleType:
+          type: string
+          enum: [daily, weekly, monthly, quarterly]
+          description: Frequency of the delivery schedule
+        scheduleDay:
+          type: number
+          description: Day value for the delivery schedule (varies by frequency)

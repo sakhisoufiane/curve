@@ -1,0 +1,355 @@
+<div id="CUR-aPZMiqDe" class="jumbotron" data-pages="parallax">
+  <div id="CUR-mszslNfD" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-zpmUohip" class="inner">
+      <ul id="CUR-FqOgmXir" class="breadcrumb">
+        <li id="CUR-nMgvxRjF">
+          <a id="CUR-bBkswbKj" href="/#/deliverySettings">Delivery Settings</a>
+        </li>
+        <li id="CUR-CtHNFeKj" ng-show="!deliveryPartner._id">
+          <a id="CUR-SOysxGpP" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-HXvwyuLH" ng-show="deliveryPartner._id">
+          <a id="CUR-CoZstPyf" href="/#/deliverySettings/deliveryPartners/{{deliveryPartner._id}}/edit" class="active">{{deliveryPartner.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-LhosEEOX" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-YkquJnWS" class="row">
+    <div id="CUR-lKKLrZcj" class="col-xs-12 text-right two-cols-row" ng-if="rights.catalogue == 'Edit'">
+      <button id="CUR-vXmHqfFi" ng-if="deliveryPartner._id" class="btn btn-danger" data-toggle="modal" data-target="#deliveryPartnersDeleteModal">
+        <i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-FZCHODMI" class="btn btn-complete" ng-click="save()">
+        <i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-HCFgBuur" class="row">
+    <div id="CUR-rwSePDCB" class="col-xs-12 col-sm-6">
+      <div id="CUR-ZPbUkItE" class="panel panel-default" style="padding-bottom: 45px;">
+        <div id="CUR-nCYaWIoJ" class="panel-heading">
+          <div id="CUR-WnkBkSDP" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-dzgUucia" class="panel-body p-t-15">
+          <div id="CUR-VnYxraTn" class="form-group">
+            <label id="CUR-wCsaYLCZ">Name</label>
+            <input id="CUR-kSlDjEll" type="text" class="form-control" ng-model="deliveryPartner.name" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-div-fg-receivingparty" class="form-group required">
+            <label id="CUR-div-fg-receivingparty-lbl">Receiving Party</label>
+            <ui-select ng-model="deliveryPartner.receivingParty" ng-disabled="rights.catalogue != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-div-fg-receivingparty-match-span" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in pros | filter: $select.search track by $index">
+                <span id="CUR-div-fg-receivingparty-choices-span" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-vWsZcDOK" class="form-group">
+            <label id="CUR-cvcJwyXH">Specific IPI No <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Use this field to overwrite your general IPI No for this specific delivery partner. If left blank, we will use the general IPI No set in your settings area"></i></label>
+            <input id="CUR-rhFpXRGV" type="text" class="form-control" ng-model="deliveryPartner.ipiNo" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-vWsZcD1K" class="form-group">
+            <label id="CUR-cvcJwyXH">Sending Party Name <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Use this field to overwrite your Sending Party Name for this specific delivery partner. If left blank, we will use the Sending Party Name set in your settings"></i></label>
+            <input id="CUR-rhFpXRGV" type="text" class="form-control" ng-model="deliveryPartner.sendingPartyName" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-vWsZcD2K" class="form-group">
+            <label id="CUR-cvcJwyXH">Sending Party ID <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Use this field to overwrite your Sending Party ID for this specific delivery partner. If left blank, we will use the Sending Party ID set in your settings"></i></label>
+            <input id="CUR-rhFpXRGV" type="text" class="form-control" ng-model="deliveryPartner.sendingPartyId" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-div-fg-territory" ng-if="!isISWC" class="form-group required">
+            <label id="CUR-div-fg-territory-lbl">Collected Territories <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Here you specify all the Territories in which you want the society or sub-publisher to represent your copyright. You can use Territory Groups to select multiple Territories for your delivery. When in doubt, please select World."></i></label>
+            <ui-select-territories selected-territory="deliveryPartner.territory"></ui-select-territories>
+          </div>
+          <div id="CUR-div-fg-outputformat" class="form-group required">
+            <label id="CUR-div-fg-outputformat-lbl">Output Format</label>
+            <ui-select ng-change="adjustDeliveryTypes(true)" ng-model="deliveryPartner.outputFormat" ng-disabled="rights.catalogue != 'Edit'">
+              <ui-select-match allow-clear="false">
+                <span id="CUR-div-fg-outputformat-select-span" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in ['CWR', 'Catalogue Shipment', 'Catalogue Shipment - Simple', 'Youtube', 'MLC', 'Excel', 'ISWC Allocation (IAS)', 'ISWC Resolution (IRS)'] | filter: $select.search track by $index">
+                <span id="CUR-div-fg-outputformat-choices-span" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-div-fg-cwrversion" data-ng-if="deliveryPartner.outputFormat == 'CWR'" class="form-group required">
+            <label id="CUR--div-fg-cwrversion-lbl">CWR Version</label>
+            <ui-select ng-model="deliveryPartner.cwrVersion" ng-disabled="rights.catalogue != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span id="CUR--div-fg-cwrversion-match-span" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in ['2.2', '2.1'] | filter: $select.search track by $index">
+                <span id="CUR--div-fg-cwrversion-choices-span" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-efnaySOz" class="form-group">
+            <label id="CUR-KtmycNOB">Delivery Type <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="To use Curve to send any deliveries to this Partner straight from the Curve platform, then an Email or FTP/SFTP must be selected. Use 'Export Only' if you plan to export your file and send it yourself, outside Curve. Export Only deliveries are not registered in Curve as having been sent. To achieve this, you can use Email and send it to yourself."></i></label>
+            <ui-select ng-model="deliveryPartner.type" ng-disabled="rights.catalogue != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-peBhwAAP" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in deliveryTypes | filter: $select.search">
+                <span id="CUR-Qqvvxhpo" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-vDKIwlnb" ng-if="!isISWC" class="panel panel-default">
+        <div id="CUR-nVDvWHtZ" class="panel-heading">
+          <div id="CUR-AXWXREpf" class="panel-title">
+            Delivery Configuration
+          </div>
+        </div>
+        <div id="CUR-phQsqHvv" class="panel-body p-t-15">
+          <div id="CUR-OJZejGNo" class="form-group">
+            <input type="checkbox" value="1" ng-model="deliveryPartner.splitElection" ng-disabled="rights.catalogue != 'Edit'" id="splitElection">
+            <label id="CUR-eWzjiTQn" for="splitElection">Split Election - 50/50  <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Split Election allows you to detail the split between music and lyrics at certain PROs to 50/50. This is often used with GEMA."></i></label>
+          </div>
+          <div id="CUR-LUSyWSaY" class="form-group" ng-show="deliveryPartner.splitElection">
+            <label id="CUR-miitzFvZ">Split Election PRO</label>
+            <ui-select ng-model="deliveryPartner.splitElectionPRO" ng-disabled="rights.catalogue != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-GeBmFtGB" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in pros | filter: $select.search track by $index">
+                <span id="CUR-LqHyHtvo" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-iFXIlJuT" ng-if="!isISWC" class="panel panel-default">
+        <div id="CUR-wcGpWReP" class="panel-heading">
+          <div id="CUR-zSDrDLAy" class="panel-title">
+            Insert into IP Chain
+          </div>
+        </div>
+        <div id="CUR-WSFkoKlQ" class="panel-body p-t-15">
+          <p>By setting this option on the delivery partner, you can insert a publisher to the top of your controlled IP chains, allowing you to include the legal entity for certain partners.</p>
+          <div ng-repeat="data in deliveryPartner.insertionTerritory track by $index">
+            <div id="CUR-div-fg-territory" class="form-group required">
+              <div>
+                <label id="CUR-div-fg-territory-lbl">Territory</label>
+              </div>
+
+              <ui-select ng-model="deliveryPartner.insertionTerritory[$index].territory" ng-disabled="rights.catalogue != 'Edit'" style="width: 80%; display: inline-block;">
+
+                <ui-select-match allow-clear="true" >
+                  <span id="CUR-div-fg-territory-match-span" ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+
+                <ui-select-choices group-by="groupFind"
+                  repeat="territory.code as territory in territoriesforInsertion | filter: $select.search">
+                  <span id="CUR-div-fg-territory-choices-span" class="country" ng-bind="territory.name"></span>
+                </ui-select-choices>
+              </ui-select>
+              <button class="btn btn-danger" ng-click="deleteinsertionTerritoryRow($index)" index="$index" style="display: inline-block; margin-bottom: 28px;"><i class="fa fa-trash"></i></button>
+
+              <div><div id="CUR-TWBVaBWc" class="form-group" style="width: 80%;">
+                <label id="CUR-RxYMxqTL">Publisher</label>
+                <publisher-select-field edit="rights.catalogue == 'Edit'" value="deliveryPartner.insertionTerritory[$index].publisherId" allow-clear="true" ></publisher-select-field>
+              </div>
+              <div id="CUR-ayAEphBS" class="form-group">
+                <label id="CUR-bIzJafaZ">Category</label>
+                <ui-select ng-model="deliveryPartner.insertionTerritory[$index].category" ng-disabled="rights.catalogue != 'Edit'" style="width: 80%;">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-Xfkvxiqx" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in [ 'Sub Publisher', 'Original Publisher', 'Acquirer'] | filter: $select.search">
+                    <span id="CUR-xoNuQbPL" ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+            </div></div>
+          <!-- <div class="form-group secondCondition" ng-if="['MUSICMARK', 'ICE'].includes(deliveryPartner.receivingParty)"><button class="btn btn-complete" ng-click="addinsertionTerritoryRow()">Add</button></div> -->
+
+          <div class="firstCondition"><div id="CUR-TWBVaBWc" class="form-group">
+            <label id="CUR-RxYMxqTL">Publisher</label>
+            <publisher-select-field edit="rights.catalogue == 'Edit'" value="deliveryPartner.insertion.publisherId" allow-clear="true"></publisher-select-field>
+          </div>
+          <div id="CUR-ayAEphBS" class="form-group">
+            <label id="CUR-bIzJafaZ">Category</label>
+            <ui-select ng-model="deliveryPartner.insertion.category" ng-disabled="rights.catalogue != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-Xfkvxiqx" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in ['Admin', 'Sub Publisher', 'Original Publisher', 'Acquirer'] | filter: $select.search">
+                <span id="CUR-xoNuQbPL" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div></div>
+
+        </div>
+      </div>
+    </div>
+    <div id="CUR-div-panel-default-subPartner" class="col-xs-12 col-sm-6" ng-if="['MUSICMARK', 'ICE'].includes(deliveryPartner.receivingParty)">
+      <div id="CUR-panel-default-subPartner-div1" class="panel panel-default">
+        <div id="CUR-div-panel-heading-subPartner" class="panel-heading">
+          <div id="CUR-div-panel-title-subPartner" class="panel-title">
+            SUB PARTNERS
+          </div>
+        </div>
+        <div id="CUR-div-panel-heading-subPartner-div" class="panel-body" style="color: #333;">
+          <p>
+            If you add Sub Partner to this Delivery Partner, Curve will be able to read the Sub Partner from any acknowledgement files ingested and show the delivery status for the Sub Partner.
+          </p>
+          <div id="CUR-div-panel-body-fg-subPartner" class="form-group required">
+            <label id="CUR-div-panel-body-fg-lbl-subPartner">Sub Partner</label>
+          </div>
+          <div id="CUR-div-panel-body-fg-subPartner-form-group" class="form-group">
+            <div id="CUR-div-panel-body-fg-subPartner-form-input-container" class="row">
+              <delivery-partner-select-field
+                  ng-repeat="subPartner in deliveryPartner.subPartners track by $index"
+                  value="subPartner._id"
+                  edit="rights.catalogue == 'Edit'"
+                  populated="subPartner.partner"
+                  delete="removeSubPartner(partner)"
+                  show-delete-btn="true"
+                  add-sub-partner-to-filter="true"
+                  display-sub-partners="false"
+                  get-users="true"
+                  current-partner="deliveryPartner">
+                </delivery-partner-select-field>
+            </div>
+          </div>
+          <button
+            id="CUR-div-panel-body-fg-subPartner-form-delete-add-btn"
+            class="btn btn-complete"
+            style="margin-left: 0px"
+            ng-show="rights.catalogue == 'Edit'"
+            ng-click="addSubPartner()"
+            ng-disabled="deliveryPartner.subPartners.length >= 20"
+          ><i class="fa fa-plus"></i> Sub Partner</button>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-jDRznMKB" class="col-xs-12 col-sm-6" ng-if="deliveryPartner.type == 'FTP' || deliveryPartner.type == 'SFTP' || deliveryPartner.type == 'FTPS'">
+      <div id="CUR-FFwizZDF" class="panel panel-default">
+        <div id="CUR-CMAVpVFN" class="panel-heading">
+          <div id="CUR-bOgvLmiZ" class="panel-title">
+            FTP Details
+          </div>
+        </div>
+        <div id="CUR-qyCIvBIV" class="panel-body p-t-15">
+          <div id="CUR-zNmhTbUP" class="form-group">
+            <label id="CUR-kJvHfrgk">Host <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This should not include http:// or ftp://, only the simple URL, such as ftp.iceaccess.com"></i></label>
+            <input id="CUR-eeHaQPDA" type="text" class="form-control" ng-model="deliveryPartner.ftpHost">
+          </div>
+          <div id="CUR-jydNVolf" class="form-group">
+            <label id="CUR-yJoNzYff">Port <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Provide the Port for the FTP server"></i></label>
+            <input id="CUR-efMbnSKx" type="text" class="form-control" ng-model="deliveryPartner.ftpPort">
+          </div>
+          <div id="CUR-bxVoZsDf" class="form-group">
+            <label id="CUR-HcbpGUAC">Username</label>
+            <input id="CUR-sUAJMHHk" type="text" class="form-control" ng-model="deliveryPartner.ftpUsername">
+          </div>
+
+          <div id="CUR-efnaySOz" class="form-group" ng-if="deliveryPartner.type == 'SFTP'">
+            <label id="CUR-KtmycNOB">Authentication Type</label>
+            <ui-select ng-model="deliveryPartner.ftpAuthenticationType" ng-disabled="rights.catalogue != 'Edit'" ng-init="deliveryPartner.ftpAuthenticationType = deliveryPartner.ftpAuthenticationType || authenticationTypes[0]">
+              <ui-select-match allow-clear="false">
+                <span id="CUR-peBhwAAP" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in authenticationTypes | filter: $select.search">
+                <span id="CUR-Qqvvxhpo" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+
+          <div id="CUR-DENRbEAR" class="form-group" ng-if="deliveryPartner.ftpAuthenticationType == 'Password' || deliveryPartner.type != 'SFTP'">
+            <label id="CUR-mdLKVdWg">Password</label>
+            <input id="CUR-LwAGALBz" type="text" class="form-control" ng-model="deliveryPartner.ftpPassword">
+          </div>
+
+          <div id="CUR-XEYAREwj" class="form-group" ng-if="deliveryPartner.type == 'SFTP' && deliveryPartner.ftpAuthenticationType == 'Key File'">
+            <label id="CUR-dqJueWNm" for="email">Key File  <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Key File authentication requires a private key or PEM file and does not support PPK files. If required a PPK file can be converted to a PEM file, please contact support for further information"></i></label>
+            <div ng-if="deliveryPartner.ftpFileKey" style="margin-bottom: 10px;">Key file uploaded</div>
+            <div ng-if="!deliveryPartner._id" style="margin-bottom: 10px;">Please save before uploading key file</div>
+            <input id="CUR-bvLoxCzx" ng-if="deliveryPartner._id" type="file" ng-model="deliveryPartner.importFile" ngf-select aria-invalid="false" ng-change="uploadFile(deliveryPartner, deliveryPartner.importFile)" ngf-max-size="2MB" ngf-allow-dir="false" ng-required="deliveryPartner.ftpAuthenticationType == 'Key File'">
+          </div>
+
+          <div id="CUR-qJDuBAjx" class="form-group">
+            <label id="CUR-FklYjRkX">Root Directory <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This should give the path for where delivery should take place, starting with a slash, such as /toice/notify"></i></label>
+            <input id="CUR-vWPlHgqM" type="text" class="form-control" ng-model="deliveryPartner.ftpRootDir">
+          </div>
+        </div>
+        <button
+          id="CUR-div-panel-body-verify-connection-btn"
+          class="btn btn-confirm"
+          style="margin-left: 20px;"
+          ng-click="verifyDeliveryPartnerFtp(deliveryPartner)"
+        >Verify connection</button>
+      </div>
+    </div>
+    <div id="CUR-bItzODAs" class="col-xs-12 col-sm-6" ng-if="deliveryPartner.type == 'Email'">
+      <div id="CUR-tNKbBlcz" class="panel panel-default">
+        <div id="CUR-gnhhhMgk" class="panel-heading">
+          <div id="CUR-oJQrIexo" class="panel-title">
+            Email Delivery
+          </div>
+        </div>
+        <div id="CUR-NsYOHGUN" class="panel-body p-t-15">
+          <p>By setting the email address for this delivery point, it will send an email containing a download link to the CWR file to this person. To send to multiple people, separate the email addresses with a comma.</p>
+          <div id="CUR-JLQdiAnE" class="form-group">
+            <label id="CUR-UrcGJWez">Email Address</label>
+            <input id="CUR-rJUALSlS" type="text" class="form-control" ng-model="deliveryPartner.notificationEmail">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--<div id="CUR-INUwtUFQ" class="row">
+    <div id="CUR-EOTriMJw" class="col-xs-12">
+      <div id="CUR-NPJYfzlz" class="panel panel-default">
+        <div id="CUR-bjQPlKDc" class="panel-heading">
+          <div id="CUR-GVSeBXPp" class="panel-title">
+            Extra Partners
+          </div>
+        </div>
+        <div id="CUR-ArVTyMbJ" class="panel-body p-t-15">
+          <delivery-extra-partner-row ng-repeat="extraPartner in deliveryPartner.extraPartners track by $index" extra-partner="extraPartner" delete="deleteExtraPartner(extraPartner)"></delivery-extra-partner-row>
+          <button id="CUR-YlaqzyTI" class="btn btn-complete" ng-click="addExtraPartner()">+ Extra Partner</button>
+        </div>
+      </div>
+    </div>
+  </div>-->
+  <div id="CUR-OqbIFfrb" class="row">
+    <div id="CUR-FRuVSPwf" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-RXiXxpuR" ng-show="deliveryPartner.updatedAt">Last Updated on {{ deliveryPartner.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-XmHIMJNn" href="javascript:;" ng-if="deliveryPartner._id" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+<div class="modal fade stick-up" id="deliveryPartnersDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-pKCJhOmx" class="modal-dialog">
+    <div id="CUR-FujtFLfo" class="modal-content">
+      <div id="CUR-qkfjuvKu" class="modal-header clearfix text-left">
+        <button id="CUR-OXhMTZAV" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-FqJUbOzL">Delete Delivery Partner</h5>
+      </div>
+      <div id="CUR-TDRMMAIP" class="modal-body">
+        <div id="CUR-qKsmzbHx" class="row">
+          <div id="CUR-ugJWrNaD" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this Delivery Partner? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-aowCqHpp" class="row">
+          <div id="CUR-qHATerln" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-MhHPxeCo" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-IoiMWEUs" type="button" class="btn btn-danger m-t-5" ng-click="delete()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<model-history data="deliveryPartner.modelHistory"></model-history>

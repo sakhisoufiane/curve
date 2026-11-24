@@ -1,0 +1,430 @@
+openapi: 3.0.3
+info:
+  title: MCPS Retentions API
+  version: 1.0.0
+  description: API for managing MCPS Retentions
+
+paths:
+  /mcpsRetentions:
+    get:
+      tags:
+        - MCPS Retentions
+      summary: Retrieve MCPS retentions
+      description: Returns a list of MCPS retentions with pagination. Only accessible to users with read access to catalogue.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number to return
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items to return per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Column to order by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Order direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Filter by text (searches by name)
+      responses:
+        200:
+          description: Successfully retrieved MCPS retentions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mcpsRetentions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/McpsRetention'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags:
+        - MCPS Retentions
+      summary: Create an MCPS retention
+      description: Creates a new MCPS retention. Only accessible to users with write access to periods.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/McpsRetentionInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/McpsRetentionInput'
+      responses:
+        200:
+          description: Successfully created MCPS retention
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpsRetention'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /mcpsRetentions/import:
+    post:
+      tags:
+        - MCPS Retentions
+      summary: Import MCPS retentions from Excel
+      description: Imports MCPS retentions from an Excel file. Only accessible to users with edit access to periods.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Excel file to import
+      responses:
+        200:
+          description: Successfully initiated import
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Payees are importing, and a report will be sent to you shortly.
+        400:
+          description: Bad request, missing file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /mcpsRetentions/export:
+    post:
+      tags:
+        - MCPS Retentions
+      summary: Export MCPS retentions to Excel
+      description: Exports MCPS retentions to an Excel file. Only accessible to users with read access to periods.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of MCPS retention IDs to export
+                filter:
+                  type: object
+                  description: Filter criteria for MCPS retentions to export
+      responses:
+        200:
+          description: Successfully initiated export
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Your report will be sent to you via email shortly
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /mcpsRetentions/{id}:
+    get:
+      tags:
+        - MCPS Retentions
+      summary: Retrieve a specific MCPS retention
+      description: Returns details for a specific MCPS retention by ID. Only accessible to users with read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: MCPS retention ID
+      responses:
+        200:
+          description: Successfully retrieved MCPS retention
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpsRetention'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+    put:
+      tags:
+        - MCPS Retentions
+      summary: Update an MCPS retention
+      description: Updates an MCPS retention by ID. Only accessible to users with write access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: MCPS retention ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/McpsRetentionInput'
+      responses:
+        200:
+          description: Successfully updated MCPS retention
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpsRetention'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags:
+        - MCPS Retentions
+      summary: Delete an MCPS retention
+      description: Deletes an MCPS retention by ID. Only accessible to users with write access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: MCPS retention ID
+      responses:
+        200:
+          description: Successfully deleted MCPS retention
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpsRetention'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+  /mcpsRetentions/{id}/history:
+    get:
+      tags:
+        - MCPS Retentions
+      summary: Retrieve history for an MCPS retention
+      description: Returns the update history for a specific MCPS retention. Only accessible to users with read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: MCPS retention ID
+      responses:
+        200:
+          description: Successfully retrieved MCPS retention history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ModelHistory'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+components:
+  schemas:
+    McpsRetention:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the MCPS retention
+        clientId:
+          type: string
+          description: Client ID associated with the MCPS retention
+        periodId:
+          type: string
+          description: Period ID
+        year:
+          type: integer
+          description: Year of the retention
+        accountingPeriod:
+          type: string
+          description: Accounting period
+        releaseId:
+          type: string
+          description: Release ID
+        releaseTitle:
+          type: string
+          description: Release title
+        releaseCatNo:
+          type: string
+          description: Release catalogue number
+        territory:
+          type: string
+          description: Territory
+        retention:
+          type: number
+          description: Retention value
+        tvRetention:
+          type: number
+          description: TV retention value
+        createdBy:
+          type: string
+          description: ID of the user who created the MCPS retention
+        lastModifiedBy:
+          type: string
+          description: ID of the user who last modified the MCPS retention
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was last updated
+    McpsRetentionInput:
+      type: object
+      required:
+        - year
+        - accountingPeriod
+        - territory
+        - retention
+      properties:
+        year:
+          type: integer
+          description: Year of the retention
+        accountingPeriod:
+          type: string
+          description: Accounting period
+        territory:
+          type: string
+          description: Territory
+        retention:
+          type: number
+          description: Retention value
+        tvRetention:
+          type: number
+          description: TV retention value (optional)
+        releaseId:
+          type: string
+          description: Release ID (optional)
+        # clientId, createdBy, lastModifiedBy are set by the backend
+
+    ModelHistory:
+      type: object
+      properties:
+        ops:
+          type: array
+          items:
+            type: object
+            properties:
+              op:
+                type: string
+              path:
+                type: string
+              value:
+                type: string
+        _id:
+          type: string
+        ref:
+          type: string
+        author:
+          type: object
+          properties:
+            _id:
+              type: string
+            email:
+              type: string
+        timestamp:
+          type: string
+          format: date-time
+
+  responses:
+    Forbidden:
+      description: Forbidden, the user does not have sufficient rights
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Forbidden
+    NotFound:
+      description: MCPS retention not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Could not find McpsRetention with ID {id}
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Internal error, please try again

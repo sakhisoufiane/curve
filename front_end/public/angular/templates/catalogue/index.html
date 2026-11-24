@@ -1,0 +1,470 @@
+<!-- Navbar -->
+<div id="CUR-gpEsJQjX" class="jumbotron" data-pages="parallax">
+  <div
+    id="CUR-zcOIxElv"
+    class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20"
+  >
+    <div id="CUR-przujmKh" class="inner">
+      <ul id="CUR-nETHzyNz" class="breadcrumb">
+        <li id="CUR-kmfZCDyI">
+          <a id="CUR-NGqqjbFT" class="active">Manage Duplicate Catalogue</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div id="CUR-JRVeYQuw" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-vTQyqNPc" class="row m-b-20">
+    <div id="CUR-NtBLiCgX" class="col-sm-12 col-md-4">
+      <form
+        id="CUR-YdmoWRzI"
+        class="sm-p-l-15 sm-p-r-15"
+        ng-submit="searchByName()"
+      >
+        <div id="CUR-RFNuJMVU" class="input-group transparent">
+          <input
+            id="CUR-LIaJGJGY"
+            type="text"
+            class="form-control"
+            placeholder="Search"
+            ng-model="filter.text"
+          />
+          <span
+            id="CUR-TDcqiadQ"
+            class="input-group-addon pointer"
+            ng-click="searchByName()"
+          >
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-GyPwfjOh" class="col-sm-12 col-md-8 text-right">
+      <div id="CUR-zruOFxTO" class="sm-p-l-15 sm-p-r-15">
+        <button
+          class="btn btn-danger hidden-xs"
+          ng-click="deleteSelectedEntities()"
+          ng-disabled="selectedEntities.length === 0"
+        >
+          <i class="fa fa-trash"></i>
+          Delete Selected
+        </button>
+        <button
+          class="btn btn-complete"
+          ng-click="runFindDuplicatesTask()"
+          ng-disabled="isRunning[type]"
+        >
+          <i class="fa fa-refresh"></i>
+          Find Duplicate {{ type === 'composer' ? 'Composers' : (type ===
+          'publisher' ? 'Publishers' : 'Works') }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-dhJfOEFl" class="col-sm-12" ng-if="!isRunning[type]">
+    <h5 id="CUR-mRuOQuMG" class="pull-right">Total: {{total ? total : 0}}</h5>
+  </div>
+  <!-- Data -->
+  <div id="CUR-LLDkHlNH" class="row">
+    <div id="CUR-UpNsPVXa" class="col-xs-12">
+      <ul class="nav nav-tabs">
+        <li ng-class="{ 'active': type === 'composer' }">
+          <a ng-click="changeType('composer')">Composers</a>
+        </li>
+        <li ng-class="{ 'active': type === 'publisher' }">
+          <a ng-click="changeType('publisher')">Publishers</a>
+        </li>
+        <li ng-class="{ 'active': type === 'work' }">
+          <a ng-click="changeType('work')">Works</a>
+        </li>
+      </ul>
+      <div id="CUR-beAiGrda" class="panel panel-default">
+        <div id="CUR-yKJqdvBq" class="panel-heading">
+          <div id="CUR-BHqUuhJj" class="panel-title">{{ selectedTab }}</div>
+        </div>
+        <div id="CUR-OuUVLroh" class="panel-body">
+          <div
+            id="CUR-kczwpSVv"
+            class="container-fluid container-fixed-lg"
+            ng-if="isRunning[type]"
+          >
+            <div id="CUR-BTzXwzPV" class="row">
+              <div id="CUR-cunmuIwo" class="col-xs-12 col-sm-6 col-sm-offset-3">
+                <div id="CUR-RGxxIeGx" class="panel panel-default text-center">
+                  <div id="CUR-wTaVaifq" class="panel-body p-t-15">
+                    <h3 id="CUR-HyTKCwnY">
+                      Searching catalogue for duplicate {{ type === 'composer' ?
+                      'Composers' : (type === 'publisher' ? 'Publishers' :
+                      'Works') }}...
+                    </h3>
+                    <div id="CUR-dslouhvq" class="loading-spinner">
+                      <md-progress-circular
+                        md-diameter="95"
+                      ></md-progress-circular>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            id="CUR-kczwpSVv"
+            class="container-fluid container-fixed-lg"
+            ng-if="entities.length === 0 && !isRunning[type]"
+          >
+            <div id="CUR-BTzXwzPV" class="row">
+              <div
+                class="col-md-8 col-md-offset-2 text-center"
+                style="padding: 40px 0"
+              >
+                <div
+                  class="panel panel-default"
+                  style="padding: 30px; border-radius: 6px"
+                >
+                  <h4 class="text-muted">
+                    No Duplicate {{ type === 'composer' ? 'Composers' : (type
+                    === 'publisher' ? 'Publishers' : 'Works') }} Found in
+                    Catalogue
+                  </h4>
+                  <p class="m-b-20">
+                    To ensure your catalogue stays clean and accurate, click the
+                    button below to scan for duplicates.
+                  </p>
+                  <button
+                    class="btn btn-complete"
+                    ng-click="runFindDuplicatesTask()"
+                    ng-disabled="isRunning[type]"
+                  >
+                    <i class="fa fa-refresh"></i>
+                    Find Duplicate {{ type === 'composer' ? 'Composers' : (type
+                    === 'publisher' ? 'Publishers' : 'Works') }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <table
+            class="table table-responsive table-striped table-bordered"
+            ng-if="!isRunning[type] && entities.length > 0"
+          >
+            <thead>
+              <tr>
+                <th class="table-checkbox hidden-xs">
+                  <input
+                    type="checkbox"
+                    class="select-all"
+                    ng-checked="selectAllChecked"
+                    ng-click="selectAll()"
+                  />
+                </th>
+                <th
+                  ng-repeat="header in (type === 'work' ? workHeaders : headers)"
+                  ng-click="sortColumn(header.name)"
+                >
+                  {{ header.title }}
+                  <span
+                    ng-if="filter.orderBy === header.name || filter.orderBy === header.score"
+                  >
+                    <i
+                      ng-class="{'fa fa-chevron-up': filter.orderDir === 'asc', 'fa fa-chevron-down': filter.orderDir === 'desc'}"
+                    ></i>
+                  </span>
+                </th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                ng-repeat-start="entity in entities"
+                ng-class="{'table-selectable': rights.catalogue === 'Edit'}"
+              >
+                <td class="v-align-middle hidden-xs">
+                  <input
+                    id="item-select-{{itemIndex}}"
+                    type="checkbox"
+                    class="select-unit"
+                    ng-model="entity.selected"
+                    ng-click="selectRow(entity)"
+                  />
+                </td>
+                <td
+                  ng-repeat="header in (type === 'work' ? workHeaders : headers)"
+                >
+                  <div
+                    ng-if="header.name === 'name' || header.name === 'title'"
+                  >
+                    <a ng-click="reviewEntity(entity)"
+                      >{{ entity.name || entity.title }}</a
+                    >
+                  </div>
+                  <div ng-if="header.name === 'potentialDuplicatesCount'">
+                    <span
+                      class="label label-warning ng-binding ng-scope"
+                      tooltips
+                      tooltip-class="wider"
+                      tooltip-side="top"
+                      tooltip-template="{{ entity.potentialDuplicatesCount }} possible duplicate {{ getMultiEntityName() }} need reviewing"
+                    >
+                      {{ entity.potentialDuplicatesCount }}
+                    </span>
+                  </div>
+                  <div ng-if="header.name === 'composer'">
+                    <span class="text-wrap">{{ entity.composer }}</span>
+                  </div>
+                  <div
+                    ng-if="!['potentialDuplicatesCount', 'name', 'title', 'composer'].includes(header.name)"
+                  >
+                    {{ entity[header.name] }}
+                  </div>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-complete"
+                    ng-click="reviewEntity(entity)"
+                    tooltips
+                    tooltip-class="wider"
+                    tooltip-side="top"
+                    tooltip-template="Review & Merge {{ entity.potentialDuplicatesCount }} Duplicate {{ getMultiEntityName() }}"
+                  >
+                    <i class="fa fa-compress"></i>
+                  </button>
+                  <!-- <button
+                    class="btn btn-sm btn-danger"
+                    ng-click=""
+                    tooltips
+                    tooltip-class="wider"
+                    tooltip-side="top"
+                    tooltip-template="Delete the selected Composer(s)"
+                  >
+                    <i class="fa fa-trash"></i>
+                  </button> -->
+                  <button
+                    class="btn btn-sm"
+                    ng-click="toggleChildRows(entity)"
+                    tooltips
+                    tooltip-class="wider"
+                    tooltip-side="top"
+                    tooltip-template="{{ !entity.expanded ? 'View' : 'Hide' }} Possible Duplicates"
+                  >
+                    <i
+                      class="glyphicon"
+                      ng-class="{'glyphicon-chevron-down': !entity.expanded, 'glyphicon-chevron-up': entity.expanded}"
+                    ></i>
+                  </button>
+                </td>
+              </tr>
+              <tr ng-repeat-end ng-if="entity.expanded">
+                <td colspan="{{headers.length + 2}}">
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th class="table-checkbox hidden-xs">
+                          <!-- <input
+                            type="checkbox"
+                            class="select-all"
+                            ng-checked="selectAllChecked"
+                            ng-click="selectAllChildren(entity)"
+                          /> -->
+                        </th>
+                        <th
+                          ng-repeat="childHeader in (type === 'work' ? workChildHeaders : childHeaders)"
+                        >
+                          {{ childHeader.title }}
+                        </th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="child in entity.potentialDuplicates">
+                        <td class="v-align-middle hidden-xs">
+                          <input
+                            id="item-select-{{itemIndex}}"
+                            type="checkbox"
+                            class="select-unit"
+                            ng-model="child.selected"
+                            ng-click="selectRowChild(child)"
+                          />
+                        </td>
+                        <td
+                          ng-repeat="childHeader in (type === 'work' ? workChildHeaders : childHeaders)"
+                        >
+                          <a
+                            ng-if="childHeader.name === 'name'"
+                            href="{{ getEntityLink(type === 'composer' ? child.composerId : child.publisherId) }}"
+                            target="_blank"
+                          >
+                            {{ child.name }}
+                            <i
+                              class="fa fa-external-link m-l-5"
+                              style="font-size: 12px"
+                            ></i>
+                          </a>
+                          <a
+                            ng-if="childHeader.name === 'title'"
+                            href="{{ getWorkLink(child.workId) }}"
+                            target="_blank"
+                          >
+                            {{ child.title }}
+                            <i
+                              class="fa fa-external-link m-l-5"
+                              style="font-size: 12px"
+                            ></i>
+                          </a>
+                          <div ng-if="childHeader.name === 'composer'">
+                            <span class="text-wrap">{{ child.composer }}</span>
+                          </div>
+                          <div ng-if="childHeader.name === 'worksCount'">
+                            <span
+                              class="label label-default ng-binding ng-scope"
+                              tooltips
+                              tooltip-class="wider"
+                              tooltip-side="top"
+                              tooltip-template="{{ getEntityName() }} used in {{ child.worksCount }} work(s)"
+                            >
+                              {{ child.worksCount }}
+                            </span>
+                          </div>
+                          <span
+                            ng-if="!['name', 'worksCount', 'title', 'composer'].includes(childHeader.name)"
+                            >{{ child[childHeader.name] }}
+                          </span>
+                        </td>
+                        <td>
+                          <div>
+                            <button
+                              class="btn btn-sm btn-warning"
+                              ng-click="removeDuplicate(entity, child)"
+                              tooltips
+                              tooltip-class="wider"
+                              tooltip-side="top"
+                              tooltip-template="Remove Duplicate. This will flag the {{ getEntityName() }} as not a duplicate. It will not be deleted."
+                            >
+                              <i class="fa fa-flag"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-danger"
+                              ng-click="deleteEntityChild(entity, child)"
+                              tooltips
+                              tooltip-class="wider"
+                              tooltip-side="top"
+                              tooltip-template="Delete {{ getEntityName() }}. This will fully delete the {{ getEntityName() }} from Curve."
+                            >
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Pagination -->
+  <div
+    id="CUR-rIsAPqkj"
+    class="col-sm-12"
+    ng-if="!isRunning[type] && entities.length > 0"
+  >
+    <div id="CUR-YcVkcRkL" class="pull-right">
+      <span id="CUR-LqwYOLQU" class="inline-block" ng-if="!isShowingAll"
+        >Showing 25 Per Page |</span
+      >
+      <span id="CUR-lmTbVCMc" class="inline-block" ng-if="isShowingAll"
+        >Showing {{filter.limit}} Per Page</span
+      >
+      <a
+        id="CUR-LEYMBPSy"
+        class="p-l-5"
+        ng-if="!isShowingAll"
+        ng-click="showAll()"
+        >Show 500</a
+      >
+    </div>
+  </div>
+  <div
+    id="CUR-XHuhhWlB"
+    class="row"
+    ng-if="!isRunning[type] && entities.length > 0"
+  >
+    <div id="CUR-jJpeZhjY" class="col-xs-12 text-center">
+      <pagination
+        id="CUR-chCwdOit"
+        pages="pages"
+        total="totalPages"
+        current="currentPage"
+        change-page="changePage(page)"
+      ></pagination>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Deletion Modal -->
+<div
+  class="modal fade stick-up"
+  id="deleteModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div id="CUR-AexRwZpI" class="modal-dialog">
+    <div id="CUR-qjFwiZhb" class="modal-content">
+      <div id="CUR-DpqAqQcd" class="modal-header clearfix text-left">
+        <button
+          id="CUR-hRrlHmmG"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5>Confirm: Delete Selected {{ getMultiEntityName() }}</h5>
+      </div>
+      <div id="CUR-iYgwgUoK" class="modal-body">
+        <div id="CUR-ymApUyOT" class="row">
+          <div id="CUR-iPvyZrHe" class="col-xs-12 m-t-20">
+            <p>
+              <b>{{ entitiesToDelete.length }}</b> {{ getMultiEntityName() }}
+              will be deleted.
+            </p>
+            <p class="p-t-20">
+              This action cannot be undone. Please review your changes
+              carefully.
+            </p>
+          </div>
+        </div>
+        <div id="CUR-ymApUyOT" class="row">
+          <div id="CUR-evzNmoqB" class="row">
+            <div id="CUR-FwyNsjrh" class="col-xs-12 m-t-20 text-right">
+              <button
+                id="CUR-yxZJaNoE"
+                type="button"
+                class="btn btn-default m-t-5"
+                data-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                id="CUR-XzraYyAZ"
+                type="button"
+                class="btn btn-danger m-t-5"
+                ng-click="confirmDelete()"
+              >
+                <i class="fa fa-check"></i> Delete {{ entitiesToDelete.length }}
+                {{ getMultiEntityName() }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

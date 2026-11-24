@@ -1,0 +1,50 @@
+<div class="row catalogue-mapping-wrapper">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <h4>Configurations</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-info">
+          <p>Below are all configurations that did not get matched to your configurations, setup on the Settings page.</p>
+          <p>Match the values on the right using the dropdowns on the left. These will all be remembered and saved to the template for future mapping.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row m-b-20">
+      <div class="col-xs-12">
+        <h5 class="pull-right">Total: {{salesFile.invalidFields.configurations.length}}</h5>
+      </div>
+    </div>
+    <div class="row m-b-20" ng-repeat="configuration in salesFile.invalidFields.configurations | limitTo: 25: configurationMappingIndex track by $index">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <ui-select ng-model="selectedConfigurations[$index + configurationMappingIndex]">
+          <ui-select-match allow-clear="true">
+              <span ng-bind="$select.selected"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item in configurations | filter: $select.search track by $index">
+              <span ng-bind="item"></span>
+          </ui-select-choices>
+        </ui-select>  
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <input type="text" class="form-control" ng-model="configuration" readonly>
+      </div>
+    </div>
+    <div class="row m-b-20" ng-if="salesFile.invalidFields.configurations && salesFile.invalidFields.configurations.length > 25">
+      <div class="col-xs-4">
+        Showing {{configurationMappingIndex + 1}} to {{lowestValue(configurationMappingIndex + 25, salesFile.invalidFields.configurations.length)}} of {{salesFile.invalidFields.configurations.length}}
+      </div>
+      <div class="col-xs-4 text-center">
+        <div class="btn-group">
+          <button ng-disabled="!(configurationMappingIndex > 0)" type="button" class="btn btn-default" ng-click="minusFromIndex('configurationMappingIndex', 25)"><</button>
+          <button ng-disabled="!(salesFile.invalidFields.configurations.length > configurationMappingIndex + 25)" type="button" class="btn btn-default" ng-click="addToIndex('configurationMappingIndex', 25)">></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

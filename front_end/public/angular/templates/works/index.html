@@ -1,0 +1,568 @@
+<div id="CUR-xhXUVTrg" class="jumbotron" data-pages="parallax">
+  <div id="CUR-IoEcwrGc" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-JQNNkVXe" class="inner">
+      <ul id="CUR-KKqqunpp" class="breadcrumb">
+        <li id="CUR-glwJKIxB"><a id="CUR-veKzeEys" href="/#/works" class="active">Works</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-NFTeWPTN" class="container-fluid container-fixed-lg works-container">
+  <!-- Search and Buttons -->
+  <div id="CUR-vTQyqNPc" class="row m-b-20">
+    <div id="CUR-NtBLiCgX" class="col-sm-12 col-md-4">
+      <form id="CUR-YdmoWRzI" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-RFNuJMVU" class="input-group transparent">
+          <input id="CUR-LIaJGJGY" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-TDcqiadQ" class="input-group-addon pointer" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-GyPwfjOh" class="col-sm-12 col-md-8 text-right">
+      <div id="CUR-zruOFxTO" class="sm-p-l-15 sm-p-r-15">
+        <div id="CUR-ccDhdxJt" class="btn-group dropdown-default" ng-show="rights.catalogue == 'Edit'">
+          <a id="CUR-IKhDGVOd" class="btn btn-default dropdown-toggle w-xs-300-p" data-toggle="dropdown" aria-expanded="false" style="width: 200px;">
+            <i class="fa fa-repeat"></i>&nbsp;Bulk Actions <span id="CUR-cnIbpdrI" class="caret"></span>
+          </a>
+          <ul id="CUR-CZEknwLx" class="dropdown-menu w-xs-100-p-3">
+            <li id="CUR-wRESqWkR">
+              <a id="CUR-LIDfLWXR" href="javascript:void(0)" ng-click="showFlushContractsModal()">Flush Contracts To Works</a>
+            </li>
+            <li id="CUR-mUzouGpZ">
+              <a id="CUR-FDypAttR" href="javascript:void(0)" ng-click="approveMany()">Approve</a>
+            </li>
+            <li id="CUR-uXhRfcHJ">
+              <a id="CUR-ULafEIFU" href="javascript:void(0)" ng-click="holdMany()">Hold</a>
+            </li>
+            <li id="CUR-EsgcTtQb">
+              <a id="CUR-ZfVzGWrD" href="javascript:void(0)" ng-click="resumeMany()">Resume</a>
+            </li>
+            <li id="CUR-uJQvoNvC">
+              <a id="CUR-cmaKeYLl" href="javascript:void(0)" data-toggle="modal" data-target="#updateDeliveryStatus">Update Delivery Status</a>
+            </li>
+            <li id="CUR-uJQvoNvC">
+              <a id="CUR-cmaKeYLl" href="javascript:void(0)" data-toggle="modal" data-target="#updateCatalogueModal" ng-show="isInternal">Bulk Update Main Identifiers</a>
+            </li>
+          </ul>
+        </div>
+        <button id="CUR-WBvbTQGx" class="btn btn-default hidden-xs" ng-show="rights.catalogue == 'Edit' && featureAccess('deliveries')" data-toggle="modal" data-target="#addToDeliveryModal"><i class="fa fa-upload"></i>&nbsp;Deliver</button>
+        <div class="btn-group dropdown-default">
+          <a class="btn btn-default dropdown-toggle w-xs-300-p" data-toggle="dropdown" aria-expanded="false" style="width: 180px;">
+            <i class="fa fa-upload"></i>&nbsp;Exports <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu w-xs-100-p-3">
+            <li>
+              <a id="CUR-zeUNEPTF" href="javascript:void(0)" ng-click="export()">Export Works</a>
+            </li>
+            <li id="CUR-mUzouGpY">
+              <a href="javascript:void(0)" ng-click="exportErroredWorks()">Export Validation Errors</a>
+            </li>
+            <li id="CUR-rJJsaBmd" ng-show="isInternal">
+              <a id="CUR-SCVPTxasX" href="javascript:void(0)" ng-click="rawExport()">Works Raw Export</a>
+            </li>
+          </ul>
+        </div>
+        <button id="CUR-iANFXSjF" class="btn btn-default hidden-xs" data-toggle="modal" data-target="#importModal"
+          ng-show="rights.catalogue == 'Edit'"><i class="fa fa-download"></i>&nbsp;Import</button>
+        <div id="CUR-gYfCnaNM" class="btn-group  dropdown-default" ng-show="rights.catalogue == 'Edit'">
+          <a id="CUR-VkYSXqHf" class="btn btn-danger dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-trash"></i>&nbsp;Delete <span id="CUR-tUkCXfgO" class="caret"></span>
+          </a>
+          <ul id="CUR-sTTOiDCo" class="dropdown-menu w-xs-100-p">
+            <li id="CUR-qFUHvwXo">
+              <a id="CUR-IOsRcqvB" href="javascript:void(0)" data-toggle="modal" data-target="#deleteModal">Selected</a>
+            </li>
+            <li id="CUR-WUnCXStX">
+              <a id="CUR-uVlUJgxf" href="javascript:void(0)" data-toggle="modal" data-target="#deleteBulkModal">Bulk</a>
+            </li>
+          </ul>
+        </div>
+        <a id="CUR-wrgSKrHw" href="#/works/new" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-show="rights.catalogue == 'Edit' && !demoMode"><i
+            class="fa fa-plus"></i>&nbsp;Create</a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-KTyWvHkW" class="row">
+    <div id="CUR-KKUstulW" class="form-group col-sm-3">
+      <label id="CUR-fejBOuNE">Cat Group</label>
+      <ui-select multiple ng-model="filter.catalogueGroups" close-on-select="true">
+        <ui-select-match>{{$item}}</ui-select-match>
+        <ui-select-choices repeat="group in catalogueGroups | filter:$select.search">
+          {{group}}
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-NialzxjC" class="form-group col-sm-3">
+      <label id="CUR-lRrKPRGs">Contract</label>
+      <ui-select multiple ng-model="filter.contractIds" close-on-select="true">
+        <ui-select-match>
+          <span id="CUR-otmRqdyF" style="vertical-align:middle;">{{$item.name}}</span>
+          <span id="CUR-YNtcldkT" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in contracts | filter:$select.search"
+          refresh="searchContracts($select)" refresh-delay="500">
+          <div id="CUR-hBEcJkfU">
+            <div id="CUR-hdUDKQdP" class="clear">
+              <div id="CUR-bzjBzHNA" ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-DMPeSlmH" class="form-group col-sm-3">
+      <label id="CUR-nswRrcLh">Created After</label>
+      <div id="datepicker-component" class="form-group input-group date">
+        <input id="CUR-PtNnuxFK" type="text" class="form-control" ng-model="filter.createdAfter" uib-datepicker-popup="{{dateFormat}}"
+          ng-model-options="{timezone: 'utc'}" is-open="createdAfterPopup" ng-click="openCreatedAfterPopup()">
+        <span id="CUR-UIdpIrAs" class="input-group-addon" ng-click="openCreatedAfterPopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+    <div id="CUR-PDhrCVlT" class="form-group col-sm-3">
+      <label id="CUR-PqSAbxgg">Created Before</label>
+      <div id="datepicker-component" class="form-group input-group date">
+        <input id="CUR-nztGOLws" type="text" class="form-control" ng-model="filter.createdBefore" uib-datepicker-popup="{{dateFormat}}"
+          ng-model-options="{timezone: 'utc'}" is-open="createdBeforePopup" ng-click="openCreatedBeforePopup()">
+        <span id="CUR-lMCcBPDr" class="input-group-addon" ng-click="openCreatedBeforePopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-ObgJqijz" class="row">
+    <div id="CUR-LOQOBglU" class="form-group col-sm-3">
+      <label id="CUR-JTKhnUon">Composer</label>
+      <ui-select multiple ng-model="filter.composerIds" close-on-select="true">
+        <ui-select-match>
+          <span id="CUR-iZVmuYnl" style="vertical-align:middle;">{{$item.name}}</span>
+          <span id="CUR-LtEgEosE" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in composers | filter:$select.search"
+          refresh="searchComposers($select)" refresh-delay="500">
+          <div id="CUR-vNxSPmCs">
+            <div id="CUR-dhMutcta" class="clear">
+              <div id="CUR-OxwFrTuG" ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-aGdVAxjy" class="form-group col-sm-3">
+      <label id="CUR-AZqHQhwn">Publisher</label>
+      <ui-select multiple ng-model="filter.publisherIds" close-on-select="true">
+        <ui-select-match>
+          <span id="CUR-YJZAZvAQ" style="vertical-align:middle;">{{$item.name}}</span>
+          <span id="CUR-vQsdCvfX" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in publishers | filter:$select.search"
+          refresh="searchPublishers($select)" refresh-delay="500">
+          <div id="CUR-OCjXNKjs">
+            <div id="CUR-lgOuBUpo" class="clear">
+              <div id="CUR-yMIvGdbn" ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div ng-if="featureAccess('deliveries')" id="CUR-ixacXCWz" class="form-group col-sm-3">
+      <label id="CUR-FMrNoJTR">Status</label>
+      <ui-select class="full-width" ng-model="filter.approvalStatus">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-ykxMXvBe" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item.value as item in approvalStatusFilterValues | filter: $select.search">
+          <span id="CUR-pnrtWvsL" ng-bind="item.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div ng-if="featureAccess('deliveries')" id="CUR-ixacXCFx" class="form-group col-sm-3">
+      <label id="CUR-FMrNoJTD">On Hold</label>
+      <ui-select class="full-width" ng-model="filter.onHold">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-ykxMXvBd" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item.value as item in onHoldValues | filter: $select.search">
+          <span id="CUR-pnrtWvsd" ng-bind="item.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-BMXNzfKl" class="form-group col-sm-3">
+      <label id="CUR-dzwxzODQ">Participation</label>
+      <filter-equal-less-and-greater-than filter="filter.participation" />
+    </div>
+    <div id="CUR-zfgLbPDW" class="form-group col-sm-3">
+      <label id="CUR-BsjEvpOq">Ownership</label>
+      <filter-equal-less-and-greater-than filter="filter.ownership" />
+    </div>
+    
+    <div id="CUR-filter-identifier" class="form-group col-sm-3">
+      <label id="CUR-filter-identifier-label">Main Identifier</label>
+      <div class="row">
+        <div class="col-xs-9 p-r-0">
+          <ui-select multiple ng-model="filter.identifiers" uis-open-close="identifierFilterChange(isOpen)">
+            <ui-select-match>{{$item}}</ui-select-match>
+            <ui-select-choices repeat="identifier in filter.identifiers" refresh="storeIdentifierEntry($select.search)" refresh-delay="0"/>
+          </ui-select>
+        </div>
+        <div id="CUR-filter-identifier-add" class="col-xs-3 p-l-0">
+          <button id="CUR-filter-identifier-add-button" class="p-l-5 p-r-5 btn btn-default btn-block hidden-xs" data-toggle="modal" data-target="#identifierBulkModal"><i
+            class="fa fa-plus"></i>&nbsp;Bulk</button>
+        </div>  
+      </div>
+    </div>
+  </div>
+  <div id="CUR-YDQhaHCL" class="row m-t-10">
+    <div id="CUR-YeHuuuYi" class="col-sm-12 text-center">
+      <button id="CUR-OPOcSCUz" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i> Filter</button>
+    </div>
+  </div>
+  <div id="CUR-yUJYCGcn" class="row">
+    <div id="CUR-ozFSXuYp" class="col-sm-12">
+      <h5 id="CUR-ViswpLVG" class="pull-right">Total: {{total? total : 0}}</h5>
+    </div>
+  </div>
+  <div id="CUR-PAZhwkyk" class="row">
+    <div id="CUR-qFvjGLsR" class="col-xs-12">
+      <div id="CUR-snfDvBYB" class="panel panel-default">
+        <div id="CUR-vsEAsSwy" class="panel-heading">
+          <div id="CUR-CjytYyTr" class="panel-title">
+            Works <documentation link="http://guide.curveroyaltysystems.com/article/catalogue-works/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-QJScNMSt" class="panel-body">
+          <responsive-table headers="headers" data="works" selectable="rights.catalogue == 'Edit'"
+            sort-changed="getSortedData(orderBy, orderDir)" hide-validation="!featureAccess('deliveries')"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-GlcbdUzz" class="col-sm-12">
+    <div id="CUR-rKeslcKR" class="pull-right">
+      <span id="CUR-oiiJLkIx" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <span id="CUR-TGDDbvKh" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-aVZqSylk" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-xnrXtTkl" class="row">
+    <div id="CUR-RurRReiN" class="col-xs-12 text-center">
+      <pagination id="CUR-nAbNZsmL" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-PYGcjmme" class="modal-dialog">
+    <div id="CUR-qxmDAIHx" class="modal-content">
+      <div id="CUR-PPAaSxtP" class="modal-header clearfix text-left">
+        <button id="CUR-xBgmnFIz" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-qZNCTzYj">Delete Works</h5>
+      </div>
+      <div id="CUR-cYZlejaW" class="modal-body">
+        <div id="CUR-oYsOKIth" class="row">
+          <div id="CUR-lCIWBnHy" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected works? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-hLkSvPjw" class="row">
+          <div id="CUR-puiwoGcJ" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-YIGUtSjs" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-RDTTPxdK" type="button" class="btn btn-danger m-t-5" ng-click="delete('selected')"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="addToDeliveryModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-addToDelivery-dialog" class="modal-dialog">
+    <div id="CUR-addToDelivery-content" class="modal-content">
+      <div id="CUR-addToDelivery-header" class="modal-header clearfix text-left">
+        <button id="CUR-addToDelivery-button" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-addToDelivery-add-h5" ng-show="!showCreateDelivery">Add to Delivery</h5>
+        <h5 id="CUR-addToDelivery-new-h5" ng-show="showCreateDelivery">Select Delivery Partner</h5>
+      </div>
+      <div id="CUR-addToDelivery-body" class="modal-body">
+        <div id="CUR-addToDelivery-body-row" class="row">
+          <div id="CUR-addToDelivery-body-row-cols" class="col-xs-12 m-t-20" ng-show="!showCreateDelivery">
+            <p>Select which delivery you would like to add the works to.</p>
+            <div id="CUR-addToDelivery-body-row-cols-error"
+              ng-show="specificDeliveries.length === 0" class="alert alert-danger">
+              <p><b>There are currently no existing Deliveries that you can add works to:</b></p>
+              <ul id="CUR-SKFviorh">
+                <li id="CUR-error-li-1">
+                  Create a delivery and select "Specific Works" OR Use the "Create New" below.
+                </li>
+              </ul>
+            </div>
+            <ui-select ng-model="addToDelivery.delivery">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-addToDelivery-select-span" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="delivery as delivery in specificDeliveries | filter: $select.search">
+                <span id="CUR-addToDelivery-choice-span" ng-bind-html="delivery.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div id="CUR-addToDelivery-body-row-cols-partner" class="col-xs-12 m-t-20 p-l-0" ng-show="showCreateDelivery">
+          <p>Select which delivery partner you would like to deliver the works to.</p>
+          <ui-select ng-model="addToDelivery.partner">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-addToDelivery-partner-select-span" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="partner as partner in partners | filter: $select.search">
+              <span id="CUR-addToDelivery-partner-choice-span" ng-bind-html="partner.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+        <div id="CUR-addToDelivery-body-div-row" class="row">
+          <div id="CUR-addToDelivery-body-div-cols" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-addToDelivery-cancel" type="button" class="btn btn-default m-t-5" ng-click="createNewDelivery(false)" data-dismiss="modal">Cancel</button>
+            <button id="CUR-addToDelivery-addToDelivery" type="button" class="btn btn-complete m-t-5" ng-show="addToDelivery.delivery._id" ng-click="addToDeliverySelected()"><i
+                class="fa fa-plus"></i>&nbsp; Add</button>
+            <button id="CUR-addToDelivery-createNewDelivery" type="button" class="btn btn-complete m-t-5" ng-show="!addToDelivery.delivery._id && !showCreateDelivery" ng-click="createNewDelivery(true)"><i
+                class="fa fa-plus"></i>&nbsp; Create New</button>
+            <button id="CUR-addToDelivery-createDelivery" type="button" class="btn btn-complete m-t-5" ng-show="showCreateDelivery" ng-click="createDelivery()"><i
+              class="fa fa-plus"></i>&nbsp; Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteBulkModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-fuJsTvIx" class="modal-dialog">
+    <div id="CUR-eZRPolpu" class="modal-content">
+      <div id="CUR-grpLEXjz" class="modal-header clearfix text-left">
+        <button id="CUR-cWxkfOsl" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-elSpYQfY">Delete Works</h5>
+      </div>
+      <div id="CUR-czKfDWTI" class="modal-body">
+        <div id="CUR-zEGZkaHR" class="row">
+          <div id="CUR-cUzaRJzW" class="col-xs-12 m-t-20">
+            <p>
+              Paste the work IDs below to bulk delete. You can get these IDs from the first column of the export.
+              Ensure that there is one ID per line, and be sure you want to delete these works, as this cannot be
+              undone.
+            </p>
+          </div>
+        </div>
+        <div id="CUR-DmAwJOuI" class="row">
+          <div id="CUR-PKdBjyiv" class="col-xs-12 m-t-20">
+            <form id="CUR-znpOLOEX">
+              <div id="CUR-oZSNiRgP" class="form-group">
+                <label id="CUR-PBqlySKJ">Works IDs</label>
+                <textarea class="form-control standard-textarea" ng-model="bulkDeleteIds"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-PTFBOoKi" class="row">
+          <div id="CUR-VqmiOoWu" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-GldoBNDd" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-jEYDRyGK" type="button" class="btn btn-danger m-t-5" ng-click="delete('bulk')"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-XUZInGAy" class="modal-dialog">
+    <div id="CUR-VtDUdWqY" class="modal-content">
+      <div id="CUR-ssiJQMvl" class="modal-header clearfix text-left">
+        <button id="CUR-uwZcBlrX" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-AhkVvuIx">Import Works</h5>
+      </div>
+      <div id="CUR-VPesslKi" class="modal-body">
+        <div id="CUR-xSLWNePH" class="row">
+          <div id="CUR-buhVpacZ" class="col-xs-12 m-t-20">
+            <p>
+              If the data in this import file contain changes to Title, Territory or IP Chain, this Import will trigger re-delivery of those Works if you have active Delivery Schedules set up
+            </p>
+          </div>
+        </div>
+        <div id="CUR-nyoQOBTs" class="row">
+          <div id="CUR-KGUFUHKt" class="col-xs-12 m-t-20">
+            <form id="CUR-wRlpTIGq">
+              <div id="CUR-GOxsWWSP" class="form-group">
+                <label id="CUR-PTgSKCiB" for="email">File</label>
+                <input id="CUR-kAKnTsMj" type="file" ng-model="importFile" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-EDdqiIwJ" class="row">
+          <div id="CUR-fBeTfHlg" class="col-xs-12 m-t-20">
+            <form id="CUR-REAETIMD">
+              <div id="CUR-BjPRWcjZ" class="form-group">
+                <input type="checkbox" ng-model="overwriteBlanks" id="overwriteblanks">
+                <label id="CUR-dANDKLZN" for="overwriteblanks">Overwrite Blank Values <i class="fa fa-question-circle" tooltips
+                    tooltip-class="wider"
+                    tooltip-template="Blank values in the template will overwrite and delete data on Curve when this box is checked"></i></label>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-rUMkySSl" class="row" ng-if="importErrors">
+          <div id="CUR-wmYzZFTr" class="col-sm-12">
+            <ul id="CUR-WCVYGnNV">
+              <li id="CUR-ybaWRKRo" ng-repeat="error in importErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-cgocpIqz" class="row">
+          <div id="CUR-Hjshzrtz" class="col-xs-12 m-t-20 text-right">
+            <a id="CUR-bUBlQYNL" class="btn btn-success m-t-5" ng-click="downloadTemplate()">Download Template</a>
+            <button id="CUR-fjQWBWke" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-BwJGXXxF" type="button" class="btn btn-complete m-t-5" ng-click="import()"><i
+                class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade stick-up" id="updateCatalogueModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-mcKXHNQg" class="modal-dialog">
+    <div id="CUR-yFhSTEDR" class="modal-content">
+      <div id="CUR-QzBWtIek" class="modal-header clearfix text-left">
+        <button id="CUR-BGxCUmjY" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-KRiERteG">Update Main Identifier</h5>
+      </div>
+      <div id="CUR-idvTwFSh" class="modal-body">
+        <div id="CUR-kayMNbjr" class="row">
+          <div id="CUR-SCPPzRII" class="col-xs-12 m-t-20">
+            <form id="CUR-UdhVVGMm">
+              <div id="CUR-XEYAREwj" class="form-group">
+                <label id="CUR-dqJueWNm" for="email">File</label>
+                <input id="CUR-bvLoxCzx" type="file" ng-model="importFile" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-xXpPaueN" class="row">
+          <div id="CUR-odaPcbaI" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-rGhVzrth" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-QKEmPtqB" type="button" class="btn btn-complete m-t-5" ng-click="updateCatalogue()"><i
+                class="fa fa-download"></i>&nbsp;Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="updateDeliveryStatus" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-wsOjfVUh" class="modal-dialog">
+    <div id="CUR-olcmtQSF" class="modal-content">
+      <div id="CUR-ItkBuCAT" class="modal-header clearfix text-left">
+        <button id="CUR-arbqMBEA" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-CxAEZNpa">Update Delivery Status</h5>
+      </div>
+      <div id="CUR-EUMzOvGJ" class="modal-body">
+        <div id="CUR-ddQCXyvC" class="row">
+          <div id="CUR-akSOlbyG" class="col-xs-12 m-t-20">
+            <p>
+              This will update the delivery status for the selected Partners on the selected or filtered Works
+            </p>
+          </div>
+          <div id="CUR-pqqmndsWUh" class="form-group col-xs-12 m-t-20">
+            <label id="CUR-uPTrqbeK">Status</label>
+            <ui-select class="full-width" ng-model="partnersFilter.deliveryStatus">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-xeeZsaasrl" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in deliveryStatuses | filter: $select.search">
+                <span id="CUR-YNsaaUpAM" ng-bind="item.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-pqhcdsWUh" class="form-group col-xs-12 m-t-20">
+            <label id="CUR-vxVXhLww">Partners</label>
+            <responsive-table headers="partnersHeaders" data="partners" selectable="rights.catalogue == 'Edit'"
+            sort-changed="getPartnersSortedData(orderBy, orderDir)"></responsive-table>
+          </div>
+        </div>
+
+        <div id="CUR-XjCKclDw" class="row">
+          <div id="CUR-PaXpHYcr" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-ooUVFtBz" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-XZkeNiJy" type="button" class="btn btn-complete m-t-5" ng-click="updateDeliveryStatus()"><i
+                class="fa fa-check"></i>&nbsp;Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<validation-modal
+  header="'Flush Contracts to Works via Ip Chains'"
+  message="'This will (re)assign the Contracts and their Participation Rates on all filtered Works. Are you sure you want to continue? This cannot be undone.'"
+  value-to-validate="'Flush Works'"
+  type="'works'"
+  method="flushContractsFromIpChains"
+  method-type="'update'">
+</validation-modal>
+
+<validation-modal
+  modal-id="'deliveryStatusConfirmModal'"
+  header="'Update Delivery Status on Filtered Works'"
+  message="deliveryStatusConfirmMessage"
+  value-to-validate="'CONFIRM'"
+  type="'works'"
+  method="confirmBulkDeliveryStatus"
+  method-type="'update'">
+</validation-modal>
+
+<div class="modal fade stick-up" id="identifierBulkModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-NTsmujZn" class="modal-dialog">
+    <div id="CUR-ocNezgEU" class="modal-content">
+      <div id="CUR-CFzzmdiK" class="modal-header clearfix text-left">
+        <button id="CUR-qHDOjfXL" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-sTAKwHqP">Include Multiple Main Identifiers</h5>
+      </div>
+      <div id="CUR-nXqbaVwf" class="modal-body">
+        <div id="CUR-KalsaxuH" class="row">
+          <div id="CUR-mmxODqEe" class="col-xs-12">
+            <small><b>Please ensure that there is only one identifier per line.</b></small>
+          </div>
+        </div>
+        <div id="CUR-DwtINGGd" class="row">
+          <div id="CUR-RBlQyHCr" class="col-xs-12 m-t-20">
+            <form id="CUR-qCbcHfEP">
+              <div id="CUR-EigpLGuO" class="form-group">
+                <label id="CUR-KLuxyqtH">Works Identifiers</label>
+                <textarea class="form-control standard-textarea" ng-model="bulkIncludeIds"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-LDOTkhqk" class="row">
+          <div id="CUR-mYZuiDTZ" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-xhpsdRlL" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-HbADKYoF" type="button" class="btn btn-complete m-t-5" ng-click="includeBulkIdentifiers()"><i
+                class="fa fa-plus"></i>&nbsp;Include</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

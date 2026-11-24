@@ -1,0 +1,57 @@
+<div data-ng-if="comparisonData || alwaysShow" data-ng-class="{ 'col-xs-12' : !comparisonData, 'col-xs-6': comparisonData }">
+  <div data-ng-if="data && data.rawData.length > 0"> <!--ng-class="{ 'col-lg-6' : !comparisonData }"-->
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              {{heading}}
+            </div>
+            <div class="hidden-xs btn-group pull-right graph-icon-buttons">
+              <button class="btn btn-secondary m-xs-t-5 m-l-0 m-r-0 " data-ng-class="{ 'active' : type=='pie' }" data-ng-click="type='pie'"><i class="fa fa-pie-chart"></i></button>
+              <button class="btn btn-secondary m-xs-t-5 m-l-0 m-r-0 " data-ng-class="{ 'active' : type=='bar' }" data-ng-click="type='bar'"><i class="fa fa-bar-chart"></i></button>
+              <button class="btn btn-secondary m-xs-t-5 m-l-0 m-r-0 " data-ng-class="{ 'active' : type=='table' || !type }" data-ng-click="type='table'"><i class="fa fa-table"></i></button>
+            </div>
+          </div>
+          <div class="panel-body sm-p-l-5 sm-p-r-5" data-ng-class=""><!--possibly move to tempate and use max height only when not mobile?? not sure -->
+            <div class="visible-xs btn-group graph-icon-buttons">
+              <button class="col-xs-6 btn btn-secondary m-xs-t-5 m-l-0 m-r-0 " data-ng-class="{ 'active' : type=='bar' }" data-ng-click="type='bar'"><i class="fa fa-bar-chart"></i></button>
+              <button class="col-xs-6 btn btn-secondary m-xs-t-5 m-l-0 m-r-0 " data-ng-class="{ 'active' : type=='table' || !type }" data-ng-click="type='table'"><i class="fa fa-table"></i></button>
+            </div>
+            <div class="col-xs-12">
+              <canvas data-ng-if="type=='pie'" id="{{identifier}}{{columnId}}" class="chart chart-doughnut" chart-data="data.data.pie" chart-labels="data.labels.pie" chart-options="pieOptions" chart-click="drillDownChart"></canvas>
+              <canvas data-ng-if="type=='bar'" id="{{identifier}}{{columnId}}" class="chart chart-bar" chart-data="data.data.bar" chart-labels="data.labels.bar" chart-options="barOptions" chart-click="drillDownChart"></canvas>
+            </div>
+            <div data-ng-if="type=='table' || !type" class="col-xs-12 max-height-400">
+              <div class="table-responsive">
+                <table class="table table-hover dataTable no-footer allow-overflow">
+                  <thead>
+                    <tr>
+                      <th class="hidden-xs">Title</th>
+                      <th class="hidden-xs" data-ng-if="identifier != 'workIds'">Artist</th>
+                      <th data-ng-switch on="identifier" width="30%">
+                        <span data-ng-switch-when="trackIds">ISRC</span>
+                        <span data-ng-switch-when="workIds">Identifier</span>
+                        <span data-ng-switch-default>Cat No</span>
+                      </th>
+                      <th width="30%">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- in drillDownTable call we need row.type to become row.id or row._id so that the drilldown value is added to to the filter corrcetly-->
+                    <tr data-ng-repeat="row in data.rawData" data-ng-click="drillDownTable(identifier, row.id, columnId==='B')">
+                      <td class="v-align-middle hidden-xs">{{row.title}}</td>
+                      <td data-ng-if="identifier != 'workIds'" class="v-align-middle hidden-xs">{{row.artist}}</td>
+                      <td class="v-align-middle">{{row.type}}</td>
+                      <td class="v-align-middle">{{currencySymbol}}{{row.value | number: 2}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

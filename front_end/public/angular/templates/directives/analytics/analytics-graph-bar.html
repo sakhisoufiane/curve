@@ -1,0 +1,54 @@
+<div data-ng-if="comparisonData || alwaysShow" data-ng-class="{ 'col-xs-12' : !comparisonData, 'col-xs-6': comparisonData }">
+  <div class="row" data-ng-if="data && data.rawData.length > 0">
+    <div class="col-xs-12">
+      <div class="panel panel-default sm-m-b-5">
+        <div class="panel-heading">
+          <div class="panel-title">
+            {{heading}}
+          </div>
+
+          <div class="hidden-xs btn-group pull-right graph-icon-buttons">
+            <button class="btn btn-secondary m-xs-t-5 m-l-0 m-r-0 " data-ng-class="{ 'active' : type=='pie' }" data-ng-click="type='pie'"><i class="fa fa-pie-chart"></i></button>
+            <button class="btn btn-secondary m-xs-t-5 m-l-0 m-r-0 " data-ng-class="{ 'active' : type=='bar' || !type }" data-ng-click="type='bar'"><i class="fa fa-bar-chart"></i></button>
+            <button class="btn btn-secondary m-xs-t-5 m-l-0 m-r-0 " data-ng-class="{ 'active' : type=='table' }" data-ng-click="type='table'"><i class="fa fa-table"></i></button>
+          </div>
+
+        </div>
+        <div class="panel-body sm-p-l-5 sm-p-r-5 sm-p-b-30">
+          <div class="visible-xs btn-group graph-icon-buttons">
+            <button class="col-xs-6 btn btn-secondary m-xs-t-5 m-l-0 m-r-0 " data-ng-class="{ 'active' : type=='bar' || !type }" data-ng-click="type='bar'"><i class="fa fa-bar-chart"></i></button>
+            <button class="col-xs-6 btn btn-secondary m-xs-t-5 m-l-0 m-r-0 " data-ng-class="{ 'active' : type=='table' }" data-ng-click="type='table'"><i class="fa fa-table"></i></button>
+          </div>
+          <div class="col-xs-12">
+            <canvas data-ng-if="type=='pie'" id="{{identifier}}{{columnId}}" class="chart chart-doughnut" chart-data="data.data.pie" chart-labels="data.labels.pie" chart-options="pieOptions" chart-click="drillDownChart"></canvas>
+            <canvas data-ng-if="type=='bar' || !type" id="{{identifier}}{{columnId}}" class="chart chart-bar" chart-data="data.data.bar" chart-labels="data.labels.bar" chart-options="barOptions" chart-click="drillDownChart"></canvas>
+          </div>
+          <div data-ng-if="type=='table'" class="col-xs-12 max-height-400">
+            <div class="table-responsive">
+              <table class="table table-hover table-condensed no-footer">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th class="text-right">Value</th>
+                  </tr>
+                </thead>
+                <tbody data-ng-if="!isRowClickDisabled">
+                  <tr data-ng-repeat="line in data.rawData" data-ng-click="drillDownTable(identifier, line.rawType, columnId==='B')">
+                    <td>{{line.type}}</td>
+                    <td class="text-right">{{line.value | number: 2}}</td>
+                  </tr>
+                </tbody>
+                <tbody data-ng-if="isRowClickDisabled">
+                  <tr data-ng-repeat="line in data.rawData">
+                    <td>{{line.type}}</td>
+                    <td class="text-right">{{line.value | number: 2}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

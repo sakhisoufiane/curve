@@ -1,0 +1,47 @@
+<div id="CUR-HZZsIbld" class="row">
+  <div id="CUR-eCUIoxdA" class="col-xs-12 text-center">
+    <img src="{{darkLogo}}" alt="logo" class="logo" crossorigin="anonymous">
+  </div>
+</div>
+<div id="CUR-zVHIMdfT" class="row">
+  <div id="CUR-cOCDNtqb" class="col-xs-12">
+      <div id="CUR-yGbLUoIi" class="mfa-form-wrapper" style="display:hidden;">
+        <div id="CUR-liqmhjIQ" class="alert alert-info" role="alert">
+            <p>Multi-factor Authentication is enabled for your user. Please fill in the code below.</p>
+        </div>
+        <form id="mfa-form" class="p-t-15" role="form">
+          <div id="notification"></div>
+          {{# if withError }}
+            <div id="CUR-jABIBVRx" class="alert alert-info" role="alert"><h4 id="CUR-TKQpNVHk" class="pull-left">Error Logging In</h4><br><p>{{withError}}</p></div>
+          {{/ if }}
+          <div id="CUR-HowfOSEB" class="form-group">
+            <label id="CUR-fCPzWaHy">Enter Token Found in Your {{multiFactorAuthenticationType}}</label>
+            <input id="CUR-cvPfEpWB" type="text" name="code" placeholder="Token" class="form-control" autocomplete="off">
+          </div>
+          <input id="CUR-iNhGQpYl" type="hidden" name="token" value={{token}}>
+          <input id="CUR-NUgNfEgf" type="hidden" name="email" value={{email}}>
+          <input id="CUR-dnaHsBWU" type="hidden" name="type" value={{multiFactorAuthenticationType}}>
+          <button id="CUR-olwkURpv" class="btn btn-complete m-t-10 w-xs-100-p m-xs-l-0" type="submit">Complete Sign In</button>
+        </form>
+      </div>
+    </div>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCaptchCb&render=explicit" async defer></script>
+
+<script>
+  
+  {{#if favicon}}
+    var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = "{{{favicon}}}";
+    link.crossOrigin = 'anonymous';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  {{/if}}
+  {{#if pageTitle}}
+    document.title = "{{pageTitle}}"
+  {{else}}
+    document.title = "Curve"
+  {{/if}}
+</script>

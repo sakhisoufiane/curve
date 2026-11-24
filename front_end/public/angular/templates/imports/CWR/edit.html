@@ -1,0 +1,373 @@
+<div id="CUR-HQENeRUK" class="jumbotron" data-pages="parallax">
+  <div
+    id="CUR-vrotThMg"
+    class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20"
+  >
+    <div id="CUR-IgQqpKix" class="inner">
+      <ul id="CUR-ILHoKCDn" class="breadcrumb">
+        <li id="CUR-mvYjCcfO">
+          <a
+            id="CUR-HHInRIbW"
+            ng-href="/#/imports?transferringSystem={{transferringSystem}}"
+            >CWR Imports</a
+          >
+        </li>
+        <li id="CUR-shbAszko" ng-show="!import._id">
+          <a id="CUR-ZMIfiKAH" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-HobEapLb" ng-show="import._id">
+          <a
+            id="CUR-CpWBXJgm"
+            ng-href="/#/imports/{{import._id}}/edit?transferringSystem={{transferringSystem}}"
+            class="active"
+            >{{import.name}}</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid m-b-20">
+  <div id="CUR-xJajqwUG" class="col-xs-12 col-md-5 col-md-offset-6 text-right">
+    <div id="CUR-IevbIqmn" class="sm-p-l-15 sm-p-r-15">
+      <button
+        id="CUR-RtvJHZzy"
+        class="btn"
+        ng-click="save(transferringSystem)"
+        ng-disabled="import && import.status !== 'Setup'"
+        ng-class="import && import.status !== 'Setup' ? 'btn-disabled' : 'btn-complete'"
+      >
+        <i class="fa fa-check"></i>&nbsp;Save
+      </button>
+      <button
+        id="CUR-RtvJHZzy"
+        class="btn btn-success-green"
+        ng-click="runImport(transferringSystem)"
+        ng-disabled="!canRunImport || hasUserEditedForm"
+        ng-style="!canRunImport || hasUserEditedForm ? { 'background-color': '#979e9d', 'color': '#fff', 'border-color': '#979e9d' } : {}"
+      >
+        &nbsp;Import
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container-fluid">
+  <div class="col-xs-12 col-md-5 col-md-offset-1">
+    <div class="panel panel-default">
+      <div
+        id="CUR-wzCyOdoB"
+        class="panel-heading"
+        style="display: flex; justify-content: space-between"
+      >
+        <div id="CUR-vSbPUNMa" class="panel-title">Overview</div>
+      </div>
+      <div class="panel-body">
+        <div
+          class="alert alert-danger"
+          role="alert"
+          ng-if="filesErrors.length > 0"
+        >
+          <strong>Files Errors:</strong>
+          <ul>
+            <li ng-repeat="error in filesErrors">
+              <strong>{{ error.file }} :</strong> {{error.error}}
+            </li>
+          </ul>
+        </div>
+        <div class="row p-l-20 p-r-20">
+          <div>
+            <div class="form-group">
+              <label>Status</label>
+              <div>
+                <span>
+                  <span
+                    ng-if="import.status === 'Setup'"
+                    class="label label-warning"
+                    >{{ import.status }}</span
+                  >
+                  <span
+                    ng-if="import.status === 'Complete'"
+                    class="label label-success"
+                    >{{ import.status }}</span
+                  >
+                  <span
+                    ng-if="import.status === 'Importing'"
+                    class="label label-info"
+                    >{{ import.status }}</span
+                  >
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Name</label>
+            <input
+              type="text"
+              class="form-control"
+              ng-model="import.name"
+              ng-change="hasUserEditedForm = true"
+              ng-disabled="import && import.status !== 'Setup'"
+            />
+            <label
+              class="error"
+              ng-if="setupErrors.includes('Import is required to have a name')"
+              >Name is required</label
+            >
+          </div>
+          <div class="form-group required">
+            <label>Import Partner</label>
+            <import-partner-select-field 
+              import="import"
+              edit="rights.catalogue === 'Edit'" 
+              populated="selectedImportPartner"
+              value="selectedImportPartner._id"
+              transferring-system="transferringSystem">
+            </import-partner-select-field>
+            <label
+              class="error"
+              ng-if="setupErrors.includes('Import partner is required')"
+              >Import partner is required</label
+            >
+          </div>
+          <div id="CUR-ocjACnYF" class="form-group">
+            <label id="CUR-hJjwXwRG">Add File</label>
+            <div>
+              Uploaded File: {{currentlyUploadedFile ? currentlyUploadedFile :
+              'N/A'}}
+            </div>
+            <input
+              id="CUR-jHJbhksv"
+              type="file"
+              class="m-t-10"
+              ngf-select
+              ngf-allow-dir="false"
+              ng-model="files[0]"
+              ng-change="hasUserEditedForm = true"
+              ng-if="import && import.status === 'Setup'"
+            />
+            <label
+              id="CUR-XcSreZWo"
+              class="error"
+              ng-if="setupErrors.includes('At least one file is required') && import && import.status === 'Setup'"
+              >File is required</label
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-md-5">
+    <div class="panel panel-default">
+      <div
+        id="CUR-wzCyOdoB"
+        class="panel-heading"
+        style="display: flex; justify-content: space-between"
+      >
+        <div id="CUR-vSbPUNMa" class="panel-title">
+          Settings for this import
+        </div>
+      </div>
+      <div class="panel-body">
+        <p>
+          <span class="bold all-caps fs-12">User Work Identifiers: </span>
+          <span
+            class="fs-13"
+            ng-bind="importPartner.defaults.setMainIdentifier"
+          />
+        </p>
+        <p>
+          <span class="bold all-caps fs-12"
+            >Use Publisher Interested Party #:
+          </span>
+          <span
+            class="fs-13"
+            ng-bind="importPartner.defaults.setPublisherInterestedParty || false"
+          />
+        </p>
+        <p>
+          <span class="bold all-caps fs-12"
+            >Use Composer Interested Party #:
+          </span>
+          <span
+            class="fs-13"
+            ng-bind="importPartner.defaults.setComposerInterestedParty || false"
+          />
+        </p>
+        <p>
+          <span class="bold all-caps fs-12">Inserted Publisher: </span>
+          <span
+            class="fs-13"
+            ng-bind="importPartner.defaults.claimingPartyPublisher || 'N/A'"
+          />
+        </p>
+        <p>
+          <span class="bold all-caps fs-12">Inserted Publisher Category: </span>
+          <span
+            class="fs-13"
+            ng-bind="importPartner.defaults.claimingPartyContractType || 'N/A'"
+          />
+        </p>
+        <p>
+          <span class="bold all-caps fs-12">ingestion territory: </span>
+          <span
+            class="fs-13"
+            ng-bind="importPartner.defaults.ingestionTerritory || 'N/A'"
+          />
+        </p>
+        <p>
+          <span class="bold all-caps fs-12">controlled territories:</span>
+          <span
+            class="fs-13"
+            ng-bind="importPartner.defaults.territories || 'N/A'"
+            style="overflow-wrap: break-word"
+          />
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Page -->
+  <div
+    id="CUR-kczwpSVv"
+    class="container-fluid container-fixed-lg"
+    ng-if="import.status == 'Importing'"
+  >
+    <div id="CUR-BTzXwzPV" class="row">
+      <div id="CUR-cunmuIwo" class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div id="CUR-RGxxIeGx" class="panel panel-default text-center">
+          <div id="CUR-wTaVaifq" class="panel-body p-t-15">
+            <h3 id="CUR-HyTKCwnY">Import is processing...</h3>
+            <div>Importing works: {{import.ingestedWorks || '0'}}</div>
+            <div id="CUR-dslouhvq" class="loading-spinner">
+              <md-progress-circular md-diameter="95"></md-progress-circular>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Error Page -->
+  <div
+    id="CUR-aigePGBE"
+    class="container-fluid container-fixed-lg"
+    ng-if="import.status == 'Errored'"
+  >
+    <div id="CUR-VdHXKrvq" class="row">
+      <div id="CUR-tgtvEvfH" class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div id="CUR-ngCPLuId" class="panel panel-default text-center">
+          <div id="CUR-gKWbMuPX" class="panel-body p-t-15">
+            <h3 id="CUR-hXFEjCap">Import has Errored</h3>
+            <div id="CUR-JyQpyIkc" class="row">
+              <div
+                id="CUR-kfCejoLi"
+                class="col-xs-10 col-xs-offset-1 progress-checklist text-left"
+              >
+                <p>{{import.calculationError}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid" ng-if="import.errors.length">
+  <div class="col-xs-10 col-md-offset-1">
+    <div id="CUR-snfDvBYB" class="panel panel-default">
+      <div
+        id="CUR-vsEAsSwy"
+        class="panel-heading"
+        ng-click="toggleShowAll()"
+        style="display: flex; justify-content: space-between"
+      >
+        <div id="CUR-CjytYyTr" class="panel-title">
+          Errors ({{import.errors.length}})
+        </div>
+        <div ng-show="import.errors.length > 5">
+          <i class="fa fa-chevron-right" ng-show="!showAll"></i>
+          <i class="fa fa-chevron-down" ng-show="showAll"></i>
+        </div>
+      </div>
+      <div id="CUR-QJScNMSt" class="panel-body">
+        <ul id="CUR-EgRt3FFS">
+          <li
+            ng-repeat="error in import.errors | limitTo:(showAll ? import.errors.length : 5) track by $index"
+            ng-bind-html="error.identifier ? error.error + ' (' + error.title + ' - ' + error.identifier + ')' : error"
+          />
+        </ul>
+        <div id="CUR-yQioVXbz" class="row">
+          <div id="CUR-eCeJHKrm" class="col-xs-12">
+            <button
+              id="CUR-XIzBetWI"
+              type="button"
+              class="btn btn-complete w-xs-100-p m-xs-l-0"
+              ng-click="exportErrors()"
+            >
+              <i class="fa fa-download"></i> Export
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid" ng-if="import.status === 'Complete'">
+  <div class="col-xs-10 col-md-offset-1">
+    <div id="CUR-yUJYCGcn" class="row">
+      <div id="CUR-ozFSXuYp" class="col-sm-12">
+        <h5 id="CUR-ViswpLVG" class="pull-right">
+          Total: {{workTotal? workTotal : 0}}
+        </h5>
+      </div>
+    </div>
+    <div id="CUR-PAZhwkyk">
+      <div id="CUR-qFvjGLsR">
+        <div id="CUR-snfDvBYB" class="panel panel-default">
+          <div id="CUR-vsEAsSwy" class="panel-heading">
+            <div id="CUR-CjytYyTr" class="panel-title">
+              Works
+              <documentation
+                link="http://guide.curveroyaltysystems.com/article/catalogue-works/"
+              ></documentation>
+            </div>
+          </div>
+          <div id="CUR-QJScNMSt" class="panel-body">
+            <responsive-table
+              headers="headers"
+              data="works"
+              selectable="rights.catalogue == 'Edit'"
+              sort-changed="getSortedData(orderBy, orderDir)"
+            ></responsive-table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-GlcbdUzz" class="col-sm-12">
+      <div id="CUR-rKeslcKR" class="pull-right">
+        <span id="CUR-oiiJLkIx" class="inline-block" ng-if="!isShowingAll"
+          >Showing 25 Per Page</span
+        >
+        <span id="CUR-TGDDbvKh" class="inline-block" ng-if="isShowingAll"
+          >Showing {{workFilter.limit}} Per Page</span
+        >
+      </div>
+    </div>
+    <div id="CUR-xnrXtTkl" class="row">
+      <div id="CUR-RurRReiN" class="col-xs-12 text-center">
+        <pagination
+          id="CUR-nAbNZsmL"
+          pages="workPages"
+          total="workTotalPages"
+          current="workCurrentPage"
+          change-page="workChangePage(page)"
+        ></pagination>
+      </div>
+    </div>
+  </div>
+</div>

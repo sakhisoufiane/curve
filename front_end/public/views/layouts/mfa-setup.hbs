@@ -1,0 +1,158 @@
+<div id="CUR-HZZsIbld" class="row">
+  <div id="CUR-eCUIoxdA" class="col-xs-12 text-center">
+    <img src="{{darkLogo}}" alt="logo" class="logo" crossorigin="anonymous">
+  </div>
+</div>
+<div id="CUR-zVHIMdfT" class="row">
+  <div id="CUR-cOCDNtqb" class="col-xs-12">
+    <div id="CUR-yGbLUoIi" class="mfa-form-wrapper">
+      <div class="panel panel-default">
+      <div id="CUR-CotIZGAw" class="panel-heading">
+        <div id="CUR-bomMJlXn" class="panel-title">
+          Multifactor Authentication Required
+        </div>
+      </div>
+      <div id="CUR-fLvIdaJF" class="panel-body p-t-15">
+        <p>To protect your account, MFA (Multifactor Authentication) is now required.</p>
+        <p>Your account has access to sensitive payment functionality, including the ability to add or edit bank account details.</p>
+        <p>To keep your data and earnings secure, please enable MFA using one of the following methods:</p>
+
+      <form id="mfa-form-setup" class="p-t-15" role="form" method="POST" action="/login/multi-factor/setup">
+        <div id="notification"></div>
+        {{# if withError }}
+        <div id="CUR-jABIBVRx" class="alert alert-info" role="alert">
+          <h4 id="CUR-TKQpNVHk" class="pull-left">Error Logging In</h4><br>
+          <p>{{withError}}</p>
+        </div>
+        {{/ if }}
+
+        <input type="hidden" id="email" value={{email}}>
+        <input type="hidden" id="token" value={{token}}>
+        <input type="hidden" id="codeSent" value={{codeSent}}>
+        <input type="hidden" id="qrCode" value={{qrCode}}>
+
+        <div id="CUR-aFvdtGKr" class="form-group">
+          <label id="CUR-yPuqGseA">Type</label>
+
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mfaType" id="mfaEmail"
+              value="Email" checked>
+            <label class="form-check-label" for="mfaEmail">
+              Email
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mfaType" id="mfaApp"
+              value="Authenticator App">
+            <label class="form-check-label" for="mfaApp">
+              Authenticator App
+            </label>
+          </div>
+        </div>
+
+        <div id="code-section" style="display: none;">
+          <div id="qr-code" class="form-group">
+            <img src="{{qrCode}}" alt="QR Code">
+            <p>Scan this code into the Authenticator app and then enter the Token below to complete the setup.</p>
+          </div>
+          <p id="mfa-code-input-email-label">Enter the Email Token below to complete the setup.</p>
+          <input id="mfa-code-input" type="text" placeholder="Token" class="form-control"
+            autocomplete="off" name="mfaCode"
+            value="{{mfaCode}}">
+        </div>
+
+        <button id="mfa-request-submit" class="btn btn-complete m-t-10 w-xs-100-p m-xs-l-0" type="submit">
+          Request Token
+        </button>
+
+        <button id="mfa-setup-submit" class="btn btn-complete m-t-10 w-xs-100-p m-xs-l-0" type="submit" style="display: none;">
+          Complete Setup
+        </button>
+
+        <hr class="border border-primary border-2 m-b-0">
+
+        <div class="panel-heading p-l-0">
+          <small class="bold">Curve Royalty Systems – Security Notice</small>
+        </div>
+        <small class="text-info fs-12">Curve Royalty Systems cannot be held liable for any data breaches or loss of earnings resulting from weak account security practices, including the use of trivial passwords, reusing credentials across services, or insecure storage (e.g., post-it notes, email, messaging apps).</small>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCaptchCb&render=explicit" async defer></script>
+
+<script>
+  {{#if favicon}}
+  var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+  link.type = 'image/x-icon';
+  link.rel = 'shortcut icon';
+  link.href = "{{{favicon}}}";
+  link.crossOrigin = 'anonymous';
+  document.getElementsByTagName('head')[0].appendChild(link);
+  {{/if}}
+  {{#if pageTitle}}
+  document.title = "{{pageTitle}}"
+  {{else}}
+  document.title = "Curve"
+  {{/if}}
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const codeSent = document.getElementById('codeSent');
+    const email = document.getElementById('email');
+    const mfaRequestSubmit = document.getElementById('mfa-request-submit');
+    const mfaSetupSubmit = document.getElementById('mfa-setup-submit');
+    const emailRadio = document.getElementById('mfaEmail');
+    const appRadio = document.getElementById('mfaApp');
+    const qrCode = document.getElementById('qr-code');
+    const codeSection = document.getElementById('code-section');
+    const tokenInput = document.getElementById('mfa-code-input');
+    const tokenInputLabel = document.getElementById('mfa-code-input-email-label');
+
+    function toggleQRSection() {
+      // Clear the token input field on type change
+      tokenInput.value = '';
+
+      if (appRadio.checked) {
+        codeSection.style.display = 'block';
+        qrCode.style.display = 'block';
+        mfaRequestSubmit.style.display = 'none';
+        mfaSetupSubmit.style.display = 'block';
+        tokenInputLabel.style.display = 'none';
+      } else {
+        qrCode.style.display = 'none';
+        tokenInputLabel.style.display = 'block';
+
+        if (codeSent?.value === 'true') {
+          codeSection.style.display = 'block';
+          mfaRequestSubmit.style.display = 'none';
+          mfaSetupSubmit.style.display = 'block';
+        } else {
+          codeSection.style.display = 'none';
+          mfaRequestSubmit.style.display = 'block';
+          mfaSetupSubmit.style.display = 'none';
+        }
+      }
+      setupPageLayout();
+    }
+
+    // Enable submit button when the token input is filled
+    function setupPageLayout() {
+      mfaSetupSubmit.disabled = !tokenInput.value || tokenInput.value.trim() === '';
+    }
+
+    // Initial check
+    toggleQRSection();
+
+    // Listen for changes
+    emailRadio.addEventListener('change', toggleQRSection);
+    appRadio.addEventListener('change', toggleQRSection);
+    
+    // Listen for token input changes
+    if (tokenInput) {
+      tokenInput.addEventListener('input', setupPageLayout);
+      tokenInput.addEventListener('keyup', setupPageLayout);
+    }
+  });
+</script>

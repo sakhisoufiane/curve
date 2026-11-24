@@ -1,0 +1,175 @@
+<div id="CUR-PsLGvxYM" class="jumbotron" data-pages="parallax">
+  <div id="CUR-yGAXRHkx" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-nLjJUwBh" class="inner">
+      <ul id="CUR-VDnngzXH" class="breadcrumb">
+        <li id="CUR-uwineyON"><a id="CUR-nwSFNGwm" href="/#/paymentGroups/{{payment.paymentGroupId}}/edit">Payment Groups</a></li>
+        <li id="CUR-oyTQFrGT" ng-show="!payment._id"><a id="CUR-WIYnCKSw" href="" class="active">Create</a></li>
+        <li id="CUR-slOenZdB" ng-show="payment._id"><a id="CUR-FSkNOTXZ" href="/#/payment/{{payment._id}}/edit" class="active">{{payment.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-oTAjAgxJ" class="container-fluid container-fixed-lg sm-p-l-5 sm-p-r-5">
+  <div id="CUR-iiPJSuKN" class="row" ng-if="payment.status !== 'Paid' && payment.status !== 'Processing'">
+    <div id="CUR-WihdGaJC" class="col-xs-12 text-right header-btn-group">
+      <button id="CUR-MRCicXjj" class="btn btn-success" data-toggle="modal" ng-click="pay()" ng-show="payment._id && rights.periods == 'Edit'"><i class="fa fa-credit-card"></i> Pay</button>
+      <button id="CUR-fjzEPjoB" class="btn btn-danger" data-toggle="modal" data-target="#deletePaymentModal" ng-show="payment._id && rights.periods == 'Edit'"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-vzLwJXME" class="btn btn-complete" ng-click="save()" ng-show="rights.periods == 'Edit'"><i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+
+  <div id="CUR-LXpnnkMj" ng-show="payment.warnings && payment.warnings.length !== 0 " class="alert alert-warning">
+    <p><b>This payment has some issues that may affect its recipient or the amount paid out</b></p>
+    <ul id="CUR-dpIYpbiv">
+      <li ng-repeat="warnings in payment.warnings track by $index">
+        {{warnings}}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Inputs -->
+  <div id="CUR-qHQWmLTy" class="row">
+    <div id="CUR-KsDCqSfl" class="col-xs-12 col-md-6">
+      <div id="CUR-cgsKLXtC" class="panel panel-default">
+        <div id="CUR-AvuPUExH" class="panel-heading">
+          <div id="CUR-uuQQvgCT" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-oxJjHZLM" class="panel-body p-t-15">
+          <div id="CUR-oCQlRhpR" class="form-group required">
+            <label id="CUR-NTEknxLZ">Name</label>
+            <input id="CUR-XHhdnPOg" ng-if="payment.status !== 'Paid' && payment.status !== 'Processing'" type="text" class="form-control" ng-model="payment.name"
+              ng-disabled="rights.periods != 'Edit'">
+            <p id="CUR-qpNtmAAv" ng-if="payment.status === 'Paid' || payment.status === 'Processing'">{{payment.name}}</p>
+          </div>
+          <div id="CUR-iaDMRyrN" class="form-group required">
+            <label id="CUR-EnVSgCHn">Amount</label>
+            <input id="CUR-eFDNZivS" ng-if="payment.status !== 'Paid' && payment.status !== 'Processing'" type="number" class="form-control" ng-model="payment.amount"
+            min="0.01" step="any" ng-disabled="rights.periods != 'Edit'"  ng-init="payment.amount = 0">
+              <p class="text-danger" ng-show="payment.amount <= 0">Amount must be greater than 0</p>
+            <p id="CUR-CmPDuobv" ng-if="payment.status === 'Paid' || payment.status === 'Processing'">{{payment.amount}}</p>
+          </div>
+          <div id="CUR-yAScTNWd" class="form-group required" ng-if="payment.currency">
+            <label id="CUR-kiIKFdEZ">
+              Currency
+              <i class="fa fa-question-circle m-l-10" tooltips tooltip-class="wider"
+              tooltip-template="The payment currency is the same as the Contract's currency"></i>
+            </label>
+            <p>{{payment.currency}}</p>
+          </div>
+          <div id="CUR-iaDMRyrN" class="form-group required">
+            <label id="CUR-EnVSgCHn">US Revenue Percentage</label>
+            <input id="CUR-eFDNZivS" ng-if="payment.status !== 'Paid' && payment.status !== 'Processing'" type="number" class="form-control" ng-model="payment.usRevenuePercentage"
+              ng-disabled="rights.periods != 'Edit'">
+            <p id="CUR-CmPDuobv" ng-if="payment.status === 'Paid' || payment.status === 'Processing'">{{payment.usRevenuePercentage}}</p>
+          </div>
+          <div id="CUR-hqUJePRw" class="form-group required">
+            <label id="CUR-kxpFcRUq">Payee</label>
+            <payee-select-field
+            value="payment.payeeId" 
+            populated="payee.payee"
+            edit="payment.status !== 'Paid' && payment.status !== 'Processing' && rights.periods == 'Edit'"
+            ></payee-select-field>
+          </div>
+          <div id="CUR-ncKliyvE" class="form-group required">
+            <label id="CUR-jcXvNwnz">Contract</label>
+            <contract-select-field edit="payment.status !== 'Paid' && payment.status !== 'Processing' && rights.periods == 'Edit'" value="payment.contractId" populated="contract.contract"></contract-select-field>
+          </div>
+          <div id="CUR-fNxbNuKw" class="form-group required" ng-if="payment.statementId && payment.statementId.name">
+            <label id="CUR-bYxDLCno">Statement</label>
+            <p>{{payment.statementId.name}}</p>
+          </div>
+
+          <div id="CUR-oCQlRhpR" class="form-group">
+            <label id="CUR-NTEknxLZ">Withholding Tax Amount</label>
+            <input id="CUR-XHhdnPOg" ng-if="payment.status !== 'Paid' && payment.status !== 'Processing'" type="text" class="form-control" ng-model="payment.withholdingTaxAmount"
+              ng-disabled="rights.periods != 'Edit'" ng-init="payment.withholdingTaxAmount = 0">
+            <p id="CUR-qpNtmAAv" ng-if="payment.status === 'Paid' || payment.status === 'Processing'">{{payment.withholdingTaxAmount}}</p>
+          </div>
+          <div id="CUR-oCQlRhpR" class="form-group" ng-if="payment.withholdingTaxCurrency">
+            <label id="CUR-NTEknxLZ">Withholding Tax Currency</label>
+            <p>{{payment.withholdingTaxCurrency || ' '}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-PtCdbshe" class="col-xs-12 col-md-6">
+      <div id="CUR-CNgGpapH" class="panel panel-default">
+        <div id="CUR-ArpUOXyy" class="panel-heading">
+          <div id="CUR-yRYvkFMf" class="row">
+            <div id="CUR-CQTExbOL" class="col-xs-6 col-md-3">
+              <div id="CUR-tvjzzDjA" class="panel-title">
+                Status <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-costs/#file">
+                </documentation>
+              </div>
+            </div>
+            <div id="CUR-iFcuWYKg" class="col-xs-6 col-md-9">
+              <span id="CUR-whIkwmZf" class="label label-sm label-success" ng-if="payment.status === 'Paid'">
+                {{ payment.status }} 
+                <span ng-if="payment.paymentDetails && payment.paymentDetails.paidOffline">Offline</span>
+            </span>            
+              <i ng-if="payment.status == 'Paid' && payment.paidAdditionalInfo" class="fa fa-question-circle m-l-10" tooltips tooltip-class="wider"
+              tooltip-template="{{payment.paidAdditionalInfo}}"></i>
+              <span id="CUR-OvRBuGWn" class="label label-sm label-info" ng-if="payment.status == 'Pending'">{{ payment.status }}</span>
+              <span id="CUR-qEWVWbmA" class="label label-sm label-warning" ng-if="payment.status == 'Missing Info'">{{ payment.status}}
+              </span>
+              <span id="CUR-qEWVWbmB" class="label label-sm label-warning" ng-if="payment.status == 'Processing'">{{ payment.status}}..
+              </span>
+              <i ng-if="payment.status == 'Missing Info' && payment.missingInfoReason" class="fa fa-question-circle m-l-10" tooltips tooltip-class="wider"
+                tooltip-template="{{payment.missingInfoReason}}"></i>
+              <span id="CUR-FExRMXly" class="label label-sm label-danger" ng-if="payment.status == 'Payment Error'">{{
+                payment.status}}</span>
+                <i ng-if="payment.status == 'Payment Error' && payment.error" class="fa fa-question-circle m-l-10" tooltips tooltip-class="wider"
+                tooltip-template="{{payment.error}}"></i>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-WDpsSwcv" class="panel-body">
+          <div id="CUR-eeWtyOLR" class="m-t-20" ng-if="payment.status == 'Paid' && payment.paymentDetails && payment.paymentDetails.paidOffline">
+            <span id="CUR-yzyDqPqT">Payment marked as Paid Offline on {{payment.paymentDetails.manuallyChangedAt | date}} by user {{payment.lastModifiedBy.email}}</span>
+          </div>
+          <div id="CUR-eeWmyLLY" class="m-t-20" ng-if="payment.status == 'Paid'">
+            <span id="CUR-ZNxEzsLt" ng-if="payment.paymentDetails.provider == 'Tipalti'">Payment submitted to Tipalti on {{payment.paymentDetails.paymentDate | date}}</span>
+            <span id="CUR-bzcDpPqW" ng-if="payment.paymentDetails.provider == 'Standard CSV'">Payment exported to CSV on {{payment.paymentDetails.paymentDate | date}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-wYoaoVzt" class="row">
+      <div id="CUR-uNmOTivX" class="col-xs-12 text-center model-history-link">
+        <span id="CUR-OfcMdIeo" ng-show="payment.updatedAt">Last Updated on {{ payment.updatedAt | date : dateFormat : 'UTC' }}.</span> <a
+          href="javascript:;" ng-if="payment._id" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade stick-up" id="deletePaymentModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-EnpMxVqd" class="modal-dialog">
+    <div id="CUR-LSmtFgQV" class="modal-content">
+      <div id="CUR-Kixgauqo" class="modal-header clearfix text-left">
+        <button id="CUR-cTrikPhB" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-MtLGfnwu">Delete Payment</h5>
+      </div>
+      <div id="CUR-SYUGTumD" class="modal-body">
+        <div id="CUR-nklzncaE" class="row">
+          <div id="CUR-VmRWIvia" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the payment? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-jdaCCcvv" class="row">
+          <div id="CUR-kFuqEsdw" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-DkcdTsYj" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-OSFxsxNc" type="button" class="btn btn-danger m-t-5" ng-click="delete()"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <model-history data="payment.modelHistory"></model-history>

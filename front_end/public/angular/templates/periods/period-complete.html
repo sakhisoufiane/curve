@@ -1,0 +1,2106 @@
+<div id="CUR-Ejitgbsb" class="jumbotron" data-pages="parallax">
+  <div
+    id="CUR-rxUMSMim"
+    class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20"
+  >
+    <div id="CUR-vaxyEbuj" class="inner">
+      <ul id="CUR-WSgcAaUt" class="breadcrumb">
+        <li id="CUR-cHXKrOku">
+          <a id="CUR-cxqkIWfA" href="/#/periods">Periods</a>
+        </li>
+        <li id="CUR-lViEFTLA" ng-show="!period._id">
+          <a id="CUR-raCCNUgY" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-sWgMpEQz" ng-show="period._id">
+          <a
+            id="CUR-LAhVTvxO"
+            href="/#/periods/{{period._id}}/edit"
+            class="active"
+            >{{period.name}}</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-GdWCWoaR" class="container container-fixed-lg">
+  <div
+    id="CUR-WCFJwPrA"
+    ng-show="period.calculationNotes && period.calculationNotes.length !== 0 "
+    class="alert alert-danger"
+  >
+    <p><b>The following validation errors occurred -</b></p>
+    <ul id="CUR-NChoCqLc">
+      <li ng-repeat="note in period.calculationNotes">
+        <div ng-if="note.documentType === 'Contract'">
+          <strong> {{note.type}}:</strong> {{note.message}} -
+          <strong
+            ><a id="CUR-sKBtEAuf" href="#/contracts/{{note.documentId}}/edit"
+              >{{note.documentName}}</a
+            >
+          </strong>
+        </div>
+        <div ng-if="note.documentType === 'Payee'">
+          <strong> {{note.type}}:</strong> {{note.message}} -
+          <strong
+            ><a id="CUR-sKBtEAuf" href="#/payees/{{note.documentId}}/edit"
+              >{{note.documentName}}</a
+            >
+          </strong>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="CUR-mzVDtKzi" class="row">
+    <div id="CUR-dkdpQUJK" class="col-xs-12 col-sm-6 sm-p-l-5 sm-p-r-5">
+      <div style="display: flex; align-items: center; margin-bottom: -10px">
+        <h3 id="CUR-TRIZDfAQ">{{period.name}}</h3>
+        <span
+          ng-show="period.status === 'Errored'"
+          class="label label-danger"
+          style="margin: 12px"
+          >Errored</span
+        >
+        <span
+          ng-show="period.status === 'Processing'"
+          class="label label-warning"
+          style="margin: 12px"
+          >Processing</span
+        >
+      </div>
+      <h4 id="CUR-NNFknldc" class="m-b-0">
+        {{period.accountingPeriod}} - {{period.year}}
+      </h4>
+    </div>
+    <div
+      id="CUR-HnUpZnGF"
+      class="col-xs-12 col-sm-6 sm-p-l-5 sm-p-r-5 text-right two-cols-row"
+    >
+      <button
+        id="CUR-HLUNTSif"
+        class="btn btn-primary sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs"
+        ng-click="edit()"
+        ng-if="!period.locked"
+        ng-show="rights.periods == 'Edit' && period.status != 'Processing' && period.status != 'Errored'"
+      >
+        <i class="fa fa-pencil"></i> Edit
+      </button>
+      <button
+        id="CUR-HLUNTSPLATOON"
+        class="btn btn-default sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs"
+        ng-click="platoonExport()"
+        ng-show="clientName == 'Platoon' && rights.periods == 'Edit' && period.status != 'Processing' && period.status != 'Errored'"
+      >
+        <i class="fa fa-upload"></i> SAP Delivery
+      </button>
+      <button
+        id="CUR-HLUNTSPLATOONDOWNLOAD"
+        class="btn btn-default sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs"
+        ng-click="platoonDownload()"
+        ng-show="clientName == 'Platoon' && rights.periods == 'Edit' && period.status != 'Processing' && period.status != 'Errored'"
+      >
+        <i class="fa fa-download"></i> SAP Download
+      </button>
+      <button
+        id="CUR-GMSFKLBa"
+        class="btn btn-danger sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs"
+        data-toggle="modal"
+        data-target="#unlockModal"
+        ng-if="period.locked"
+        ng-show="rights.periods == 'Edit' && period.status != 'Processing'"
+      >
+        <i class="fa fa-unlock"></i> Unlock
+      </button>
+      <button
+        id="CUR-xsDHVljW"
+        class="btn btn-warning sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs"
+        ng-click="toggleLock()"
+        ng-if="!period.locked"
+        ng-show="rights.periods == 'Edit' && period.status != 'Processing' && period.status != 'Errored'"
+      >
+        <i class="fa fa-lock"></i> Lock
+      </button>
+      <button
+        id="CUR-gObgfhMC"
+        class="btn btn-complete sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs"
+        data-toggle="modal"
+        data-target="#validationModal"
+        ng-if="!period.locked"
+        ng-show="internalUser && period.status != 'Processing' && period.status != 'Errored'"
+      >
+        <i class="fa fa-refresh"></i> Reprocess Full
+      </button>
+      <button
+        id="CUR-pgvxbjUc"
+        class="btn btn-complete sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs"
+        data-toggle="modal"
+        data-target="#runCalculationModal"
+        ng-if="!period.locked"
+        ng-show="rights.periods == 'Edit' && period.status != 'Processing' && period.status != 'Errored'"
+      >
+        <i class="fa fa-refresh"></i> Reprocess
+      </button>
+      <button
+        class="btn btn-complete sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs"
+        ng-click="publishFugaStatements()"
+        ng-if="!period.locked"
+        ng-show="rights.periods == 'Edit' && period.status != 'Processing' && period.status != 'Errored' && client.features && client.features.fugaPublishStatementsToCloudStorage"
+        ng-disabled="disableFugaPublishButton"
+      >
+        <i class="fa fa-upload"></i> Publish to GCS
+      </button>
+      <div id="CUR-MOCnTqeb" class="btn-group dropdown-default visible-xs">
+        <a
+          id="CUR-qcJRnxeS"
+          class="btn dropdown-toggle w-xs-100-p"
+          data-toggle="dropdown"
+          aria-expanded="false"
+          ng-show="rights.periods == 'Edit' && period.status != 'Processing' && period.status != 'Errored'"
+        >
+          Edit <span id="CUR-IWHBQLHC" class="caret"></span>
+        </a>
+        <ul id="CUR-eWyUwfQI" class="dropdown-menu w-xs-100-p">
+          <li id="CUR-pIUldacR">
+            <a
+              id="CUR-dHeeLBqU"
+              href="javascript:void(0)"
+              data-toggle="modal"
+              data-target="#unlockModal"
+              ng-if="period.locked"
+              >Unlock</a
+            >
+          </li>
+          <li id="CUR-ChRvDUxD">
+            <a
+              id="CUR-FwwZWXgM"
+              href="javascript:void(0)"
+              ng-click="edit()"
+              ng-if="!period.locked"
+              >Edit</a
+            >
+          </li>
+          <li id="CUR-iNIHSbOg">
+            <a
+              id="CUR-nzXuAWrr"
+              href="javascript:void(0)"
+              ng-click="toggleLock()"
+              ng-if="!period.locked"
+              >Lock</a
+            >
+          </li>
+          <li id="CUR-SBCMSrYV">
+            <a
+              id="CUR-wBizkvhH"
+              href="javascript:void(0)"
+              data-toggle="modal"
+              data-target="#runCalculationModal"
+              ng-if="!period.locked"
+              >Reprocess</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div
+        ng-show="period.status != 'Processing' && period.status != 'Errored'"
+        id="CUR-hnpcmAMI"
+        class="btn-group dropdown-default"
+      >
+        <a
+          id="CUR-uFAfLJsO"
+          class="btn dropdown-toggle w-xs-100-p"
+          data-toggle="dropdown"
+          style="width: 141px"
+          aria-expanded="false"
+          ><i class="fa fa-download"></i> Download
+          <span id="CUR-IqAaYPnW" class="caret"></span>
+        </a>
+        <ul
+          id="CUR-NrXCIvmC"
+          class="dropdown-menu w-xs-100-p"
+          style="width: 141px"
+        >
+          <li id="CUR-UlKnYCNc" ng-if="period.contractType !== 'MCPS'">
+            <a id="CUR-KgBarqTR" ng-click="openDownloadModal()"
+              >All Statements</a
+            >
+          </li>
+          <li id="CUR-lqPvyPTp">
+            <a id="CUR-lwNnRywE" ng-click="exportSalesCsv()">
+              <span id="CUR-TmGuJmiN" ng-if="clientType != 'Publisher'"
+                >All Sales</span
+              >
+              <span id="CUR-EGgtHwwq" ng-if="clientType == 'Publisher'"
+                >All Income</span
+              >
+            </a>
+          </li>
+          <li
+            id="CUR-qknMiLUU"
+            ng-if="clientType !== 'Publisher' && period.contractType !== 'Mechanical' && period.contractType !== 'MCPS'"
+          >
+            <a id="CUR-dDCLPqeP" ng-click="exportCostsCsv()">All Costs</a>
+          </li>
+          <li id="CUR-rSivBcrX">
+            <a
+              id="CUR-WzVVAkpV"
+              ng-if="(!features || !features.unreportedFileV2) && period.unreportedSalesCsv && period.unreportedSalesCsvPublicLink"
+              target="_blank"
+              href="{{period.unreportedSalesCsvPublicLink}}"
+              >Unreported Sales</a
+            >
+            <a
+              id="CUR-WzVVAkpV"
+              ng-if="features && features.unreportedFileV2"
+              target="_blank"
+              ng-click="validatePeriodFileGeneration('Unreported Sales')"
+              >Unreported Sales</a
+            >
+          </li>
+          <li
+            id="CUR-phxDsjuw"
+            ng-if="clientType !== 'Publisher' && period.contractType !== 'Mechanical' && period.contractType !== 'MCPS'"
+          >
+            <a
+              id="CUR-WlLltKaq"
+              ng-if="features && features.unreportedFileV2"
+              target="_blank"
+              ng-click="validatePeriodFileGeneration('Unreported Costs')"
+              >Unreported Costs</a
+            >
+            <a
+              id="CUR-WlLltKaq"
+              ng-if="(!features || !features.unreportedFileV2) && period.unreportedCostsCsv && period.unreportedCostsCsvPublicLink"
+              target="_blank"
+              href="{{period.unreportedCostsCsvPublicLink}}"
+              >Unreported Costs</a
+            >
+          </li>
+          <li
+            id="CUR-GBTOxkOR"
+            ng-if="period.suspenseCsv && period.suspenseCsvPublicLink"
+          >
+            <a
+              id="CUR-VKaOrVQn"
+              target="_blank"
+              href="{{period.suspenseCsvPublicLink}}"
+              >Suspense Report</a
+            >
+          </li>
+          <li
+            id="CUR-rKxTKbZd"
+            ng-if="period.generalLedgerSummary && period.generalLedgerSummaryPublicLink"
+          >
+            <a
+              id="CUR-rcoCicLR"
+              target="_blank"
+              href="{{period.generalLedgerSummaryPublicLink}}"
+              >GL Summary</a
+            >
+          </li>
+          <li
+            id="CUR-VegSxDtM"
+            ng-if="period.customStatement && period.customStatementPublicLink"
+          >
+            <a
+              id="CUR-JjpchlQT"
+              target="_blank"
+              href="{{period.customStatementPublicLink}}"
+              >Statement</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-LbiyydHy" class="row">
+    <div id="CUR-GIKYYFzB" class="col-md-6">
+      <p id="CUR-iELGdBKR" class="m-b-0">
+        {{period.startDate | date : dateFormat : 'UTC'}} - {{period.endDate |
+        date : dateFormat : 'UTC'}}
+      </p>
+      <p id="CUR-amXLVLuY" class="m-b-0">
+        Accounting Date: {{period.accountingDate | date :dateFormat : 'UTC'}}
+      </p>
+    </div>
+    <div id="CUR-wlPqHfEn" class="col-md-6 text-right">
+      <p id="CUR-oabPeKoo" class="m-b-0">Run No: {{period.runNo}}</p>
+      <p id="CUR-HFdzqxYY" class="m-b-0">
+        Last Run At: {{period.processStartTime | date : 'dd/MM/yyyy HH:mm:ss'}}
+      </p>
+      <p id="CUR-bYjsFpbE" class="m-b-0">
+        Last Run Time: {{getRunTime(period.processStartTime,
+        period.processEndTime)}}
+      </p>
+    </div>
+  </div>
+  <div
+    id="CUR-EewZepLx"
+    class="alert alert-danger m-t-20 m-b-20 text-center"
+    role="alert"
+    ng-if="recalculationError"
+  >
+    <p><b>{{recalculationError}}</b></p>
+  </div>
+  <div id="CUR-WIJRFCkS" class="row">
+    <div id="CUR-YYorgjIt" class="panel panel-transparent hidden-xs">
+      <!-- Nav tabs -->
+      <ul
+        id="CUR-XrQEksKE"
+        class="nav nav-tabs"
+        data-init-reponsive-tabs="dropdownfx"
+      >
+        <li id="CUR-tXrssgXD" class="active" ng-click="setTab('overview')">
+          <a id="CUR-BosjIHdv" data-toggle="tab" aria-expanded="true"
+            ><span id="CUR-MqlpPueK"
+              >{{period.status === 'Processing' ? 'Progress' :
+              'Overview'}}</span
+            ></a
+          >
+        </li>
+        <li id="CUR-GVAJhsfM" ng-click="setTab('includedSales')">
+          <a id="CUR-vmgrOXaN" data-toggle="tab" aria-expanded="false">
+            <span id="CUR-rDOeIwcX" ng-if="clientType != 'Publisher'"
+              >Included Sales</span
+            >
+            <span id="CUR-DItnnxMW" ng-if="clientType == 'Publisher'"
+              >Included Income</span
+            >
+          </a>
+        </li>
+        <li
+          ng-if="features.suspense && period.contractType !== 'MCPS'"
+          id="CUR-resolved"
+          ng-click="setTab('includedResolvedGroups')"
+        >
+          <a id="CUR-resolved-link" data-toggle="tab" aria-expanded="false">
+            <span id="CUR-resolved-text">Included Groups</span>
+          </a>
+        </li>
+        <li
+          id="CUR-KDSkdvsa"
+          ng-click="setTab('includedCosts')"
+          ng-if="clientType != 'Publisher' && period.contractType != 'Mechanical'"
+        >
+          <a id="CUR-MSynfZHR" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-jNUEATzr">Included Costs</span></a
+          >
+        </li>
+        <li id="CUR-JTWsLbJH" ng-click="setTab('sales')">
+          <a id="CUR-MDgTIarw" data-toggle="tab" aria-expanded="false">
+            <span id="CUR-zuUobHLT" ng-if="clientType != 'Publisher'"
+              >Sales</span
+            >
+            <span id="CUR-tbyCIePR" ng-if="clientType == 'Publisher'"
+              >Income</span
+            >
+          </a>
+        </li>
+        <li
+          id="CUR-QlsgPEEM"
+          ng-click="setTab('statements')"
+          ng-if="period.status !== 'Processing'"
+        >
+          <a id="CUR-yJluSXBB" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-wkHjTyNE">Statements</span></a
+          >
+        </li>
+        <li
+          id="CUR-vYktVYWO"
+          ng-click="setTab('qaReport')"
+          ng-if="internalUser"
+        >
+          <a id="CUR-oNisoaLx" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-fAlYCvRl">QA Report</span></a
+          >
+        </li>
+        <li
+          id="CUR-vYktVYWO"
+          ng-click="setTab('batchTasks')"
+          ng-if="superInternalUser"
+        >
+          <a id="CUR-oNisoaLx" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-fAlYCvRl">Batch Tasks</span></a
+          >
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-XZBRYPfg" class="tab-content" ng-if="!showAccordions">
+        <div
+          id="CUR-NPVIOkRj"
+          class="tab-pane active"
+          ng-show="activeTab === 'overview'"
+          ng-include="periodStatusHtml"
+        ></div>
+        <div
+          id="CUR-ktISZTVp"
+          ng-show="activeTab === 'includedSales'"
+          ng-include="'included-sales-tab.html'"
+        ></div>
+        <div
+          id="CUR-included-resolved-tab"
+          ng-show="activeTab === 'includedResolvedGroups'"
+          ng-include="'included-resolved-groups-tab.html'"
+        ></div>
+        <div
+          id="CUR-fNKVIeYx"
+          ng-show="activeTab === 'includedCosts'"
+          ng-include="'included-costs-tab.html'"
+        ></div>
+        <div
+          id="CUR-tJONFHqA"
+          ng-show="activeTab === 'sales'"
+          ng-include="'sales-tab.html'"
+        ></div>
+        <div
+          id="CUR-bXUsftEO"
+          ng-show="activeTab === 'statements'"
+          ng-include="'statements-tab.html'"
+        ></div>
+        <div
+          id="CUR-ccTVTcUu"
+          ng-show="activeTab === 'qaReport'"
+          ng-include="'qa-report.html'"
+        ></div>
+        <div
+          id="CUR-ccTVTcUu"
+          ng-show="activeTab === 'batchTasks'"
+          ng-include="'batch-tasks.html'"
+        ></div>
+      </div>
+    </div>
+    <div
+      id="CUR-gfqoaKMC"
+      class="col-xs-12 sm-p-l-5 sm-p-r-5 visible-xs"
+      ng-if="showAccordions"
+    >
+      <uib-accordion
+        close-others="true"
+        ng-init="status1.open = true; status2.open = false; status3.open = false; status4.open = false; status5.open = false; status6.open = false; status7.open = false;"
+      >
+        <div
+          id="CUR-HiXbYqRa"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status1.open"
+        >
+          <uib-accordion-heading>
+            {{period.status === 'Processing' ? 'Progress' : 'Overview'}}
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-xDvaXKsG" ng-include="periodStatusHtml"></div>
+        </div>
+        <div
+          id="CUR-gaEaqnIP"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status2.open"
+          ng-click="setTab('includedSales')"
+        >
+          <uib-accordion-heading>
+            Included Sales
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-UYRYbSkj" ng-include="'included-sales-tab.html'"></div>
+        </div>
+        <div
+          ng-if="features.suspense && period.contractType !== 'MCPS'"
+          id="CUR-resolved-acc"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status3.open"
+          ng-click="setTab('includedResolvedGroups')"
+        >
+          <uib-accordion-heading>
+            Included Groups
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div
+            id="CUR-resolved-acc-inc"
+            ng-include="'included-resolved-groups-tab.html'"
+          ></div>
+        </div>
+        <div
+          id="CUR-RDtPaHzG"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status4.open"
+          ng-if="clientType != 'Publisher'"
+          ng-click="setTab('includedCosts')"
+        >
+          <uib-accordion-heading>
+            Included Costs
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status4.open, 'glyphicon-chevron-right': !status4.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-NXzdQmCI" ng-include="'included-costs-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-WHHzfuhc"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status5.open"
+          ng-click="setTab('sales')"
+        >
+          <uib-accordion-heading>
+            Sales
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status5.open, 'glyphicon-chevron-right': !status5.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-bBvwCHAh" ng-include="'sales-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-NIgszhww"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status6.open"
+          ng-click="setTab('statements')"
+        >
+          <uib-accordion-heading>
+            Statements
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status6.open, 'glyphicon-chevron-right': !status6.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-frdKeiIm" ng-include="'statements-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-mKDeCxXG"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status7.open"
+          ng-if="internalUser"
+          ng-click="setTab('qaReport')"
+        >
+          <uib-accordion-heading>
+            QA Report
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status7.open, 'glyphicon-chevron-right': !status7.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-NpHTFrLI" ng-include="'qa-report.html'"></div>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+</div>
+
+<!--<div id="CUR-FZmKdcds" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-xouOVbNU" class="row">
+    <div id="CUR-KYEYGtDf" class="col-sm-12 text-right">
+      <h6>Created By: {{period.createdBy.email}}</h6>
+      <h6>Last Modified By: {{period.lastModifiedBy.email}}</h6>
+    </div>
+  </div>
+</div>-->
+
+<script type="text/ng-template" id="overview-tab.html">
+  <div id="CUR-NPzPbIQv" class="row" ng-if="clientType != 'Publisher' && period.contractType != 'Mechanical'">
+    <div id="CUR-byTjLguB" class="col-xs-12 col-sm-4 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-szSrxsdz" class="panel panel-default height-100 bg-success">
+        <div id="CUR-tmoUVFlf" class="panel-heading">
+          <div id="CUR-tXTGsrcQ" class="panel-title text-white">
+            Gross Revenue >
+          </div>
+        </div>
+        <div id="CUR-JqaSWfJz" class="panel-body bg-transparent">
+          <h3 id="CUR-zcbZKEiQ" class="text-white no-margin"><span id="CUR-zyVySVDH" class="semi-bold">{{currencySymbol}}{{period.grossAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+      <div id="CUR-xzOpwEuU" class="panel panel-default height-100 bg-complete sm-m-t-5">
+        <div id="CUR-dscHqBkW" class="panel-heading">
+          <div id="CUR-bxPoRhTC" class="panel-title text-white">
+            Net Payout >
+          </div>
+        </div>
+        <div id="CUR-HKOnfuzg" class="panel-body bg-transparent">
+          <h3 id="CUR-kBeFasSx" class="text-white no-margin"><span id="CUR-rqTgezrJ" class="semi-bold">{{currencySymbol}}{{period.netAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-PXYSTPbY" class="col-xs-12 col-sm-4 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-JCgjdmqQ" class="panel panel-default height-100 bg-primary-darker">
+        <div id="CUR-dGrILCNw" class="panel-heading">
+          <div id="CUR-XHVnixfn" class="panel-title text-white">
+            Gross Costs >
+          </div>
+        </div>
+        <div id="CUR-ilOMDOAf" class="panel-body bg-transparent">
+          <h3 id="CUR-qlfUInTf" class="no-margin text-white"><span id="CUR-iBGmGogr" class="semi-bold">{{currencySymbol}}{{period.grossCosts | number: 2}}</span></h3>
+        </div>
+      </div>
+      <div id="CUR-eeCHVOny" class="panel panel-default height-100 bg-primary-light sm-m-t-5">
+        <div id="CUR-ZVwxbTet" class="panel-heading">
+          <div id="CUR-hSDHlghB" class="panel-title text-white">
+            Recharged Costs >
+          </div>
+        </div>
+        <div id="CUR-qrcqMMjg" class="panel-body bg-transparent">
+          <h3 id="CUR-KHMAjGzM" class="no-margin text-white"><span id="CUR-zMiwhDmI" class="semi-bold">{{currencySymbol}}{{period.netCosts | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-RKfIpHPx" class="col-xs-12 col-sm-4 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-TksZPKFp" class="panel panel-default height-100 bg-info">
+        <div id="CUR-iBmcygXd" class="panel-heading">
+          <div id="CUR-XjZWWqsL" class="panel-title text-white">
+            Input Units >
+          </div>
+        </div>
+        <div id="CUR-YJzKeMtG" class="panel-body bg-transparent">
+          <h3 id="CUR-KpsYNQso" class="no-margin text-white"><span id="CUR-HMGqiQBl" class="semi-bold">{{period.units || 0 | number: 2}}</span></h3>
+        </div>
+      </div>
+      <div id="CUR-bZtElNzD" class="panel panel-default height-100 bg-info sm-m-t-5">
+        <div id="CUR-BwcgVeYI" class="panel-heading">
+          <div id="CUR-RYQoItzw" class="panel-title text-white">
+            Input Sales Lines >
+          </div>
+        </div>
+        <div id="CUR-ZISzazgI" class="panel-body bg-transparent">
+          <h3 id="CUR-PDRXuYLI" class="no-margin text-white"><span id="CUR-cZsDzHip" class="semi-bold">{{period.lines || 0 | number: 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-HFfaMRlj" class="col-xs-12 col-sm-4 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+    </div>
+  </div>
+  <div id="CUR-qgtNjZQg" class="row" ng-if="clientType == 'Publisher' || period.contractType == 'Mechanical'">
+    <div id="CUR-mKHyODOa" class="col-xs-12 col-sm-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-hZQpfrcA" class="panel panel-default height-100 bg-success">
+        <div id="CUR-huNiNLaK" class="panel-heading">
+          <div id="CUR-ZJRXUPwP" class="panel-title text-white">
+            Gross Revenue >
+          </div>
+        </div>
+        <div id="CUR-HdAaVkcf" class="panel-body bg-transparent">
+          <h3 id="CUR-laJUpaNP" class="text-white no-margin"><span id="CUR-JPUmrINt" class="semi-bold">{{currencySymbol}}{{period.grossAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-yuJwGxRe" class="col-xs-12 col-sm-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-BuErksmA" class="panel panel-default height-100 bg-complete sm-m-t-5">
+        <div id="CUR-sXlmKyFn" class="panel-heading">
+          <div id="CUR-dseIvKpY" class="panel-title text-white">
+            Net Payout >
+          </div>
+        </div>
+        <div id="CUR-WdeyyOEH" class="panel-body bg-transparent">
+          <h3 id="CUR-ZBkxtGpD" class="text-white no-margin"><span id="CUR-YsRmPcQW" class="semi-bold">{{currencySymbol}}{{period.netAmount | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-QejHCONl" class="col-xs-12 col-sm-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-zlKSZpUo" class="panel panel-default height-100 bg-info">
+        <div id="CUR-HIqojstf" class="panel-heading">
+          <div id="CUR-tTpIJdmf" class="panel-title text-white">
+            Input Units >
+          </div>
+        </div>
+        <div id="CUR-txhEsUgq" class="panel-body bg-transparent">
+          <h3 id="CUR-ndrVWEHl" class="no-margin text-white"><span id="CUR-lOZrWgsS" class="semi-bold">{{period.units || 0 | number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-JDkRfAVx" class="col-xs-12 col-sm-3 m-t-40 sm-m-t-5 sm-p-l-5 sm-p-r-5 sm-text-center">
+      <div id="CUR-plSpnSTR" class="panel panel-default height-100 bg-info sm-m-t-5">
+        <div id="CUR-YHOLSZDo" class="panel-heading">
+          <div id="CUR-ycPgqXSZ" class="panel-title text-white">
+            Input Sales Lines >
+          </div>
+        </div>
+        <div id="CUR-XMagvnSn" class="panel-body bg-transparent">
+          <h3 id="CUR-xYtDrolw" class="no-margin text-white"><span id="CUR-JElGCmer" class="semi-bold">{{period.lines || 0 | number: 0}}</span></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-pKUlYROE" class="row">
+    <div id="CUR-WUbrrOar" class="col-xs-12 sm-p-l-5 sm-p-r-5">
+      <standard-graphs analysis-data="analytics" basis="'gross'"></standard-graphs>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="period-processing.html">
+  <div id="CUR-jgWhtGop">
+    <div id="CUR-PZzRqtag" class="row">
+      <div id="CUR-ehojRBrZ" class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div id="CUR-PBVFumLQ" class="panel panel-default text-center">
+          <div id="CUR-BJTUbgzE" class="panel-body p-t-15">
+            <h3 id="CUR-AkesVxMP">Period is {{period.status}}...</h3>
+
+            <div id="CUR-ykjLyaPX" class="row">
+              <div id="CUR-Kmydkqyk" class="col-xs-10 col-xs-offset-1 progress-checklist text-left">
+                <ul id="CUR-hhRiyqjT">
+                  <li ng-if="DMPData.length > 1" style="margin-left: 25px; font-size: 0.9em;">
+                    <period-processing-status-element
+                    name="DMPData[0]"
+                    index="0"
+                    current-status="0"
+                    errored-status="-1">
+                  </period-processing-status-element>
+                   <div> Step: {{DMPData[1]}}
+                    <div ng-if="DMPData[2]">
+                      count: {{DMPData[2]}}
+                    </div>
+                  </div>
+
+                  </li>
+                  <li id="CUR-NMdZzvou" ng-repeat="name in processingStatuses track by $index">
+                    <period-processing-status-element name="name" index="$index" current-status="currentStatusIndex" errored-status="erroredStatusIndex">
+                    </period-processing-status-element>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div id="CUR-rDOClkXh" class="row" ng-if="period.calculationStatus == 'Calculating Sales' || period.calculationStatus == 'Creating Statement Files'">
+              <div id="CUR-KVYwiqnN" class="col-xs-10 col-xs-offset-1">
+                {{period.completedCatalogueItems}} out of {{totalCatalogueItems}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="period-errored.html">
+  <div id="CUR-kEsLYuKx" class="container-fluid container-fixed-lg">
+    <div id="CUR-nPDjWNcf" class="row">
+      <div id="CUR-ASbMTdEN" class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div id="CUR-skgZRtCb" class="panel panel-default text-center">
+          <div id="CUR-fRkUcEyp" class="panel-body p-t-15">
+            <h3 id="CUR-mDsQLGoE">Period has Errored</h3>
+            <p>Please Contact Support</p>
+            <a id="CUR-AekIMeNu" href="mailto:support@curveroyaltysystems.com" target="_blank">support@curveroyaltysystems.com</a>
+
+            <div id="CUR-yIEIzABy" class="row">
+              <div id="CUR-WCNrJAAy" class="col-xs-10 col-xs-offset-1 progress-checklist text-left">
+                <!-- To be added back in after log has been amended -->
+                <!-- <p>{{period.calculationError}}</p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="included-sales-tab.html">
+  <div id="CUR-zTaeWxcQ" class="row">
+    <div id="CUR-duyNOdrN" class="col-xs-12">
+      <div id="CUR-NlPXuhtg" class="panel panel-default">
+        <div id="CUR-ocCcnHqg" class="panel-heading">
+          <div id="CUR-jjuXhbbx" class="panel-title">
+            <span ng-if="clientType != 'Publisher'">Sales</span>
+            <span ng-if="clientType == 'Publisher'">Income</span>
+            <documentation link="http://guide.curveroyaltysystems.com/article/reviewing-a-period-sending-statements/#includedsales"></documentation>
+          </div>
+        </div>
+        <div id="CUR-FZIEblAX" class="panel-body">
+          <div id="CUR-LHJFFHEL" class="row hidden-xs">
+            <div id="CUR-YlKyyJdi" class="col-xs-12 text-right">
+              <button id="CUR-btvxAeyL" class="btn btn-default sm-m-r-10 sm-p-l-0 sm-p-r-0" ng-click="exportSales()" ng-show="rights.periods == 'Edit'"><i class="fa fa-upload"></i> Export</button>
+              <div id="CUR-VBirPijC" class="btn-group dropdown-default" ng-show="rights.periods == 'Edit' && period.status != 'Processing' && period.status != 'Errored'"> <a id="CUR-uzFFKzsl" class="btn btn-complete dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false" style="width: 175px;"><i class="fa fa-lock"></i> Archive <span id="CUR-NBWEvaXu" class="caret"></span> </a>
+                <ul id="CUR-pexeScVV" class="dropdown-menu w-xs-100-p">
+                  <li id="CUR-LrCTCZtz">
+                    <a id="CUR-YTIljyoV" ng-click="archiveAllSalesFiles()">Archive All</a>
+                  </li>
+                  <li id="CUR-RbjyrhBo">
+                    <a id="CUR-lnVadsIC" ng-click="archiveFullyReportedSalesFiles()">Archive Fully Reported</a>
+                  </li>
+                  <li id="CUR-gAiIogzP">
+                    <a id="CUR-PkzIxuuq" ng-click="archiveSelectedSalesFiles()">Archive Selected</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div id="CUR-YwPFHlUg" class="table-responsive">
+            <table id="CUR-QKNbWrZU" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+              <tr id="CUR-zaTfUzzc">
+                <th class="table-checkbox hidden-xs">
+                  <input id="CUR-xPMsavEJ" type="checkbox" class="select-all" ng-click="selectAll(includedSalesFiles)">
+                </th>
+                <th ng-click="includedSalesTable.getSortedData('name')" ng-class="includedSalesTable.whatClassIsIt('name')">Name</th>
+                <th class="hidden-xs" ng-click="includedSalesTable.getSortedData('invoiceNo')" ng-class="includedSalesTable.whatClassIsIt('invoiceNo')">Invoice</th>
+                <th class="hidden-xs" ng-click="includedSalesTable.getSortedData('targetPeriod')" ng-class="includedSalesTable.whatClassIsIt('targetPeriod')">Target</th>
+                <th class="hidden-xs" ng-click="includedSalesTable.getSortedData('salesAccountName')" ng-class="includedSalesTable.whatClassIsIt('salesAccountName')">Account</th>
+                <th class="hidden-xs" ng-click="includedSalesTable.getSortedData('homeCurrencyGrossAmount')" ng-class="includedSalesTable.whatClassIsIt('homeCurrencyGrossAmount')">Gross</th>
+                <th ng-click="includedSalesTable.getSortedData('homeCurrencyNetAmount')" ng-class="includedSalesTable.whatClassIsIt('homeCurrencyNetAmount')">Net</th>
+                <th class="hidden-xs" ng-click="includedSalesTable.getSortedData('invalidLines')" ng-class="includedSalesTable.whatClassIsIt('invalidLines')">Unmapped Lines</th>
+                <th class="hidden-xs"></th>
+              </tr>
+              </thead>
+              <tbody id="CUR-sfNWmLvu">
+              <tr sales-file-table-row ng-repeat="sale in includedSalesFiles" index="{{$index}}" sale="sale" no-links="false" edit="rights.periods == 'Edit'"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="CUR-MFKjVkjE" class="row">
+            <div id="CUR-gjDgqTpw" class="col-xs-12 text-center">
+              <pagination id="CUR-QYwOuoTU" pages="salesFilePages" total="totalSalesFilePages" current="currentSalesFilePage" change-page="changeSalesFilePage(page)"></pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="included-resolved-groups-tab.html">
+  <div id="CUR-resolved-groups-tab-row" class="row">
+    <div id="CUR-resolved-groups-tab-col" class="col-xs-12">
+      <div id="CUR-resolved-groups-tab-panel" class="panel panel-default">
+        <div id="CUR-resolved-groups-tab-panel-heading" class="panel-heading">
+          <div id="CUR-resolved-groups-tab-panel-title" class="panel-title">
+            Resolved Groups
+          </div>
+        </div>
+        <div id="CUR-resolved-groups-tab-panel-body" class="panel-body">
+          <div id="CUR-included-resolved-groups-table" class="table-responsive overflow-x-hidden">
+            <table id="CUR-included-resolved-groups-data-table" class="table table-hover table-condensed dataTable no-footer">
+              <thead id="CUR-included-resolved-groups-table-header">
+                <tr id="CUR-included-resolved-groups-table-header-row">
+                  <th id="CUR-included-resolved-groups-table-header-name" ng-click="includedResolvedGroupsTable.getSortedData('name')" ng-class="includedResolvedGroupsTable.whatClassIsIt('name')">Name</th>
+                  <th id="CUR-included-resolved-groups-table-header-lines" ng-click="includedResolvedGroupsTable.getSortedData('lines')" ng-class="includedResolvedGroupsTable.whatClassIsIt('lines')">Lines</th>
+                  <th id="CUR-included-resolved-groups-table-header-createdAt" ng-click="includedResolvedGroupsTable.getSortedData('createdAt')" ng-class="includedResolvedGroupsTable.whatClassIsIt('createdAt')" class="hidden-xs">Created</th>
+                </tr>
+              </thead>
+              <tbody id="CUR-included-resolved-groups-table-body">
+                <tr sales-group-table-row id="CUR-included-resolved-group-{{$index}}" ng-repeat="includedResolvedGroup in includedResolvedGroups" sales-group="includedResolvedGroup" hide-type="true" hide-checkbox="true"></tr>
+              </tbody>
+            </table>
+            <div id="CUR-included-resolved-groups-pagination-row" class="row">
+              <div id="CUR-included-resolved-groups-pagination-container" class="col-xs-12 text-center">
+                <pagination id="CUR-included-resolved-groups-pagination" pages="resolvedGroupPages" total="totalResolvedGroupPages" current="currentResolvedGroupPage" change-page="changeResolvedGroupPage(page)"></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="included-costs-tab.html">
+  <div id="CUR-HLFaVLsf" class="row">
+    <div id="CUR-jUpkBUDo" class="col-xs-12">
+      <div id="CUR-OnBsvtde" class="panel panel-default">
+        <div id="CUR-NGYxtmFl" class="panel-heading">
+          <div id="CUR-LCxKqTGs" class="panel-title">
+            Costs <documentation link="http://guide.curveroyaltysystems.com/article/reviewing-a-period-sending-statements/#includedcosts"></documentation>
+          </div>
+        </div>
+        <div id="CUR-cnpEkuUe" class="panel-body">
+          <div id="CUR-cIcIbuuj" class="row hidden-xs">
+            <div id="CUR-yALQKzlE" class="col-xs-12 text-right">
+              <button id="CUR-YKvTIiWH" class="btn btn-default sm-m-r-10 sm-p-l-0 sm-p-r-0" ng-click="exportCosts()" ng-show="rights.periods == 'Edit'"><i class="fa fa-upload"></i> Export</button>
+              <div id="CUR-YGPOIrAI" class="btn-group dropdown-default" ng-show="rights.periods == 'Edit' && period.status != 'Processing' && period.status != 'Errored'"> <a id="CUR-PrvlDakM" class="btn btn-complete dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false" style="width: 175px;"><i class="fa fa-lock"></i> Archive <span id="CUR-TuekzSII" class="caret"></span> </a>
+                <ul id="CUR-eYtmipRB" class="dropdown-menu w-xs-100-p">
+                  <li id="CUR-BWZIqEEQ">
+                    <a id="CUR-blYInRWo" ng-click="archiveAllCosts()">Archive All</a>
+                  </li>
+                  <li id="CUR-mzloDmDG">
+                    <a id="CUR-OVYBdXzP" ng-click="archiveFullyReportedCosts()">Archive Fully Reported</a>
+                  </li>
+                  <li id="CUR-oizOIGtp">
+                    <a id="CUR-ZrYBPpTT" ng-click="archiveSelectedCosts()">Archive Selected</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div id="CUR-xvpkjEDC" class="table-responsive">
+            <table id="CUR-eYRMKqaW" class="table table-hover table-condensed dataTable no-footer">
+              <thead>
+              <tr id="CUR-tEvSfudo">
+                <th class="table-checkbox hidden-xs">
+                  <input id="CUR-UcIvgamd" type="checkbox" class="select-all" ng-click="selectAll(includedCosts)">
+                </th>
+                <th ng-click="includedCostsTable.getSortedData('name')" ng-class="includedCostsTable.whatClassIsIt('name')">Name</th>
+                <th ng-click="includedCostsTable.getSortedData('amount')" ng-class="includedCostsTable.whatClassIsIt('amount')">Amount</th>
+                <th ng-click="includedCostsTable.getSortedData('currency')" ng-class="includedCostsTable.whatClassIsIt('currency')">Currency</th>
+                <th class="hidden-xs" ng-click="includedCostsTable.getSortedData('description')" ng-class="includedCostsTable.whatClassIsIt('description')">Description</th>
+                <th class="hidden-xs" ng-click="includedCostsTable.getSortedData('targetPeriod')" ng-class="includedCostsTable.whatClassIsIt('targetPeriod')">Target Period</th>
+                <th class="hidden-xs" ng-click="includedCostsTable.getSortedData('type')" ng-class="includedCostsTable.whatClassIsIt('type')">Type</th>
+                <th class="hidden-xs" ng-click="includedCostsTable.getSortedData('createdAt')" ng-class="includedCostsTable.whatClassIsIt('createdAt')">Reported</th>
+              </tr>
+              </thead>
+              <tbody id="CUR-TdVjlFWp">
+              <tr cost-table-row ng-repeat="cost in includedCosts" index="{{$index}}" cost="cost" no-links="false" edit="rights.periods == 'Edit'"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="CUR-lLCxLDFP" class="row">
+            <div id="CUR-oNcwAbIo" class="col-xs-12 text-center">
+              <pagination id="CUR-TRCsXvBD" pages="costPages" total="totalCostPages" current="currentCostPage" change-page="changeCostPage(page)"></pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="sales-tab.html">
+  <div id="CUR-aIdtIRsa">
+    <div id="CUR-JHJARAgj" class="row m-t-40 sm-m-t-10" ng-if="clientType != 'Publisher'">
+      <div id="CUR-QxrFACzH" class="col-xs-12 col-sm-6">
+        <div id="CUR-SeThobIL" class="form-group required">
+          <label id="CUR-TmZuNete">Release <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Which specific releases are you interested in? You can select multiple releases below"></i></label>
+          <ui-select multiple ng-model="filter.releaseIds">
+            <ui-select-match>
+              <span id="CUR-KrFabuQq" style="vertical-align:middle;">{{releaseString($item)}}</span>
+              <span id="CUR-smYEFBrk" ng-bind="$select.selected.title"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item._id as item in releases | filter: $select.search" refresh="searchReleases($select)" refresh-delay="500">
+              <span id="CUR-nYQzTCpQ" ng-bind="releaseString(item)"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-UwCbsfre" class="col-xs-12 col-sm-6">
+        <div id="CUR-UbEozFJU" class="form-group required">
+          <label id="CUR-wuKyfhli">Track <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Which specific tracks are you interested in? You can select multiple tracks below"></i></label>
+          <ui-select multiple ng-model="filter.trackIds" theme="bootstrap" ng-disabled="false">
+            <ui-select-match>
+              <span id="CUR-qumJiqmb" style="vertical-align:middle;">{{$item.isrc}} - {{$item.title}}</span>
+              <span id="CUR-AEghaUPm" ng-bind="$select.selected.title"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item._id as item in tracks | filter:$select.search" refresh="searchTracks($select)" refresh-delay="500">
+              <span id="CUR-FBycDEBz" ng-bind="item.isrc + ' - ' + item.title"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-fkitGmGt" class="row m-t-40 sm-m-t-10" ng-if="clientType == 'Publisher'">
+      <div id="CUR-WFyQqDbq" class="col-xs-12">
+        <div id="CUR-RCBEMniJ" class="form-group required">
+          <label id="CUR-npHtmIpl">Work <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Which specific works are you interested in? You can select multiple works below"></i></label>
+          <ui-select multiple ng-model="filter.workIds" theme="bootstrap" ng-disabled="false">
+            <ui-select-match>
+              <span id="CUR-WMdoEPvW" style="vertical-align:middle;">{{$item.title}} - {{$item.composers}}</span>
+              <span id="CUR-WyeJuvxV" ng-bind="$select.selected.title"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item._id as item in works | filter:$select.search"
+                                refresh="searchWorks($select)" refresh-delay="500">
+              <span id="CUR-VrEUytnu" ng-bind="item.title + ' - ' + item.composers"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-swLMkXhr" class="row">
+      <div id="CUR-xQnUjlCK" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+        <div id="CUR-aSXzJMQW" class="form-group">
+          <label id="CUR-IMxTruMZ">Cat Type
+            <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Are you just interested in releases or tracks? Filtering by a release without setting the Cat Type may include track data that is associated with that release"></i>
+          </label>
+          <ui-select ng-model="filter.catType">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-FBaCbkYj" ng-bind="$select.selected"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item in (['Release', 'Track', 'Contract'] | filter: $select.search)">
+              <span id="CUR-fzZIssZc" ng-bind="item"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-KdlpSlED" class="col-xs-12 col-sm-6 col-md-4">
+        <div id="CUR-NzsYENCY" class="form-group required">
+          <label id="CUR-OcYHXNKr">Channel
+            <i ng-if="clientType != 'Publisher'" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is the headline consumption model, so think Digital, Physical, Licensing, etc. This will vary depending on how the system has been configured"></i>
+            <i ng-if="clientType == 'Publisher'" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is the headline consumption model, so think Performance, Mechanical, Sync, etc. This will vary depending on how the system has been configured"></i>
+          </label>
+          <ui-select multiple ng-model="filter.distributionChannels" theme="bootstrap">
+            <ui-select-match>{{$item}}</ui-select-match>
+            <ui-select-choices repeat="channel in channels | filter:$select.search track by $index">
+              {{channel}}
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-kSIkAWIJ" class="col-xs-12 col-sm-6 col-md-4">
+        <div id="CUR-dTiAnFuZ" class="form-group required">
+          <label id="CUR-dplszBzR">Configuration
+            <i ng-if="clientType != 'Publisher'" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is the specific consumption model, so think CD, Download, Streaming, etc. This will vary depending on how the system has been configured"></i>
+            <i ng-if="clientType == 'Publisher'" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is the specific consumption model, so think Radio, Streaming, etc. This will vary depending on how the system has been configured"></i>
+          </label>
+          <ui-select multiple ng-model="filter.configurations" theme="bootstrap">
+            <ui-select-match>{{$item}}</ui-select-match>
+            <ui-select-choices repeat="config in configs | filter:$select.search track by $index">
+              {{config}}
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-pCLOrLUL" class="col-xs-12 col-sm-6 col-md-4">
+        <div id="CUR-SZRUxASZ" class="form-group required">
+          <label id="CUR-KfupYEGS">Territory <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Select which specific territories you'd like to export the data for"></i></label>
+          <ui-select multiple ng-model="filter.territories" theme="bootstrap">
+            <ui-select-match>{{$item.name}}</ui-select-match>
+            <ui-select-choices group-by="groupFind" repeat="country.code as country in territories | filter: $select.search track by $index">
+              <span id="CUR-neqBNSAR" class="country" ng-bind="country.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-DNTXpzaZ" class="col-xs-12 col-sm-6 col-md-4">
+        <div id="CUR-QuWAgdzS" class="form-group required">
+          <label id="CUR-tctLrzxG">Source <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Sources are free text search, so you will want to get an idea of the specific sources in your data. Sources can be specific distributors or specific stores and DSPs"></i></label>
+          <input id="CUR-vALiwPOD" type="text" class="form-control" ng-model="filter.source">
+        </div>
+      </div>
+      <div id="CUR-cXhlNFjG" class="col-xs-12 col-sm-6 col-md-4">
+        <div id="CUR-zeRRSSLY" class="form-group required">
+          <label id="CUR-DjdYRusu">Subsource <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Sub-Sources are free text search, so you will want to get an idea of the specific sources in your data. Sub-Sources can be specific distributors or specific stores and DSPs"></i></label>
+          <input id="CUR-YVZVNUjg" type="text" class="form-control" ng-model="filter.subSource">
+        </div>
+      </div>
+    </div>
+    <!-- Buttons and Total -->
+    <div id="CUR-VkavhyWn" class="row">
+      <div id="CUR-JBVnzJJZ" class="col-xs-12 center two-cols-row">
+        <button id="CUR-qvqmkuKn" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i>&nbsp;Filter</button>
+      </div>
+    </div>
+    <div id="CUR-WFffeZTP" class="row">
+      <div id="CUR-LwSXwPtm" class="col-xs-6">
+      </div>
+      <div id="CUR-sJKcowdV" class="col-xs-6">
+        <h5 id="CUR-YWftyBgd" class="pull-right">Total: {{total}}</h5>
+      </div>
+    </div>
+    <div id="CUR-TOqWLaQt" class="row">
+      <div id="CUR-XQxGkCTN" class="col-xs-12">
+        <div id="CUR-ITJCGXff" class="panel panel-default xs-border-none">
+          <div id="CUR-XZfSvlqr" class="panel-body sm-p-l-0 sm-p-r-0 sm-p-t-0 sm-p-b-0">
+            <div id="CUR-bSMuItoc" class="table-responsive">
+              <table id="CUR-JvuyYZcy" class="table table-hover table-condensed dataTable no-footer sales-table sales-table-with-checkbox">
+                <thead>
+                  <tr id="CUR-vducIcHn" ng-if="clientType != 'Publisher'">
+                    <th ng-click="getSortedData('saleDate')" ng-class="whatClassIsIt('saleDate')">Sale date</th>
+                    <th ng-click="getSortedData('transactionDate')" ng-class="whatClassIsIt('transactionDate')">Transaction date</th>
+                    <th ng-click="getSortedData('catType')" ng-class="whatClassIsIt('catType')">Cat type</th>
+                    <th ng-click="getSortedData('catalogueReleaseTitle')" ng-class="whatClassIsIt('catalogueReleaseTitle')">Release title</th>
+                    <th ng-click="getSortedData('catalogueReleaseArtist')" ng-class="whatClassIsIt('catalogueReleaseArtist')">Release artist</th>
+                    <th ng-click="getSortedData('catalogueBarcode')" ng-class="whatClassIsIt('catalogueBarcode')">Barcode</th>
+                    <th ng-click="getSortedData('catalogueCatNo')" ng-class="whatClassIsIt('catalogueCatNo')">Cat no</th>
+                    <th ng-click="getSortedData('catalogueTrackTitle')" ng-class="whatClassIsIt('catalogueTrackTitle')">Track title</th>
+                    <th ng-click="getSortedData('catalogueTrackArtist')" ng-class="whatClassIsIt('catalogueTrackArtist')">Track artist</th>
+                    <th ng-click="getSortedData('isrc')" ng-class="whatClassIsIt('isrc')">ISRC</th>
+                    <th ng-click="getSortedData('distributionChannel')" ng-class="whatClassIsIt('distributionChannel')">Dist Channel</th>
+                    <th ng-click="getSortedData('configuration')" ng-class="whatClassIsIt('configuration')">Configuration</th>
+                    <th ng-click="getSortedData('priceCategory')" ng-class="whatClassIsIt('priceCategory')">Price cat</th>
+                    <th ng-click="getSortedData('source')" ng-class="whatClassIsIt('source')">Source</th>
+                    <th ng-click="getSortedData('subSource')" ng-class="whatClassIsIt('subSource')">Subsource</th>
+                    <th ng-click="getSortedData('territory')" ng-class="whatClassIsIt('territory')">Territory</th>
+                    <th ng-click="getSortedData('units')" ng-class="whatClassIsIt('units')">Units</th>
+                    <th ng-click="getSortedData('originalCurrency')" ng-class="whatClassIsIt('originalCurrency')">Original currency</th>
+                    <th ng-click="getSortedData('exchangeRate')" ng-class="whatClassIsIt('exchangeRate')">Ex Rate</th>
+                    <th ng-click="getSortedData('homeCurrencyPerUnitRate')" ng-class="whatClassIsIt('homeCurrencyPerUnitRate')">Unit Rate</th>
+                    <th ng-click="getSortedData('homeCurrencyGrossAmount')" ng-class="whatClassIsIt('homeCurrencyGrossAmount')">Gross</th>
+                    <th ng-click="getSortedData('homeCurrencyNetAmount')" ng-class="whatClassIsIt('homeCurrencyNetAmount')">Net</th>
+                    <th ng-click="getSortedData('calculationOutput')" ng-class="whatClassIsIt('calculationOutput')">Royalty</th>
+                  </tr>
+                  <tr id="CUR-LDRUiLCb" ng-if="clientType == 'Publisher'">
+                    <th ng-click="getSortedData('catType')" ng-class="whatClassIsIt('catType')">Cat type</th>
+                    <th ng-click="getSortedData('distributionChannel')" ng-class="whatClassIsIt('distributionChannel')">Channel</th>
+                    <th ng-click="getSortedData('configuration')" ng-class="whatClassIsIt('configuration')">Configuration</th>
+                    <th ng-click="getSortedData('source')" ng-class="whatClassIsIt('source')">Source</th>
+                    <th ng-click="getSortedData('subSource')" ng-class="whatClassIsIt('subSource')">Subsource</th>
+                    <th ng-click="getSortedData('territory')" ng-class="whatClassIsIt('territory')">Territory</th>
+                    <th ng-click="getSortedData('originalWorkTitle')" ng-class="whatClassIsIt('originalWorkTitle')">Title</th>
+                    <th ng-click="getSortedData('originalComposers')" ng-class="whatClassIsIt('originalComposers')">Composers</th>
+                    <th ng-click="getSortedData('production')" ng-class="whatClassIsIt('production')">Production</th>
+                    <th ng-click="getSortedData('description')" ng-class="whatClassIsIt('description')">Description</th>
+                    <th ng-click="getSortedData('Episode')" ng-class="whatClassIsIt('episode')">Episode</th>
+                    <th ng-click="getSortedData('catalogueIdentifier')" ng-class="whatClassIsIt('catalogueIdentifier')">Identifier</th>
+                    <th ng-click="getSortedData('catalogueIswc')" ng-class="whatClassIsIt('catalogueIswc')">ISWC</th>
+                    <th ng-click="getSortedData('catalogueTunecode')" ng-class="whatClassIsIt('catalogueTunecode')">Tunecode</th>
+                    <th ng-click="getSortedData('barcode')" ng-class="whatClassIsIt('barcode')">Barcode</th>
+                    <th ng-click="getSortedData('catNo')" ng-class="whatClassIsIt('catNo')">Cat no</th>
+                    <th ng-click="getSortedData('isrc')" ng-class="whatClassIsIt('isrc')">ISRC</th>
+                    <th ng-click="getSortedData('units')" ng-class="whatClassIsIt('units')">Units</th>
+                    <th ng-click="getSortedData('exchangeRate')" ng-class="whatClassIsIt('exchangeRate')">Ex Rate</th>
+                    <th ng-click="getSortedData('homeCurrencyGrossAmount')" ng-class="whatClassIsIt('homeCurrencyGrossAmount')">Gross</th>
+                    <th ng-click="getSortedData('homeCurrencyNetAmount')" ng-class="whatClassIsIt('homeCurrencyNetAmount')">Net</th>
+                    <th ng-click="getSortedData('calculationOutput')" ng-class="whatClassIsIt('calculationOutput')">Royalty</th>
+                  </tr>
+                </thead>
+                <tbody id="CUR-KkyLsZjv">
+                  <tr ng-if="clientType != 'Publisher'" output-sales-table-row ng-repeat="sale in outputSales" index="{{$index}}" sale="sale"></tr>
+                  <tr ng-if="clientType == 'Publisher'" output-publishing-sales-table-row ng-repeat="sale in outputSales" index="{{$index}}" sale="sale"></tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="CUR-AHnKCuzP" class="row">
+              <div id="CUR-GEAoeXLt" class="col-xs-12 text-center">
+                <pagination id="CUR-oxxxjsCm" pages="salesPages" total="salesTotalPages" current="salesCurrentPage" change-page="changeSalesPage(page)"></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="statements-tab.html">
+  <div id="CUR-CbnOKsPa">
+    <div id="CUR-gGmAwMfa" class="row">
+      <div id="CUR-xuidYehe" class="col-xs-12">
+        <div id="CUR-LTlUCJaB" class="panel panel-default">
+          <div id="CUR-PWiKGzdq" class="panel-heading">
+            <div id="CUR-BtsXhETD" class="panel-title">
+              Statements <documentation link="http://guide.curveroyaltysystems.com/article/reviewing-a-period-sending-statements/#statements"></documentation>
+            </div>
+          </div>
+          <div id="CUR-zqWDKCuQ" class="panel-body">
+            <div id="CUR-yhLOgkqZ" class="row">
+              <div ng-show="period.status != 'Processing' && period.status != 'Errored'" id="CUR-eoizDcjP" class="col-xs-12 text-right">
+                <button id="CUR-FYPxzvoA" class="btn btn-complete hidden-xs" data-toggle="modal" data-target="#createStatementModal"><i class="fa fa-plus"></i>&nbsp;Create Statement</button>
+                <button id="CUR-bPEhsWSX" class="btn btn-success sm-m-r-10 sm-p-l-0 sm-p-r-0 hidden-xs" ng-click="paySelected()"ng-if="userType == 'client' && clientAdminUser && rights.periods == 'Edit' && features && features.payments"><i class="fa fa-credit-card"></i> Pay Selected</button>
+                <button id="CUR-LXqxGZsA" class="btn btn-default hidden-xs" ng-click="exportStatements()"><i class="fa fa-upload"></i>&nbsp;Export</button>
+                <button id="CUR-LXqxGZsA" class="btn btn-complete hidden-xs" ng-show="rights.periods == 'Edit' || rights.periods == 'Approval'" ng-click="openSendModal()"><i class="fa fa-send"></i>&nbsp;Send</button>
+                <div id="CUR-CkOfXPAO" class="btn-group dropdown-default"> <a id="CUR-SjKQzqKl" class="btn btn-success dropdown-toggle w-xs-100-p" ng-show="rights.periods == 'Edit' || rights.periods == 'Approval'" data-toggle="dropdown" aria-expanded="false" style="width: 212px;"><i class="fa fa-unlock"></i> Publish <span id="CUR-kynGlvnn" class="caret"></span> </a>
+                  <ul id="CUR-NLRmpzOI" class="dropdown-menu w-xs-100-p">
+                    <li id="CUR-seOzYCtN">
+                      <a id="CUR-NNlNGVFw" ng-click="openPublishModal('Publish')">Publish ({{publishTotal}}) statements</a>
+                    </li>
+                    <li id="CUR-HeIjqajC">
+                      <a id="CUR-gGdEwhma" ng-click="openPublishModal('Unpublish')">Unpublish ({{publishTotal}}) statements</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- Statements filter -->
+            <div id="CUR-szcLDKSC" class="row">
+              <div id="contract-payee-search-div" class="form-group col-sm-4">
+                <label id="contract-payee-search-label">Payee</label>
+                <ui-select id="contract-payee-search-select" multiple ng-model="statementFilter.payeeIds" close-on-select="true">
+                  <ui-select-match id="contract-payee-search-select-match">
+                    <span id="contract-payee-search-span-select-match-1" style="vertical-align:middle;">{{$item.name}}</span>
+                    <span id="contract-payee-search-span-select-match-2" ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item._id as item in payees | filter:$select.search"
+                    refresh="searchPayees($select)" refresh-delay="500">
+                    <div id="contract-payee-search-choices-div">
+                      <div id="contract-payee-search-choices-div-div" class="clear">
+                        <div id="contract-payee-search-choices-div-div-div" ng-bind-html="item.name | highlight: $select.search"></div>
+                      </div>
+                    </div>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-UBJcRsgF" class="form-group col-sm-4">
+                <label id="CUR-JnbARxvG">Published</label>
+                <ui-select class="full-width" ng-model="statementFilter.published">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-EqTpujMy" ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item.value as item in publishedValues | filter: $select.search">
+                    <span id="CUR-WgAygZXB" ng-bind="item.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-UBJcRdsdG" class="form-group col-sm-4">
+                <label id="CUR-JnbARlklkjs">Sent</label>
+                <ui-select class="full-width" ng-model="statementFilter.sent">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-EqTMdsay" ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item.value as item in sentValues | filter: $select.search">
+                    <span id="CUR-WgAMMSAB" ng-bind="item.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+            <div class="row">
+              <div id="contract-contractCategories-search-div" class="form-group col-sm-4">
+                <label id="contract-contractCategories-search-label">Contract Categories</label>
+                <ui-select id="contract-contractCategories-search-select" multiple ng-model="statementFilter.contractCategories" close-on-select="true">
+                  <ui-select-match id="contract-contractCategories-search-select-match">{{$item}}</ui-select-match>
+                  <ui-select-choices repeat="category in contractCategories | filter:$select.search">
+                    {{category}}
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="contract-payeeCategories-search-div" class="form-group col-sm-4">
+                <label id="contract-payeeCategories-search-label">Payee Categories</label>
+                <ui-select id="contract-payeeCategories-search-select" multiple ng-model="statementFilter.payeeCategories" close-on-select="true">
+                  <ui-select-match id="contract-payeeCategories-search-select-match">{{$item}}</ui-select-match>
+                  <ui-select-choices repeat="category in payeeCategories | filter:$select.search">
+                    {{category}}
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="contract-company-search-div" class="form-group col-sm-4">
+                <label id="contract-company-search-label">Company</label>
+                <ui-select id="contract-company-search-select" multiple ng-model="statementFilter.companyIds" close-on-select="true">
+                  <ui-select-match id="contract-company-search-select-match">
+                    <span id="contract-company-search-span-select-match-1" style="vertical-align:middle;">{{$item.name}}</span>
+                    <span id="contract-company-search-span-select-match-2" ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item._id as item in companies | filter:$select.search"
+                    refresh="searchCompanies($select)" refresh-delay="500">
+                    <div id="contract-company-search-choices-div">
+                      <div id="contract-company-search-choices-div-div" class="clear">
+                        <div id="contract-company-search-choices-div-div-div" ng-bind-html="item.name | highlight: $select.search"></div>
+                      </div>
+                    </div>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+
+            </div>
+
+            <div id="CUR-VkavLDSss" class="row">
+              <div id="CUR-JBVMNDSZ" class="col-xs-12 center two-cols-row">
+                <button id="CUR-DSqmMNDS" class="btn btn-complete" ng-click="searchLoadStatements()"><i class="fa fa-search"></i>&nbsp;Filter</button>
+              </div>
+            </div>
+
+            <!-- End of Statements filter -->
+            <div id="CUR-WFffeMNC" class="row">
+              <div id="CUR-sJKcolkD" class="col-xs-12">
+                <h5 id="CUR-YWftlwed" class="pull-right">Total: {{totalStatement}}</h5>
+              </div>
+            </div>
+            <div id="CUR-EDTTbPcH" class="table-responsive">
+              <table id="CUR-IxnzJpGe" class="table table-hover dataTable no-footer">
+                <thead>
+                <tr id="CUR-ByLfXcQs">
+                  <th class="table-checkbox hidden-xs"><input id="CUR-iJIazCFm" type="checkbox" class="select-all" ng-click="selectAll(statements)"></th>
+                  <th ng-click="statementsTable.getSortedData('name')" ng-class="statementsTable.whatClassIsIt('date name')">Name</th>
+                  <th>Gross Sales</th>
+                  <th class="hidden-xs">Net Sales</th>
+                  <th class="hidden-xs" ng-if="clientType != 'Publisher' && period.contractType != 'Mechanical'">Gross Costs</th>
+                  <th class="hidden-xs" ng-if="clientType != 'Publisher' && period.contractType != 'Mechanical'">Net Costs</th>
+                  <th class="hidden-xs">Status</th>
+                </tr>
+                </thead>
+                <tbody id="CUR-HNSDHMbl">
+                <tr statement-table-row ng-repeat="statement in statements" index="{{$index}}" statement="statement" client-type="clientType" exclude-created="true" exclude-costs="period.contractType == 'Mechanical'"></tr>
+                </tbody>
+              </table>
+              <div id="CUR-bZRGjoSB" class="col-sm-12">
+                <div id="CUR-Awpeneqe" class="pull-right">
+                  <span id="CUR-nhiLcxYB" class="inline-block" ng-if="!isShowingAllStatement">Showing 100 Per Page  |</span>
+                  <a id="CUR-qWrgBSAV" class="p-l-5" ng-if="!isShowingAllStatement" ng-click="showAllStatement()">Show 500</a>
+                </div>
+              </div>
+              <div id="CUR-PRZoqxXT" class="row">
+                <div id="CUR-AANHYMiF" class="col-xs-12 text-center">
+                  <pagination id="CUR-FINjkOZO" pages="statementPages" total="totalStatementPages" current="currentStatementPage" change-page="changeStatementPage(page)"></pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="batch-tasks.html">
+  <div id="CUR-CbnOKsPa">
+    <div id="CUR-gGmAwMfa" class="row">
+      <div id="CUR-xuidYehe" class="col-xs-12">
+        <div id="CUR-LTlUCJaB" class="panel panel-default">
+          <div id="CUR-PWiKGzdq" class="panel-heading">
+            <div id="CUR-BtsXhETD" class="panel-title">
+              Batch Tasks
+            </div>
+          </div>
+          <div id="CUR-zqWDKCuQ" class="panel-body" style="margin-top: 15px;">
+            <div id="CUR-DwjUxBuf" class="row">
+              <div id="CUR-nsurszij" class="form-group col-sm-3">
+                <label id="CUR-hcNPVXPV">Status</label>
+                <ui-select ng-model="batchTaskFilter.status" close-on-select="true">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-IgOTAyOp" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="status in batchTaskStatus | filter:$select.search">
+                    <span id="CUR-olXevMGv" ng-bind="status"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            <div id="CUR-VkavhyWn" class="row" style="margin-top: 20px;">
+              <div id="CUR-JBVnzJJZ" class="col-xs-12 center two-cols-row">
+                <button id="CUR-qvqmkuKn" class="btn btn-complete" ng-click="searchBatchTasks()"><i class="fa fa-search"></i>&nbsp;Filter</button>
+              </div>
+            </div>
+            <div id="CUR-EDTTbPcH" class="table-responsive" style="margin-top: 10px;">
+              <table id="CUR-IxnzJpGe" class="table table-hover dataTable no-footer">
+                <thead>
+                  <tr>
+                    <th class="hidden-xs">ID</th>
+                    <th class="hidden-xs">Name</th>
+                    <th class="hidden-xs">Status</th>
+                    <th class="hidden-xs">Created At</th>
+                    <th class="hidden-xs"></th>
+                  </tr>
+                </thead>
+                <tbody id="CUR-HNSDHMbl">
+                  <tr data-ng-repeat="batchTask in batchTasks" data-ng-click="drillDownTable(identifier, row.id, columnId==='B')">
+                    <td class="v-align-middle hidden-xs">{{batchTask._id}}</td>
+                    <td class="v-align-middle hidden-xs">{{batchTask.name}}</td>
+                    <td id="CUR-cvBLNXRz" class="v-align-middle semi-bold">
+                      <span id="CUR-xeMQKBmZ"
+                        class="label label-sm {{batchTask.statusClass}}">
+                        {{batchTask.status}}</span>
+                    </td>
+                    <td class="v-align-middle hidden-xs">{{batchTask.createdAt | date : 'dd/MM/yyyy HH:mm:ss' : 'UTC' }}</td>
+                    <td class="v-align-middle">
+                      <button id="CUR-KuOgSWJo" type="button" class="btn btn-complete m-t-5" ng-click="openBatchTaskModal(batchTask)">
+                        <i class="fa fa-refresh"></i> Reprocess
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div id="CUR-PRZoqxXT" ng-if="!isShowingAllStatement" class="row">
+                <div id="CUR-AANHYMiF" class="col-xs-12 text-center">
+                  <pagination id="CUR-FINjkOZO" pages="batchTaskPages" total="totalBatchTaskPages" current="currentBatchTaskPage" change-page="changeBatchTaskPage(page)"></pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="qa-report.html">
+  <uib-accordion ng-repeat="log in calculationLog | orderBy:'timestamp':true">
+    <div id="CUR-JtfyCZTM" uib-accordion-group is-open="$first" class="panel-default">
+      <uib-accordion-heading>
+        <strong>{{log.type}}</strong> | {{log.status}}<span id="CUR-srplpphB" class="no-caps" ng-if="log.endTime"> | {{getRunTime(log.startTime, log.endTime)}}</span>
+        <i class="glyphicon"ng-class="{'glyphicon-chevron-down': status1.open,
+        'glyphicon-chevron-right': !status1.open}"></i>
+          <p id="CUR-SjOWeYDG" class="pull-right">{{log.endTime | date:'MMM d, y - HH:mm'}}   </p>
+      </uib-accordion-heading>
+      <div id="CUR-udUCYMcD" class="container">
+        <div id="CUR-eovWBqlv" class="row">
+          <div id="CUR-ipxuqiRY" ng-class="{'col-md-5': log.type !== 'Full' && log.status !== 'No Changes', 'col-md-8': log.type === 'Full' || log.status === 'No Changes'}">
+            <pre>{{log | json}}</pre>
+          </div>
+          <div id="CUR-cdDqcfkz" ng-if="log.type !== 'Full' && log.status !== 'No Changes'" class="col-md-7">
+            <div id="CUR-tQPSrUuz" ng-if="log.contracts">
+              <strong>Affected Contracts:</strong>
+              <ul id="CUR-UcZDljly">
+                <li ng-repeat="contract in log.contracts">
+                  <a href="#/contracts/{{contract._id}}/edit" ng-if="contract.name">{{contract.name}}</a>
+                  <p ng-if="!contract.name">{{contract._id}}</p>
+                </li>
+              </ul>
+            </div>
+            <div id="CUR-DzELUkUA" ng-if="log.costs && log.costs.length > 0">
+              <strong>Affected Costs:</strong>
+              <ul id="CUR-slLxsYdt">
+                <li ng-repeat="cost in log.costs">
+                  <a href="#/costs/{{cost._id}}/edit" ng-if="cost.name">{{cost.name}}</a>
+                  <p ng-if="!cost.name">{{cost._id}}</p>
+                </li>
+              </ul>
+            </div>
+            <div id="CUR-CjCeqaAx" ng-if="log.salesFiles">
+              <strong>Affected Sales:</strong>
+              <ul id="CUR-TAsBmeca">
+                <li id="CUR-vYVQQVpv">Contracts:
+                  <ul id="CUR-BoHVzrpt">
+                    <li ng-repeat="contract in log.salesFiles.contracts">
+                      <a href="#/contracts/{{contract._id}}/edit" ng-if="contract.name">{{contract.name}}</a>
+                      <p ng-if="!contract.name">{{contract._id}}</p>
+                    </li>
+                  </ul>
+                </li>
+                <li id="CUR-FKRUWBza">Sales Files:
+                  <ul id="CUR-gazTcMxd">
+                    <li ng-repeat="sale in log.salesFiles.sales">
+                      <a href="#/sales/{{sales._id}}/ingestion_complete" ng-if="sale.name">{{sale.name}}</a>
+                      <p ng-if="!sale.name">{{sale._id}}</p>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </uib-accordion>
+</script>
+
+<div
+  class="modal fade stick-up"
+  id="unlockModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div id="CUR-BFLvqcug" class="modal-dialog">
+    <div id="CUR-kPberlHu" class="modal-content">
+      <div id="CUR-jmDFLTLp" class="modal-header clearfix text-left">
+        <button
+          id="CUR-TdvURHsZ"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-HhYxaMkP">Unlock Period</h5>
+      </div>
+      <div id="CUR-QtjIZzCp" class="modal-body">
+        <div id="CUR-puaPwbZc" class="row">
+          <div id="CUR-usVWRpyF" class="col-xs-12 m-t-20">
+            <p>
+              Are you sure you want to unlock this period? Changes will be able
+              to be made which could affect published statements
+            </p>
+          </div>
+        </div>
+        <div id="CUR-YIfjsUoX" class="row">
+          <div id="CUR-YzFGDbrn" class="col-xs-12 m-t-20 text-right">
+            <button
+              id="CUR-bixpfmAb"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-DIutUqyX"
+              type="button"
+              class="btn btn-danger m-t-5"
+              ng-click="toggleLock()"
+            >
+              <i class="fa fa-unlock"></i>&nbsp;Unlock
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="runCalculationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div id="CUR-SnudTCrV" class="modal-dialog">
+    <div id="CUR-HMAvEkrd" class="modal-content">
+      <div id="CUR-dEYptrhB" class="modal-header clearfix text-left">
+        <button
+          id="CUR-HtfZBSqt"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-wJIaToYh" style="font-weight: bold; font-size: 15px">
+          Recalculate
+        </h5>
+      </div>
+      <div id="CUR-ofhOkdIr" class="modal-body">
+        <div id="CUR-GhhKRZOW" class="row">
+          <div id="CUR-ilRxfpAW" class="col-xs-12 m-t-10">
+            <h5 class="text-danger" style="font-weight: bold; font-size: 15px">
+              Are you sure you want to recalculate all statements in this
+              period?
+            </h5>
+            <p>
+              Clicking Reprocess will delete all statements associated with the
+              period and recalculate them. You can recalculate individual
+              statements by navigating to their individual pages and clicking
+              the Reprocess button there.
+            </p>
+          </div>
+        </div>
+        <div id="CUR-ItYyTQni" class="row">
+          <div id="CUR-kVTECVVZ" class="col-xs-12 m-t-20 text-right">
+            <button
+              id="CUR-omPyWAjo"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-KuOgSWJo"
+              type="button"
+              class="btn btn-complete m-t-5"
+              ng-click="runCalculation()"
+              data-dismiss="modal"
+            >
+              <i class="fa fa-refresh"></i> Reprocess
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="batchTaskModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div id="CUR-SnudTCrV" class="modal-dialog">
+    <div id="CUR-HMAvEkrd" class="modal-content">
+      <div id="CUR-dEYptrhB" class="modal-header clearfix text-left">
+        <button
+          id="CUR-HtfZBSqt"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-wJIaToYh">Process Batch Task</h5>
+      </div>
+      <div id="CUR-ofhOkdIr" class="modal-body">
+        <div id="CUR-GhhKRZOW" class="row">
+          <div id="CUR-ilRxfpAW" class="col-xs-12 m-t-20">
+            <p><strong>Batch Task ID:</strong> {{selectedBatchTask._id}}</p>
+            <p>
+              Make sure you are certain you want to process this Batch Task, it
+              could lead to DUPLICATE DATA!
+            </p>
+            <strong
+              >Before Re-Processing, here are a few things to think
+              about:</strong
+            >
+            <ul>
+              <li>Have you refreshed this list?</li>
+              <li>
+                Is this a long running batch or has it stalled? (Check Datadog)
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-ItYyTQni" class="row">
+          <div id="CUR-kVTECVVZ" class="col-xs-12 m-t-20 text-right">
+            <button
+              id="CUR-omPyWAjo"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-KuOgSWJo"
+              type="button"
+              class="btn btn-complete m-t-5"
+              ng-click="reprocessBatchTask()"
+              data-dismiss="modal"
+            >
+              <i class="fa fa-refresh"></i>Reprocess
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="createStatementModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div id="CUR-WxpHOKam" class="modal-dialog">
+    <div id="CUR-QkHiFMOl" class="modal-content">
+      <div id="CUR-ZLxKhNXM" class="modal-header clearfix text-left">
+        <button
+          id="CUR-ktCxJeeE"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-nkWQDGPh">Create Statement</h5>
+      </div>
+      <div id="CUR-knqTzXRn" class="modal-body">
+        <div id="CUR-sTARfMug" class="row">
+          <div id="CUR-VtUTQNKj" class="col-xs-12 m-t-20">
+            <p>
+              Use this to create any statements missing from the original run of
+              the period. Select the contract below for the statement you want
+              to create.
+            </p>
+            <div id="CUR-sNFgXoFo" class="form-group">
+              <label id="CUR-ieyhkgSk">Contract</label>
+              <contract-select-field
+                type="period.contractType"
+                value="createStatementContractId"
+                edit="true"
+              >
+              </contract-select-field>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-ZpxdlxhA" class="row">
+          <div id="CUR-drqAckxS" class="col-xs-12 m-t-20 text-right">
+            <button
+              id="CUR-bSVAXMgs"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-nqObrHgU"
+              type="button"
+              class="btn btn-complete m-t-5"
+              ng-click="createStatement()"
+            >
+              <i class="fa fa-plus"></i> Create
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="downloadModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div id="CUR-GFHOWXXT" class="modal-dialog">
+    <div id="CUR-dRYADtEQ" class="modal-content">
+      <div id="CUR-wTkUEWPh" class="modal-header clearfix text-left">
+        <button
+          id="CUR-CZLzYlNe"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-iKJsFvUC">Files to Export</h5>
+      </div>
+      <div id="CUR-lUdZHqrX" class="modal-body">
+        <div id="CUR-XsLGvKoq" class="row">
+          <div id="CUR-IuuMQtQM" class="col-xs-12 m-t-20">
+            <p>
+              Which files do you want to receive from the Period files? These
+              will be sent in individual Zip files and may be received at
+              different times depending on the size and time it takes to create
+              each file.
+            </p>
+            <div id="CUR-LGeJROar" class="p-t-15">
+              <div id="CUR-mWHgmwAW">
+                <label for="pdf" class="download-option-select">
+                  <input
+                    id="pdf"
+                    type="checkbox"
+                    ng-model="downloadAllOptions.pdf.value"
+                  />
+                  {{ downloadAllOptions.pdf.display }}
+                </label>
+              </div>
+              <div id="CUR-iUKvFdHy">
+                <label for="salesCsv" class="download-option-select">
+                  <input
+                    id="salesCsv"
+                    type="checkbox"
+                    ng-model="downloadAllOptions.salesCsv.value"
+                  />
+                  <span ng-if="clientType != 'Publisher'"
+                    >{{ downloadAllOptions.salesCsv.display }}</span
+                  >
+                  <span ng-if="clientType == 'Publisher'">Income CSV</span>
+                </label>
+              </div>
+              <div id="CUR-uVUqgkUF" ng-if="clientType != 'Publisher'">
+                <label for="costsCsv" class="download-option-select">
+                  <input
+                    id="costsCsv"
+                    type="checkbox"
+                    ng-model="downloadAllOptions.costsCsv.value"
+                  />
+                  {{ downloadAllOptions.costsCsv.display }}
+                </label>
+              </div>
+              <div id="CUR-fdvTVWCs">
+                <label for="statementOfAccount" class="download-option-select">
+                  <input
+                    id="statementOfAccount"
+                    type="checkbox"
+                    ng-model="downloadAllOptions.statementOfAccount.value"
+                  />
+                  {{ downloadAllOptions.statementOfAccount.display }}
+                </label>
+              </div>
+              <div id="CUR-hGyGVjUF" ng-if="clientType != 'Publisher'">
+                <label for="feesInvoice" class="download-option-select">
+                  <input
+                    id="feesInvoice"
+                    type="checkbox"
+                    ng-model="downloadAllOptions.feesInvoice.value"
+                  />
+                  {{ downloadAllOptions.feesInvoice.display }}
+                </label>
+              </div>
+              <div id="CUR-Pmldpwhn">
+                <label for="selfBillingInvoice" class="download-option-select">
+                  <input
+                    id="selfBillingInvoice"
+                    type="checkbox"
+                    ng-model="downloadAllOptions.selfBillingInvoice.value"
+                  />
+                  {{ downloadAllOptions.selfBillingInvoice.display }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-zjfYqgQL" class="row">
+          <div id="CUR-SPFygZSq" class="col-xs-12 m-t-20 text-right">
+            <button
+              id="CUR-gqeEcUkr"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-mVCokogs"
+              type="button"
+              class="btn btn-complete m-t-5"
+              ng-click="downloadSelectedStatements()"
+            >
+              Download
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="publishModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div id="CUR-DS122sDD" class="modal-dialog">
+    <div id="CUR-QkHiLKDS" class="modal-content">
+      <div id="CUR-ZLxKhNSAS" class="modal-header clearfix text-left">
+        <button
+          id="CUR-kMJDSJeeE"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-nkMSAGPh">{{publishAction}} Statements</h5>
+      </div>
+      <div id="CUR-knqNAARn" class="modal-body">
+        <div id="CUR-sTARCXSug" class="row">
+          <div id="CUR-VSASNKj" class="col-xs-12 m-t-20">
+            <p>
+              You are about to
+              <span style="text-transform: lowercase">{{publishAction}}</span>
+              {{publishTotal}} statements.
+            </p>
+          </div>
+        </div>
+        <div id="CUR-ZpxdlxhA" class="row">
+          <div id="CUR-drqAckxS" class="col-xs-12 m-t-20 text-right">
+            <button
+              id="CUR-bSVAXMgs"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-nqObrHgU"
+              type="button"
+              class="btn btn-complete m-t-5"
+              ng-click="publishStatements()"
+            >
+              <i class="fa fa-unlock"></i> {{publishAction}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade stick-up"
+  id="sendModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div id="CUR-DS122SEND" class="modal-dialog">
+    <div id="CUR-QkHiLSEND" class="modal-content">
+      <div id="CUR-ZLxKhNSEND" class="modal-header clearfix text-left">
+        <button
+          id="CUR-kMJDSJSEND"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-nkMSASEND">Send Statements</h5>
+      </div>
+      <div id="CUR-knqNASEND" class="modal-body">
+        <div id="CUR-sTARCXSEND" class="row">
+          <div id="CUR-VSASSEND" class="col-xs-12 m-t-20">
+            <p ng-if="sendTotal > 0">
+              Curve will attempt to send {{sendTotal}} Published {{sendTotal ===
+              1 ? 'Statement' : 'Statements'}}.
+            </p>
+            <p ng-if="unpublishedCount > 0 && sendTotal > 0">
+              There are {{unpublishedCount}} Unpublished {{unpublishedCount ===
+              1 ? 'Statement' : 'Statements'}} that will not be sent as part of
+              this operation.
+            </p>
+            <p ng-if="sendTotal === 0">
+              No published statements available to send.
+            </p>
+            <p style="font-size: 11px">
+              Please note: In order for a statement to be successfully sent it
+              requires at least 1 user associated with it.
+            </p>
+          </div>
+        </div>
+        <div id="CUR-ZpxdlSEND" class="row">
+          <div id="CUR-drqAcSEND" class="col-xs-12 m-t-20 text-right">
+            <button
+              id="CUR-bSVAXSEND"
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="CUR-nqObrSEND"
+              type="button"
+              class="btn btn-complete m-t-5"
+              ng-click="sendStatements()"
+              ng-disabled="sendTotal === 0"
+            >
+              <i class="fa fa-send"></i> Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<validation-modal
+  header="'Full Period Recalulation'"
+  message="'This will turn off the recalculation filters and run a full for this period, once complete it will revert back to filters on.'"
+  value-to-validate="'Force Full'"
+  type="'period'"
+  method="runCalculationFull"
+  method-type="'reprocessFull'"
+>
+</validation-modal>
+
+<div
+  class="modal fade stick-up"
+  id="validatePeriodFileGenerationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header clearfix text-left">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5>{{periodFilesValidationModalData.type}} CSV</h5>
+      </div>
+
+      <div class="modal-body" style="margin-top: 10px">
+        <div class="row" style="margin-bottom: 0px">
+          <div class="col-xs-12 text-left">
+            <a
+              ng-if="periodFilesValidationModalData.publicLink"
+              target="_blank"
+              href="{{periodFilesValidationModalData.publicLink}}"
+            >
+              Download Current File |
+              {{periodFilesValidationModalData.unreportedLastRun | date :
+              'dd/MM/yyyy HH:mm:ss' : 'UTC'}}
+            </a>
+            <p ng-if="!periodFilesValidationModalData.publicLink">
+              {{periodFilesValidationModalData.message}}
+            </p>
+          </div>
+
+          <div
+            ng-if="periodFilesValidationModalData.salesFileList || periodFilesValidationModalData.statementList"
+            class="col-xs-11"
+            style="margin-top: 15px; margin-bottom: 10px"
+          >
+            <hr style="margin-top: 0px; margin-bottom: 1px" />
+          </div>
+        </div>
+
+        <h5
+          ng-if="periodFilesValidationModalData.salesFileList.length || periodFilesValidationModalData.statementList.length"
+          style="margin-top: 0px"
+        >
+          (Re) Generate {{periodFilesValidationModalData.type}} File
+        </h5>
+
+        <div
+          ng-if="periodFilesValidationModalData.salesFileMessage"
+          class="row"
+        >
+          <div class="col-xs-12">
+            <p>
+              <strong>NOTE:</strong
+              >{{periodFilesValidationModalData.salesFileMessage}}
+            </p>
+          </div>
+          <p
+            class="col-xs-11"
+            id="CUR-wRKBDjLY"
+            ng-repeat="salesFile in periodFilesValidationModalData.salesFileList"
+          >
+            <a
+              id="CUR-BKSQpKCh"
+              ng-click="navigateToLink(salesFile._id, 'sales')"
+              >{{salesFile.name}}</a
+            >
+            | Last Ingested: {{salesFile.lastIngestedDate | date : 'dd/MM/yyyy
+            HH:mm:ss' : 'UTC'}}
+          </p>
+        </div>
+
+        <hr
+          ng-if="periodFilesValidationModalData.salesFileList.length && periodFilesValidationModalData.statementList.length"
+          style="margin-top: 10px; margin-bottom: 10px"
+        />
+
+        <div
+          ng-if="periodFilesValidationModalData.statementMessage"
+          class="row"
+        >
+          <div class="col-xs-12">
+            <p>
+              <strong>NOTE: </strong>
+              {{periodFilesValidationModalData.statementMessage}}
+            </p>
+          </div>
+
+          <p
+            class="col-xs-11"
+            id="CUR-wRKBDjLY"
+            ng-repeat="statement in periodFilesValidationModalData.statementList"
+          >
+            <a
+              id="CUR-BKSQpKCh"
+              ng-click="navigateToLink(statement._id, 'statements')"
+              >{{statement.name}}</a
+            >
+            | Last Processed: {{statement.updatedAt | date : 'dd/MM/yyyy
+            HH:mm:ss' : 'UTC'}}
+          </p>
+        </div>
+
+        <div
+          class="row"
+          ng-if="periodFilesValidationModalData.salesFileList.length || periodFilesValidationModalData.statementList.length"
+          style="margin-bottom: 20px; margin-top: 0px"
+        >
+          <small class="col-xs-11 bold"
+            >Last Period Processing Date:
+            {{periodFilesValidationModalData.periodEndDate | date : 'dd/MM/yyyy
+            HH:mm:ss' : 'UTC'}}</small
+          >
+        </div>
+
+        <div class="row" style="margin-top: 20px">
+          <div class="col-xs-12 text-right">
+            <button
+              type="button"
+              class="btn btn-default m-t-5"
+              data-dismiss="modal"
+            >
+              {{!periodFilesValidationModalData.canGenerate ? 'Ok' : 'Cancel'}}
+            </button>
+            <button
+              type="button"
+              ng-if="periodFilesValidationModalData.canGenerate"
+              class="btn btn-warning m-t-5"
+              ng-click="generateUnreportedFile(periodFilesValidationModalData.type)"
+            >
+              <i class="fa fa-refresh"></i>&nbsp;(Re)Generate New File
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

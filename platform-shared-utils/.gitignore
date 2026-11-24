@@ -1,0 +1,10 @@
+node_modules
+tmp
+.env
+.idea/
+.vscode/
+.DS_Store
+.nyc_output/
+test/.DS_Store
+.nyc_output/
+coverage

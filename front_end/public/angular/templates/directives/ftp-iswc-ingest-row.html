@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="panel panel-default bg-gray-l">
+    <div class="panel-body p-t-25">
+      <div class="col-sm-6">
+          <div class="form-group">
+              <label>Name  <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is for your reference to identify different ftp servers."></i></label>
+              <input type="text" class="form-control" ng-model="server.name">
+          </div>
+          <div class="form-group">
+              <label>Type <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="SFTP offers secure data transfer and is recommended when available."></i></label>
+              <ui-select ng-model="server.protocol">
+                  <ui-select-match allow-clear="false">
+                      <span ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="protocol as protocol in serverProtocols | filter: $select.search">
+                      <span ng-bind="protocol"></span>
+                  </ui-select-choices>
+              </ui-select>
+          </div>
+          <div class="form-group">
+              <label>Host <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Typically this will begin with 'ftp.' and should not contain 'http://'.<br /><br />Once initialised this can not be changed.<br /><br />Note: Port number should be included in the Port field, not on the host."></i></label>
+              <input type="text" class="form-control" ng-model="server.host" data-ng-disabled="!!server.initialisedDate">
+          </div>
+          <div class="form-group">
+              <label>Username</label>
+              <input type="text" class="form-control" ng-model="server.username">
+          </div>
+          <div class="form-group" ng-if="clientAdminUser">
+              <label>Password</label>
+              <input type="password" class="form-control" ng-model="server.password">
+          </div>
+      </div>
+      <div class="col-sm-6">
+          <div class="form-group">
+              <label>Root Directory <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Where should the system look for files once connected. Leave blank for server root.<br /><br />Directory should begin with a ‘/' and NOT end with a '/’.<br /><br />Once initialised this can not be changed."></i></label>
+              <input type="text" class="form-control" ng-model="server.directory" data-ng-disabled="!!server.initialisedDate">
+          </div>
+          <div class="form-group">
+              <label>Port <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Provide the Port for the FTP server."></i></label>
+              <input type="number" class="form-control" ng-model="server.port">
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" value="1" ng-model="server.active">
+              Active 
+              <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Set this server as active or inactive. Inactive servers will not be scanned."></i>
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" value="1" data-ng-checked="!!server.lastSuccessfulCheck" disabled="disabled">
+              Last successful scan : 
+              <i data-ng-if="!server.lastSuccessfulCheck" class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Once Curve has scanned this server for changes, the last scanned date will appear here."></i>
+              <span data-ng-if="server.lastSuccessfulCheck">{{server.lastSuccessfulCheck | date : 'dd/MM/yyyy HH:mm:ss' : 'UTC' }}</span>
+            </label>
+          </div>
+      </div>
+      <div class="col-sm-12 m-t-15">
+          <div class="form-group col-xs-12 col-md-2 two-cols-row p-l-0 p-r-0">
+              <button class="btn btn-danger m-xs-t-5 m-l-0 m-r-0" ng-click="delete({ server: server })"><i class="fa fa-trash"></i></button>
+              <button
+                id="CUR-div-panel-body-verify-connection-btn"
+                class="btn btn-confirm"
+                style="margin-left: 10px;"
+                ng-click="verifyFtp(server)"
+              >Verify connection</button>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>

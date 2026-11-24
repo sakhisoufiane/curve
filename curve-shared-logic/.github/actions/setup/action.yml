@@ -1,0 +1,22 @@
+name: Setup
+description: Setup Code, Node and NPM
+
+inputs:
+  token:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18.16.0
+
+    - name: Configure NPM
+      shell: bash
+      run: npm config set '//registry.npmjs.org/:_authToken' "${{inputs.token}}"
+    
+    - name: Install Dependencies
+      shell: bash
+      run: npm ci

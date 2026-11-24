@@ -1,0 +1,7 @@
+<td ng-if="!hideCheckbox" class="v-align-middle hidden-xs">
+  <input id="sales-group-select-{{index}}" type="checkbox" class="select-unit" ng-model="salesGroup.selected" ng-if="edit" />
+</td>
+<td class="v-align-middle"><a href="#/sales/salesdb?{{salesGroup.type}}GroupId={{salesGroup._id}}">{{ salesGroup.name }}</a></td>
+<td ng-if="!hideType" class="v-align-middle text-capitalize">{{ salesGroup.type }}</td>
+<td class="v-align-middle">{{ salesGroup.totalSalesLines }}</td>
+<td class="v-align-middle hidden-xs">{{salesGroup.createdAt | date : dateFormat : 'UTC'}}</td>

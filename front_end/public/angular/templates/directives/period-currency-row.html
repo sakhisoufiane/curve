@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="form-group col-xs-5">
+  	<label ng-if="!index">Currency</label>
+    <ui-select ng-model="item.currency" ng-disabled="edit != true">
+      <ui-select-match allow-clear="true">
+        <span ng-bind="$select.selected.code"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search">
+        <span ng-bind-html="currency.code"></span>
+        <span> &nbsp; - &nbsp; </span>
+        <span ng-bind-html="currency.name"></span>
+      </ui-select-choices>
+    </ui-select>
+  </div>
+  <div class="form-group col-xs-5">
+  	<label ng-if="!index">Exchange Rate <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="This is multiplied by the currency rate, so from the selected currency to your home currency"></i></label>
+    <input type="number" class="form-control" ng-model="item.exchangeRate" ng-disabled="edit != true">
+  </div>
+  <div class="form-group col-xs-2">
+    <button class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-show="edit == true" ng-click="delete({ item: item })" ng-if="!index"><i class="fa fa-trash"></i></button>
+    <button class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-show="edit == true" ng-click="delete({ item: item })" ng-if="index"><i class="fa fa-trash"></i></button>
+  </div> 
+</div>

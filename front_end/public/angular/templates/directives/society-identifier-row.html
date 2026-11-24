@@ -1,0 +1,22 @@
+<div class="row contract-row-layout">
+  <div class="form-group required col-xs-6 col-sm-7">
+    <label ng-if="!index">Society</label>
+    <ui-select ng-model="identifier.society" on-select="onSocietySelected($item)" ng-if="inputType === 'Select'" ng-disabled="edit != true">
+      <ui-select-match>
+        <span ng-bind="$select.selected"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="item as item in (societies | filter: $select.search)">
+        <span ng-bind="item"></span>
+      </ui-select-choices>
+    </ui-select>
+    <input type="text" class="form-control" ng-model="identifier.society" ng-if="inputType === 'Text'" ng-disabled="edit != true">
+  </div>
+  <div class="form-group col-xs-3">
+    <label ng-if="!index">Identifier</label>
+    <input class="form-control sm-p-l-5 sm-p-r-5" ng-model="identifier.identifier" ng-disabled="edit != true">
+  </div>
+  <div class="form-group col-xs-3 col-sm-2 action-btn">
+    <button class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-show="edit == true" ng-click="delete({ identifier: identifier })" ng-if="!index"><i class="fa fa-trash"></i></button>
+    <button class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-show="edit == true" ng-click="delete({ identifier: identifier })" ng-if="index"><i class="fa fa-trash"></i></button>
+  </div> 
+</div>

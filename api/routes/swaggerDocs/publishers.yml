@@ -1,0 +1,646 @@
+openapi: 3.0.3
+info:
+  title: Publishers API
+  version: 1.0.0
+  description: |
+    API for managing publisher records in the system.
+    Supports CRUD operations on publishers with access control validation.
+    Includes support for PRO affiliations, territories, and agreements.
+    
+    Access Control:
+    - Read access requires catalogue read permissions
+    - Write access requires catalogue write permissions
+    - Client users can only access publishers in their organization
+
+paths:
+  /publishers:
+    get:
+      tags:
+        - Publishers
+      summary: Retrieve a list of publishers
+      description: Retrieve publishers based on provided filters and pagination settings.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page.
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+            enum: [name, createdAt, updatedAt]
+          description: Field to sort by.
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]  
+          description: Sorting direction.
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Search term for publisher names, IDs, or interested party IDs.
+      responses:
+        200:
+          description: List of publishers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  publishers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Publisher"
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer  
+                      total:
+                        type: integer
+              example:
+                publishers:
+                  - _id: "507f1f77bcf86cd799439011"
+                    name: "Example Publisher"
+                    cae: "123456789"
+                    controlled: true
+                    linkedContracts: []
+                    createdAt: "2024-01-01T00:00:00.000Z"
+                    updatedAt: "2024-01-01T00:00:00.000Z"
+                meta:
+                  currentPage: 1
+                  totalPages: 1
+                  total: 25
+        403:
+          $ref: "#/components/responses/Forbidden"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      tags:
+        - Publishers
+      summary: Create a new publisher
+      description: Add a new publisher record to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublisherInput"
+      responses:
+        200:
+          description: Publisher created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Publisher"
+              example:
+                _id: "507f1f77bcf86cd799439011"
+                name: "New Publisher"
+                cae: "123456789"
+                foreignId: "EXT123"
+                partyNo: 6
+                controlled: true
+                linkedContracts: []
+                createdBy: "507f1f77bcf86cd799439012"
+                lastModifiedBy: "507f1f77bcf86cd799439012"
+                createdAt: "2024-01-01T00:00:00.000Z"
+                updatedAt: "2024-01-01T00:00:00.000Z"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    delete:
+      tags:
+        - Publishers
+      summary: Bulk delete publishers
+      description: |
+        Delete multiple publishers by IDs with validation for dependencies. Only accessible to client users with Edit catalogue permissions.
+        - Validates that publishers are not in use by works, tracks, releases, or composers
+        - Supports different deletion types (multi, force, etc.)
+        - Returns detailed validation results for each publisher
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of publisher IDs to delete
+                type:
+                  type: string
+                  default: "multi"
+                  description: Type of deletion operation
+      responses:
+        200:
+          description: Bulk deletion completed with results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Bulk deletion completed"
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      description: Deletion result for each publisher
+        403:
+          $ref: "#/components/responses/Forbidden"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /publishers/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the publisher.
+    
+    get:
+      tags:
+        - Publishers
+      summary: Retrieve a specific publisher
+      description: Get detailed information about a specific publisher.
+      responses:
+        200:
+          description: Publisher details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Publisher"
+              example:
+                _id: "507f1f77bcf86cd799439011"
+                name: "Example Publisher"
+                cae: "123456789"
+                foreignId: "EXT123"
+                partyNo: 6
+                controlled: true
+                linkedContracts: [
+                  {
+                    contractId: "507f1f77bcf86cd799439013"
+                  }
+                ]
+                societies: [
+                  {
+                    society: "PRS",
+                    identifier: "123456",
+                    publisherName: "Example Publisher Ltd"
+                  }
+                ]
+                territories: ["GB", "US", "CA"]
+                createdBy: "507f1f77bcf86cd799439012"
+                lastModifiedBy: "507f1f77bcf86cd799439012"
+                createdAt: "2024-01-01T00:00:00.000Z"
+                updatedAt: "2024-01-01T00:00:00.000Z"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    put:
+      tags:
+        - Publishers
+      summary: Update a publisher
+      description: Update details of an existing publisher.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublisherInput"
+      responses:
+        200:
+          description: Publisher updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Publisher"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /publishers/{id}/history:
+    get:
+      tags:
+        - Publishers
+      summary: Get publisher history
+      description: Retrieve the modification history of a publisher.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the publisher.
+      responses:
+        200:
+          description: Publisher history retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ref:
+                          type: string
+                        author:
+                          type: object
+                          properties:
+                            email:
+                              type: string
+                        modifiedBy:
+                          type: string
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /publishers/export:
+    post:
+      tags:
+        - Publishers
+      summary: Export publishers
+      description: Export publishers to a file that will be sent via email.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - clientType
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                filter:
+                  type: object
+                clientType:
+                  type: string
+      responses:
+        200:
+          description: Export initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        403:
+          $ref: "#/components/responses/Forbidden"
+
+  /publishers/raw-export:
+    post:
+      tags:
+        - Publishers
+      summary: Raw export publishers
+      description: |
+        Export publishers to a raw CSV file. By default, the export is processed asynchronously
+        and a notification email is sent when complete. When sync=true, the request waits for
+        the export to complete and returns the download URL directly in the response.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - clientType
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of publisher IDs to export. If not provided, uses filter criteria.
+                filter:
+                  type: object
+                  description: Filter criteria for selecting publishers when specific IDs are not provided
+                clientType:
+                  type: string
+                  description: Type of client for export processing
+                sync:
+                  type: boolean
+                  default: false
+                  description: |
+                    If true, waits for export to complete and returns download URL directly.
+                    If false (default), sends notification email when export is ready.
+      responses:
+        200:
+          description: |
+            When sync=false (default): Export process started successfully, email notification will be sent.
+            When sync=true: Export completed, returns download URL (expires in 24 hours).
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Your report will be sent to you via email shortly"
+                    description: Response when sync=false (default)
+                  - type: object
+                    properties:
+                      csvPublicLink:
+                        type: string
+                        format: uri
+                        example: "https://s3.amazonaws.com/bucket/raw_exports/Client-publishers%20raw%20export.csv"
+                    description: Response when sync=true
+        403:
+          $ref: "#/components/responses/Forbidden"
+
+  /publishers/import:
+    post:
+      tags:
+        - Publishers
+      summary: Import publishers
+      description: Import publishers from an Excel file.
+      parameters:
+        - in: query
+          name: overwriteBlanks
+          schema:
+            type: boolean
+          description: Whether to overwrite blank fields.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                clientType:
+                  type: string
+      responses:
+        200:
+          description: Import initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        403:
+          $ref: "#/components/responses/Forbidden"
+
+components:
+  schemas:
+    Publisher:
+      type: object
+      required:
+        - name
+        - cae
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the publisher.
+        clientId:
+          type: string
+          description: Client identifier associated with the publisher.
+        foreignId:
+          type: string
+          description: External identifier for the publisher.
+        partyNo:
+          type: number
+          description: Auto-assigned party number.
+        name:
+          type: string
+          description: The name of the publisher.
+        lowerCaseName:
+          type: string
+          description: Auto-generated lowercase name for search purposes.
+        cae:
+          type: string
+          description: CAE or IPI number of the publisher.
+        caeWithoutLeadingZeros:
+          type: string
+          description: CAE or IPI number without leading zeros.
+        aliases:
+          type: array
+          items:
+            type: string
+          description: |
+            Alternate names that will resolve to this publisher.
+            Aliases cannot be empty. Each alias must be unique (case-insensitive)
+            within the publisher and across all publishers in the same client.
+            An alias must not match any publisher's primary name, and a publisher's
+            name must not match another publisher's alias.
+        mainPro:
+          type: string
+          enum: ["PRS", "ASCAP", "BMI", "SOCAN", "SESAC"]
+        mainProIdentifier:
+          type: string
+          description: Identifier for the main PRO.
+        mechanicalPro:
+          type: string
+          enum: ["PRS", "ASCAP", "BMI", "SOCAN", "AACIMH", "ABRAC", "ABRAMUS", "ACAM", "ACCESS", "ACDAM", "ACEMLA", "ACUM", "ADAGP", "ADAVIS", "ADDAF", "AEPI", "AGADU", "AGAYC", "AKKA/LAA", "AKM", "ALBAUTOR", "ALCS", "AMAR", "AMCOS", "AMPAL", "AMRA", "AMUS", "ANACIM", "APA", "APDAYC", "APG-JAPAN", "APRA", "APSAV", "ARGENTORES", "ARMAUTHOR", "ARS", "ARTISJUS", "ASDAC", "ASSIM", "ATIDA", "ATN", "AUSTRO-MECHANA", "AUTODIA", "AUTORARTE", "AUTVIS", "AWA", "AWGACS", "BACKOFFICE", "BBDA", "BCDA", "BEELDRECHT", "BGDA", "BILD-KUNST", "BMDA", "BNDA", "BONO", "BSDA", "BUBEDRA", "BUCUDA", "BUMA", "BUMDA", "BURAFO", "BURIDA", "BUS", "BUTODRA", "CAL", "CAPAC", "CAPASSO", "CASH", "CCL", "CHA", "CMRRA", "COMPASS", "COPY-DAN BILLEDKUNST", "COPYRO", "COSCAP", "COSGA", "COSOMA", "COSOTA", "COTT", "CPSN", "CREAIMAGEN", "CSCS", "DACS", "DALRO", "DGA", "DILIA ", "DIRECTORES", "DIVA", "DP", "DPRS", "DRCC", "EAU", "ECAD", "EDEM", "FILMAUTOR", "FILSCAP", "FLIM JUS", "FONOPERU", "GEMA", "GESAC", "GESTOR", "GMR", "HAA", "HARRY FOX", "HDS-ZAMP", "ECCO", "HUNGART", "ICE", "ICG", "IMJV", "IMRO", "IPRS", "JACAP", "JASRAC", "KAZAK", "KCI", "KODA", "KOMCA", "KOPIOSTO", "KOSA", "KUVASTO", "KYRGYZPATENT", "LAA", "LATGA-A", "LATINAUTOR", "LATINNET", "LIRA", "LITA", "LITERAR-MECHANA", "LVG", "MACP", "MASA", "MCPS", "MCSC", "MCSK", "MCSN", "MCT", "MESAM", "MINT", "MISASIA", "MLC", "MRS", "MSG", "MUSICAUTOR", "MUSICMARK", "MUSIKEDITION", "MUST", "NASCAM", "NCB", "NMPA", "NORD-DOC", "NS", "OMDA", "ONDA", "OSA", "OTPDA", "PAPPRI", "PROCAN", "PROLITTERIS", "RAO", "ROMS", "RUPIS", "SABAM", "SABEM", "SACD", "SACEM", "SACEMLUXEMBOURG", "SACENC", "SACERAU", "SACK", "SACM", "SACVEN", "SADA", "SADAIC", "SADEMBRA", "SADH", "SAIF", "SAMPRA", "SAMRO", "SARRAL", "SARTEC", "SAS", "SAYCE", "SAYCO", "SAZAS", "SBACEM", "SBAT", "SCAM", "SCD", "SESAC", "SESAM", "SFF", "SGA", "SGACEDOM", "SGAE", "SGDL", "SIAE", "SICAM", "SLPRS", "SNAC", "SOBODAYCOM", "SOCIETE DE L'IMAGE", "SOCINADA", "SOCINPRO", "SODART", "SODRAC", "SOFAM", "SOGEM", "SOKOJ", "SOMAAP", "SOMAS", "SONECA", "SONGCODE", "SOPE", "SOZA", "SPA", "SPAC", "SPACEMF", "SPACQ", "SPOTIFY", "SQN", "SSA", "STEF", "STEMRA", "STIM", "SUISA", "SUISSIMAGE", "SUOMEN KIRJAILIJALIITTO", "TEATERAUTOR", "TEOSTO", "THE AUTHOR'S REGISTRY INC.", "THE SOCIETY OF AUTHORS", "TONO", "UACRR", "UBC", "UCMR-ADA", "UCOSO", "UFFICIO LEGALE", "VAGA", "VBK", "VDFS", "VEGAP", "VEVAM", "VG WORT", "VISCOPY", "WAMI", "WGA", "WGJ", "WID CENTRE", "YOUTUBE", "ZAIKS", "ZAMCOPS", "ZAMP", "ZAPA", "ZIMRA", "UNISON", "KOSCAP", "CISAC"]
+        mechanicalProIdentifier:
+          type: string
+          description: Identifier for the mechanical PRO.
+        performancePro:
+          type: string
+          enum: ["PRS", "ASCAP", "BMI", "SOCAN", "AACIMH", "ABRAC", "ABRAMUS", "ACAM", "ACCESS", "ACDAM", "ACEMLA", "ACUM", "ADAGP", "ADAVIS", "ADDAF", "AEPI", "AGADU", "AGAYC", "AKKA/LAA", "AKM", "ALBAUTOR", "ALCS", "AMAR", "AMCOS", "AMPAL", "AMRA", "AMUS", "ANACIM", "APA", "APDAYC", "APG-JAPAN", "APRA", "APSAV", "ARGENTORES", "ARMAUTHOR", "ARS", "ARTISJUS", "ASDAC", "ASSIM", "ATIDA", "ATN", "AUSTRO-MECHANA", "AUTODIA", "AUTORARTE", "AUTVIS", "AWA", "AWGACS", "BACKOFFICE", "BBDA", "BCDA", "BEELDRECHT", "BGDA", "BILD-KUNST", "BMDA", "BNDA", "BONO", "BSDA", "BUBEDRA", "BUCUDA", "BUMA", "BUMDA", "BURAFO", "BURIDA", "BUS", "BUTODRA", "CAL", "CAPAC", "CAPASSO", "CASH", "CCL", "CHA", "CMRRA", "COMPASS", "COPY-DAN BILLEDKUNST", "COPYRO", "COSCAP", "COSGA", "COSOMA", "COSOTA", "COTT", "CPSN", "CREAIMAGEN", "CSCS", "DACS", "DALRO", "DGA", "DILIA ", "DIRECTORES", "DIVA", "DP", "DPRS", "DRCC", "EAU", "ECAD", "EDEM", "FILMAUTOR", "FILSCAP", "FLIM JUS", "FONOPERU", "GEMA", "GESAC", "GESTOR", "GMR", "HAA", "HARRY FOX", "HDS-ZAMP", "ECCO", "HUNGART", "ICE", "ICG", "IMJV", "IMRO", "IPRS", "JACAP", "JASRAC", "KAZAK", "KCI", "KODA", "KOMCA", "KOPIOSTO", "KOSA", "KUVASTO", "KYRGYZPATENT", "LAA", "LATGA-A", "LATINAUTOR", "LATINNET", "LIRA", "LITA", "LITERAR-MECHANA", "LVG", "MACP", "MASA", "MCPS", "MCSC", "MCSK", "MCSN", "MCT", "MESAM", "MINT", "MISASIA", "MLC", "MRS", "MSG", "MUSICAUTOR", "MUSICMARK", "MUSIKEDITION", "MUST", "NASCAM", "NCB", "NMPA", "NORD-DOC", "NS", "OMDA", "ONDA", "OSA", "OTPDA", "PAPPRI", "PROCAN", "PROLITTERIS", "RAO", "ROMS", "RUPIS", "SABAM", "SABEM", "SACD", "SACEM", "SACEMLUXEMBOURG", "SACENC", "SACERAU", "SACK", "SACM", "SACVEN", "SADA", "SADAIC", "SADEMBRA", "SADH", "SAIF", "SAMPRA", "SAMRO", "SARRAL", "SARTEC", "SAS", "SAYCE", "SAYCO", "SAZAS", "SBACEM", "SBAT", "SCAM", "SCD", "SESAC", "SESAM", "SFF", "SGA", "SGACEDOM", "SGAE", "SGDL", "SIAE", "SICAM", "SLPRS", "SNAC", "SOBODAYCOM", "SOCIETE DE L'IMAGE", "SOCINADA", "SOCINPRO", "SODART", "SODRAC", "SOFAM", "SOGEM", "SOKOJ", "SOMAAP", "SOMAS", "SONECA", "SONGCODE", "SOPE", "SOZA", "SPA", "SPAC", "SPACEMF", "SPACQ", "SPOTIFY", "SQN", "SSA", "STEF", "STEMRA", "STIM", "SUISA", "SUISSIMAGE", "SUOMEN KIRJAILIJALIITTO", "TEATERAUTOR", "TEOSTO", "THE AUTHOR'S REGISTRY INC.", "THE SOCIETY OF AUTHORS", "TONO", "UACRR", "UBC", "UCMR-ADA", "UCOSO", "UFFICIO LEGALE", "VAGA", "VBK", "VDFS", "VEGAP", "VEVAM", "VG WORT", "VISCOPY", "WAMI", "WGA", "WGJ", "WID CENTRE", "YOUTUBE", "ZAIKS", "ZAMCOPS", "ZAMP", "ZAPA", "ZIMRA", "UNISON", "KOSCAP", "CISAC"]
+        performanceProIdentifier:
+          type: string
+        syncPro:
+          type: string
+          enum: ["PRS", "ASCAP", "BMI", "SOCAN", "AACIMH", "ABRAC", "ABRAMUS", "ACAM", "ACCESS", "ACDAM", "ACEMLA", "ACUM", "ADAGP", "ADAVIS", "ADDAF", "AEPI", "AGADU", "AGAYC", "AKKA/LAA", "AKM", "ALBAUTOR", "ALCS", "AMAR", "AMCOS", "AMPAL", "AMRA", "AMUS", "ANACIM", "APA", "APDAYC", "APG-JAPAN", "APRA", "APSAV", "ARGENTORES", "ARMAUTHOR", "ARS", "ARTISJUS", "ASDAC", "ASSIM", "ATIDA", "ATN", "AUSTRO-MECHANA", "AUTODIA", "AUTORARTE", "AUTVIS", "AWA", "AWGACS", "BACKOFFICE", "BBDA", "BCDA", "BEELDRECHT", "BGDA", "BILD-KUNST", "BMDA", "BNDA", "BONO", "BSDA", "BUBEDRA", "BUCUDA", "BUMA", "BUMDA", "BURAFO", "BURIDA", "BUS", "BUTODRA", "CAL", "CAPAC", "CAPASSO", "CASH", "CCL", "CHA", "CMRRA", "COMPASS", "COPY-DAN BILLEDKUNST", "COPYRO", "COSCAP", "COSGA", "COSOMA", "COSOTA", "COTT", "CPSN", "CREAIMAGEN", "CSCS", "DACS", "DALRO", "DGA", "DILIA ", "DIRECTORES", "DIVA", "DP", "DPRS", "DRCC", "EAU", "ECAD", "EDEM", "FILMAUTOR", "FILSCAP", "FLIM JUS", "FONOPERU", "GEMA", "GESAC", "GESTOR", "GMR", "HAA", "HARRY FOX", "HDS-ZAMP", "ECCO", "HUNGART", "ICE", "ICG", "IMJV", "IMRO", "IPRS", "JACAP", "JASRAC", "KAZAK", "KCI", "KODA", "KOMCA", "KOPIOSTO", "KOSA", "KUVASTO", "KYRGYZPATENT", "LAA", "LATGA-A", "LATINAUTOR", "LATINNET", "LIRA", "LITA", "LITERAR-MECHANA", "LVG", "MACP", "MASA", "MCPS", "MCSC", "MCSK", "MCSN", "MCT", "MESAM", "MINT", "MISASIA", "MLC", "MRS", "MSG", "MUSICAUTOR", "MUSICMARK", "MUSIKEDITION", "MUST", "NASCAM", "NCB", "NMPA", "NORD-DOC", "NS", "OMDA", "ONDA", "OSA", "OTPDA", "PAPPRI", "PROCAN", "PROLITTERIS", "RAO", "ROMS", "RUPIS", "SABAM", "SABEM", "SACD", "SACEM", "SACEMLUXEMBOURG", "SACENC", "SACERAU", "SACK", "SACM", "SACVEN", "SADA", "SADAIC", "SADEMBRA", "SADH", "SAIF", "SAMPRA", "SAMRO", "SARRAL", "SARTEC", "SAS", "SAYCE", "SAYCO", "SAZAS", "SBACEM", "SBAT", "SCAM", "SCD", "SESAC", "SESAM", "SFF", "SGA", "SGACEDOM", "SGAE", "SGDL", "SIAE", "SICAM", "SLPRS", "SNAC", "SOBODAYCOM", "SOCIETE DE L'IMAGE", "SOCINADA", "SOCINPRO", "SODART", "SODRAC", "SOFAM", "SOGEM", "SOKOJ", "SOMAAP", "SOMAS", "SONECA", "SONGCODE", "SOPE", "SOZA", "SPA", "SPAC", "SPACEMF", "SPACQ", "SPOTIFY", "SQN", "SSA", "STEF", "STEMRA", "STIM", "SUISA", "SUISSIMAGE", "SUOMEN KIRJAILIJALIITTO", "TEATERAUTOR", "TEOSTO", "THE AUTHOR'S REGISTRY INC.", "THE SOCIETY OF AUTHORS", "TONO", "UACRR", "UBC", "UCMR-ADA", "UCOSO", "UFFICIO LEGALE", "VAGA", "VBK", "VDFS", "VEGAP", "VEVAM", "VG WORT", "VISCOPY", "WAMI", "WGA", "WGJ", "WID CENTRE", "YOUTUBE", "ZAIKS", "ZAMCOPS", "ZAMP", "ZAPA", "ZIMRA", "UNISON", "KOSCAP", "CISAC"]
+        publisherAgreements:
+          type: array
+          items:
+            type: object
+            properties:
+              publisherId:
+                type: string
+                description: ID of the related publisher
+              agreementType:
+                type: string
+                enum: ["Subpublishing General", "Subpublishing Specific"]
+              territory:
+                type: string
+                description: ISO2 Country Code
+              society:
+                type: string
+                enum: ["PRS", "ASCAP", "BMI", "SOCAN", "AACIMH", "ABRAC", "ABRAMUS", "ACAM", "ACCESS", "ACDAM", "ACEMLA", "ACUM", "ADAGP", "ADAVIS", "ADDAF", "AEPI", "AGADU", "AGAYC", "AKKA/LAA", "AKM", "ALBAUTOR", "ALCS", "AMAR", "AMCOS", "AMPAL", "AMRA", "AMUS", "ANACIM", "APA", "APDAYC", "APG-JAPAN", "APRA", "APSAV", "ARGENTORES", "ARMAUTHOR", "ARS", "ARTISJUS", "ASDAC", "ASSIM", "ATIDA", "ATN", "AUSTRO-MECHANA", "AUTODIA", "AUTORARTE", "AUTVIS", "AWA", "AWGACS", "BACKOFFICE", "BBDA", "BCDA", "BEELDRECHT", "BGDA", "BILD-KUNST", "BMDA", "BNDA", "BONO", "BSDA", "BUBEDRA", "BUCUDA", "BUMA", "BUMDA", "BURAFO", "BURIDA", "BUS", "BUTODRA", "CAL", "CAPAC", "CAPASSO", "CASH", "CCL", "CHA", "CMRRA", "COMPASS", "COPY-DAN BILLEDKUNST", "COPYRO", "COSCAP", "COSGA", "COSOMA", "COSOTA", "COTT", "CPSN", "CREAIMAGEN", "CSCS", "DACS", "DALRO", "DGA", "DILIA ", "DIRECTORES", "DIVA", "DP", "DPRS", "DRCC", "EAU", "ECAD", "EDEM", "FILMAUTOR", "FILSCAP", "FLIM JUS", "FONOPERU", "GEMA", "GESAC", "GESTOR", "GMR", "HAA", "HARRY FOX", "HDS-ZAMP", "ECCO", "HUNGART", "ICE", "ICG", "IMJV", "IMRO", "IPRS", "JACAP", "JASRAC", "KAZAK", "KCI", "KODA", "KOMCA", "KOPIOSTO", "KOSA", "KUVASTO", "KYRGYZPATENT", "LAA", "LATGA-A", "LATINAUTOR", "LATINNET", "LIRA", "LITA", "LITERAR-MECHANA", "LVG", "MACP", "MASA", "MCPS", "MCSC", "MCSK", "MCSN", "MCT", "MESAM", "MINT", "MISASIA", "MLC", "MRS", "MSG", "MUSICAUTOR", "MUSICMARK", "MUSIKEDITION", "MUST", "NASCAM", "NCB", "NMPA", "NORD-DOC", "NS", "OMDA", "ONDA", "OSA", "OTPDA", "PAPPRI", "PROCAN", "PROLITTERIS", "RAO", "ROMS", "RUPIS", "SABAM", "SABEM", "SACD", "SACEM", "SACEMLUXEMBOURG", "SACENC", "SACERAU", "SACK", "SACM", "SACVEN", "SADA", "SADAIC", "SADEMBRA", "SADH", "SAIF", "SAMPRA", "SAMRO", "SARRAL", "SARTEC", "SAS", "SAYCE", "SAYCO", "SAZAS", "SBACEM", "SBAT", "SCAM", "SCD", "SESAC", "SESAM", "SFF", "SGA", "SGACEDOM", "SGAE", "SGDL", "SIAE", "SICAM", "SLPRS", "SNAC", "SOBODAYCOM", "SOCIETE DE L'IMAGE", "SOCINADA", "SOCINPRO", "SODART", "SODRAC", "SOFAM", "SOGEM", "SOKOJ", "SOMAAP", "SOMAS", "SONECA", "SONGCODE", "SOPE", "SOZA", "SPA", "SPAC", "SPACEMF", "SPACQ", "SPOTIFY", "SQN", "SSA", "STEF", "STEMRA", "STIM", "SUISA", "SUISSIMAGE", "SUOMEN KIRJAILIJALIITTO", "TEATERAUTOR", "TEOSTO", "THE AUTHOR'S REGISTRY INC.", "THE SOCIETY OF AUTHORS", "TONO", "UACRR", "UBC", "UCMR-ADA", "UCOSO", "UFFICIO LEGALE", "VAGA", "VBK", "VDFS", "VEGAP", "VEVAM", "VG WORT", "VISCOPY", "WAMI", "WGA", "WGJ", "WID CENTRE", "YOUTUBE", "ZAIKS", "ZAMCOPS", "ZAMP", "ZAPA", "ZIMRA", "UNISON", "KOSCAP"]
+              agreementNo:
+                type: string
+        linkedContracts:
+          type: array
+          items:
+            type: object
+            properties:
+              contractId:
+                type: string
+        territories:
+          type: array
+          items:
+            type: string
+            description: ISO2 Country Code
+        createdBy:
+          type: string
+          format: uuid
+          description: ID of user who created the record
+        lastModifiedBy:
+          type: string  
+          format: uuid
+          description: ID of user who last modified the record
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    PublisherInput:
+      type: object
+      required:
+        - name
+        - cae
+      properties:
+        name:
+          type: string
+        cae:
+          type: string
+        aliases:
+          type: array
+          items:
+            type: string
+          description: |
+            Alternate names that will resolve to this publisher.
+            Aliases cannot be empty. Each alias must be unique (case-insensitive)
+            within the publisher and across all publishers in the same client.
+            An alias must not match any publisher's primary name, and a publisher's
+            name must not match another publisher's alias.
+        mainPro:
+          type: string
+          enum: ["PRS", "ASCAP", "BMI", "SOCAN", "AACIMH", "ABRAC", "ABRAMUS", "ACAM", "ACCESS", "ACDAM", "ACEMLA", "ACUM", "ADAGP", "ADAVIS", "ADDAF", "AEPI", "AGADU", "AGAYC", "AKKA/LAA", "AKM", "ALBAUTOR", "ALCS", "AMAR", "AMCOS", "AMPAL", "AMRA", "AMUS", "ANACIM", "APA", "APDAYC", "APG-JAPAN", "APRA", "APSAV", "ARGENTORES", "ARMAUTHOR", "ARS", "ARTISJUS", "ASDAC", "ASSIM", "ATIDA", "ATN", "AUSTRO-MECHANA", "AUTODIA", "AUTORARTE", "AUTVIS", "AWA", "AWGACS", "BACKOFFICE", "BBDA", "BCDA", "BEELDRECHT", "BGDA", "BILD-KUNST", "BMDA", "BNDA", "BONO", "BSDA", "BUBEDRA", "BUCUDA", "BUMA", "BUMDA", "BURAFO", "BURIDA", "BUS", "BUTODRA", "CAL", "CAPAC", "CAPASSO", "CASH", "CCL", "CHA", "CMRRA", "COMPASS", "COPY-DAN BILLEDKUNST", "COPYRO", "COSCAP", "COSGA", "COSOMA", "COSOTA", "COTT", "CPSN", "CREAIMAGEN", "CSCS", "DACS", "DALRO", "DGA", "DILIA ", "DIRECTORES", "DIVA", "DP", "DPRS", "DRCC", "EAU", "ECAD", "EDEM", "FILMAUTOR", "FILSCAP", "FLIM JUS", "FONOPERU", "GEMA", "GESAC", "GESTOR", "GMR", "HAA", "HARRY FOX", "HDS-ZAMP", "ECCO", "HUNGART", "ICE", "ICG", "IMJV", "IMRO", "IPRS", "JACAP", "JASRAC", "KAZAK", "KCI", "KODA", "KOMCA", "KOPIOSTO", "KOSA", "KUVASTO", "KYRGYZPATENT", "LAA", "LATGA-A", "LATINAUTOR", "LATINNET", "LIRA", "LITA", "LITERAR-MECHANA", "LVG", "MACP", "MASA", "MCPS", "MCSC", "MCSK", "MCSN", "MCT", "MESAM", "MINT", "MISASIA", "MLC", "MRS", "MSG", "MUSICAUTOR", "MUSICMARK", "MUSIKEDITION", "MUST", "NASCAM", "NCB", "NMPA", "NORD-DOC", "NS", "OMDA", "ONDA", "OSA", "OTPDA", "PAPPRI", "PROCAN", "PROLITTERIS", "RAO", "ROMS", "RUPIS", "SABAM", "SABEM", "SACD", "SACEM", "SACEMLUXEMBOURG", "SACENC", "SACERAU", "SACK", "SACM", "SACVEN", "SADA", "SADAIC", "SADEMBRA", "SADH", "SAIF", "SAMPRA", "SAMRO", "SARRAL", "SARTEC", "SAS", "SAYCE", "SAYCO", "SAZAS", "SBACEM", "SBAT", "SCAM", "SCD", "SESAC", "SESAM", "SFF", "SGA", "SGACEDOM", "SGAE", "SGDL", "SIAE", "SICAM", "SLPRS", "SNAC", "SOBODAYCOM", "SOCIETE DE L'IMAGE", "SOCINADA", "SOCINPRO", "SODART", "SODRAC", "SOFAM", "SOGEM", "SOKOJ", "SOMAAP", "SOMAS", "SONECA", "SONGCODE", "SOPE", "SOZA", "SPA", "SPAC", "SPACEMF", "SPACQ", "SPOTIFY", "SQN", "SSA", "STEF", "STEMRA", "STIM", "SUISA", "SUISSIMAGE", "SUOMEN KIRJAILIJALIITTO", "TEATERAUTOR", "TEOSTO", "THE AUTHOR'S REGISTRY INC.", "THE SOCIETY OF AUTHORS", "TONO", "UACRR", "UBC", "UCMR-ADA", "UCOSO", "UFFICIO LEGALE", "VAGA", "VBK", "VDFS", "VEGAP", "VEVAM", "VG WORT", "VISCOPY", "WAMI", "WGA", "WGJ", "WID CENTRE", "YOUTUBE", "ZAIKS", "ZAMCOPS", "ZAMP", "ZAPA", "ZIMRA", "UNISON", "KOSCAP"]
+        mechanicalProIdentifier:
+          type: string
+        performancePro:
+          type: string  
+          enum: ["PRS", "ASCAP", "BMI", "SOCAN", "AACIMH", "ABRAC", "ABRAMUS", "ACAM", "ACCESS", "ACDAM", "ACEMLA", "ACUM", "ADAGP", "ADAVIS", "ADDAF", "AEPI", "AGADU", "AGAYC", "AKKA/LAA", "AKM", "ALBAUTOR", "ALCS", "AMAR", "AMCOS", "AMPAL", "AMRA", "AMUS", "ANACIM", "APA", "APDAYC", "APG-JAPAN", "APRA", "APSAV", "ARGENTORES", "ARMAUTHOR", "ARS", "ARTISJUS", "ASDAC", "ASSIM", "ATIDA", "ATN", "AUSTRO-MECHANA", "AUTODIA", "AUTORARTE", "AUTVIS", "AWA", "AWGACS", "BACKOFFICE", "BBDA", "BCDA", "BEELDRECHT", "BGDA", "BILD-KUNST", "BMDA", "BNDA", "BONO", "BSDA", "BUBEDRA", "BUCUDA", "BUMA", "BUMDA", "BURAFO", "BURIDA", "BUS", "BUTODRA", "CAL", "CAPAC", "CAPASSO", "CASH", "CCL", "CHA", "CMRRA", "COMPASS", "COPY-DAN BILLEDKUNST", "COPYRO", "COSCAP", "COSGA", "COSOMA", "COSOTA", "COTT", "CPSN", "CREAIMAGEN", "CSCS", "DACS", "DALRO", "DGA", "DILIA ", "DIRECTORES", "DIVA", "DP", "DPRS", "DRCC", "EAU", "ECAD", "EDEM", "FILMAUTOR", "FILSCAP", "FLIM JUS", "FONOPERU", "GEMA", "GESAC", "GESTOR", "GMR", "HAA", "HARRY FOX", "HDS-ZAMP", "ECCO", "HUNGART", "ICE", "ICG", "IMJV", "IMRO", "IPRS", "JACAP", "JASRAC", "KAZAK", "KCI", "KODA", "KOMCA", "KOPIOSTO", "KOSA", "KUVASTO", "KYRGYZPATENT", "LAA", "LATGA-A", "LATINAUTOR", "LATINNET", "LIRA", "LITA", "LITERAR-MECHANA", "LVG", "MACP", "MASA", "MCPS", "MCSC", "MCSK", "MCSN", "MCT", "MESAM", "MINT", "MISASIA", "MLC", "MRS", "MSG", "MUSICAUTOR", "MUSICMARK", "MUSIKEDITION", "MUST", "NASCAM", "NCB", "NMPA", "NORD-DOC", "NS", "OMDA", "ONDA", "OSA", "OTPDA", "PAPPRI", "PROCAN", "PROLITTERIS", "RAO", "ROMS", "RUPIS", "SABAM", "SABEM", "SACD", "SACEM", "SACEMLUXEMBOURG", "SACENC", "SACERAU", "SACK", "SACM", "SACVEN", "SADA", "SADAIC", "SADEMBRA", "SADH", "SAIF", "SAMPRA", "SAMRO", "SARRAL", "SARTEC", "SAS", "SAYCE", "SAYCO", "SAZAS", "SBACEM", "SBAT", "SCAM", "SCD", "SESAC", "SESAM", "SFF", "SGA", "SGACEDOM", "SGAE", "SGDL", "SIAE", "SICAM", "SLPRS", "SNAC", "SOBODAYCOM", "SOCIETE DE L'IMAGE", "SOCINADA", "SOCINPRO", "SODART", "SODRAC", "SOFAM", "SOGEM", "SOKOJ", "SOMAAP", "SOMAS", "SONECA", "SONGCODE", "SOPE", "SOZA", "SPA", "SPAC", "SPACEMF", "SPACQ", "SPOTIFY", "SQN", "SSA", "STEF", "STEMRA", "STIM", "SUISA", "SUISSIMAGE", "SUOMEN KIRJAILIJALIITTO", "TEATERAUTOR", "TEOSTO", "THE AUTHOR'S REGISTRY INC.", "THE SOCIETY OF AUTHORS", "TONO", "UACRR", "UBC", "UCMR-ADA", "UCOSO", "UFFICIO LEGALE", "VAGA", "VBK", "VDFS", "VEGAP", "VEVAM", "VG WORT", "VISCOPY", "WAMI", "WGA", "WGJ", "WID CENTRE", "YOUTUBE", "ZAIKS", "ZAMCOPS", "ZAMP", "ZAPA", "ZIMRA", "UNISON", "KOSCAP"]
+        controlled:
+          type: boolean
+        catalogueGroups:
+          type: array
+          items:
+            type: string
+        notes:
+          type: string
+        societies:
+          type: array
+          items:
+            type: object
+            properties:
+              society:
+                type: string
+                enum: ["PRS", "ASCAP", "BMI", "SOCAN", "AACIMH", "ABRAC", "ABRAMUS", "ACAM", "ACCESS", "ACDAM", "ACEMLA", "ACUM", "ADAGP", "ADAVIS", "ADDAF", "AEPI", "AGADU", "AGAYC", "AKKA/LAA", "AKM", "ALBAUTOR", "ALCS", "AMAR", "AMCOS", "AMPAL", "AMRA", "AMUS", "ANACIM", "APA", "APDAYC", "APG-JAPAN", "APRA", "APSAV", "ARGENTORES", "ARMAUTHOR", "ARS", "ARTISJUS", "ASDAC", "ASSIM", "ATIDA", "ATN", "AUSTRO-MECHANA", "AUTODIA", "AUTORARTE", "AUTVIS", "AWA", "AWGACS", "BACKOFFICE", "BBDA", "BCDA", "BEELDRECHT", "BGDA", "BILD-KUNST", "BMDA", "BNDA", "BONO", "BSDA", "BUBEDRA", "BUCUDA", "BUMA", "BUMDA", "BURAFO", "BURIDA", "BUS", "BUTODRA", "CAL", "CAPAC", "CAPASSO", "CASH", "CCL", "CHA", "CMRRA", "COMPASS", "COPY-DAN BILLEDKUNST", "COPYRO", "COSCAP", "COSGA", "COSOMA", "COSOTA", "COTT", "CPSN", "CREAIMAGEN", "CSCS", "DACS", "DALRO", "DGA", "DILIA ", "DIRECTORES", "DIVA", "DP", "DPRS", "DRCC", "EAU", "ECAD", "EDEM", "FILMAUTOR", "FILSCAP", "FLIM JUS", "FONOPERU", "GEMA", "GESAC", "GESTOR", "GMR", "HAA", "HARRY FOX", "HDS-ZAMP", "ECCO", "HUNGART", "ICE", "ICG", "IMJV", "IMRO", "IPRS", "JACAP", "JASRAC", "KAZAK", "KCI", "KODA", "KOMCA", "KOPIOSTO", "KOSA", "KUVASTO", "KYRGYZPATENT", "LAA", "LATGA-A", "LATINAUTOR", "LATINNET", "LIRA", "LITA", "LITERAR-MECHANA", "LVG", "MACP", "MASA", "MCPS", "MCSC", "MCSK", "MCSN", "MCT", "MESAM", "MINT", "MISASIA", "MLC", "MRS", "MSG", "MUSICAUTOR", "MUSICMARK", "MUSIKEDITION", "MUST", "NASCAM", "NCB", "NMPA", "NORD-DOC", "NS", "OMDA", "ONDA", "OSA", "OTPDA", "PAPPRI", "PROCAN", "PROLITTERIS", "RAO", "ROMS", "RUPIS", "SABAM", "SABEM", "SACD", "SACEM", "SACEMLUXEMBOURG", "SACENC", "SACERAU", "SACK", "SACM", "SACVEN", "SADA", "SADAIC", "SADEMBRA", "SADH", "SAIF", "SAMPRA", "SAMRO", "SARRAL", "SARTEC", "SAS", "SAYCE", "SAYCO", "SAZAS", "SBACEM", "SBAT", "SCAM", "SCD", "SESAC", "SESAM", "SFF", "SGA", "SGACEDOM", "SGAE", "SGDL", "SIAE", "SICAM", "SLPRS", "SNAC", "SOBODAYCOM", "SOCIETE DE L'IMAGE", "SOCINADA", "SOCINPRO", "SODART", "SODRAC", "SOFAM", "SOGEM", "SOKOJ", "SOMAAP", "SOMAS", "SONECA", "SONGCODE", "SOPE", "SOZA", "SPA", "SPAC", "SPACEMF", "SPACQ", "SPOTIFY", "SQN", "SSA", "STEF", "STEMRA", "STIM", "SUISA", "SUISSIMAGE", "SUOMEN KIRJAILIJALIITTO", "TEATERAUTOR", "TEOSTO", "THE AUTHOR'S REGISTRY INC.", "THE SOCIETY OF AUTHORS", "TONO", "UACRR", "UBC", "UCMR-ADA", "UCOSO", "UFFICIO LEGALE", "VAGA", "VBK", "VDFS", "VEGAP", "VEVAM", "VG WORT", "VISCOPY", "WAMI", "WGA", "WGJ", "WID CENTRE", "YOUTUBE", "ZAIKS", "ZAMCOPS", "ZAMP", "ZAPA", "ZIMRA", "UNISON", "KOSCAP"]
+              performancePro:
+                type: string
+                enum: ["PRS", "ASCAP", "BMI", "SOCAN", "AACIMH", "ABRAC", "ABRAMUS", "ACAM", "ACCESS", "ACDAM", "ACEMLA", "ACUM", "ADAGP", "ADAVIS", "ADDAF", "AEPI", "AGADU", "AGAYC", "AKKA/LAA", "AKM", "ALBAUTOR", "ALCS", "AMAR", "AMCOS", "AMPAL", "AMRA", "AMUS", "ANACIM", "APA", "APDAYC", "APG-JAPAN", "APRA", "APSAV", "ARGENTORES", "ARMAUTHOR", "ARS", "ARTISJUS", "ASDAC", "ASSIM", "ATIDA", "ATN", "AUSTRO-MECHANA", "AUTODIA", "AUTORARTE", "AUTVIS", "AWA", "AWGACS", "BACKOFFICE", "BBDA", "BCDA", "BEELDRECHT", "BGDA", "BILD-KUNST", "BMDA", "BNDA", "BONO", "BSDA", "BUBEDRA", "BUCUDA", "BUMA", "BUMDA", "BURAFO", "BURIDA", "BUS", "BUTODRA", "CAL", "CAPAC", "CAPASSO", "CASH", "CCL", "CHA", "CMRRA", "COMPASS", "COPY-DAN BILLEDKUNST", "COPYRO", "COSCAP", "COSGA", "COSOMA", "COSOTA", "COTT", "CPSN", "CREAIMAGEN", "CSCS", "DACS", "DALRO", "DGA", "DILIA ", "DIRECTORES", "DIVA", "DP", "DPRS", "DRCC", "EAU", "ECAD", "EDEM", "FILMAUTOR", "FILSCAP", "FLIM JUS", "FONOPERU", "GEMA", "GESAC", "GESTOR", "GMR", "HAA", "HARRY FOX", "HDS-ZAMP", "ECCO", "HUNGART", "ICE", "ICG", "IMJV", "IMRO", "IPRS", "JACAP", "JASRAC", "KAZAK", "KCI", "KODA", "KOMCA", "KOPIOSTO", "KOSA", "KUVASTO", "KYRGYZPATENT", "LAA", "LATGA-A", "LATINAUTOR", "LATINNET", "LIRA", "LITA", "LITERAR-MECHANA", "LVG", "MACP", "MASA", "MCPS", "MCSC", "MCSK", "MCSN", "MCT", "MESAM", "MINT", "MISASIA", "MLC", "MRS", "MSG", "MUSICAUTOR", "MUSICMARK", "MUSIKEDITION", "MUST", "NASCAM", "NCB", "NMPA", "NORD-DOC", "NS", "OMDA", "ONDA", "OSA", "OTPDA", "PAPPRI", "PROCAN", "PROLITTERIS", "RAO", "ROMS", "RUPIS", "SABAM", "SABEM", "SACD", "SACEM", "SACEMLUXEMBOURG", "SACENC", "SACERAU", "SACK", "SACM", "SACVEN", "SADA", "SADAIC", "SADEMBRA", "SADH", "SAIF", "SAMPRA", "SAMRO", "SARRAL", "SARTEC", "SAS", "SAYCE", "SAYCO", "SAZAS", "SBACEM", "SBAT", "SCAM", "SCD", "SESAC", "SESAM", "SFF", "SGA", "SGACEDOM", "SGAE", "SGDL", "SIAE", "SICAM", "SLPRS", "SNAC", "SOBODAYCOM", "SOCIETE DE L'IMAGE", "SOCINADA", "SOCINPRO", "SODART", "SODRAC", "SOFAM", "SOGEM", "SOKOJ", "SOMAAP", "SOMAS", "SONECA", "SONGCODE", "SOPE", "SOZA", "SPA", "SPAC", "SPACEMF", "SPACQ", "SPOTIFY", "SQN", "SSA", "STEF", "STEMRA", "STIM", "SUISA", "SUISSIMAGE", "SUOMEN KIRJAILIJALIITTO", "TEATERAUTOR", "TEOSTO", "THE AUTHOR'S REGISTRY INC.", "THE SOCIETY OF AUTHORS", "TONO", "UACRR", "UBC", "UCMR-ADA", "UCOSO", "UFFICIO LEGALE", "VAGA", "VBK", "VDFS", "VEGAP", "VEVAM", "VG WORT", "VISCOPY", "WAMI", "WGA", "WGJ", "WID CENTRE", "YOUTUBE", "ZAIKS", "ZAMCOPS", "ZAMP", "ZAPA", "ZIMRA", "UNISON", "KOSCAP"]
+        publisherAgreements:
+          type: array
+          items:
+            type: object
+            properties:
+              publisherId:
+                type: string
+              agreementType:
+                type: string
+                enum: ["Subpublishing General", "Subpublishing Specific"]
+              territory:
+                type: string
+              society:
+                type: string
+                enum: ["PRS", "ASCAP", "BMI", "SOCAN", "AACIMH", "ABRAC", "ABRAMUS", "ACAM", "ACCESS", "ACDAM", "ACEMLA", "ACUM", "ADAGP", "ADAVIS", "ADDAF", "AEPI", "AGADU", "AGAYC", "AKKA/LAA", "AKM", "ALBAUTOR", "ALCS", "AMAR", "AMCOS", "AMPAL", "AMRA", "AMUS", "ANACIM", "APA", "APDAYC", "APG-JAPAN", "APRA", "APSAV", "ARGENTORES", "ARMAUTHOR", "ARS", "ARTISJUS", "ASDAC", "ASSIM", "ATIDA", "ATN", "AUSTRO-MECHANA", "AUTODIA", "AUTORARTE", "AUTVIS", "AWA", "AWGACS", "BACKOFFICE", "BBDA", "BCDA", "BEELDRECHT", "BGDA", "BILD-KUNST", "BMDA", "BNDA", "BONO", "BSDA", "BUBEDRA", "BUCUDA", "BUMA", "BUMDA", "BURAFO", "BURIDA", "BUS", "BUTODRA", "CAL", "CAPAC", "CAPASSO", "CASH", "CCL", "CHA", "CMRRA", "COMPASS", "COPY-DAN BILLEDKUNST", "COPYRO", "COSCAP", "COSGA", "COSOMA", "COSOTA", "COTT", "CPSN", "CREAIMAGEN", "CSCS", "DACS", "DALRO", "DGA", "DILIA ", "DIRECTORES", "DIVA", "DP", "DPRS", "DRCC", "EAU", "ECAD", "EDEM", "FILMAUTOR", "FILSCAP", "FLIM JUS", "FONOPERU", "GEMA", "GESAC", "GESTOR", "GMR", "HAA", "HARRY FOX", "HDS-ZAMP", "ECCO", "HUNGART", "ICE", "ICG", "IMJV", "IMRO", "IPRS", "JACAP", "JASRAC", "KAZAK", "KCI", "KODA", "KOMCA", "KOPIOSTO", "KOSA", "KUVASTO", "KYRGYZPATENT", "LAA", "LATGA-A", "LATINAUTOR", "LATINNET", "LIRA", "LITA", "LITERAR-MECHANA", "LVG", "MACP", "MASA", "MCPS", "MCSC", "MCSK", "MCSN", "MCT", "MESAM", "MINT", "MISASIA", "MLC", "MRS", "MSG", "MUSICAUTOR", "MUSICMARK", "MUSIKEDITION", "MUST", "NASCAM", "NCB", "NMPA", "NORD-DOC", "NS", "OMDA", "ONDA", "OSA", "OTPDA", "PAPPRI", "PROCAN", "PROLITTERIS", "RAO", "ROMS", "RUPIS", "SABAM", "SABEM", "SACD", "SACEM", "SACEMLUXEMBOURG", "SACENC", "SACERAU", "SACK", "SACM", "SACVEN", "SADA", "SADAIC", "SADEMBRA", "SADH", "SAIF", "SAMPRA", "SAMRO", "SARRAL", "SARTEC", "SAS", "SAYCE", "SAYCO", "SAZAS", "SBACEM", "SBAT", "SCAM", "SCD", "SESAC", "SESAM", "SFF", "SGA", "SGACEDOM", "SGAE", "SGDL", "SIAE", "SICAM", "SLPRS", "SNAC", "SOBODAYCOM", "SOCIETE DE L'IMAGE", "SOCINADA", "SOCINPRO", "SODART", "SODRAC", "SOFAM", "SOGEM", "SOKOJ", "SOMAAP", "SOMAS", "SONECA", "SONGCODE", "SOPE", "SOZA", "SPA", "SPAC", "SPACEMF", "SPACQ", "SPOTIFY", "SQN", "SSA", "STEF", "STEMRA", "STIM", "SUISA", "SUISSIMAGE", "SUOMEN KIRJAILIJALIITTO", "TEATERAUTOR", "TEOSTO", "THE AUTHOR'S REGISTRY INC.", "THE SOCIETY OF AUTHORS", "TONO", "UACRR", "UBC", "UCMR-ADA", "UCOSO", "UFFICIO LEGALE", "VAGA", "VBK", "VDFS", "VEGAP", "VEVAM", "VG WORT", "VISCOPY", "WAMI", "WGA", "WGJ", "WID CENTRE", "YOUTUBE", "ZAIKS", "ZAMCOPS", "ZAMP", "ZAPA", "ZIMRA", "UNISON", "KOSCAP"]
+              agreementNo:
+                type: string
+        territories:
+          type: array
+          items:
+            type: string
+
+  responses:
+    Forbidden:
+      description: User does not have sufficient permissions
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Forbidden
+
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Could not find Publisher with ID xyz
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Internal error, please try again

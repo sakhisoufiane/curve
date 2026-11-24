@@ -1,0 +1,71 @@
+<div class="row border-bottom-dashed m-b-10 sm-m-b-15 contract-terms">
+  <div class="col-xs-12">
+    <div class="row contract-row-layout">
+      <div class="form-group required col-xs-3">
+        <label>Society</label>
+        <ui-select ng-model="identifier.society" ng-disabled="edit != true">
+          <ui-select-match>
+            <span ng-bind="$select.selected"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item as item in (societies | filter: $select.search)">
+            <span ng-bind="item"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="form-group col-xs-3">
+        <label>Identifier</label>
+        <input class="form-control sm-p-l-5 sm-p-r-5" ng-model="identifier.identifier" ng-disabled="edit != true">
+      </div>
+      <div class="form-group col-xs-3" ng-if="includeName">
+        <label>Publisher Name</label>
+        <input class="form-control sm-p-l-5 sm-p-r-5" ng-model="identifier.publisherName" ng-disabled="edit != true">
+      </div>
+      <div class="form-group col-xs-2 action-btn">
+        <button ng-show="edit == true" class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0"
+          ng-click="delete({ identifier: identifier })"><i class="fa fa-trash"></i></button>
+      </div>
+    </div>
+    <div class="row contract-row-layout">
+      <div class="col-xs-3">
+        <div class="form-group">
+          <label>Mech. Society</label>
+          <ui-select ng-model="identifier.mechanicalPro" ng-disabled="edit != true">
+            <ui-select-match allow-clear="true">
+              <span ng-bind="$select.selected"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item in societies | filter: $select.search track by $index">
+              <span ng-bind="item"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <label>Perf. Society</label>
+          <ui-select ng-model="identifier.performancePro" ng-disabled="edit != true">
+            <ui-select-match allow-clear="true">
+              <span ng-bind="$select.selected"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item in societies | filter: $select.search track by $index">
+              <span ng-bind="item"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <label>Sync Society</label>
+          <ui-select ng-model="identifier.syncPro" ng-disabled="edit != true">
+            <ui-select-match allow-clear="true">
+              <span ng-bind="$select.selected"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item in societies | filter: $select.search track by $index">
+              <span ng-bind="item"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

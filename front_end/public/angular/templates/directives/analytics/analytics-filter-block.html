@@ -1,0 +1,74 @@
+<div class="panel panel-default">
+  <div data-ng-if="!first" class="analytics-or-label">OR</div>
+  <div class="panel-heading">
+    <div class="panel-title">{{blockTitle}}</div>
+    <span data-ng-if="testFilterBlockHasDelete()">
+      <button class="btn btn-danger m-xs-t-5 m-l-0 m-r-0 pull-right" data-ng-click="deleteFilterBlock(filterBlock)"><i class="fa fa-trash"></i></button>
+    </span>
+  </div>
+  <div class="panel-body p-t-15">
+    <div class="row">
+      <div class="hidden-xs col-sm-4">
+        <div class="form-group">
+            <label>Field</label>
+        </div>
+      </div>
+      <div class="hidden-xs col-sm-6">
+        <div class="form-group">
+            <label>Value </label>
+        </div>
+      </div>
+      <div data-ng-if="baseFilter" class="m-b-10">   
+        <analytics-filter-cat-default-row base-filter="baseFilter" filter-block="filterBlock" block-identifier="blockIdentifier" show-tracks-with-release="showTracksWithRelease" inline="true"></analytics-filter-cat-default-row>
+      </div>
+      <analytics-filter-row
+        dataset="dataset"
+        data-ng-repeat="filterRow in filterBlock.filterRows"
+        first="$first"
+        index="$index"
+        filter-row="filterRow"
+        filter-block="filterBlock"
+        block-identifier="blockIdentifier"
+        base-filter="baseFilter"
+        showing-comparison="showingComparison"
+        block-field-options="blockFieldOptions"
+        delete-filter-row="deleteFilterRow"
+        test-filter-row-has-delete="testFilterRowHasDelete"
+        show-tracks-with-release="showTracksWithRelease"
+        lowest-index-tracks-with-release="lowestIndexTracksWithRelease"
+        client-type="clientType"
+        search-contracts="searchContracts"
+        contracts="contracts"
+        companies="companies"
+        search-companies="searchCompanies"
+        contract-categories="contractCategories"
+        periods="periods",
+        search-periods="searchPeriods"
+        sales-files="salesFiles"
+        search-sales-files="searchSalesFiles"
+        cat-types="catTypes"
+        channels="channels"
+        configs="configs"
+        territories="territories"
+        catalogue-groups="catalogueGroups"
+        prices="prices"
+        search-releases="searchReleases"
+        release-string="releaseString"
+        releases="releases"
+        search-tracks="searchTracks"
+        track-string="trackString"
+        tracks="tracks"
+        search-works="searchWorks"
+        works="works"
+        sources="sources"
+        report-type="reportType"
+        target-periods="targetPeriods"
+        foreign-ids="foreignIds"></analytics-filter-row>     
+      <div class="col-sm-12">
+        <div class="col-xs-12 col-md-2 two-cols-row p-l-0 p-r-0" data-ng-if="blockFieldOptions.length > 1">
+            <button class="btn btn-sm btn-complete w-xs-100-p m-xs-l-0 m-b-0 m-l-0" data-ng-click="addFilterRow(filterBlock)"><i class="fa fa-plus-circle"></i> AND</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

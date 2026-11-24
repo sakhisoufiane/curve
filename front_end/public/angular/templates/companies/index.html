@@ -1,0 +1,92 @@
+<div id="CUR-XKSwrydU" class="jumbotron" data-pages="parallax">
+  <div id="CUR-eFnJpEsb" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-SNLeKpmy" class="inner">
+      <ul id="CUR-uYrtjxYz" class="breadcrumb">
+        <li id="CUR-EZGvmKEy"><a id="CUR-nvJSCDml" href="/#/companies" class="active">Companies</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-zCwbwEZY" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-BDlwnMDA" class="row m-b-20">
+    <div id="CUR-YBiggphP" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-VQNVZrHK" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-NOtGGJpo" class="input-group transparent">
+          <input id="CUR-ZexrNblG" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-OEOCatTV" class="input-group-addon pointer search-button" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-ybXeKwsN" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-IdlwJNiT" class="sm-p-l-15 sm-p-r-15">
+        <button id="CUR-JBOGlUTW" class="btn btn-danger hidden-xs" data-toggle="modal" data-target="#deleteModal"
+          ng-show="rights.contracts == 'Edit'"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+        <a id="CUR-PRItMVVy" href="#/companies/new">
+          <button id="CUR-jtAvhCXu" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-show="rights.contracts == 'Edit' && !demoMode"><i
+              class="fa fa-plus"></i>&nbsp;Create</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-tmbNZDQe" class="col-sm-12">
+    <h5 id="CUR-htSyduha" class="pull-right">Total: {{total? total : 0}}</h5>
+  </div>
+  <div id="CUR-JISexfPl" class="row">
+    <div id="CUR-ZFdmftNS" class="col-xs-12">
+      <div id="CUR-epqKMSWs" class="panel panel-default">
+        <div id="CUR-RjQkodIZ" class="panel-heading">
+          <div id="CUR-wTFiVLXn" class="panel-title">
+            Companies <documentation link="http://guide.curveroyaltysystems.com/article/companies/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-ZHbvhsmX" class="panel-body">
+          <responsive-table headers="headers" data="companies" order-by="filter.orderBy" selectable="true"
+            sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-ekOEXXvK" class="col-sm-12">
+    <div id="CUR-iZFOGFLs" class="pull-right">
+      <span id="CUR-BMffBroq" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <span id="CUR-tCJxpose" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-mOwmJLkE" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-gSkreExD" class="row">
+    <div id="CUR-axlFEHJD" class="col-xs-12 text-center">
+      <pagination id="CUR-HyslRmvw" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-PDJiaBQb" class="modal-dialog">
+    <div id="CUR-eTIFRnsf" class="modal-content">
+      <div id="CUR-ZrVekagf" class="modal-header clearfix text-left">
+        <button id="CUR-nRSQodbS" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-DZClDlou">Delete Companies</h5>
+      </div>
+      <div id="CUR-JXjmNpUM" class="modal-body">
+        <div id="CUR-fhoXYZSO" class="row">
+          <div id="CUR-ENYYaurE" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected companies? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-rKAyJiVi" class="row">
+          <div id="CUR-NlfWVSGB" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-VxvEMsVx" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-zqNKcnNi" type="button" class="btn btn-danger m-t-5" ng-click="deleteSelected()"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

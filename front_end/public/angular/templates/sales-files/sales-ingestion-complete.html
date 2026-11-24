@@ -1,0 +1,1427 @@
+<div id="CUR-dJpRCaPL" class="jumbotron" data-pages="parallax">
+  <div id="CUR-UkutZTAP" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-yociVidS" class="inner">
+      <ul id="CUR-iwIoLwNn" class="breadcrumb">
+        <li id="CUR-gULMDVtg"><a id="CUR-QkoCHvTt" href="/#/sales">Sales</a></li>
+        <li id="CUR-ilppITSl" ng-show="salesFile._id"><a id="CUR-hrfZMfGG" href="/#/sales/{{salesFile._id}}/complete"
+            class="active">{{salesFile.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-wbUTgZSQ" class="container-fluid container-fixed-lg sm-p-l-5 sm-p-r-5">
+  <div id="CUR-ThmvezQe" class="row">
+    <div id="CUR-KtjbGowc" class="col-xs-12 col-sm-6">
+      <h3 id="CUR-CormnEei">{{salesFile.name}}
+        <span id="CUR-OMDivtTd" ng-if="salesFile.valid" class="label label-success">Valid</span>
+        <span id="CUR-NCNzBZXJ" ng-if="!salesFile.valid && salesFile.status == 'Complete'"
+          class="label label-danger">Invalid</span>
+        <span id="CUR-vJGUPzhJ" ng-if="salesFile.locked" class="label label-danger"><i
+            class="fa fa-lock text-white"></i> Locked</span>
+        <span id="CUR-vJGUPzhJ" ng-if="salesFile.duplicateSalesFileId" class="label label-info">Duplicate</span>
+        <a ng-if="salesFile.duplicateSalesFileId && salesFile.duplicateSalesFileId !== 'No ID Found'"
+          href="#/sales/{{ salesFile.duplicateSalesFileId }}/edit">
+          <p>Link to Duplicate Sales File</p>
+        </a>
+        <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-sales/#salesfileoverview">
+        </documentation>
+      </h3>
+      <h5 id="CUR-WAQnQuFC">
+        Template: <a id="CUR-dhsJxbHA" href="#/templates/{{salesFile.salesTemplateId}}/edit"
+          ng-if="salesFile.salesTemplateId">{{salesFile.salesTemplateName}}</a>
+      </h5>
+      <!-- Last Ingested/Revalidated -->
+      <p ng-show="salesFile.lastIngested" style="font-size: 12px;"><span style="font-weight:bold;">Last Ingested:</span>
+        {{salesFile.lastIngested.date | date : dateFormat + ' h:mm a' : 'UTC' }} {{(salesFile.lastIngested.user &&
+        salesFile.lastIngested.user != 'internal') ? 'by ' + salesFile.lastIngested.user : ''}}</p>
+      <p ng-show="salesFile.lastRevalidated" style="font-size: 12px;"><span style="font-weight:bold;">Last
+          Revalidated:</span> {{salesFile.lastRevalidated.date | date : dateFormat + ' h:mm a' : 'UTC' }}
+        {{(salesFile.lastRevalidated.user && salesFile.lastRevalidated.user != 'internal') ? 'by ' +
+        salesFile.lastRevalidated.user : ''}}</p>
+    </div>
+    <div id="CUR-AhTiFkUG" class="col-xs-12 col-sm-6 text-right two-cols-row">
+      <a id="CUR-ixAEydAe" target="_blank" href="{{salesFile.publicLink}}" ng-if="salesFile.publicLink"
+        class="btn m-t-10 m-xs-t-0 sm-p-l-0 sm-p-r-0 sm-m-r-5 btn-default"><i class="fa fa-download"></i></a>
+      <button id="CUR-NhsbHVlY" class="btn btn-warning m-t-10 hidden-xs"
+        ng-show="rights.sales == 'Edit' && !salesFile.locked" ng-click="toggleArchived()" ng-if="!salesFile.archived"><i
+          class="fa fa-lock"></i> Archive</button>
+      <button id="CUR-wnFLBLtC" class="btn btn-warning m-t-10 hidden-xs"
+        ng-show="rights.sales == 'Edit' && !salesFile.locked" ng-click="toggleArchived()" ng-if="salesFile.archived"><i
+          class="fa fa-unlock"></i> Unarchive</button>
+      <button id="CUR-DUdWDnqe" class="btn btn-info m-t-10 hidden-xs" ng-show="rights.sales == 'Edit'"
+        ng-click="revalidate()" ng-if="!salesFile.archived"><i class="fa fa-flag"></i> Revalidate</button>
+      <button id="CUR-wAXCjalH" class="btn btn-complete m-t-10 hidden-xs"
+        ng-show="rights.sales == 'Edit' && !salesFile.locked" ng-click="showReingestConfirmModel()"
+        ng-if="!salesFile.archived"><i class="fa fa-refresh"></i> Reingest</button>
+      <button id="CUR-JntuUeyO" class="btn btn-primary m-t-10 hidden-xs"
+        ng-show="rights.sales == 'Edit' && !salesFile.locked" ng-click="edit()" ng-if="!salesFile.archived"><i
+          class="fa fa-pencil"></i> Edit</button>
+      <div id="CUR-mjTieXeB" class="btn-group dropdown-default visible-xs"
+        ng-show="rights.sales == 'Edit' && !salesFile.locked"> <a id="CUR-eAMqfKCI"
+          class="btn dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false"> Edit <span
+            id="CUR-HpFCOMPb" class="caret"></span> </a>
+        <ul id="CUR-pgVnddPC" class="dropdown-menu w-xs-100-p">
+          <li id="CUR-XMcojnYv" ng-if="salesFile.salesTemplateId">
+            <a id="CUR-tXbewjxD" href="#/templates/{{salesFile.salesTemplateId}}/edit">View Template</a>
+          </li>
+          <li id="CUR-OnnTOpZR">
+            <a id="CUR-WaUFZUtk" href="javascript:void(0)" ng-click="edit()">Edit</a>
+          </li>
+          <li id="CUR-SojXCsoO">
+            <a id="CUR-whNRdmtr" href="javascript:void(0)" ng-click="revalidate()">Revalidate File</a>
+          </li>
+          <li id="CUR-YPqtRQOh">
+            <a id="CUR-GlxOShyK" href="javascript:void(0)" ng-click="showReingestConfirmModel()">Reingest</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-hXiiJqfV" class="row">
+    <div id="CUR-aAqKXhlT" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5">
+      <div id="CUR-tgdbiKoJ" class="panel panel-default height-180 bg-primary m-xs-b-0">
+        <div id="CUR-QMhbCcda" class="panel-heading">
+          <div id="CUR-CGTAoYWA" class="panel-title text-white">
+            No. of Units
+          </div>
+        </div>
+        <div id="CUR-GZdCkHTz" class="panel-body center bg-primary">
+          <h1 class="text-white"><span id="CUR-LvMIwRWo" class="semi-bold">{{salesFile.units || 0}}</span></h1>
+          <small>Validation: {{salesFile.validationUnits || 0}}</small>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-RYzERCqH" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 sm-m-t-5">
+      <div id="CUR-ktIRbbuv" class="panel panel-default height-180 bg-complete m-xs-b-0">
+        <div id="CUR-ZWOYogqk" class="panel-heading">
+          <div id="CUR-eqUhybst" class="panel-title text-white">
+            Revenue
+          </div>
+        </div>
+        <div id="CUR-fXPXrwvo" class="panel-body center bg-complete">
+          <h1 class="text-white"><span id="CUR-TiVIlIcB"
+              class="semi-bold">{{currencySymbol}}{{salesFile.homeCurrencyNetAmount | number: 2}}</span></h1>
+          <small class="text-white">Original Currency: {{salesFile.validationNetAmount | number: 2}}</small><br />
+          <small class="text-white">Validation: {{salesFile.validationNetAmount | number: 2}}</small>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-nGDqtTNY" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 m-md-t-0 sm-m-t-5">
+      <div id="CUR-FplHxjsj" class="panel panel-default height-180 bg-info m-xs-b-0">
+        <div id="CUR-erfAsmmG" class="panel-heading">
+          <div id="CUR-oubJSbjC" class="panel-title text-white">
+            No. of Lines
+          </div>
+        </div>
+        <div id="CUR-wLWSqjVZ" class="panel-body center bg-info">
+          <h1 class="text-white"><span id="CUR-azMhaCoE" class="semi-bold">{{salesFile.lines || 0}}</span></h1>
+          <small class="text-white">Validation: {{salesFile.validationLines || 0}}</small>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-tbkGeQte" class="col-xs-12 col-sm-6 col-lg-3 m-t-40 m-md-t-0 sm-m-t-5">
+      <div id="CUR-mlAoYQFt" class="panel panel-default height-180 m-xs-b-0"
+        ng-class="{ 'bg-danger': salesFile.invalidLines > 0, 'bg-success': salesFile.invalidLines <= 0 }">
+        <div id="CUR-qqbTCHPx" class="panel-heading">
+          <div id="CUR-xTSGKdYq" class="panel-title text-white">
+            Invalid Lines
+          </div>
+        </div>
+        <div id="CUR-JKBlARgc" class="panel-body center"
+          ng-class="{ 'bg-danger': salesFile.invalidLines > 0, 'bg-success': salesFile.invalidLines <= 0 }">
+          <h1 class="text-white"><span id="CUR-lvkNdSrJ" class="semi-bold">{{salesFile.invalidLines || 0}}</span></h1>
+          <button id="CUR-nAUtOzZT" class="btn btn-complete" ng-click="showInvalidLines()"
+            ng-show="salesFile.invalidLines > 0">
+            Show Invalid Lines
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-XJXtWoYC" class="row m-t-40">
+
+    <div id="CUR-XJXtWoYC" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-ltQOuPzh" class="form-group required">
+        <label id="CUR-pvJhzvQJ">Track Title</label>
+        <div class="input-group filter-group">
+          <select id="CUR-originalTrackTitleFilterType" class="form-control filter-dropdown"
+            ng-model="filter.originalTrackTitleFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-GwVGZdxj" type="text" class="form-control filter-input" ng-model="filter.originalTrackTitle"
+            ng-disabled="filter.originalTrackTitleFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-GjeKLygY" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-RJhMVheT" class="form-group required">
+        <label id="CUR-AtdQSWQB">Barcode</label>
+        <div class="input-group filter-group">
+          <select id="CUR-barcodeFilterType" class="form-control filter-dropdown" ng-model="filter.barcodeFilterType"
+            ng-init="filter.barcodeFilterType = filter.barcodeFilterType || '='"
+            ng-options="type for type in filterTypes"></select>
+          <input id="CUR-fydtMpDl" type="text" class="form-control filter-input" ng-model="filter.barcode"
+            ng-disabled="filter.barcodeFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-gDGWLJAo" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType == 'Publisher'">
+      <div id="CUR-MAfmtqpa" class="form-group required">
+        <label id="CUR-OTFeHsPp">Work Title</label>
+        <div class="input-group filter-group">
+          <select id="CUR-originalWorkTitleFilterType" class="form-control filter-dropdown"
+            ng-model="filter.originalWorkTitleFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-ZbriODyT" type="text" class="form-control filter-input" ng-model="filter.originalWorkTitle"
+            ng-disabled="filter.originalWorkTitleFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-LevYfzsx" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType == 'Publisher'">
+      <div id="CUR-ImFdPTUR" class="form-group required">
+        <label id="CUR-kqaCrCkY">Identifier</label>
+        <div class="input-group filter-group">
+          <select id="CUR-originalIdentifierFilterType" class="form-control filter-dropdown"
+            ng-model="filter.originalIdentifierFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-VDlIPWyq" type="text" class="form-control filter-input" ng-model="filter.originalIdentifier"
+            ng-disabled="filter.originalIdentifierFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+
+
+    <div id="CUR-rZdWvmpS" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-DdXRYEwQ" class="form-group required">
+        <label id="CUR-EXrpNFgX">Distribution Channel</label>
+        <div class="input-group filter-group">
+          <select id="CUR-distributionChannelFilterType" class="form-control filter-dropdown"
+            ng-model="filter.distributionChannelFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-bWePcltY" type="text" class="form-control filter-input" ng-model="filter.distributionChannel"
+            ng-disabled="filter.distributionChannelFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-fBpqpZOP" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-xxeKPLSA" class="form-group required">
+        <label id="CUR-TalCYlki">Track Artist</label>
+        <div class="input-group filter-group">
+          <select id="CUR-trackArtistFilterType" class="form-control filter-dropdown"
+            ng-model="filter.originalTrackArtistFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-xfZXIdAS" type="text" class="form-control filter-input" ng-model="filter.originalTrackArtist"
+            ng-disabled="filter.originalTrackArtistFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-jeEGctmj" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-GIfvvHhp" class="form-group required">
+        <label id="CUR-NSBeIEiW">Cat No.</label>
+        <div class="input-group filter-group">
+          <select id="CUR-catNoFilterType" class="form-control filter-dropdown" ng-model="filter.catNoFilterType"
+            ng-init="filter.catNoFilterType = filter.catNoFilterType || '='"
+            ng-options="type for type in filterTypes"></select>
+          <input id="CUR-nUzUgGSP" type="text" class="form-control filter-input" ng-model="filter.catNo"
+            ng-disabled="filter.catNoFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-wILDgzqb" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType == 'Publisher'">
+      <div id="CUR-ZeOsWorL" class="form-group required">
+        <label id="CUR-uDOAXipT">Composers</label>
+        <div class="input-group filter-group">
+          <select id="CUR-originalComposersFilterType" class="form-control filter-dropdown"
+            ng-model="filter.originalComposersFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-qyeIgJEQ" type="text" class="form-control filter-input" ng-model="filter.originalComposers"
+            ng-disabled="filter.originalComposersFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-dZvMmuDR" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType == 'Publisher'">
+      <div id="CUR-ZcwlatLt" class="form-group required">
+        <label id="CUR-LsyRwbpB">ISWC</label>
+        <div class="input-group filter-group">
+          <select id="CUR-iswcFilterType" class="form-control filter-dropdown" ng-model="filter.iswcFilterType"
+            ng-init="filter.iswcFilterType = filter.iswcFilterType || '='"
+            ng-options="type for type in filterTypes"></select>
+          <input id="CUR-KFFqoaQR" type="text" class="form-control filter-input" ng-model="filter.iswc"
+            ng-disabled="filter.iswcFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+
+
+    <div id="CUR-tbHdqEKL" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-FQCMqGAJ" class="form-group required">
+        <label id="CUR-SAFVZTiV">Configuration</label>
+        <div class="input-group filter-group">
+          <select id="CUR-configurationFilterType" class="form-control filter-dropdown"
+            ng-model="filter.configurationFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-wvdQkOQE" type="text" class="form-control filter-input" ng-model="filter.configuration"
+            ng-disabled="filter.configurationFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-PUdrOMBF" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType == 'Publisher'">
+      <div id="CUR-EoyNmVKW" class="form-group required">
+        <label id="CUR-hxmqWOwy">Status</label>
+        <ui-select ng-model="filter.status">
+          <ui-select-match allow-clear="true">
+            <span id="CUR-VcIvrVmA" ng-bind="$select.selected"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item in status">
+            <span id="CUR-pTFFPyvF" ng-bind="item"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+
+    <div id="CUR-IkJuWGqN" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-radjxCeZ" class="form-group required">
+        <label id="CUR-zyWfEnHr">Release Title</label>
+        <div class="input-group filter-group">
+          <select id="CUR-originalReleaseTitleFilterType" class="form-control filter-dropdown"
+            ng-model="filter.originalReleaseTitleFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-gluJzGLv" type="text" class="form-control filter-input" ng-model="filter.originalReleaseTitle"
+            ng-disabled="filter.originalReleaseTitleFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-GrocAzRz" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-PGbfKOqL" class="form-group required">
+        <label id="CUR-dCVhuhtT">ISRC</label>
+        <div class="input-group filter-group">
+          <select id="CUR-isrcFilterType" class="form-control filter-dropdown" ng-model="filter.isrcFilterType"
+            ng-init="filter.isrcFilterType = filter.isrcFilterType || '='"
+            ng-options="type for type in filterTypes"></select>
+          <input id="CUR-dAUBipPn" type="text" class="form-control filter-input" ng-model="filter.isrc"
+            ng-disabled="filter.isrcFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-SKnwTARP" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType == 'Publisher'">
+      <div id="CUR-eUgRXuHY" class="form-group required">
+        <label id="CUR-KlOdkjhk">Tunecode</label>
+        <div class="input-group filter-group">
+          <select id="CUR-tunecodeFilterType" class="form-control filter-dropdown" ng-model="filter.tunecodeFilterType"
+            ng-init="filter.tunecodeFilterType = filter.tunecodeFilterType || '='"
+            ng-options="type for type in filterTypes"></select>
+          <input id="CUR-KayqFTIC" type="text" class="form-control filter-input" ng-model="filter.tunecode"
+            ng-disabled="filter.tunecodeFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+
+
+    <div id="CUR-VyQqeLHL" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-VYRKotwM" class="form-group required">
+        <label id="CUR-GDNscnJl">Source</label>
+        <div class="input-group filter-group">
+          <select id="CUR-sourceFilterType" class="form-control filter-dropdown" ng-model="filter.sourceFilterType"
+            ng-init="filter.sourceFilterType = filter.sourceFilterType || '='"
+            ng-options="type for type in filterTypes"></select>
+          <input id="CUR-SupyqOqS" type="text" class="form-control filter-input" ng-model="filter.source"
+            ng-disabled="filter.sourceFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-EJUCZfYK" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-zhMSyjcR" class="form-group required">
+        <label id="CUR-dHBzPGDK">Release Artist</label>
+        <div class="input-group filter-group">
+          <select id="CUR-originalReleaseArtistFilterType" class="form-control filter-dropdown"
+            ng-model="filter.originalReleaseArtistFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-tACuoSLb" type="text" class="form-control filter-input" ng-model="filter.originalReleaseArtist"
+            ng-disabled="filter.originalReleaseArtistFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-tsyNtcia" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType == 'Publisher'">
+      <div id="CUR-tyJaiwQg" class="form-group required">
+        <label id="CUR-TIWDUkwI">Works</label>
+        <ui-select multiple ng-model="filter.workIds">
+          <ui-select-match>
+            <span id="CUR-qDLsmyuL" style="vertical-align:middle;">{{$item.title}} - {{$item.composers}}</span>
+            <span id="CUR-MtwXxQct" ng-bind="$select.selected.title"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item._id as item in works | filter:$select.search" refresh="searchWorks($select)"
+            refresh-delay="500">
+            <span id="CUR-LwyQVpED" ng-bind="item.title + ' - ' + item.composers"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+
+    <div id="CUR-qenMTWei" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-gtboLahr" class="form-group required">
+        <label id="CUR-MToDAVkm">Territory</label>
+        <div class="input-group filter-group">
+          <select id="CUR-territoryFilterType" class="form-control filter-dropdown"
+            ng-model="filter.territoryFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-IRkuOLwM" type="text" class="form-control filter-input" ng-model="filter.territory"
+            ng-disabled="filter.territoryFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+
+    <div id="CUR-LStasVGq" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-EfeRteir" class="form-group required">
+        <label id="CUR-lLzKLzTZ">Subsource</label>
+        <div class="input-group filter-group">
+          <select id="CUR-subSourceFilterType" class="form-control filter-dropdown"
+            ng-model="filter.subSourceFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-eggZoFlj" type="text" class="form-control filter-input" ng-model="filter.subSource"
+            ng-disabled="filter.subSourceFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-kHRgHYAT" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-goEJilDQ" class="form-group required">
+        <label id="CUR-crHTlcjd">Cat Type</label>
+        <ui-select ng-model="filter.catType">
+          <ui-select-match allow-clear="true">
+            <span id="CUR-SFbixldO" ng-bind="$select.selected"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item in (['Release', 'Track', 'Contract'] | filter: $select.search)">
+            <span id="CUR-YRUXuAGF" ng-bind="item"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+
+    <div id="CUR-UdNPrcaI" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-byZFnzFn" class="form-group required">
+        <label id="CUR-NUdVpdwV">Releases</label>
+        <ui-select multiple ng-model="filter.releaseIds">
+          <ui-select-match>
+            <span id="CUR-pqXDplJd" style="vertical-align:middle;">{{releaseString($item)}}</span>
+            <span id="CUR-TtSARngb" ng-bind="$select.selected.title"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item._id as item in releases | filter: $select.search"
+            refresh="searchReleases($select)" refresh-delay="500">
+            <span id="CUR-vBmapIXg" ng-bind="releaseString(item)"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+
+    <div id="CUR-wkcdPDQD" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-WjaeTyqz" class="form-group required">
+        <label id="CUR-kANfkEuQ">Tracks</label>
+        <ui-select multiple ng-model="filter.trackIds">
+          <ui-select-match>
+            <span id="CUR-BgtaVyUi" style="vertical-align:middle;">{{trackString($item)}}</span>
+            <span id="CUR-XVTYHwaS" ng-bind="$select.selected.title"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item._id as item in tracks | filter:$select.search" refresh="searchTracks($select)"
+            refresh-delay="500">
+            <span id="CUR-HoTlcHFb" ng-bind="trackString(item)"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+
+    <div id="CUR-prgkcVtw" class="col-xs-12 col-sm-6 col-md-4" ng-if="clientType != 'Publisher'">
+      <div id="CUR-PvPPwBfd" class="form-group required">
+        <label id="CUR-QImVcpEF">Status</label>
+        <ui-select ng-model="filter.status">
+          <ui-select-match allow-clear="true">
+            <span id="CUR-JCtHpNyN" ng-bind="$select.selected"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item in status">
+            <span id="CUR-eAFHnkDS" ng-bind="item"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+
+    <div id="CUR-aBcD1234" class="col-xs-12 col-sm-6 col-md-4">
+      <div id="CUR-XyZ9876W" class="form-group required">
+        <label id="CUR-LMnOp456">Contract ID</label>
+        <div class="input-group filter-group">
+          <select id="CUR-QRsTu789" class="form-control filter-dropdown" ng-model="filter.contractIdFilterType"
+            ng-style="filter.contractIdFilterType === 'is_not_blank' ? {'width': '120px', 'max-width': 'unset'} : {}"
+            ng-options="type for type in ['=', 'is_blank', 'is_not_blank']">
+          </select>
+          <ui-select multiple ng-model="filter.selectedContracts"
+            ng-disabled="filter.contractIdFilterType === 'is_blank' || filter.contractIdFilterType === 'is_not_blank'">
+            <ui-select-match multiple>
+              <span style="vertical-align:middle;">{{contractString($item)}}</span>
+            </ui-select-match>
+            <ui-select-choices repeat="contract in contracts track by contract._id | filter: $select.search"
+              refresh="getContracts($select.search)" refresh-delay="500">
+              <span ng-bind="contractString(contract)"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-alternativeId-filter-container" class="col-xs-12 col-sm-6 col-md-4" ng-if="features.useAlternativeId">
+      <div id="CUR-alternativeId-filter-form" class="form-group required">
+        <label id="CUR-alternativeId-filter-label">Alternative ID</label>
+        <div class="input-group filter-group">
+          <select id="CUR-alternativeId-filter-select" class="form-control filter-dropdown" ng-model="filter.alternativeIdFilterType" ng-options="type for type in filterTypes"></select>
+          <input id="CUR-alternativeId-filter-input" type="text" class="form-control filter-input" ng-model="filter.alternativeId" ng-disabled="filter.alternativeIdFilterType === 'is_blank'">
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-filter-suspense-group" class="col-xs-12 col-sm-6 col-md-4" ng-if="features && features.suspense">
+      <div id="CUR-filter-suspense-group-form" class="form-group required">
+        <label id="CUR-filter-suspense-group-label">Group (Suspense) <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Only one of Group (Suspense) or Group (Resolved) can be active at a time.<br />Selecting a Suspense Group will clear the Resolved Group selection."></i></label>
+        <ui-select multiple ng-model="filter.suspenseGroupIds" on-select="onSelectedSuspenseGroup()">
+          <ui-select-match>
+            <span id="CUR-filter-suspense-group-item" style="vertical-align:middle;">{{$item.name}}</span>
+          </ui-select-match>
+          <ui-select-choices repeat="item._id as item in suspenseGroups | filter:$select.search" refresh="searchSuspenseGroups($select)"
+            refresh-delay="500">
+            <span id="CUR-filter-suspense-group-selected-item" ng-bind="item.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    
+    <div id="CUR-filter-resolved-group" class="col-xs-12 col-sm-6 col-md-4" ng-if="features && features.suspense">
+      <div id="CUR-filter-resolved-group-form" class="form-group required">
+        <label id="CUR-filter-resolved-group-label">Group (Resolved) <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Only one of Group (Suspense) or Group (Resolved) can be active at a time.<br />Selecting a Resolved Group will clear the Suspense Group selection."></i></label>
+        <ui-select multiple ng-model="filter.resolvedGroupIds" on-select="onSelectedResolvedGroup()">
+          <ui-select-match>
+            <span id="CUR-filter-resolved-group-item" style="vertical-align:middle;">{{$item.name}}</span>
+          </ui-select-match>
+          <ui-select-choices repeat="item._id as item in resolvedGroups | filter:$select.search" refresh="searchResolvedGroups($select)"
+            refresh-delay="500">
+            <span id="CUR-filter-resolved-group-selected-item" ng-bind="item.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+
+  </div>
+  <!-- Buttons and Total -->
+  <div id="CUR-bArkqloy" class="row">
+    <div id="CUR-wbIflSOT" class="col-xs-12 center two-cols-row">
+      <button id="CUR-nAUtOzZT" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i>
+        Filter</button>
+      <button id="CUR-YIPjAzty" class="btn btn-default" ng-click="export()"><i class="fa fa-download"></i>
+        Export</button>
+      <button id="CUR-shejlikX" ng-if="displayIgnition" class="btn btn-default" ng-click="ignitionExport()"><i
+          class="fa fa-download"></i> Ignition Export</button>
+    </div>
+  </div>
+  <div id="CUR-sBukUjXF" class="row">
+    <div id="CUR-oqvXykII" class="col-xs-12 col-sm-6 two-cols-row">
+      <div id="CUR-edit-sales" class="btn-group dropdown-default" ng-show="rights.sales == 'Edit'">
+        <a id="CUR-edit-sales-button" class="btn btn-primary dropdown-toggle w-xs-100-p"
+        style="width: 96px" data-toggle="dropdown" aria-expanded="false"> Edit <span id="CUR-nixRWNVM" class="caret"></span></a>
+        <ul id="CUR-edit-sales-dropdown" class="dropdown-menu w-xs-100-p">
+          <li id="CUR-edit-sales-selected">
+            <a id="CUR-edit-sales-selected-link" href="javascript:void(0)" data-toggle="modal" data-target="#modalEditFields"
+              ng-click="editSelected()">Selected</a>
+          </li>
+          <li id="CUR-edit-sales-filtered">
+            <a id="CUR-edit-sales-filtered-link" href="javascript:void(0)" data-toggle="modal" data-target="#modalEditFields"
+              ng-click="editFiltered()">Filtered</a>
+          </li>
+        </ul>
+      </div>
+      <button id="CUR-delete-sales-button" class="btn btn-danger"
+        ng-show="rights.sales == 'Edit'" data-toggle="modal" data-target="#modalDeleteSalesLine"
+        ng-click="setupDeleteSelected()" ng-show="rights.sales == 'Edit'"><i class="fa fa-trash"></i> Delete Selected</button>
+      
+      <div id="CUR-sales-to-suspense" class="btn-group dropdown-default m-l-5" ng-if="features && features.suspense" ng-show="rights.sales == 'Edit'">
+        <a id="CUR-sales-to-suspense-button" class="btn btn-warning dropdown-toggle w-xs-100-p"
+        style="width: 114px;" data-toggle="dropdown" aria-expanded="false">Suspense <span id="CUR-wPlVUYxH" class="caret"></span></a>
+        <ul id="CUR-sales-to-suspense-dropdown" class="dropdown-menu w-xs-100-p">
+          <li id="CUR-sales-to-suspense-selected"><a id="CUR-sales-to-suspense-selected-link" data-toggle="modal" data-target="#modalSuspense" ng-click="selectedToSuspense()">Selected</a></li>
+          <li id="CUR-sales-to-suspense-filtered"><a id="CUR-sales-to-suspense-filtered-link" data-toggle="modal" data-target="#modalSuspense" ng-click="filteredToSuspense()">Filtered</a></li>
+        </ul>
+      </div>
+      
+      <div id="CUR-sales-to-resolved" class="btn-group dropdown-default m-l-5" ng-if="features && features.suspense && showResolve && filter.suspenseGroupIds.length" ng-show="rights.sales == 'Edit'">
+        <a id="CUR-sales-to-resolved-button" class="btn btn-success dropdown-toggle w-xs-100-p"
+        style="width: 114px;" data-toggle="dropdown" aria-expanded="false">Resolve <span id="CUR-wPlVUYxH" class="caret"></span></a>
+        <ul id="CUR-sales-to-resolved-dropdown" class="dropdown-menu w-xs-100-p">
+          <li id="CUR-sales-to-resolved-selected"><a id="CUR-sales-to-resolved-selected-link" data-toggle="modal" data-target="#modalResolved" ng-click="selectedToResolved()">Selected</a></li>
+          <li id="CUR-sales-to-resolved-filtered"><a id="CUR-sales-to-resolved-filtered-link" data-toggle="modal" data-target="#modalResolved" ng-click="filteredToResolved()">Filtered</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <div id="CUR-EuBCFSXf" class="col-xs-12 col-sm-6">
+      <h5 id="CUR-hMPBxmdb" class="pull-right">Total:
+        {{total}}
+      </h5>
+    </div>
+  </div>
+  <div id="CUR-ZdCznWGR" class="row">
+    <div id="CUR-fCyWoIeZ" class="col-xs-12">
+      <div id="CUR-AntuIxtT" class="panel panel-default xs-border-none">
+        <div id="CUR-AJGioedA" class="panel-body sm-p-t-0 sm-p-r-0 sm-p-l-0 sm-p-b-0">
+          <div id="CUR-KQmLWJlL" class="table-responsive">
+            <table id="CUR-HMItmDDm"
+              class="table table-condensed dataTable no-footer sales-table sales-table-with-checkbox">
+              <thead>
+                <tr id="CUR-eTgzGkjT" ng-if="clientType != 'Publisher'">
+                  <th>
+                    <input id="CUR-bgSJBvyf" ng-show="rights.sales == 'Edit'" type="checkbox" class="select-all"
+                      ng-click="selectAllSales()" ng-checked="selectAllChecked">
+                  </th>
+                  <th ng-click="getSortedData('status')" ng-class="whatClassIsIt('status')">Status</th>
+                  <th ng-if="features.suspense">Group</th>
+                  <th ng-click="getSortedData('catType')" ng-class="whatClassIsIt('catType')">Cat type</th>
+                  <th ng-click="getSortedData('distributionChannel')" ng-class="whatClassIsIt('distributionChannel')">
+                    Channel</th>
+                  <th ng-click="getSortedData('configuration')" ng-class="whatClassIsIt('configuration')">Configuration
+                  </th>
+                  <th ng-click="getSortedData('priceCategory')" ng-class="whatClassIsIt('priceCategory')">Price cat</th>
+                  <th ng-click="getSortedData('source')" ng-class="whatClassIsIt('source')">Source</th>
+                  <th ng-click="getSortedData('subSource')" ng-class="whatClassIsIt('subSource')">Subsource</th>
+                  <th ng-click="getSortedData('territory')" ng-class="whatClassIsIt('territory')">Territory</th>
+                  <th ng-click="getSortedData('barcode')" ng-class="whatClassIsIt('barcode')">Barcode</th>
+                  <th ng-click="getSortedData('catNo')" ng-class="whatClassIsIt('catNo')">Cat no</th>
+                  <th ng-click="getSortedData('isrc')" ng-class="whatClassIsIt('isrc')">ISRC</th>
+                  <th ng-click="getSortedData('identifier')" ng-class="whatClassIsIt('identifier')">Identifier</th>
+                  <th ng-click="getSortedData('units')" ng-class="whatClassIsIt('units')">Units</th>
+                  <th ng-click="getSortedData('retailPrice')" ng-class="whatClassIsIt('retailPrice')">Retail Price</th>
+                  <th ng-click="getSortedData('perUnitRate')" ng-class="whatClassIsIt('perUnitRate')">Per Unit Rate</th>
+                  <th ng-click="getSortedData('grossAmount')" ng-class="whatClassIsIt('grossAmount')">Gross</th>
+                  <th ng-click="getSortedData('mechanicalAtSource')" ng-class="whatClassIsIt('mechanicalAtSource')">
+                    Mech. at Source</th>
+                  <th ng-click="getSortedData('discountAmount')" ng-class="whatClassIsIt('discountAmount')">Discount
+                  </th>
+                  <th ng-click="getSortedData('netAmount')" ng-class="whatClassIsIt('netAmount')">Net</th>
+                  <th ng-click="getSortedData('originalCurrency')" ng-class="whatClassIsIt('originalCurrency')">Original
+                    currency</th>
+                  <th ng-click="getSortedData('exchangeRate')" ng-class="whatClassIsIt('exchangeRate')">Ex Rate</th>
+                  <th ng-click="getSortedData('grossAmount')" ng-class="whatClassIsIt('grossAmount')">Home Currency
+                    Gross</th>
+                  <th ng-click="getSortedData('homeCurrencyMechanicalAtSource')"
+                    ng-class="whatClassIsIt('homeCurrencyMechanicalAtSource')">Home Currency Mech. at Source</th>
+                  <th ng-click="getSortedData('homeCurrencyDiscountAmount')"
+                    ng-class="whatClassIsIt('homeCurrencyDiscountAmount')">Home Currency Discount</th>
+                  <th ng-click="getSortedData('netAmount')" ng-class="whatClassIsIt('netAmount')">Home Currency Net</th>
+                  <th ng-click="getSortedData('originalReleaseTitle')" ng-class="whatClassIsIt('originalReleaseTitle')">
+                    Release title</th>
+                  <th ng-click="getSortedData('originalReleaseArtist')"
+                    ng-class="whatClassIsIt('originalReleaseArtist')">Release artist</th>
+                  <th ng-click="getSortedData('originalTrackTitle')" ng-class="whatClassIsIt('originalTrackTitle')">
+                    Track title</th>
+                  <th ng-click="getSortedData('originalTrackArtist')" ng-class="whatClassIsIt('originalTrackArtist')">
+                    Track artist</th>
+                  <th ng-click="getSortedData('saleDate')" ng-class="whatClassIsIt('saleDate')">Sale date</th>
+                  <th ng-click="getSortedData('transactionDate')" ng-class="whatClassIsIt('transactionDate')">
+                    Transaction date</th>
+                  <th ng-click="getSortedData('releaseId')" ng-class="whatClassIsIt('releaseId')">Release id</th>
+                  <th ng-click="getSortedData('trackId')" ng-class="whatClassIsIt('trackId')">Track id</th>
+                  <th ng-click="getSortedData('contractId')" ng-class="whatClassIsIt('contractId')">Contract id</th>
+                  <th ng-if="features.useAlternativeId" ng-click="getSortedData('alternativeId')" ng-class="whatClassIsIt('alternativeId')">Alternative id</th>
+                  <th></th>
+                </tr>
+                <tr id="CUR-lSvEfIZe" ng-if="clientType == 'Publisher'">
+                  <th>
+                    <input id="CUR-ztkZrcmk" type="checkbox" ng-show="rights.sales == 'Edit'" class="select-all"
+                      ng-click="selectAllSales()" ng-checked="selectAllChecked">
+                  </th>
+                  <th ng-click="getSortedData('status')" ng-class="whatClassIsIt('status')">Status</th>
+                  <th ng-if="features.suspense">Group</th>
+                  <th ng-click="getSortedData('catType')" ng-class="whatClassIsIt('catType')">Cat type</th>
+                  <th ng-click="getSortedData('distributionChannel')" ng-class="whatClassIsIt('distributionChannel')">
+                    Channel</th>
+                  <th ng-click="getSortedData('configuration')" ng-class="whatClassIsIt('configuration')">Configuration
+                  </th>
+                  <th ng-click="getSortedData('source')" ng-class="whatClassIsIt('source')">Source</th>
+                  <th ng-click="getSortedData('subSource')" ng-class="whatClassIsIt('subSource')">Subsource</th>
+                  <th ng-click="getSortedData('territory')" ng-class="whatClassIsIt('territory')">Territory</th>
+                  <th ng-click="getSortedData('originalWorkTitle')" ng-class="whatClassIsIt('originalWorkTitle')">Title
+                  </th>
+                  <th ng-click="getSortedData('originalComposers')" ng-class="whatClassIsIt('originalComposers')">
+                    Composers</th>
+                  <th ng-click="getSortedData('party1')" ng-class="whatClassIsIt('party1')">Party 1</th>
+                  <th ng-click="getSortedData('party2')" ng-class="whatClassIsIt('party2')">Party 2</th>
+                  <th ng-click="getSortedData('party3')" ng-class="whatClassIsIt('party3')">Party 3</th>
+                  <th ng-click="getSortedData('party4')" ng-class="whatClassIsIt('party4')">Party 4</th>
+                  <th ng-click="getSortedData('party5')" ng-class="whatClassIsIt('party5')">Party 5</th>
+                  <th ng-click="getSortedData('production')" ng-class="whatClassIsIt('production')">Production</th>
+                  <th ng-click="getSortedData('description')" ng-class="whatClassIsIt('description')">Description</th>
+                  <th ng-click="getSortedData('Episode')" ng-class="whatClassIsIt('episode')">Episode</th>
+                  <th ng-click="getSortedData('originalIdentifier')" ng-class="whatClassIsIt('originalIdentifier')">
+                    Identifier</th>
+                  <th ng-click="getSortedData('iswc')" ng-class="whatClassIsIt('iswc')">ISWC</th>
+                  <th ng-click="getSortedData('tunecode')" ng-class="whatClassIsIt('tunecode')">Tunecode</th>
+                  <th ng-click="getSortedData('songCode')" ng-class="whatClassIsIt('songCode')">Song Code</th>
+                  <th ng-click="getSortedData('barcode')" ng-class="whatClassIsIt('barcode')">Barcode</th>
+                  <th ng-click="getSortedData('catNo')" ng-class="whatClassIsIt('catNo')">Cat no</th>
+                  <th ng-click="getSortedData('isrc')" ng-class="whatClassIsIt('isrc')">ISRC</th>
+                  <th ng-click="getSortedData('units')" ng-class="whatClassIsIt('units')">Units</th>
+                  <th ng-click="getSortedData('grossAmount')" ng-class="whatClassIsIt('grossAmount')">Gross</th>
+                  <th ng-click="getSortedData('netAmount')" ng-class="whatClassIsIt('netAmount')">Net</th>
+                  <th ng-click="getSortedData('originalCurrency')" ng-class="whatClassIsIt('originalCurrency')">Original
+                    currency</th>
+                  <th ng-click="getSortedData('exchangeRate')" ng-class="whatClassIsIt('exchangeRate')">Ex Rate</th>
+                  <th ng-click="getSortedData('grossAmount')" ng-class="whatClassIsIt('grossAmount')">Home Currency
+                    Gross</th>
+                  <th ng-click="getSortedData('netAmount')" ng-class="whatClassIsIt('netAmount')">Home Currency Net</th>
+                  <th ng-click="getSortedData('saleDate')" ng-class="whatClassIsIt('saleDate')">Sale date</th>
+                  <th ng-click="getSortedData('transactionDate')" ng-class="whatClassIsIt('transactionDate')">
+                    Transaction date</th>
+                  <th ng-click="getSortedData('workId')" ng-class="whatClassIsIt('workId')">Work id</th>
+                  <th ng-click="getSortedData('contractId')" ng-class="whatClassIsIt('contractId')">Contract id</th>
+                  <th ng-if="features.useAlternativeId" ng-click="getSortedData('alternativeId')" ng-class="whatClassIsIt('alternativeId')">Alternative id</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="CUR-LXLLIXuU">
+                <tr ng-if="clientType != 'Publisher'" sales-unmapped-table-row ng-repeat="sale in sales"
+                  index="{{$index}}" sale="sale" edit="rights.sales == 'Edit'" single="editSingle(sale)"
+                  delete="setupDeleteSingle(sale)" features="features" client-type="clientType"></tr>
+                <tr ng-if="clientType == 'Publisher'" sales-publisher-unmapped-table-row ng-repeat="sale in sales"
+                  index="{{$index}}" edit="rights.sales == 'Edit'" sale="sale" single="editSingle(sale)"
+                  delete="setupDeleteSingle(sale)" features="features" client-type="clientType"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="CUR-eyMRhddd" class="row">
+            <div id="CUR-nKjxhcdz" class="col-xs-12 text-center" ng-if="!total && total != 0">
+              <h5 id="CUR-pLJiHccP">View the sales data by using the filters above</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-rgOrdEPw" class="row">
+    <div id="CUR-BUWriDvd" class="col-xs-12 text-center">
+      <pagination id="CUR-zYIOLuwm" pages="pages" total="totalPages" current="currentPage"
+        change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+<div class="modal fade stick-up" id="modalEditFields" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-zSlVZRbo" class="modal-dialog">
+    <div id="CUR-tDbSEZEi" class="modal-content">
+      <div id="CUR-kFPlpHPR" class="modal-header clearfix text-left">
+        <button id="CUR-KhpQYpaJ" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+            class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-svZgqSZG">Update Fields</h5>
+      </div>
+      <div id="CUR-VvjqwFUY" class="modal-body">
+        <div ng-if="editType != 'selected' || areAnySalesSelected">
+          <div id="CUR-VZdKiOkZ" class="row">
+            <div id="CUR-atxDIkoD" class="col-sm-6">
+              <div id="CUR-oHSOPIgh" class="form-group">
+                <label id="CUR-uyfTNNbr">Cat Type</label>
+                <ui-select ng-model="sale.catType">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-pMnMEtXd" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in catTypes | filter: $select.search">
+                    <span id="CUR-GtfIEFJf" ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-aclrlRCe" class="form-group">
+                <label id="CUR-oEsppRgn">Distribution Channel</label>
+                <ui-select ng-model="sale.distributionChannel">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-WRPJeBSR" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in distributionChannels | filter: $select.search track by $index">
+                    <span id="CUR-spDNMcnH" ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-fxOyVsXA" class="form-group">
+                <label id="CUR-YtwEdGZD">Configuration</label>
+                <ui-select ng-model="sale.configuration">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-XwhytcJu" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in configurations | filter: $select.search track by $index">
+                    <span id="CUR-xNnMCVpB" ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-bRssVHCp" class="form-group">
+                <label id="CUR-otGzURlP">Price Category</label>
+                <ui-select ng-model="sale.priceCategory">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-FyxnQKjE" ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in priceCategories | filter: $select.search track by $index">
+                    <span id="CUR-AWKScECQ" ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-uobHvaXY" class="form-group">
+                <label id="CUR-oJNdGMMV">Sub Source</label>
+                <input id="CUR-cwfEqvyd" type="text" class="form-control" ng-model="sale.subSource">
+              </div>
+            </div>
+            <div id="CUR-HUVnNVzZ" class="col-sm-6">
+              <div id="CUR-FTUhWPuw" class="form-group">
+                <label id="CUR-oGFjTgZn">Territory</label>
+                <ui-select ng-model="sale.territory">
+                  <ui-select-match allow-clear="true">
+                    <span id="CUR-ffveMwkz" ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices group-by="groupFind"
+                    repeat="territory.code as territory in territories | filter: $select.search">
+                    <span id="CUR-sqOHdBDa" class="country" ng-bind="territory.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-eTYqxXXJ" class="form-group">
+                <label id="CUR-ToqiJUNl">Sale Date</label>
+                <div id="datepicker-component" class="form-group input-group date">
+                  <input id="CUR-lTrwEmRl" type="text" class="form-control" ng-model="sale.saleDate"
+                    uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}" is-open="saleDatePopup"
+                    ng-click="openSaleDatePopup()">
+                  <span id="CUR-eRrQawkn" class="input-group-addon" ng-click="openSaleDatePopup()"><i
+                      class="fa fa-calendar"></i></span>
+                </div>
+              </div>
+              <div id="CUR-FAbfzsQj" class="form-group">
+                <label id="CUR-iYrKqvue">Transaction Date</label>
+                <div id="datepicker-component" class="form-group input-group date">
+                  <input id="CUR-rNXWioCU" type="text" class="form-control" ng-model="sale.transactionDate"
+                    uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}"
+                    is-open="transactionDatePopup" ng-click="openTransactionDatePopup()">
+                  <span id="CUR-DozbCZDR" class="input-group-addon" ng-click="openTransactionDatePopup()"><i
+                      class="fa fa-calendar"></i></span>
+                </div>
+              </div>
+              <div id="CUR-VikNfVvC" class="form-group">
+                <label id="CUR-qVhwhUXx">Source</label>
+                <input id="CUR-TJQenuyU" type="text" class="form-control" ng-model="sale.source">
+              </div>
+            </div>
+          </div>
+          <div id="CUR-NMjYOfCM" class="row" ng-if="clientType != 'Publisher'">
+            <div id="CUR-OyutdUfs" class="col-xs-12">
+              <hr>
+            </div>
+            <div id="CUR-KgXbeAEE" class="col-xs-12 col-sm-6">
+              <div id="CUR-kYKvZNDQ" class="form-group">
+                <label id="CUR-ySvQQKAW">Release</label>
+                <release-select-field edit="rights.catalogue === 'Edit'" value="sale.releaseId"></release-select-field>
+              </div>
+            </div>
+            <div id="CUR-zgTmPMXr" class="col-xs-12 col-sm-6">
+              <div id="CUR-OZOLLlpW" class="form-group">
+                <label id="CUR-sBIFPDmh">Track</label>
+                <track-select-field edit="rights.catalogue === 'Edit'" value="sale.trackId"></track-select-field>
+              </div>
+              <div id="CUR-mgWRaqQr" class="form-group">
+                <label id="CUR-cdCvPrNC">Contract</label>
+                <contract-select-field edit="rights.catalogue === 'Edit'" value="sale.contractId"
+                  clear-populated="true"></contract-select-field>
+              </div>
+            </div>
+          </div>
+          <div id="CUR-KPLanxwJ" class="row" ng-if="clientType == 'Publisher'">
+            <div id="CUR-qxgRtxCs" class="col-xs-12">
+              <hr>
+            </div>
+            <div id="CUR-NaFyQvGO" class="col-xs-12 col-sm-6">
+              <div id="CUR-cnkYqdYC" class="form-group">
+                <label id="CUR-AeNeMnzh">Work</label>
+                <work-select-field edit="rights.catalogue === 'Edit'" value="sale.workId"></work-select-field>
+              </div>
+            </div>
+            <div id="CUR-qCHlirHQ" class="col-xs-12 col-sm-6">
+              <div id="CUR-Wzbcifch" class="form-group">
+                <label id="CUR-jhcukNhL">Contract</label>
+                <contract-select-field edit="rights.catalogue === 'Edit'" value="sale.contractId"
+                  clear-populated="true"></contract-select-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p id="CUR-edit-no-lines-selected-error" class="text-error" ng-if="editType == 'selected' && !areAnySalesSelected">Please select at least one sales line</p>
+        <div id="CUR-dChmzVjj" class="row">
+          <div id="CUR-PeYctStK" class="col-xs-12 m-t-20 text-right two-cols-row">
+            <button id="CUR-jGhwGleW" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-rhCsqtHD" type="button" ng-if="editType == 'single'" class="btn btn-complete m-t-5"
+              ng-click="updateSingle()" data-dismiss="modal"><i class="fa fa-check"></i>&nbsp;Update</button>
+            <button id="CUR-cPBEQyyW" type="button" ng-if="editType == 'selected'" ng-disabled="!areAnySalesSelected" class="btn btn-complete m-t-5"
+              ng-click="updateSelected()" data-dismiss="modal"><i class="fa fa-check"></i>&nbsp;Update</button>
+            <button id="CUR-dSILqmKE" type="button" ng-if="editType == 'filtered'" class="btn btn-complete m-t-5"
+              ng-click="updateFiltered()" data-dismiss="modal"><i class="fa fa-check"></i>&nbsp;Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<div id="CUR-plLmERDU" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-sHwqcRGk" class="row">
+    <div id="CUR-GuVpJaXY" class="col-sm-12 text-right">
+      <h6>Created By: {{salesFile.createdBy.email}}</h6>
+      <h6>Last Modified By: {{salesFile.lastModifiedBy.email}}</h6>
+    </div>
+  </div>
+</div>-->
+
+<div class="modal fade stick-up" id="modalDeleteSalesLine" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-WQNglEaE" class="modal-dialog">
+    <div id="CUR-gUXiabYD" class="modal-content">
+      <div id="CUR-UoKjHClS" class="modal-header clearfix text-left">
+        <button id="CUR-qyzqndPT" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+            class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-FuRZtBWg">Delete Sales Line</h5>
+      </div>
+      <div id="CUR-sLjePgYe" class="modal-body">
+        <div id="CUR-SBbdHhHx" class="row">
+          <div id="CUR-AVqtxSgl" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected sales? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-LldFfInv" class="row">
+          <div id="CUR-GyYejpuJ" class="col-xs-12 m-t-20 text-right two-cols-row">
+            <button id="CUR-rycQpuOb" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-IDiATACW" type="button" ng-if="deleteType == 'single'" class="btn btn-danger m-t-5"
+              ng-click="deleteSingle()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+            <button id="CUR-qsyFAQBk" type="button" ng-if="deleteType == 'selected'" class="btn btn-danger m-t-5"
+              ng-click="deleteSelected()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="modalCatalogueMapping" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-ZYbPpzvO" class="modal-dialog modal-catalogue-mapping">
+    <div id="CUR-hrjaasoH" class="modal-content">
+      <div id="CUR-UaFGXTbr" class="modal-header clearfix text-left">
+        <button id="CUR-iIgkdOdE" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+            class="pg-close fs-14"></i>
+        </button>
+      </div>
+      <div id="CUR-VVeZxWMS" class="modal-body">
+        <div id="CUR-ZlSFKRaq" class="row m-b-20">
+          <div id="CUR-PbvFDBBv" class="col-xs-12">
+            <ul id="CUR-VNipmLln" class="breadcrumb wizard-breadcrumb">
+              <li id="CUR-SoMnrSoY" ng-if="modalTabs.includes('Setup')"><a id="CUR-zKwVRugV"
+                  ng-click="changeTab('Setup')" ng-class="setupStage == 'Setup' ? 'active' : ''">Setup</a></li>
+              <li id="CUR-VhkblMzm" ng-if="modalTabs.includes('Financial File')"><a id="CUR-vPNhQRFM"
+                  ng-click="changeTab('Financial File')"
+                  ng-class="setupStage == 'Financial File' ? 'active' : ''">Financial File</a></li>
+              <li id="CUR-kfexLYMQ" ng-if="modalTabs.includes('Dates')"><a id="CUR-iiEOXeUb"
+                  ng-click="changeTab('Dates')" ng-class="setupStage == 'Dates' ? 'active' : ''">Dates</a></li>
+              <li id="CUR-bgzVGBzT" ng-if="modalTabs.includes('Channels')"><a id="CUR-hVrwFLye"
+                  ng-click="changeTab('Channels')" ng-class="setupStage == 'Channels' ? 'active' : ''">Channels</a></li>
+              <li id="CUR-VzAJmxSX" ng-if="modalTabs.includes('Configurations')"><a id="CUR-UAvqpGNH"
+                  ng-click="changeTab('Configurations')"
+                  ng-class="setupStage == 'Configurations' ? 'active' : ''">Configurations</a></li>
+              <li id="CUR-CBjZAWUS" ng-if="modalTabs.includes('Price Categories')"><a id="CUR-UPnHyIaC"
+                  ng-click="changeTab('Price Categories')"
+                  ng-class="setupStage == 'Price Categories' ? 'active' : ''">Price Categories</a></li>
+              <li id="CUR-EPWSkLNz" ng-if="modalTabs.includes('Sub Sources')"><a id="CUR-XeQUQxmk"
+                  ng-click="changeTab('Sub Sources')" ng-class="setupStage == 'Sub Sources' ? 'active' : ''">Sub
+                  Sources</a></li>
+              <li id="CUR-CRgAMhVj" ng-if="modalTabs.includes('Territories')"><a id="CUR-vPfPjCtA"
+                  ng-click="changeTab('Territories')"
+                  ng-class="setupStage == 'Territories' ? 'active' : ''">Territories</a></li>
+              <li id="CUR-FuoJzuzt" ng-if="modalTabs.includes('Currencies')"><a id="CUR-Ifjwhydh"
+                  ng-click="changeTab('Currencies')"
+                  ng-class="setupStage == 'Currencies' ? 'active' : ''">Currencies</a></li>
+              <li id="CUR-sYeXmuQT" ng-if="modalTabs.includes('Exchange Rates')"><a id="CUR-GxwthlrV"
+                  ng-click="changeTab('Exchange Rates')"
+                  ng-class="setupStage == 'Exchange Rates' ? 'active' : ''">Exchange Rates</a></li>
+              <li id="CUR-bGqJbUpQ" ng-if="modalTabs.includes('Releases')"><a id="CUR-ThOUMeVe"
+                  ng-click="changeTab('Releases')" ng-class="setupStage == 'Releases' ? 'active' : ''">Releases</a></li>
+              <li id="CUR-bLiWHpig" ng-if="modalTabs.includes('Tracks')"><a id="CUR-HVgMjwYs"
+                  ng-click="changeTab('Tracks')" ng-class="setupStage == 'Tracks' ? 'active' : ''">Tracks</a></li>
+              <li id="CUR-bLiWHpik" ng-if="modalTabs.includes('Works')"><a id="CUR-HVgMjwYz"
+                  ng-click="changeTab('Works')" ng-class="setupStage == 'Works' ? 'active' : ''">Works</a></li>
+              <li id="CUR-NRRlbAnM" ng-if="modalTabs.includes('Contracts')"><a id="CUR-NHoZhjTz"
+                  ng-click="changeTab('Contracts')" ng-class="setupStage == 'Contracts' ? 'active' : ''">Contracts</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <catalogue-mapping-setup ng-show="setupStage == 'Setup'"></catalogue-mapping-setup>
+        <catalogue-mapping-financial-file ng-show="setupStage == 'Financial File'"></catalogue-mapping-financial-file>
+        <catalogue-mapping-dates ng-show="setupStage == 'Dates'"></catalogue-mapping-dates>
+        <catalogue-mapping-distribution-channels
+          ng-show="setupStage == 'Channels'"></catalogue-mapping-distribution-channels>
+        <catalogue-mapping-configurations ng-show="setupStage == 'Configurations'"></catalogue-mapping-configurations>
+        <catalogue-mapping-price-categories
+          ng-show="setupStage == 'Price Categories'"></catalogue-mapping-price-categories>
+        <catalogue-mapping-sub-sources ng-show="setupStage == 'Sub Sources'"></catalogue-mapping-sub-sources>
+        <catalogue-mapping-territories ng-show="setupStage == 'Territories'"></catalogue-mapping-territories>
+        <catalogue-mapping-currencies ng-show="setupStage == 'Currencies'"></catalogue-mapping-currencies>
+        <catalogue-mapping-exchange-rates ng-show="setupStage == 'Exchange Rates'"></catalogue-mapping-exchange-rates>
+        <catalogue-mapping-releases ng-show="setupStage == 'Releases'"></catalogue-mapping-releases>
+        <catalogue-mapping-tracks ng-show="setupStage == 'Tracks'"></catalogue-mapping-tracks>
+        <catalogue-mapping-works ng-show="setupStage == 'Works'"></catalogue-mapping-works>
+        <catalogue-mapping-contracts ng-show="setupStage == 'Contracts'"></catalogue-mapping-contracts>
+        <div id="CUR-mOghpbGo" class="row m-t-20" ng-if="nextSetupStage">
+          <div id="CUR-iEbylocQ" class="col-xs-12">
+            <button id="CUR-oTFHNCxq" type="button" ng-click="changeTab(nextSetupStage)"
+              class="btn btn-complete pull-right">Next</button>
+            <button id="CUR-POwDMygQ" ng-if="setupStage == 'Financial File' || setupStage == 'Setup'"
+              class="btn btn-primary pull-right" data-dismiss="modal"
+              ng-click="changeTab('ingestAfterUpload')">Reingest</button>
+            <button id="CUR-NIbtLNqR" type="button" class="btn btn-default pull-right"
+              data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+        <div id="CUR-HgRXtKaw" class="row m-t-20" ng-if="!nextSetupStage">
+          <div id="CUR-WiHoJlzA" class="col-xs-12">
+            <button id="CUR-tSDxRqMQ" type="button" data-dismiss="modal" ng-click="changeTab('Close')"
+              class="btn btn-complete pull-right">Complete</button>
+            <button id="CUR-IAzsqTer" class="btn btn-primary pull-right" data-dismiss="modal"
+              ng-click="changeTab('Reingest')" ng-show="!salesFile.locked">Reingest</button>
+            <button id="CUR-FETUfawv" class="btn btn-info pull-right" data-dismiss="modal"
+              ng-click="changeTab('Revalidate')">Revalidate</button>
+            <button id="CUR-SKyGMkZi" type="button" class="btn btn-default pull-right"
+              data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<validation-modal header="'Reingest Sales'"
+  message="'This sales file is used in a period. Are you sure you want to reingest? Doing so will remove any reporting links, which could lead to accounting these sales twice.
+  If you have already delivered related Periods to your artists, then we advise against reprocessing these Periods and so advise against reingesting this sales file.'"
+  value-to-validate="'Reingest'" type="'sale'" method="reingest" method-type="'reingest'">
+</validation-modal>
+
+<div class="modal fade slide-right" id="createReleaseModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-vQhndhen" class="modal-dialog modal-lg">
+    <div id="CUR-nKlhjvaJ" class="modal-content">
+      <div id="CUR-qKSHyyJH" class="modal-header clearfix text-left">
+        <button id="CUR-eybcjZio" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+            class="pg-close fs-14"></i>
+        </button>
+        <h4 id="CUR-MqqxemSz">Create Release</h4>
+      </div>
+      <div id="CUR-PpCrYsUY" class="modal-body">
+        <div id="CUR-QFeoZAPj" class="panel panel-transparent">
+          <div id="CUR-ZLEaTkXQ" class="form-group required">
+            <label id="CUR-wlpjUMuG">Title</label>
+            <input id="CUR-sbwEyfms" type="text" class="form-control" ng-model="release.title"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-ZNaxpzNR" class="form-group required">
+            <label id="CUR-zAkYzdNb">Version</label>
+            <input id="CUR-AKoCXhlQ" type="text" class="form-control" ng-model="release.version"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-KgZXeeSA" class="form-group required">
+            <label id="CUR-duDTeZHf">Artist</label>
+            <input id="CUR-AONHFJLl" type="text" class="form-control" ng-model="release.artist"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-sQIdYljg" class="form-group required">
+            <label id="CUR-GqVcJSWx">Foreign ID <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                tooltip-template="Used for integrating into other systems, such as accounting systems"></i></label>
+            <input id="CUR-YiijYbgz" type="text" class="form-control" ng-model="release.foreignId"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-create-release-projectId" class="form-group required">
+            <label id="CUR-create-release-projectId-label">Project ID</label>
+            <input id="CUR-create-release-projectId-input" type="text" class="form-control" ng-model="release.projectId"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-birpnpGV" class="form-group required">
+            <label id="CUR-seIcJCaT">Cat No</label>
+            <input id="CUR-IszLYnDI" type="text" class="form-control" ng-model="release.catNo"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-NqlQsDrS" class="form-group required">
+            <label id="CUR-etGenuff">Barcode</label>
+            <input id="CUR-DEWgRSbk" type="text" class="form-control" ng-model="release.barcode"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-RQGlAcyy" class="form-group required">
+            <label id="CUR-EAmQSLyH">Distribution Channel</label>
+            <ui-select ng-model="release.distributionChannel" ng-disabled="rights.catalogue != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-lMQudWPo" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in distributionChannels | filter: $select.search track by $index">
+                <span id="CUR-OjVllBEC" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-HaAnbtSM" class="form-group required">
+            <label id="CUR-krnDTOYq">Format</label>
+            <ui-select ng-model="release.format" ng-disabled="rights.catalogue != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-CVzuxAbg" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in formats | filter: $select.search track by $index">
+                <span id="CUR-xhQAJVxf" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div id="CUR-AJfgVPMj" class="panel panel-transparent">
+          <h5 id="CUR-mAMHWYOX">Sales &amp; Costs Contracts</h5>
+          <contract-row ng-repeat="contract in release.salesReturnsRights track by $index" index="$index"
+            contract-type="'Artist'" contract="contract" contracts="contracts"
+            delete="deleteSalesReturnsRights(release.salesReturnsRights, contract)" index="$index"
+            edit="rights.catalogue == 'Edit'"></contract-row>
+          <button id="CUR-AFKJPqyE" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'"
+            ng-click="addSalesReturnsRights(release.salesReturnsRights)">+ Contract</button>
+        </div>
+        <div id="CUR-BVzTGsQL" class="row">
+          <div id="CUR-fcbhhLDX" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-XFwFIPTX" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-OOkOSXUN" type="button" class="btn btn-complete m-t-5" ng-click="saveRelease()">+
+              Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade slide-right" id="createTrackModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-gGrUjgiy" class="modal-dialog modal-lg">
+    <div id="CUR-ZciKTjbO" class="modal-content">
+      <div id="CUR-Rekjoktl" class="modal-header clearfix text-left">
+        <button id="CUR-xjulMnrM" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+            class="pg-close fs-14"></i>
+        </button>
+        <h4 id="CUR-nXTqJjXt">Create Track</h4>
+      </div>
+      <div id="CUR-EzrBXeyo" class="modal-body">
+        <div id="CUR-qXaArsEc" class="panel panel-transparent">
+          <div id="CUR-pSEvdUNO" class="form-group required">
+            <label id="CUR-QIpUlfIG">Title</label>
+            <input id="CUR-vMDhGKhU" type="text" class="form-control" ng-model="track.title"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-xMdNtSsb" class="form-group required">
+            <label id="CUR-lQMOfaMD">Version</label>
+            <input id="CUR-hYcpWukk" type="text" class="form-control" ng-model="track.version"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-uBMgmoeE" class="form-group required">
+            <label id="CUR-ELgppSql">Artist</label>
+            <input id="CUR-YHHwuQuk" type="text" class="form-control" ng-model="track.artist"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-PbFLFSOM" class="form-group required">
+            <label id="CUR-DZcpxRKR">Foreign ID <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                tooltip-template="Used for integrating into other systems, such as accounting systems"></i></label>
+            <input id="CUR-FCXByKoi" type="text" class="form-control" ng-model="track.foreignId"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-create-track-projectId" class="form-group required">
+            <label id="CUR-create-track-projectId-label">Project ID</label>
+            <input id="CUR-create-track-projectId-input" type="text" class="form-control" ng-model="track.projectId"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-CmKnjmbC" class="form-group required">
+            <label id="CUR-GMsGcknT">ISRC</label>
+            <input id="CUR-okdXhahE" type="text" class="form-control" ng-model="track.isrc"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+        </div>
+        <div id="CUR-AwaQhKmx" class="panel panel-transparent">
+          <h5 id="CUR-grOoyEie">Sales &amp; Costs Contracts</h5>
+          <contract-row ng-repeat="contract in track.salesReturnsRights track by $index" index="$index"
+            contract-type="'Artist'" contract="contract" contracts="contracts" edit="rights.catalogue == 'Edit'"
+            delete="deleteSalesReturnsRights(track.salesReturnsRights, contract)"></contract-row>
+          <button id="CUR-JaqrfSbS" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'"
+            ng-click="addSalesReturnsRights(track.salesReturnsRights)">+ Contract</button>
+        </div>
+        <div id="CUR-yKLFTvra" class="row">
+          <div id="CUR-mxSgfppf" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-FgFDaoyG" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-uRimtRRH" type="button" class="btn btn-complete m-t-5" ng-click="saveTrack()">+
+              Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createReleasesModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-yTBTwBqr" class="modal-dialog">
+    <div id="CUR-ByvMSOgZ" class="modal-content">
+      <div id="CUR-zQfJkgbq" class="modal-header clearfix text-left">
+        <button id="CUR-ktBDogag" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-bKzRoXSN">Create Selected Releases</h5>
+      </div>
+      <div id="CUR-sAHsdufg" class="modal-body">
+        <div id="CUR-AANoJlIn" ng-show="selectedReleases > 0" class="row">
+          <div id="CUR-HZcnOQzl" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{selectedReleases}} release{{(selectedReleases > 1) ? 's' : ''}}? This
+              cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-TcmEIKFq" ng-show="selectedReleases === 0" class="row">
+          <div id="CUR-cHbBdRos" class="col-xs-12 m-t-20">
+            <p>You have selected no releases to create.</p>
+          </div>
+        </div>
+        <div id="CUR-ddywRdit" class="row">
+          <div id="CUR-MPORENxu" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-nrUMvkbm" ng-show="selectedReleases === 0" type="button" class="btn btn-default m-t-5"
+              data-dismiss="modal">Close</button>
+            <button id="CUR-BhfkZKUL" ng-show="selectedReleases > 0" type="button" class="btn btn-default m-t-5"
+              data-dismiss="modal">Cancel</button>
+            <button id="CUR-nZRODbKx" ng-show="selectedReleases > 0" type="button" class="btn btn-complete m-t-5"
+              ng-click="createReleases('selected')">+&nbsp;Create {{selectedReleases}} Release{{(selectedReleases > 1) ?
+              's' : ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createReleasesAllModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-sGUrOSVC" class="modal-dialog">
+    <div id="CUR-mMBaXXhv" class="modal-content">
+      <div id="CUR-ZkFJbXMw" class="modal-header clearfix text-left">
+        <button id="CUR-ngfugUsx" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-HubYVcDZ">Create All Releases</h5>
+      </div>
+      <div id="CUR-kLQiUrAv" class="modal-body">
+        <div id="CUR-upCyiICZ" class="row">
+          <div id="CUR-uBdhwAdm" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{salesFile.invalidFields.releases.length}}
+              release{{(salesFile.invalidFields.releases.length > 1) ? 's' : ''}}? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-TkdJLpqq" class="row">
+          <div id="CUR-kdfsyYwS" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-nHXtKHLQ" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-QYlZGxyc" type="button" class="btn btn-complete m-t-5"
+              ng-click="createReleases('all')">+&nbsp;Create {{salesFile.invalidFields.releases.length}}
+              Release{{(salesFile.invalidFields.releases.length > 1) ? 's' : ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createTracksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-jngBTHQc" class="modal-dialog">
+    <div id="CUR-rwtyoNym" class="modal-content">
+      <div id="CUR-nLfUoThO" class="modal-header clearfix text-left">
+        <button id="CUR-MeZXagLg" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-TlHCiNCp">Create Selected Tracks</h5>
+      </div>
+      <div id="CUR-qHkztEjY" class="modal-body">
+        <div id="CUR-DtDdTQJT" ng-show="selectedTracks > 0" class="row">
+          <div id="CUR-wUchKqAz" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{selectedTracks}} track{{(selectedTracks > 1) ? 's' : ''}}? This cannot
+              be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-ebazlfAJ" ng-show="selectedTracks === 0" class="row">
+          <div id="CUR-smfRlRvy" class="col-xs-12 m-t-20">
+            <p>You have selected no tracks to create.</p>
+          </div>
+        </div>
+        <div id="CUR-HfVOgAWp" class="row">
+          <div id="CUR-FcjOMxhF" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-APiBCJeJ" ng-show="selectedTracks === 0" type="button" class="btn btn-default m-t-5"
+              data-dismiss="modal">Close</button>
+            <button id="CUR-seZxPUTn" ng-show="selectedTracks > 0" type="button" class="btn btn-default m-t-5"
+              data-dismiss="modal">Cancel</button>
+            <button id="CUR-zVakjTZZ" ng-show="selectedTracks > 0" type="button" class="btn btn-complete m-t-5"
+              ng-click="createTracks('selected')">+&nbsp;Create {{selectedTracks}} Track{{(selectedTracks > 1) ? 's' :
+              ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createTracksAllModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-EGmzwRfR" class="modal-dialog">
+    <div id="CUR-STNrKbml" class="modal-content">
+      <div id="CUR-JigMvYXf" class="modal-header clearfix text-left">
+        <button id="CUR-JyUSxcBN" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-DFhzgdRF">Create All Tracks</h5>
+      </div>
+      <div id="CUR-acgtfCSo" class="modal-body">
+        <div id="CUR-xQoJmsAC" class="row">
+          <div id="CUR-GmPoVYGA" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{salesFile.invalidFields.tracks.length}}
+              track{{(salesFile.invalidFields.tracks.length > 1) ? 's' : ''}}? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-tfXrpYKy" class="row">
+          <div id="CUR-aGpKGQzD" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-yRjbrhui" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-qLmNJXCy" type="button" class="btn btn-complete m-t-5"
+              ng-click="createTracks('all')">+&nbsp;Create {{salesFile.invalidFields.tracks.length}}
+              Track{{(salesFile.invalidFields.tracks.length > 1) ? 's' : ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createWorksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-create-work-mod-diag" class="modal-dialog">
+    <div id="CUR-create-work-mod-content" class="modal-content">
+      <div id="CUR-create-work-mod-header" class="modal-header clearfix text-left">
+        <button id="CUR-create-work-mod-button" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-create-work-mod-title">Create Selected Works</h5>
+      </div>
+      <div id="CUR-create-work-mod-body" class="modal-body">
+        <div id="CUR-create-work-mod-row" ng-show="selectedWorks > 0" class="row">
+          <div id="CUR-create-work-mod-desc" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{selectedWorks}} work{{(selectedWorks > 1) ? 's' : ''}}? This cannot be
+              undone.</p>
+          </div>
+        </div>
+        <div id="CUR-create-work-mod-warn" ng-show="selectedWorks === 0" class="row">
+          <div id="CUR-create-work-mod-warn-text" class="col-xs-12 m-t-20">
+            <p>You have selected no works to create.</p>
+          </div>
+        </div>
+        <div id="CUR-create-work-mod-buttons" class="row">
+          <div id="CUR-create-work-mod-notice-buttons-div" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-create-work-mod-close" ng-show="selectedWorks === 0" type="button"
+              class="btn btn-default m-t-5" data-dismiss="modal">Close</button>
+            <button id="CUR-create-work-mod-cancel" ng-show="selectedWorks > 0" type="button"
+              class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-create-work-mod-create" ng-show="selectedWorks > 0" type="button"
+              class="btn btn-complete m-t-5" ng-click="createWorks('selected', 'unmapped')">+&nbsp;Create {{selectedWorks}}
+              Work{{(selectedWorks > 1) ? 's' : ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createWorksAllModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-create-allwork-mod-diag" class="modal-dialog">
+    <div id="CUR-create-allwork-mod-content" class="modal-content">
+      <div id="CUR-create-allwork-mod-header" class="modal-header clearfix text-left">
+        <button id="CUR-create-allwork-mod-button" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-create-allwork-mod-title">Create All Works</h5>
+      </div>
+      <div id="CUR-create-allwork-mod-body" class="modal-body">
+        <div id="CUR-create-allwork-mod-row" class="row">
+          <div id="CUR-create-allwork-mod-desc" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to create {{salesFile.invalidFields.works.length}}
+              work{{(salesFile.invalidFields.works.length > 1) ? 's' : ''}}? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-create-allwork-mod-buttons" class="row">
+          <div id="CUR-create-allwork-mod-buttons-div" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-create-allwork-mod-cancel" type="button" class="btn btn-default m-t-5"
+              data-dismiss="modal">Cancel</button>
+            <button id="CUR-create-allwork-mod-create" type="button" class="btn btn-complete m-t-5"
+              ng-click="createWorks('all', 'unmapped')">+&nbsp;Create {{salesFile.invalidFields.works.length}}
+              Work{{(salesFile.invalidFields.works.length > 1) ? 's' : ''}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade slide-right" id="createWorkModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-mDgxNzJD" class="modal-dialog modal-lg">
+    <div id="CUR-wIvsQgbN" class="modal-content">
+      <div id="CUR-RpQfTpyV" class="modal-header clearfix text-left">
+        <button id="CUR-NuxxVDFK" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+            class="pg-close fs-14"></i>
+        </button>
+        <h4 id="CUR-QmXlNykf">Create Work</h4>
+      </div>
+      <div id="CUR-yjKOSqTT" class="modal-body">
+        <div id="CUR-tKJBPQMQ" class="panel panel-transparent">
+          <div id="CUR-otzzjdmk" class="form-group required">
+            <label id="CUR-qieeGHRD">Title</label>
+            <input id="CUR-NepFZbEZ" type="text" class="form-control" ng-model="work.title"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-GxoMMLxJ" class="form-group required">
+            <label id="CUR-QjhuPgBQ">Foreign ID <i class="fa fa-question-circle" tooltips tooltip-class="wider"
+                tooltip-template="Used for integrating into other systems, such as accounting systems"></i></label>
+            <input id="CUR-oultQZYA" type="text" class="form-control" ng-model="work.foreignId"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-create-work-projectId" class="form-group required">
+            <label id="CUR-create-work-projectId-label">Project ID</label>
+            <input id="CUR-create-work-projectId-input" type="text" class="form-control" ng-model="work.projectId"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-RXqPJPfw" class="form-group required">
+            <label id="CUR-UEKqFobo">Main Identifier</label>
+            <input id="CUR-xbitUFLs" type="text" class="form-control" ng-model="work.identifier"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-InxQTTao" class="form-group required">
+            <label id="CUR-kyOeITCq">ISWC</label>
+            <input id="CUR-obqXevvh" type="text" class="form-control" ng-model="work.iswc"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-ScFGOMyz" class="form-group required">
+            <label id="CUR-hEJVvHoj">Tunecode</label>
+            <input id="CUR-yErofuQy" type="text" class="form-control" ng-model="work.tunecode"
+              ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+        </div>
+        <div id="CUR-ovvfNaSB" class="panel panel-transparent">
+          <h5 id="CUR-QVEAoTML">Participation Rates</h5>
+          <work-participator ng-repeat="contract in work.salesReturnsRightsDisplay" edit="rights.catalogue == 'Edit'"
+            contract="contract" contracts="contracts"
+            delete="deleteSalesReturnsRights(work.salesReturnsRightsDisplay, contract)"
+            index="$index"></work-participator>
+          <button id="CUR-EkkvJTsH" class="btn btn-complete" ng-show="rights.catalogue == 'Edit'"
+            ng-click="addSalesReturnsRights(work.salesReturnsRightsDisplay)">+ Contract</button>
+        </div>
+        <div id="CUR-CDRAKoHp" class="row">
+          <div id="CUR-efFaVRjW" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-irhFfYPX" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-dCfzztqd" type="button" class="btn btn-complete m-t-5" ng-click="saveWork()">+
+              Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<sales-add-to-suspense-resolved ng-show="features && features.suspense && rights.sales == 'Edit'" />

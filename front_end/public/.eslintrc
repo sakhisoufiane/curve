@@ -1,0 +1,18 @@
+{
+  "env": {
+    "node": false,
+    "browser": true,
+    "jquery": true
+  },
+  "globals": {
+    "angular": "readonly",
+    "$location": "readonly",
+    "Stripe": "readonly",
+    "Loader": "readonly",
+    "Pagination": "readonly"
+  },
+  "rules": {
+    "no-console": "error",
+    "no-restricted-syntax": "off"
+  }
+}

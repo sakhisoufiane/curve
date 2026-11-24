@@ -1,0 +1,40 @@
+<div class="modal fade stick-up" id="{{modalId || 'validationModal'}}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header clearfix text-left">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+          </button>
+          <h5>{{header}}</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <p ng-bind-html="trustedMessage"></p>
+              <p>Please type <span class="text-danger" style="font-weight: bold;">{{valueToValidate}}</span> into the text box to confirm this change.</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-11 m-t-20">
+              <div class="form-group">
+                <p ng-if="showError" class="text-danger">Could not {{methodType}} {{type}}, text does not match <span style="font-weight: bold;">{{valueToValidate}}</span> word.</p>
+                <input class="form-control" ng-model="userInput" ng-change="validationFeedback()" ng-trim="false">
+              </div>
+            </div>
+            <div ng-show="showValidation" class="col-xs-1 m-t-25 p-l-5">
+              <p class="fa fa-check text-success"></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 m-t-20 text-right">
+              <button type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+              <button ng-if="methodType === 'delete'" type="button" ng-disabled="!showValidation" class="btn btn-danger m-t-5" ng-click="runMethod()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+              <button ng-if="methodType === 'reingest'" type="button" ng-disabled="!showValidation" class="btn btn-complete m-t-5" ng-click="runMethod()"><i class="fa fa-refresh"></i>&nbsp;Reingest</button>
+              <button ng-if="methodType === 'update'" type="button" ng-disabled="!showValidation" class="btn btn-complete m-t-5" ng-click="runMethod()"><i class="fa fa-check"></i>&nbsp;Update</button>
+              <button ng-if="methodType === 'reprocessFull'" type="button" ng-disabled="!showValidation" class="btn btn-complete m-t-5" ng-click="runMethod()"><i class="fa fa-refresh"></i>&nbsp;Reprocess Full</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

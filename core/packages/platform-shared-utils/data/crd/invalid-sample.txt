@@ -1,0 +1,10 @@
+Artist,Territory,CAT NO.,Channel,Net Amount,Total Play Time,Sale Date
+David Runte,CA,CATNO01,Digital,963.08,7147973,11/12/2022
+Abraham Turner,UK,CATNO01,Physical,54.59,8207242,03/10/2022
+George Deckow,CA,CATNO02,Licensing,837.05,146385,17/08/2022
+Joseph Wuckert,CA,CATNO01,Licensing,922.09,715857,09/11/2022
+Ruth Murazik,US,CATNO01,Digital,542.72,3266328,10/12/2021
+Sophia Bergstrom,CA,CATNO02,Physical,247.5,2892359,28/09/2022
+Rafael Goyette,US,CATNO02,Licensing,494.59,2240870,27/08/2020
+Christie Kuhlman,US,CATNO01,Physical,148.89,3713337,13/09/2022
+Lydia Jacobi,US,CATNO02,Physical,411.04,5377618,22/05/2020

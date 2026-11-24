@@ -1,0 +1,16 @@
+<div class="row contract-row-layout">
+  <div class="form-group required col-xs-4">
+    <label>Contract</label>
+    <contract-select-field value="contract.contractId" edit="edit" populated="contract.contract"></contract-select-field>
+  </div>
+  <div class="form-group col-xs-3">
+    <label>Rate</label>
+    <input type="number" class="form-control sm-p-l-5 sm-p-r-5" ng-model="contract.percentage" ng-if="edit">
+    <read-only-field ng-if="!edit" parent-field="contract" field="'percentage'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-4 action-btn">
+    <button ng-show="edit == true"class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-click="delete({ contract: contract })"><i class="fa fa-trash"></i></button>
+    <button ng-show="edit == true"class="btn btn-primary row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-click="addChild(contract)">+ Sub Contract</button>
+  </div>
+  <child-participator class="col-xs-12 first" ng-repeat="child in contract.children" contract="child" contracts="contracts" parent="contract" edit="edit" index="$index"></child-participator>
+</div>

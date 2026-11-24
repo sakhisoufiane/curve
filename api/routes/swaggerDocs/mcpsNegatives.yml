@@ -1,0 +1,432 @@
+openapi: 3.0.3
+info:
+  title: MCPS Negatives API
+  version: 1.0.0
+  description: API for managing MCPS negatives
+paths:
+  /mcpsNegatives:
+    get:
+      tags:
+        - MCPS Negatives
+      summary: Retrieve MCPS negatives
+      description: Returns a list of MCPS negatives with pagination. Only accessible to users with read access to catalogue.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number to return
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items to return per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Column to order by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Order direction
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Filter by text (searches by name)
+      responses:
+        '200':
+          description: Successfully retrieved MCPS negatives
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mcpsNegatives:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/McpsNegative'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - MCPS Negatives
+      summary: Create an MCPS negative
+      description: Creates a new MCPS negative. Only accessible to users with write access to periods.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/McpsNegativeInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/McpsNegativeInput'
+      responses:
+        '200':
+          description: Successfully created MCPS negative
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpsNegative'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /mcpsNegatives/import:
+    post:
+      tags:
+        - MCPS Negatives
+      summary: Import MCPS negatives from Excel
+      description: Imports MCPS negatives from an Excel file. Only accessible to users with edit access to periods.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Excel file to import
+      responses:
+        '200':
+          description: Successfully initiated import
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Payees are importing, and a report will be sent to you shortly.
+        '400':
+          description: Bad request, missing file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Requires a file to be uploaded"]
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /mcpsNegatives/export:
+    post:
+      tags:
+        - MCPS Negatives
+      summary: Export MCPS negatives to Excel
+      description: Exports MCPS negatives to an Excel file. Only accessible to users with read access to periods.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of MCPS negative IDs to export
+                filter:
+                  type: object
+                  description: Filter criteria for MCPS negatives to export
+      responses:
+        '200':
+          description: Successfully initiated export
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Your report will be sent to you via email shortly
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /mcpsNegatives/{id}:
+    get:
+      tags:
+        - MCPS Negatives
+      summary: Retrieve a specific MCPS negative
+      description: Returns details for a specific MCPS negative by ID. Only accessible to users with read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: MCPS negative ID
+      responses:
+        '200':
+          description: Successfully retrieved MCPS negative
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpsNegative'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: MCPS negative not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - MCPS Negatives
+      summary: Update an MCPS negative
+      description: Updates an MCPS negative by ID. Only accessible to users with write access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: MCPS negative ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/McpsNegativeInput'
+      responses:
+        '200':
+          description: Successfully updated MCPS negative
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpsNegative'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: MCPS negative not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - MCPS Negatives
+      summary: Delete an MCPS negative
+      description: Deletes an MCPS negative by ID. Only accessible to users with write access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: MCPS negative ID
+      responses:
+        '200':
+          description: Successfully deleted MCPS negative
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpsNegative'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: MCPS negative not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /mcpsNegatives/{id}/history:
+    get:
+      tags:
+        - MCPS Negatives
+      summary: Retrieve history for an MCPS negative
+      description: Returns the update history for a specific MCPS negative. Only accessible to users with read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: MCPS negative ID
+      responses:
+        '200':
+          description: Successfully retrieved MCPS negative history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items: {}
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: MCPS negative not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    McpsNegative:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the MCPS negative
+        clientId:
+          type: string
+          description: Client ID associated with the MCPS negative
+        periodId:
+          type: string
+        year:
+          type: integer
+        accountingPeriod:
+          type: string
+        releaseId:
+          type: string
+        releaseTitle:
+          type: string
+        releaseCatNo:
+          type: string
+        territory:
+          type: string
+        value:
+          type: number
+        createdBy:
+          type: string
+        lastModifiedBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was last updated
+    McpsNegativeInput:
+      type: object
+      properties:
+        clientId:
+          type: string
+        periodId:
+          type: string
+        year:
+          type: integer
+        accountingPeriod:
+          type: string
+        releaseId:
+          type: string
+        territory:
+          type: string
+        value:
+          type: number
+      required:
+        - clientId
+        - year
+        - accountingPeriod
+        - territory
+        - value
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message

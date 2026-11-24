@@ -1,0 +1,116 @@
+{
+  "mappings": {
+    "dynamic": false,
+    "fields": {
+      "_id": {
+        "type": "objectId"
+      },
+      "aliases": {
+        "analyzer": "lowercaseKeyword",
+        "type": "string"
+      },
+      "artist": [
+        {
+          "analyzer": "lowercaseKeyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "barcode": [
+        {
+          "analyzer": "lowercaseKeyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "catNo": [
+        {
+          "analyzer": "lowercaseKeyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "catalogueGroups": {
+        "analyzer": "lucene.keyword",
+        "type": "string"
+      },
+      "clientId": {
+        "analyzer": "lucene.keyword",
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "date"
+      },
+      "updatedAt": {
+        "type": "date"
+      },
+      "distributionChannel": {
+        "analyzer": "lucene.keyword",
+        "type": "string"
+      },
+      "foreignId": {
+        "analyzer": "lowercaseKeyword",
+        "type": "string"
+      },
+      "format": {
+        "analyzer": "lucene.keyword",
+        "type": "string"
+      },
+      "label": {
+        "analyzer": "lowercaseKeyword",
+        "type": "string"
+      },
+      "projectId": {
+        "analyzer": "lowercaseKeyword",
+        "type": "string"
+      },
+      "salesReturnsRights": {
+        "fields": {
+          "contractId": {
+            "analyzer": "lucene.keyword",
+            "type": "string"
+          }
+        },
+        "type": "document"
+      },
+      "title": [
+        {
+          "analyzer": "lowercaseKeyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "totalParticipation": {
+        "type": "number"
+      },
+      "valid": {
+        "type": "boolean"
+      },
+      "version": {
+        "analyzer": "lowercaseKeyword",
+        "type": "string"
+      }
+    }
+  },
+  "analyzers": [
+    {
+      "name": "lowercaseKeyword",
+      "tokenFilters": [
+        {
+          "type": "lowercase"
+        }
+      ],
+      "tokenizer": {
+        "type": "keyword"
+      }
+    }
+  ]
+}

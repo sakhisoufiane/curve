@@ -1,0 +1,19 @@
+{
+  "loggedInAs": "Accesso effettuato come {{name}}",
+  "notifications": "Notifiche",
+  "noNotifications": "Nessuna notifica",
+  "clearAll": "Cancella tutto",
+  "markAllAsRead": "Segna tutto come letto",
+  "darkMode": "Modalità scura",
+  "signOut": "Disconnetti",
+  "language": "Lingua",
+  "search": "Cerca",
+  "launchTour": "Avvia il tour",
+  "totalRevenue": "Ricavi totali",
+  "totalCosts": "Costi totali",
+  "incompleteLines": "Righe incomplete",
+  "recentContracts": "Contratti recenti",
+  "recentSales": "Vendite recenti",
+  "revenueOverTime": "Ricavi nel tempo",
+  "revenueOverTimeDesc": "Questo grafico mostra i ricavi nel tempo per il cliente."
+}

@@ -1,0 +1,42 @@
+{
+  "name": "cypress-test-dite",
+  "version": "1.0.0",
+  "description": "Initial Cypress test repo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cypress:open": "cypress open",
+    "cy:run": "npx cypress run",
+    "cy:run:record": "npx cypress run --tag 'local,smoke,trials' --record --key 5d06de8d-deb8-4864-9360-190ad6b258a9",
+    "cy:run:file": "npx cypress run --spec cypress/e2e/smoke-tests/spec.smoke.imports.cy.js",
+    "cy:run:file:record": "npx cypress run --tag 'ecs,smoke,trials' --spec cypress/e2e/smoke-tests/spec.smoke.label.cy.js --record --key 5d06de8d-deb8-4864-9360-190ad6b258a9",
+    "cy:run:updatedsmoke": "npx cypress run --spec cypress/e2e/updated-smoke-tests/test-suites/**/*,cypress/e2e/smoke-tests/spec.smoke.imports.cy.js",
+    "cy:run:updatedsmoke:record": "npx cypress run --tag 'ecs,updated-smoke' --spec cypress/e2e/updated-smoke-tests/test-suites/**/*,cypress/e2e/smoke-tests/spec.smoke.imports.cy.js --record --key 5d06de8d-deb8-4864-9360-190ad6b258a9",
+    "cy:run:smoke": "npx cypress run --spec cypress/e2e/smoke-tests/**/*",
+    "cy:run:smoke:record": "npx cypress run --tag 'ecs,smoke,trials' --spec cypress/e2e/smoke-tests/**/* --record --key 5d06de8d-deb8-4864-9360-190ad6b258a9",
+    "cy:run:gp:pr:smoke": "npx cypress run --parallel --group smoking-tests --spec cypress/e2e/smoke-tests/**/* --record --key 5d06de8d-deb8-4864-9360-190ad6b258a9",
+    "e2e:chrome": "cypress run --browser chrome --headed",
+    "ec2:runner": "node runner.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:quiet": "eslint . --quiet"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CurveRoyalties/cypress-test-dite.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CurveRoyalties/cypress-test-dite/issues"
+  },
+  "homepage": "https://github.com/CurveRoyalties/cypress-test-dite#readme",
+  "devDependencies": {
+    "cypress": "^12.14.0",
+    "cypress-file-upload": "^5.0.8",
+    "cypress-xpath": "^2.0.1",
+    "eslint": "^8.41.0",
+    "eslint-plugin-cypress": "^2.13.3",
+    "eslint-plugin-import": "^2.27.5"
+  }
+}

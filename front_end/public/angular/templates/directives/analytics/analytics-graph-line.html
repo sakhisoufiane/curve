@@ -1,0 +1,35 @@
+<div data-ng-if="!showMerged">
+  <div data-ng-if="comparisonData || alwaysShow" data-ng-class="{ 'col-xs-12' : !comparisonData, 'col-xs-6': comparisonData }">
+    <div class="row" data-ng-if="data && data.figures && data.figures.length > 0">
+      <div class="col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-heading ">
+            <div class="panel-title">{{heading}}</div>
+          </div>
+          <div class="panel-body">
+            <canvas id="{{identifier}}{{columnId}}" class="chart chart-line" chart-series="data.series" chart-data="data.figures" chart-labels="data.labels" chart-options="lineOptions" chart-dataset-override="lineOptionsDatasetOverride">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div data-ng-if="showMerged">
+  <div class="col-xs-12">
+    <div class="row" data-ng-if="data && data.figures && data.figures.length > 0">
+      <div class="col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-heading ">
+            <div class="panel-title">{{heading}}</div>
+          </div>
+          <div class="panel-body">
+            <canvas id="revenueOverTimeMerged" class="chart chart-line" chart-series="data.series" chart-data="data.figures" chart-labels="data.labels" chart-options="lineOptions" chart-dataset-override="lineOptionsDatasetOverride">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

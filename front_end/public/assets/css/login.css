@@ -1,0 +1,21 @@
+.logo {
+	margin: 0 auto;
+	width: 150px;
+	padding-bottom: 20px;
+}
+
+#notification {
+	width: 100%;
+}
+
+.text-notification{
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 767px) {
+  .login-container {
+    height: 100vh;
+  }
+}

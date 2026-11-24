@@ -1,0 +1,593 @@
+<div ng-if="!inBulkEdit">
+  <div id="CUR-HSjmvzOm" class="jumbotron" data-pages="parallax">
+    <div
+      id="CUR-CWXDjqlC"
+      class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20"
+    >
+      <div id="CUR-CVOOxNeY" class="inner">
+        <ul id="CUR-tPMBRFse" class="breadcrumb">
+          <li id="CUR-WNhFEkam">
+            <a id="CUR-zpMMuOej" href="/#/sales" class="active">Sales</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- Main Container -->
+  <div id="CUR-LcXSBQMG" class="container-fluid container-fixed-lg">
+    <!-- Search and Buttons -->
+    <div id="CUR-FSZHkfXR" class="row m-b-20">
+      <div
+        id="CUR-kdqBBUif"
+        class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2"
+      >
+        <form
+          id="CUR-ScrTvfnG"
+          class="sm-p-l-15 sm-p-r-15"
+          ng-submit="search()"
+        >
+          <div id="CUR-QwRtxpgw" class="input-group transparent">
+            <input
+              id="CUR-WCGmtZHU"
+              type="text"
+              class="form-control"
+              placeholder="Search"
+              ng-model="filter.text"
+            />
+            <span
+              id="CUR-fmZxpvnJ"
+              class="input-group-addon pointer search-button"
+              ng-click="search()"
+            >
+              <i class="pg-search"></i>
+            </span>
+          </div>
+        </form>
+      </div>
+      <div
+        id="CUR-xpMFQGRI"
+        class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right"
+      >
+        <div id="CUR-OENipyMe" class="sm-p-l-15 sm-p-r-15">
+          <button
+            class="btn btn-default hidden-xs"
+            ng-click="bulkUpdate()"
+            ng-disabled="!filesSelected"
+            ng-show="rights.sales == 'Edit'"
+          >
+            <i class="fa fa-edit"></i> Bulk Update
+          </button>
+          <button
+            id="CUR-ivKvGcQl"
+            class="btn btn-default hidden-xs"
+            ng-click="export()"
+            ng-show="rights.sales == 'Edit' || rights.sales == 'View'"
+          >
+            <i class="fa fa-upload"></i>&nbsp;Export
+          </button>
+          <div
+            id="CUR-nBTrboeS"
+            class="btn-group dropdown-default hidden-xs"
+            ng-show="rights.sales == 'Edit'"
+          >
+            <a
+              class="btn dropdown-toggle w-xs-100-p"
+              data-toggle="dropdown"
+              aria-expanded="false"
+              ><i class="fa fa-refresh"></i>&nbsp;Rerun
+              <span id="CUR-GauLPkXJ" class="caret"></span>
+            </a>
+            <ul id="CUR-QJPjWCEp" class="dropdown-menu w-xs-100-p">
+              <li id="CUR-xVBjElow">
+                <a
+                  id="CUR-GQgwEktZ"
+                  href="javascript:void(0)"
+                  ng-click="showReingestConfirmModel()"
+                  >Reingest</a
+                >
+              </li>
+              <li id="CUR-LHLogprW">
+                <a
+                  id="CUR-TEnAoSDt"
+                  href="javascript:void(0)"
+                  ng-click="revalidate()"
+                  >Revalidate</a
+                >
+              </li>
+            </ul>
+          </div>
+          <button
+            id="CUR-riqaSlSH"
+            class="btn btn-danger hidden-xs"
+            data-toggle="modal"
+            data-target="#deleteModal"
+            ng-show="rights.sales == 'Edit'"
+            ng-click="prepareDeleteSelected()"
+          >
+            <i class="fa fa-trash"></i>&nbsp;Delete
+          </button>
+          <button
+            id="CUR-ofnmYZwF"
+            class="btn btn-warning hidden-xs"
+            data-toggle="modal"
+            data-target="#archiveModal"
+            ng-show="rights.sales == 'Edit'"
+          >
+            <i class="fa fa-lock"></i> Archive
+          </button>
+          <button
+            id="CUR-cugYkWGS"
+            class="btn btn-warning m-t-10 hidden-xs"
+            ng-if="false"
+            data-toggle="modal"
+            data-target="#unarchiveModal"
+            ng-show="rights.sales == 'Edit'"
+          >
+            <i class="fa fa-unlock"></i> Unarchive
+          </button>
+          <a
+            id="CUR-PNdYcPxE"
+            href="#/sales/new-bulk"
+            class="btn btn-complete"
+            ng-show="rights.sales == 'Edit' && !demoMode"
+            ><i class="fa fa-plus"></i>&nbsp;Create</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-plLumlcO" class="row">
+      <div id="CUR-ESYUobfx" class="col-xs-12 col-sm-3">
+        <div id="CUR-yTOQugBr" class="form-group sm-p-l-15 sm-p-r-15">
+          <label id="CUR-FHufgwGM">Valid</label>
+          <ui-select class="full-width" ng-model="filter.valid">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-zSdcfRPU" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices
+              repeat="item.value as item in validFilterValues | filter: $select.search"
+            >
+              <span id="CUR-byhYXwZC" ng-bind="item.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-ExJYPORl" class="col-xs-12 col-sm-3">
+        <div id="CUR-pvOAhhhY" class="form-group sm-p-l-15 sm-p-r-15">
+          <label id="CUR-vwBFXAWO">Status</label>
+          <ui-select class="full-width" ng-model="filter.status">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-bswqEgOl" ng-bind="$select.selected"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item in statusFilterValues">
+              <span id="CUR-yhycUtKg" ng-bind="item"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-ofoRAeMH" class="col-xs-12 col-sm-3">
+        <div id="CUR-vBheNoDL" class="form-group sm-p-l-15 sm-p-r-15">
+          <label id="CUR-sSeLfdFL">Reported</label>
+          <ui-select class="full-width" ng-model="filter.reportedStatus">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-nFAOMPkA" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices
+              repeat="item.value as item in reportedFilterValues | filter: $select.search"
+            >
+              <span id="CUR-eXztaoRd" ng-bind="item.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-pQXPAkpC" class="col-xs-12 col-sm-3">
+        <div id="CUR-XWRQRhBl" class="form-group sm-p-l-15 sm-p-r-15">
+          <label id="CUR-gTNhalNj">Archived</label>
+          <ui-select class="full-width" ng-model="filter.archived">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-TlvgVJPX" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices
+              repeat="item.value as item in archivedFilterValues | filter: $select.search"
+            >
+              <span id="CUR-ynlSEVcO" ng-bind="item.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-oQpRUzuq" class="col-xs-12 col-sm-3">
+        <div id="CUR-GHGqoNdU" class="form-group sm-p-l-15 sm-p-r-15">
+          <label id="CUR-ZYheIwqI">New</label>
+          <ui-select class="full-width" ng-model="filter.viewed">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-KzktldyW" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices
+              repeat="item.value as item in isNewFilterValues | filter: $select.search"
+            >
+              <span id="CUR-ccsJcOzj" ng-bind="item.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-oQpRUzuq" class="col-xs-12 col-sm-3">
+        <div id="CUR-GHGqoNdU" class="form-group sm-p-l-15 sm-p-r-15">
+          <label id="CUR-ZYheIwqI">Duplicates</label>
+          <ui-select class="full-width" ng-model="filter.duplicates">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-KzktldyW" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices
+              repeat="item.value as item in isDuplicates | filter: $select.search"
+            >
+              <span id="CUR-ccsJcOzj" ng-bind="item.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-oQpRUzuq" class="col-xs-12 col-sm-3">
+        <div id="CUR-GHGqoNdU" class="form-group sm-p-l-15 sm-p-r-15">
+          <label id="CUR-ZYheIwqI">Target Period</label>
+          <ui-select class="full-width" ng-model="filter.targetPeriod">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-KzktldyW" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices
+              repeat="item.value as item in targetPeriodFilterValues | filter: $select.search"
+            >
+              <span id="CUR-ccsJcOzj" ng-bind="item.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+      <div id="CUR-nkfjkDid" class="col-xs-12 col-sm-3">
+        <div id="CUR-KJkjdjd" class="form-group sm-p-l-15 sm-p-r-15">
+            <label id="CUR-SOdiejd" ng-if="clientType">
+            {{ clientType === 'Publisher' ? 'Income File Foreign ID' : 'Sales File Foreign ID' }}
+            </label>
+          <ui-select class="full-width" ng-model="filter.foreignId">
+            <ui-select-match allow-clear="true">
+              <span id="CUR-kjfkDije" ng-bind="$select.selected.name"></span>
+            </ui-select-match>
+            <ui-select-choices
+              repeat="item.value as item in foreignIdFilterValues | filter: $select.search"
+            >
+              <span id="CUR-ijidjSId" ng-bind="item.name"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-cMjhxOUv" class="row">
+      <div id="CUR-NFCxZlpj" class="col-xs-12 col-sm-12 text-center">
+        <button id="CUR-NlTTzTrO" class="btn btn-complete" ng-click="search()">
+          <i class="fa fa-search"></i> Filter
+        </button>
+      </div>
+    </div>
+    <div id="CUR-kpJGHAIo" class="col-sm-12">
+      <h5 id="CUR-tVQnCwEU" class="pull-right">Total: {{total? total : 0}}</h5>
+    </div>
+    <div id="CUR-WtcrGOXD" class="row">
+      <div id="CUR-GQUnIdpg" class="col-xs-12">
+        <div id="CUR-eqmNmElM" class="panel panel-default">
+          <div id="CUR-ziwOnRWO" class="panel-heading">
+            <div id="CUR-sAiuTKJC" class="panel-title">
+              Sales
+              <documentation
+                link="http://guide.curveroyaltysystems.com/article/sales-uploading-sales/"
+              >
+              </documentation>
+            </div>
+          </div>
+          <div id="CUR-WOKaQxzP" class="panel-body">
+            <div id="CUR-RKtAMVsX" class="table-responsive">
+              <table
+                id="CUR-yprfVOlM"
+                class="table table-hover dataTable no-footer minimal-padding table-condensed"
+              >
+                <thead>
+                  <tr id="CUR-RoSJGqwU">
+                    <th class="table-checkbox hidden-xs">
+                      <input
+                        id="CUR-sMddXWJG"
+                        type="checkbox"
+                        class="select-all"
+                        ng-click="selectAllSales()"
+                        ng-checked="selectAllChecked"
+                        ng-show="rights.sales == 'Edit'"
+                      />
+                    </th>
+                    <th
+                      ng-click="getSortedData('name')"
+                      ng-class="whatClassIsIt('name')"
+                    >
+                      Name
+                    </th>
+                    <th
+                      ng-click="getSortedData('invoiceNo')"
+                      ng-class="whatClassIsIt('invoiceNo')"
+                      class="hidden-xs"
+                    >
+                      Invoice
+                    </th>
+                    <th
+                      ng-click="getSortedData('targetPeriod')"
+                      ng-class="whatClassIsIt('targetPeriod')"
+                      class="hidden-xs"
+                    >
+                      Target
+                    </th>
+                    <th
+                      ng-click="getSortedData('salesAccountName')"
+                      ng-class="whatClassIsIt('salesAccountName')"
+                      class="hidden-xs"
+                    >
+                      Account
+                    </th>
+                    <th
+                      ng-click="getSortedData('homeCurrencyGrossAmount')"
+                      ng-class="whatClassIsIt('homeCurrencyGrossAmount')"
+                      class="hidden-xs"
+                    >
+                      Gross
+                    </th>
+                    <th
+                      ng-click="getSortedData('homeCurrencyNetAmount')"
+                      ng-class="whatClassIsIt('homeCurrencyNetAmount')"
+                    >
+                      Net
+                    </th>
+                    <th
+                      ng-click="getSortedData('createdAt')"
+                      ng-class="whatClassIsIt('createdAt')"
+                    >
+                      Created
+                    </th>
+                    <th
+                      ng-click="getSortedData('invalidLines')"
+                      ng-class="whatClassIsIt('invalidLines')"
+                      class="hidden-xs"
+                    >
+                      Invalid Lines
+                    </th>
+                    <th class="hidden-xs"></th>
+                  </tr>
+                </thead>
+                <tbody id="CUR-UhaRrVoZ">
+                  <tr
+                    sales-file-table-row
+                    ng-repeat="sale in salesFile"
+                    index="{{$index}}"
+                    sale="sale"
+                    edit="rights.sales == 'Edit'"
+                    show-created-at="true"
+                  ></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="CUR-MwhVUPNL" class="col-sm-12">
+      <div id="CUR-futVclPP" class="pull-right">
+        <span id="CUR-IWSvPjoH" class="inline-block" ng-if="!isShowingAll"
+          >Showing 25 Per Page |</span
+        >
+        <span id="CUR-IJmWNrYD" class="inline-block" ng-if="isShowingAll"
+          >Showing {{filter.limit}} Per Page</span
+        >
+        <a
+          id="CUR-BkCOnitR"
+          class="p-l-5"
+          ng-if="!isShowingAll"
+          ng-click="showAll()"
+          >Show 500</a
+        >
+      </div>
+    </div>
+    <div id="CUR-JWsLAovT" class="row">
+      <div id="CUR-wZuWMqiC" class="col-xs-12 text-center">
+        <pagination
+          id="CUR-QhcYhgAr"
+          pages="pages"
+          total="totalPages"
+          current="currentPage"
+          change-page="changePage(page)"
+        ></pagination>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div
+    class="modal fade stick-up"
+    id="deleteModal"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+  >
+    <div id="CUR-XmWOHCta" class="modal-dialog">
+      <div id="CUR-XmkViTJU" class="modal-content">
+        <div id="CUR-VqcHhKRL" class="modal-header clearfix text-left">
+          <button
+            id="CUR-WAZtYuWR"
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+          >
+            <i class="pg-close fs-14"></i>
+          </button>
+          <h5 id="CUR-sgnNNhSf">Delete Sales</h5>
+        </div>
+        <div id="CUR-jfKYFqKu" class="modal-body">
+          <div id="CUR-TCZrEDnh" class="row">
+            <div id="CUR-fhuqEJQG" class="col-xs-12 m-t-20">
+              <div ng-show="reportedSalesFiles.length">
+                <p>There are {{reportedSalesFiles.length}} sales files which have been fully or partially reported in a period:</p>
+                <ul>
+                  <li ng-repeat="salesFile in reportedSalesFiles track by $index">
+                    <a
+                      ng-href="/#/sales/{{salesFile._id}}/edit"
+                      ng-click="goToSalesFile($event, salesFile._id)"
+                    >
+                      {{ salesFile.name }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <p>
+                Are you sure you want to delete the selected sales? This cannot
+                be undone.
+              </p>
+              <div ng-show="reportedSalesFiles.length">
+                <p>Please type <span class="text-danger" style="font-weight: bold;">Delete</span> into the text box to confirm this change.</p>
+                <input class="form-control" ng-model="confirmDelete.text" ng-trim="false">
+              </div>
+            </div>
+          </div>
+          <div id="CUR-tCCPStXF" class="row">
+            <div id="CUR-SfLROhdc" class="col-xs-12 m-t-20 text-right">
+              <button
+                id="CUR-DpSAhOMX"
+                type="button"
+                class="btn btn-default m-t-5"
+                data-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                id="CUR-LIkCBbfT"
+                type="button"
+                class="btn btn-danger m-t-5"
+                ng-click="deleteSelected()"
+                ng-disabled="reportedSalesFiles.length && confirmDelete.text !== 'Delete'"
+              >
+                <i class="fa fa-trash"></i>&nbsp;Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Archive Modal -->
+  <div
+    class="modal fade stick-up"
+    id="archiveModal"
+    tabindex="-1"
+    role="dialog"
+  >
+    <div id="CUR-FtVHWtbe" class="modal-dialog">
+      <div id="CUR-bqBvDWoL" class="modal-content">
+        <div id="CUR-RUhaWUrJ" class="modal-header clearfix text-left">
+          <button
+            id="CUR-WnLxfIwt"
+            type="button"
+            class="close"
+            data-dismiss="modal"
+          >
+            <i class="pg-close fs-14"></i>
+          </button>
+          <h5 id="CUR-laEQDyxf">Archive Sales</h5>
+        </div>
+        <div id="CUR-kNkvtBTq" class="modal-body">
+          <div id="CUR-wNXvwrAO" class="row">
+            <div id="CUR-uschZvlG" class="col-xs-12 m-t-20">
+              <p>Are you sure you want to archive the selected sales?</p>
+            </div>
+          </div>
+          <div id="CUR-JyHPFaKO" class="row">
+            <div id="CUR-pafTBAWw" class="col-xs-12 m-t-20 text-right">
+              <button
+                id="CUR-UlfAuOxb"
+                type="button"
+                class="btn btn-default m-t-5"
+                data-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                id="CUR-OJDLasiD"
+                type="button"
+                class="btn btn-warning m-t-5"
+                ng-click="archiveSelected()"
+              >
+                <i class="fa fa-trash"></i>&nbsp;Archive
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unarchive Modal -->
+  <div
+    class="modal fade stick-up"
+    id="unarchiveModal"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+  >
+    <div id="CUR-pwchXJpB" class="modal-dialog">
+      <div id="CUR-hzUVevan" class="modal-content">
+        <div id="CUR-RhkxTVJL" class="modal-header clearfix text-left">
+          <button
+            id="CUR-YsCRMwwA"
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+          >
+            <i class="pg-close fs-14"></i>
+          </button>
+          <h5 id="CUR-rWrxDgbJ">Unarchive Sales</h5>
+        </div>
+        <div id="CUR-iXOYHArB" class="modal-body">
+          <div id="CUR-ZgXetlUe" class="row">
+            <div id="CUR-ueMeEljF" class="col-xs-12 m-t-20">
+              <p>Are you sure you want to unarchive the selected sales?</p>
+            </div>
+            <div id="CUR-VDSnEmsi" class="row">
+              <div id="CUR-FCoriMTT" class="col-xs-12 m-t-20 text-right">
+                <button
+                  id="CUR-dnoiySxI"
+                  type="button"
+                  class="btn btn-default m-t-5"
+                  data-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button
+                  id="CUR-htCimpsT"
+                  type="button"
+                  class="btn btn-warning m-t-5"
+                  ng-click="unarchiveSelected()"
+                >
+                  <i class="fa fa-trash"></i>&nbsp;Unarchive
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <validation-modal
+    header="'Reingest Sales'"
+    message="'These sales files are used in a period. Are you sure you want to reingest? Doing so will remove any reporting links, which could lead to accounting these sales twice.
+  If you have already delivered related Periods to your artists, then we advise against reprocessing these Periods and so advise against reingesting these sales file(s).'"
+    value-to-validate="'Reingest'"
+    type="'sale'"
+    method="reingest"
+    method-type="'reingest'"
+  >
+  </validation-modal>
+</div>
+<sales-files-bulk-edit ng-if="inBulkEdit" />

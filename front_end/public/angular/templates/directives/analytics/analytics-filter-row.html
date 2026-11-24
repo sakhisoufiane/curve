@@ -1,0 +1,416 @@
+<div class="visible-xs col-sm-4">
+  <div class="form-group sm-m-b-0">
+    <label class="sm-p-b-0 sm-m-b-0">Field</label>
+  </div>
+</div>
+<div class="col-sm-4">
+  <div data-ng-if="!first || baseFilter" class="analytics-and-label hidden-xs">AND</div>
+  <div class="form-group">
+    <ui-select data-ng-model="filterRow.key" on-select="onSelectField($item, filterRow, blockFieldOptions)">
+      <ui-select-match>
+        <span data-ng-bind="$select.selected.name"></span>
+      </ui-select-match>
+      <ui-select-choices
+        repeat="item.value as item in blockFieldOptions | filter: $select.search | filter: {unused:true} | filter: {forceShowField:true}">
+        <span data-ng-bind="item.name"></span>
+      </ui-select-choices>
+    </ui-select>
+  </div>
+</div>
+<div class="col-sm-6">
+  <div class="visible-xs">
+    <div class="form-group sm-m-b-0">
+      <label class="sm-p-b-0 sm-m-b-0">Value</label>
+    </div>
+  </div>
+
+  <div data-ng-if="!filterRow.key">
+    <div class="form-group">
+      <input type="text" class="form-control" disabled="disabled" />
+    </div>
+  </div>
+
+  <div data-ng-if="plainTextFieldKeys | contains:filterRow.key">
+    <div class="form-group">
+      <input type="text" class="form-control" data-ng-model="filterRow.values" />
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'companies'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values">
+        <ui-select-match allow-clear="true">
+          {{$item.name}}
+        </ui-select-match>
+        <ui-select-choices repeat="company._id as company in companies | filter:$select.search"
+          refresh="searchCompanies()" refresh-delay="500">
+          {{company.name}}
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'contractIds'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values" theme="bootstrap">
+        <ui-select-match>
+          <span style="vertical-align:middle;">{{$item.name}}</span>
+          <span data-ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in contracts | filter:$select.search"
+          refresh="searchContracts($select)" refresh-delay="500">
+          <div>
+            <div class="clear">
+              <div data-ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+
+  <div data-ng-if="filterRow.key === 'calculationTypes'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values" theme="bootstrap">
+        <ui-select-match>
+          <span style="vertical-align:middle;">{{$item}}</span>
+          <span data-ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in calculationTypes | filter:$select.search"
+          refresh="searchContracts($select)" refresh-delay="500">
+          <div>
+            <div class="clear">
+              <div data-ng-bind-html="item | highlight: $select.search"></div>
+            </div>
+          </div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'contractCategories'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values">
+        <ui-select-match allow-clear="true">
+          {{$item}}
+        </ui-select-match>
+        <ui-select-choices repeat="item in (contractCategories | filter: $select.search)">
+          <span data-ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'periodIds'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values" theme="bootstrap">
+        <ui-select-match>{{$item.name}}</ui-select-match>
+        <ui-select-choices repeat="period._id as period in periods | filter:$select.search" refresh="searchPeriods()"
+          refresh-delay="500">
+          {{period.name}}
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'period'">
+    <div class="form-group">
+      <ui-select data-ng-model="filterRow.values">
+        <ui-select-match allow-clear="true">
+          <span data-ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="period._id as period in periods | filter: $select.search">
+          <span data-ng-bind="period.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'salesFileIds'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values" theme="bootstrap">
+        <ui-select-match>{{$item.name}}</ui-select-match>
+        <ui-select-choices repeat="salesFile._id as salesFile in salesFiles | filter:$select.search"
+          refresh="searchSalesFiles()" refresh-delay="500">
+          {{salesFile.name}}
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'catType'">
+    <div class="form-group">
+      <ui-select data-ng-model="filterRow.values">
+        <ui-select-match allow-clear="true">
+          <span data-ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in (catTypes | filter: $select.search)">
+          <span data-ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'targetPeriod'">
+    <div class="form-group">
+      <ui-select data-ng-model="filterRow.values">
+        <ui-select-match allow-clear="true">
+          <span data-ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in (targetPeriods | filter: $select.search)">
+          <span data-ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'foreignId'">
+    <div class="form-group">
+      <ui-select data-ng-model="filterRow.values">
+        <ui-select-match allow-clear="true">
+          <span data-ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in (foreignIds | filter: $select.search)">
+          <span data-ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'distributionChannels'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values" theme="bootstrap">
+        <ui-select-match>{{$item}}</ui-select-match>
+        <ui-select-choices repeat="channel in channels | filter:$select.search track by $index">
+          {{channel}}
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'configurations'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values" theme="bootstrap">
+        <ui-select-match>{{$item}}</ui-select-match>
+        <ui-select-choices repeat="config in configs | filter:$select.search track by $index">
+          {{config}}
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'territories'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values" theme="bootstrap">
+        <ui-select-match>{{$item.name}}</ui-select-match>
+        <ui-select-choices group-by="groupFind"
+          repeat="country.code as country in territories | filter: $select.search track by $index">
+          <span class="country" data-ng-bind="country.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'priceCategories'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values" theme="bootstrap">
+        <ui-select-match>{{$item}}</ui-select-match>
+        <ui-select-choices repeat="price in prices | filter:$select.search track by $index">
+          {{price}}
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'catalogueGroups'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values">
+        <ui-select-match allow-clear="true">
+          {{$item}}
+        </ui-select-match>
+        <ui-select-choices repeat="item in (catalogueGroups | filter: $select.search)">
+          <span data-ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'releaseIds'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values">
+        <ui-select-match>
+          <span style="vertical-align:middle;">{{releaseString($item)}}</span>
+          <span data-ng-bind="$select.selected.title"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in releases | filter: $select.search"
+          refresh="searchReleases($select)" refresh-delay="500">
+          <span data-ng-bind="releaseString(item)"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div data-ng-if="showTracksWithRelease(index)" class="form-group labelPointers">
+      <input name="includeTracksOnReleases" id="includeTracksOnReleases{{blockIdentifier}}" type="checkbox" value="1"
+        data-ng-model="filterBlock.includeTracksWithRelease">
+      <label for="includeTracksOnReleases{{blockIdentifier}}">Include tracks associated with release</label>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'trackIds'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values" theme="bootstrap">
+        <ui-select-match>
+          <span style="vertical-align:middle;">{{trackString($item)}}</span>
+          <span data-ng-bind="$select.selected.title"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in tracks | filter:$select.search" refresh="searchTracks($select)"
+          refresh-delay="500">
+          <span data-ng-bind="trackString(item)"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'workIds'">
+    <div class="form-group">
+      <ui-select multiple data-ng-model="filterRow.values" theme="bootstrap">
+        <ui-select-match>
+          <span style="vertical-align:middle;">{{$item.title}}
+            <!--  - {{$item.identifier}} - {{item.composers}} -->
+          </span>
+          <span data-ng-bind="$select.selected.title"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in works | filter:$select.search" refresh="searchWorks($select)"
+          refresh-delay="500">
+          <span data-ng-bind="item.title"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'saleDate'">
+    <div class="form-group col-sm-6 no-padding">
+      <input type="number" min="1" class="form-control" data-ng-model="filterRow.values">
+    </div>
+    <div class="form-group col-sm-6 no-padding">
+      <ui-select data-ng-model="filterRow.option">
+        <ui-select-match allow-clear="false">
+          <span data-ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in (['Days','Months'] | filter: $select.search)">
+          <span data-ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'transactionDate'">
+    <div class="form-group col-sm-6 no-padding">
+      <input type="number" min="1" class="form-control" data-ng-model="filterRow.values">
+    </div>
+    <div class="form-group col-sm-6 no-padding">
+      <ui-select data-ng-model="filterRow.option">
+        <ui-select-match allow-clear="false">
+          <span data-ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in (['Days','Months'] | filter: $select.search)">
+          <span data-ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'saleDateStart'">
+    <div class="form-group">
+      <div id="datepicker-component" class="form-group input-group date">
+        <input type="text" class="form-control" data-ng-model="filterRow.values" uib-datepicker-popup="{{dateFormat}}"
+          data-ng-model-options="{timezone: 'utc'}" is-open="saleDateStartPopup"
+          data-ng-click="openSaleDateStartPopup()">
+        <span class="input-group-addon" data-ng-click="openSaleDateStartPopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'saleDateEnd'">
+    <div class="form-group">
+      <div id="datepicker-component" class="form-group input-group date">
+        <input type="text" class="form-control" data-ng-model="filterRow.values" uib-datepicker-popup="{{dateFormat}}"
+          data-ng-model-options="{timezone: 'utc'}" is-open="saleDateEndPopup" data-ng-click="openSaleDateEndPopup()">
+        <span class="input-group-addon" data-ng-click="openSaleDateEndPopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'releaseDateStart'">
+    <div class="form-group">
+      <div id="datepicker-component" class="form-group input-group date">
+        <input type="text" class="form-control" data-ng-model="filterRow.values" uib-datepicker-popup="{{dateFormat}}"
+          data-ng-model-options="{timezone: 'utc'}" is-open="releaseDateStartPopup"
+          data-ng-click="openReleaseDateStartPopup()">
+        <span class="input-group-addon" data-ng-click="c()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+    <div data-ng-if="showTracksWithRelease(index)" class="form-group labelPointers">
+      <input name="includeTracksOnReleases" id="includeTracksOnReleases{{blockIdentifier}}" type="checkbox" value="1"
+        data-ng-model="filterBlock.includeTracksWithRelease">
+      <label for="includeTracksOnReleases{{blockIdentifier}}">Include tracks associated with release</label>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'releaseDateEnd'">
+    <div class="form-group">
+      <div id="datepicker-component" class="form-group input-group date">
+        <input type="text" class="form-control" data-ng-model="filterRow.values" uib-datepicker-popup="{{dateFormat}}"
+          data-ng-model-options="{timezone: 'utc'}" is-open="releaseDateEndPopup"
+          data-ng-click="openReleaseDateEndPopup()">
+        <span class="input-group-addon" data-ng-click="openReleaseDateEndPopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+    <div data-ng-if="showTracksWithRelease(index)" class="form-group labelPointers">
+      <input name="includeTracksOnReleases" id="includeTracksOnReleases{{blockIdentifier}}" type="checkbox" value="1"
+        data-ng-model="filterBlock.includeTracksWithRelease">
+      <label for="includeTracksOnReleases{{blockIdentifier}}">Include tracks associated with release</label>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'transactionDateStart'">
+    <div class="form-group">
+      <div id="datepicker-component" class="form-group input-group date">
+        <input type="text" class="form-control" data-ng-model="filterRow.values" uib-datepicker-popup="{{dateFormat}}"
+          data-ng-model-options="{timezone: 'utc'}" is-open="transDateStartPopup"
+          data-ng-click="openTransDateStartPopup()">
+        <span class="input-group-addon" data-ng-click="openTransDateStartPopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div data-ng-if="filterRow.key === 'transactionDateEnd'">
+    <div class="form-group">
+      <div id="datepicker-component" class="form-group input-group date">
+        <input type="text" class="form-control" data-ng-model="filterRow.values" uib-datepicker-popup="{{dateFormat}}"
+          data-ng-model-options="{timezone: 'utc'}" is-open="transDateEndPopup" data-ng-click="openTransDateEndPopup()">
+        <span class="input-group-addon" data-ng-click="openTransDateEndPopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-sm-2">
+  <div data-ng-if="testFilterRowHasDelete()" class="form-group col-xs-12 col-md-2 two-cols-row p-l-0 p-r-0"
+    style="float:none">
+    <button class="btn btn-danger m-xs-t-5 m-l-0 m-r-0" data-ng-click="delete()"><i class="fa fa-trash"></i> <span
+        class="hidden-xs" data-ng-if="!showingComparison">Delete</span></button>
+  </div>
+</div>

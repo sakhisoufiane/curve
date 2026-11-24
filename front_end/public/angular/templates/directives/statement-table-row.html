@@ -1,0 +1,21 @@
+<td ng-if="!noLinks" class="v-align-middle hidden-xs">
+  <input id="statement-select-{{index}}" type="checkbox" class='select-unit' ng-model="statement.selected">
+</td>
+<td class="v-align-middle">
+  <a id="statement-{{index}}" ng-if="!noLinks" href="#/statements/{{ statement._id }}" ng-bind-html="statement.name"></a>
+  <span ng-if="noLinks" ng-bind-html="statement.name"></span>
+  <span class="label label-danger m-l-5" ng-if="statement.periodType === 'Mechanical'">Mechanical</span>
+</td>
+<td class="v-align-middle">
+  <span ng-if="statement.periodType != 'Mechanical'">{{ statement.grossAmount | number: 2 }}</span>
+</td>
+<td class="v-align-middle hidden-xs">{{ statement.netAmount | number: 2 }}</td>
+<td class="v-align-middle hidden-xs" ng-if="clientType != 'Publisher' && !excludeCosts">{{ statement.grossCosts | number: 2 }}</td>
+<td class="v-align-middle hidden-xs" ng-if="clientType != 'Publisher' && !excludeCosts">{{ statement.netCosts | number: 2 }}</td>
+<td class="v-align-middle hidden-xs" ng-if="!excludeCreated">{{ statement.date | date : dateFormat : 'UTC' }}</td>
+<td class="v-align-middle hidden-xs">
+  <span class="label label-danger" tooltips tooltip-template="Unpublished" ng-if="statement.status === 'Pending'">U</span>
+  <span class="label label-success" tooltips tooltip-template="Published" ng-if="statement.status === 'Published'">P</span>
+  <span class="label label-info" tooltips tooltip-template="Sent" ng-if="statement.sendings.length">S</span>
+  <span class="label label-info" ng-if="statement.status !== 'Pending' && statement.status !== 'Published'">{{statement.status}}</span>
+</td>

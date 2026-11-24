@@ -1,0 +1,27 @@
+<td class="v-align-middle hidden-xs" ng-if="!noCheckboxes"><input type="checkbox" class='select-unit'
+		ng-model="payment.selected" ng-if="!noLinks && edit"></td>
+<td class="v-align-middle">
+	<a ng-if="payment.payeeId && payment.payeeId.name" href="#/payments/{{ payment._id }}/edit?paymentGroupId={{group}}"> {{payment.payeeId.name}}</a>
+	<a ng-if="!payment.payeeId || !payment.payeeId.name"> <i>Deleted Payee</i></a>
+</td>
+<td class="v-align-middle">{{payment.name}}</td>
+<td class="v-align-middle">{{payment.currency}}</td>
+<td class="v-align-middle"><span class="semi-bold">{{currencySymbol}}{{payment.amount |
+		number: 2}}</span></td>
+<td class="v-align-middle">
+	<span class="label label-sm label-success" ng-if="payment.status === 'Paid'">
+		{{ payment.status }} <span ng-if="payment.paymentDetails && payment.paymentDetails.paidOffline">Offline</span>
+	</span>
+	<span class="label label-sm label-info" ng-if="payment.status === 'Pending'">{{ payment.status }}</span>
+	<span class="label label-sm label-warning" ng-if="payment.status === 'Missing Info'">{{ payment.status }}</span>
+	<span class="label label-sm label-warning" ng-if="payment.status === 'Processing'">{{ payment.status }}..</span>
+	<span class="label label-sm label-danger" ng-if="payment.status === 'Payment Error'">{{ payment.status }}</span>
+</td>
+<td class="v-align-middle">
+	<span class="label label-sm label-warning" ng-if="payment.warnings && payment.warnings.length"
+	tooltips tooltip-class="wider" tooltip-template="{{payment.warnings.join('</br>')}}"
+	>
+		<i class="fa fa-warning"></i> 
+		{{payment.warnings.length}} Issue(s)
+	</span>
+</td>

@@ -1,0 +1,38 @@
+<div>
+  <div class="col-xs-12 col-md-6">
+    <div class="form-group">
+      <label>{{ label }}</label>
+      <ui-select
+        ng-model="mergedFields[proKey]"
+        ng-disabled="mergedComposer[proKey].length <= 1"
+      >
+        <ui-select-match>
+          <span ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices
+          repeat="item in mergedComposer[proKey] | filter: $select.search track by $index"
+        >
+          <span ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+  <div class="col-xs-12 col-md-6">
+    <div class="form-group">
+      <label>Identifier</label>
+      <ui-select
+        ng-model="mergedFields[proIdentifierKey]"
+        ng-disabled="mergedComposer[proIdentifierKey].length <= 1"
+      >
+        <ui-select-match>
+          <span ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices
+          repeat="item in mergedComposer[proIdentifierKey] | filter: $select.search track by $index"
+        >
+          <span ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+  </div>
+</div>

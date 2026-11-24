@@ -1,0 +1,89 @@
+<div id="CUR-HyePeEDW" class="jumbotron" data-pages="parallax">
+  <div id="CUR-xxFaOntz" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-tJalGJym" class="inner">
+      <ul id="CUR-xMochCfY" class="breadcrumb">
+        <li id="CUR-SXmHbZyx">
+          <a id="CUR-tTvIWwFm" href="/#/territoryGroups">Territory Groups</a>
+        </li>
+        <li id="CUR-vOIaFMsz" ng-show="!territoryGroup._id">
+          <a id="CUR-XnpvXuQT" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-SMjCDRqy" ng-show="territoryGroup._id">
+          <a id="CUR-HndUZkNQ" href="/#/territoryGroups/{{territoryGroup._id}}" class="active">{{territoryGroup.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-UKhVseVP" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+  <div id="CUR-IRxabifL" class="row">
+    <div id="CUR-HrTUgVtN" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-fDqxxksj" ng-if="territoryGroup._id" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+        <i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-CWWIULeZ" class="btn btn-complete" ng-click="save()">
+        <i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-ugwxYGeq" class="row">
+    <div id="CUR-ifVSucUX" class="col-xs-12 col-sm-6">
+      <div id="CUR-KtrAaEJy" class="panel panel-default">
+        <div id="CUR-ugKWcfpA" class="panel-heading">
+          <div id="CUR-ELfzVZoG" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-mVNiedDK" class="panel-body p-t-15">
+          <div id="CUR-MvhRLmgX" class="form-group required">
+            <label id="CUR-BtCLquos">Name</label>
+            <input id="CUR-wTpUgIyi" type="text" class="form-control" ng-model="territoryGroup.name">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-cLKpoMcq" class="col-xs-12 col-lg-12">
+      <div id="CUR-FTxvzOLF" class="panel panel-default">
+        <div id="CUR-SmWQsQPS" class="panel-heading">
+          <div id="CUR-SBehgCss" class="panel-title">
+            Territories
+          </div>
+        </div>
+        <div id="CUR-btTdNqSZ" class="panel-body p-t-15">
+          <territory-checkboxes model="territoryGroup.territories" edit="true"></territory-checkboxes>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-PRbaGXXH" class="row">
+    <div id="CUR-uzIheJIB" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-xuuufiFK" ng-show="territoryGroup.updatedAt">Last Updated on {{ territoryGroup.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-eCcNtaqi" href="javascript:;" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-oINxDoph" class="modal-dialog">
+    <div id="CUR-AwBdckUK" class="modal-content">
+      <div id="CUR-QihtjbMx" class="modal-header clearfix text-left">
+        <button id="CUR-fdeMOcwU" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-adkeWesZ">Delete Territory Group</h5>
+      </div>
+      <div id="CUR-pKWCZuNH" class="modal-body">
+        <div id="CUR-wkcYChbL" class="row">
+          <div id="CUR-ceGnJudn" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this territoryGroup? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-BDYuZMzg" class="row">
+          <div id="CUR-ITqwIhJa" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-ILgMlWfC" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-rpWaZOxX" type="button" class="btn btn-danger m-t-5" ng-click="delete()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<model-history data="territoryGroup.modelHistory"></model-history>

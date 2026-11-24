@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: Fuga v2 API - Common Components
+  description: Shared components for Fuga v2 API documentation
+  version: 1.0.0
+
+components:
+  schemas:
+    FugaPaginationMeta:
+      type: object
+      description: Pagination metadata
+      properties:
+        currentPage:
+          type: integer
+          example: 1
+        totalPages:
+          type: integer
+          example: 10
+        total:
+          type: integer
+          example: 250
+
+  responses:
+    FugaBadRequest:
+      description: Bad request - validation error
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Error response for validation failures
+            properties:
+              code:
+                type: string
+                enum:
+                  - FIELDS_REQUIRED
+                  - INVALID_FIELDS
+                  - INVALID_CLIENT_ID
+                  - INVALID_STATEMENT_ID
+                  - INVALID_FILE
+                  - INVALID_EMAIL
+                  - INVALID_STATUS
+                  - TOTAL_SHARES_LIMIT_EXCEEDED
+                  - TASK_ALREADY_RUNNING
+              message:
+                type: string
+              details:
+                type: object
+                properties:
+                  missingFields:
+                    type: array
+                    items:
+                      type: string
+                  note:
+                    type: string
+
+    FugaForbidden:
+      description: Forbidden - insufficient permissions
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Error response when access is forbidden
+            properties:
+              code:
+                type: string
+                example: "FORBIDDEN"
+              message:
+                type: string
+                example: "Forbidden"
+
+    FugaNotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Error response when resource is not found
+            properties:
+              code:
+                type: string
+                enum:
+                  - CLIENT_NOT_FOUND
+                  - PAYEE_NOT_FOUND
+                  - TRACK_NOT_FOUND
+                  - RELEASE_NOT_FOUND
+                  - PERIOD_NOT_FOUND
+                  - STATEMENT_NOT_FOUND
+                  - STATEMENT_NOT_FOUND_FOR_CLIENT
+                  - SUB_ORG_PAYEE_NOT_FOUND
+                  - BULK_JOB_NOT_FOUND
+              message:
+                type: string
+
+    FugaConflict:
+      description: Conflict - resource already exists
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Error response for conflicts (e.g., duplicate entries)
+            properties:
+              code:
+                type: string
+                example: "DUPLICATE_PAYEE_NAME"
+              message:
+                type: string
+                example: "Payee name already exists"
+
+    FugaInternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Error response for internal server errors
+            properties:
+              code:
+                type: string
+                enum:
+                  - INTERNAL_ERROR
+                  - DUPLICATE_ISRC
+                  - PAYEE_IN_USE
+                  - PAYEE_NOT_FOUND
+                  - STATEMENTS_PUBLISHING_FAILED
+                  - EMAIL_SENDING_FAILED
+                  - TASK_FAILED
+              message:
+                type: string

@@ -1,0 +1,178 @@
+{
+  "mappings": {
+    "dynamic": false,
+    "fields": {
+      "_id": {
+        "type": "objectId"
+      },
+      "aliases": {
+        "analyzer": "lowercaseKeyword",
+        "type": "string"
+      },
+      "alternateTitles": {
+        "fields": {
+          "title": {
+            "analyzer": "lowercaseKeyword",
+            "type": "string"
+          }
+        },
+        "type": "document"
+      },
+      "approvalStatus": [
+        {
+          "analyzer": "lowercaseKeyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "catalogueGroups": [
+        {
+          "analyzer": "lucene.keyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "clientId": [
+        {
+          "analyzer": "lucene.keyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "composer": [
+        {
+          "analyzer": "lowercaseKeyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "createdAt": {
+        "type": "date"
+      },
+      "updatedAt": {
+        "type": "date"
+      },
+      "foreignId": {
+        "analyzer": "lowercaseKeyword",
+        "type": "string"
+      },
+      "identifier": [
+        {
+          "analyzer": "lowercaseKeyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "iswc": {
+        "analyzer": "lowercaseKeyword",
+        "type": "string"
+      },
+      "onHold": {
+        "type": "boolean"
+      },
+      "projectId": {
+        "analyzer": "lowercaseKeyword",
+        "type": "string"
+      },
+      "salesReturnsRights": {
+        "fields": {
+          "contractId": [
+            {
+              "analyzer": "lucene.keyword",
+              "type": "string"
+            },
+            {
+              "type": "token"
+            }
+          ]
+        },
+        "type": "document"
+      },
+      "societyIdentifiers": {
+        "fields": {
+          "identifier": {
+            "analyzer": "lowercaseKeyword",
+            "type": "string"
+          }
+        },
+        "type": "document"
+      },
+      "source": {
+        "fields": {
+          "importId": {
+            "type": "objectId"
+          }
+        },
+        "type": "document"
+      },
+      "title": [
+        {
+          "analyzer": "lowercaseKeyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "totalCollection": {
+        "fields": {
+          "totalOwnedMechanical": {
+            "type": "number"
+          }
+        },
+        "type": "document"
+      },
+      "totalParticipation": {
+        "type": "number"
+      },
+      "tunecode": {
+        "analyzer": "lowercaseKeyword",
+        "type": "string"
+      },
+      "usedComposerIds": [
+        {
+          "analyzer": "lucene.keyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "usedPublisherIds": [
+        {
+          "analyzer": "lucene.keyword",
+          "type": "string"
+        },
+        {
+          "type": "token"
+        }
+      ],
+      "valid": {
+        "type": "boolean"
+      }
+    }
+  },
+  "analyzers": [
+    {
+      "name": "lowercaseKeyword",
+      "tokenFilters": [
+        {
+          "type": "lowercase"
+        }
+      ],
+      "tokenizer": {
+        "type": "keyword"
+      }
+    }
+  ]
+}

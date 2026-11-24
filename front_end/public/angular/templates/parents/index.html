@@ -1,0 +1,63 @@
+<div id="CUR-wiBRswew" class="jumbotron" data-pages="parallax">
+  <div id="CUR-EqJnMmBw" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-RzeaszJD" class="inner">
+      <ul id="CUR-iyLTjrbj" class="breadcrumb">
+        <li id="CUR-idzrHKMa"><a id="CUR-anEENYuK" href="#/parents" class="active">Parents</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-DUcCCEoP" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-lDyJDLLw" class="row m-b-20">
+    <div id="CUR-bhdTEBkz" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-qQljQdIM" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-WBSJuXyu" class="input-group transparent">
+          <input id="CUR-VneMHkSh" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-VtNsJMlU" class="input-group-addon pointer search-button" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-pyfdprVg" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-wxOYBRoh" class="sm-p-l-15 sm-p-r-15">
+        <a id="CUR-mskhSKdw" href="#/parents/new">
+          <button id="CUR-ylNBYRcP" class="btn btn-complete w-xs-100-p m-xs-l-0"><i class="fa fa-plus"></i>&nbsp;Create</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-yMRFwRVi" class="col-sm-12">
+    <h5 id="CUR-klGrXIkb" class="pull-right">Total: {{total? total : 0}}</h5>
+  </div>
+  <div id="CUR-JGZmEQXn" class="row">
+    <div id="CUR-QHxHASYG" class="col-xs-12">
+      <div id="CUR-DlUlrIEd" class="panel panel-default">
+        <div id="CUR-fLfYKoNl" class="panel-heading">
+          <div id="CUR-ITKwEwPg" class="panel-title">
+            Parents
+          </div>
+        </div>
+        <div id="CUR-CJkGDTnC" class="panel-body">
+          <responsive-table headers="headers" data="parents" order-by="filter.orderBy" selectable="true"
+            sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-TkDPAYFw" class="col-sm-12">
+    <div id="CUR-AxvTHQKN" class="pull-right">
+      <span id="CUR-bhDwyIXx" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+      <span id="CUR-PgvtHROw" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+      <a id="CUR-HKcaIBYL" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+    </div>
+  </div>
+  <div id="CUR-RuhVWxaY" class="row">
+    <div id="CUR-vtYCQqXi" class="col-xs-12 text-center">
+      <pagination id="CUR-sTwsrkIp" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>

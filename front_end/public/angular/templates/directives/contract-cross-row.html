@@ -1,0 +1,42 @@
+<div class="row border-bottom-dashed m-b-10 sm-m-b-15 p-r-10 p-l-10">
+  <div class="form-group col-xs-6">
+    <label>When</label>
+    <ui-select ng-model="crossing.condition" ng-if="edit">
+      <ui-select-match>
+        <span ng-bind="$select.selected.name"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="condition.value as condition in conditions | filter: $select.search">
+        <span ng-bind="condition.name"></span>
+      </ui-select-choices>
+    </ui-select>
+    <read-only-field ng-if="!edit" parent-field="crossing" field="'condition'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-6">
+    <label>Process</label>
+    <ui-select ng-model="crossing.process" ng-if="edit">
+      <ui-select-match>
+        <span ng-bind="$select.selected"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="process as process in processes | filter: $select.search">
+        <span ng-bind="process"></span>
+      </ui-select-choices>
+    </ui-select>
+    <read-only-field ng-if="!edit" parent-field="crossing" field="'process'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-6 col-md-6">
+    <label>Contract</label>
+    <contract-select-field accounting-period="accountingPeriod" type="contractType" value="crossing.contractId" edit="edit" populated="crossing.contract" current-contract-id="currentContractId"></contract-select-field>
+  </div>
+  <div class="form-group col-xs-6 col-md-4">
+    <label>%</label>
+    <input type="text" class="form-control" ng-model="crossing.percentage" ng-if="edit">
+    <read-only-field ng-if="!edit" parent-field="crossing" field="'percentage'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-12 col-md-2 two-cols-row">
+    <button ng-show="edit == true" class="btn btn-danger row-button m-xs-t-0" ng-click="delete({ crossing: crossing })"><i class="fa fa-trash"></i></button>
+  </div>
+  <div class="form-group col-xs-12">
+    <input type="checkbox" value="1" ng-model="crossing.whenAutoPaymentTriggered" ng-disabled="!edit">
+    <label>Only run when auto payment is triggered</label>
+  </div>
+</div>

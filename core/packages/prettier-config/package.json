@@ -1,0 +1,9 @@
+{
+  "name": "@curveroyaltysystems/prettier-config",
+  "version": "1.0.0",
+  "private": true,
+  "main": "prettier.config.js",
+  "devDependencies": {
+    "prettier": "3.8.3"
+  }
+}

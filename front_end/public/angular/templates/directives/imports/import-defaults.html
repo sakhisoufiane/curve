@@ -1,0 +1,200 @@
+<div class="container-fluid container-fixed-lg">
+  <div class="row">
+    <div class="col-xs-12 col-md-10 col-md-offset-1">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row m-b-20">
+            <div class="col-xs-12">
+              <ul class="breadcrumb wizard-breadcrumb">
+                <li>
+                  <a ng-click="changePage('Setup')">Setup</a>
+                </li>
+                <li>
+                  <a ng-click="changePage('Files')">Files</a>
+                </li>
+                <li ng-if="import.transferringSystem != 'CWR' && import.transferringSystem != 'Maestro 400 Catalogue Shipment'">
+                  <a ng-click="changePage('Mapping')">Mapping</a>
+                </li>
+                <li>
+                  <a class="active">Defaults</a>
+                </li>
+                <li>Complete</li>
+              </ul>
+            </div>
+          </div>
+          <div class="row" ng-if="import.transferringSystem === 'Counterpoint Recordings'">
+            <div class="col-xs-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    Cost Terms
+                  </div>
+                </div>
+                <div class="panel-body p-t-15">
+                  <div class="panel-body p-t-15">
+                    <import-costs-row ng-repeat="cost in import.defaults.costContractTerms" cost="cost" countries="countries" cost-types="costTypes" index="$index" delete="deleteCostsRow(cost)"></import-costs-row>
+                    <br>
+                    <button class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addCostsRow()">+ Cost Term</button>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    Reserve Terms
+                  </div>
+                </div>
+                <div class="panel-body p-t-15">
+                  <import-reserves-row ng-repeat="reserve in import.defaults.reserveContractTerms" reserve="reserve" index="$index" delete="deleteReservesRow(reserve)" index="$index"></import-reserves-row>
+                  <br>
+                  <button class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addReservesRow()">+ Reserve Period</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" ng-if="import.transferringSystem === 'Counterpoint Publishing'">
+            <div class="col-xs-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    Default Values
+                  </div>
+                </div>
+                <div class="panel-body p-t-15">
+                  <div class="panel-body p-t-15">
+                    <div class="form-group required">
+                      <label>Accounting Period</label>
+                      <ui-select ng-model="import.defaults.accountingPeriod">
+                        <ui-select-match allow-clear="true">
+                          <span ng-bind="$select.selected"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="item in (accountingPeriods | filter: $select.search)">
+                          <span ng-bind="item"></span>
+                        </ui-select-choices>
+                      </ui-select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" ng-if="import.transferringSystem === 'CWR' || import.transferringSystem === 'Catalogue Shipment' || import.transferringSystem === 'Maestro 400 Catalogue Shipment'">
+            <div class="col-xs-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    Use Identifiers as Main Identifier
+                  </div>
+                </div>
+                <div class="panel-body p-t-15">
+                  <p>Use the Identifiers sent in the Catalogue Shipment as your Main Identifier on your works. Only do this if it is your own content, otherwise you should select to auto-create these. These identifiers are used to recognise the same works on the next import from this party regardless.</p>
+                  <div class="form-group">
+                    <input type="checkbox" value="1" ng-model="import.defaults.setMainIdentifier">
+                    <label>Use Identifiers</label>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    Insert to IP Chain
+                  </div>
+                </div>
+                <div class="panel-body p-t-15">
+                  <p>Set your publisher here for it to be added to the top of each claimed IP chain.</p>
+                  <div class="row">
+                    <div class="form-group col-xs-6">
+                      <label>Publisher</label>
+                      <publisher-select-field edit="true" value="import.defaults.claimingParty.publisherId"></publisher-select-field>
+                    </div>
+                    <div class="form-group col-xs-6">
+                      <label>Category</label>
+                      <select class="form-control" ng-model="import.defaults.claimingParty.contractType" ng-options="item as item for item in ['Admin', 'Sub Publisher', 'Original Publisher', 'Acquirer']"></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    Default Contracts
+                  </div>
+                </div>
+                <div class="panel-body p-t-15">
+                  <p>What contracts should be added to all works? For instance if this has come from a publisher you subpublish, adding the contract here will link all works ingested to it.</p>
+                  <div class="form-group required">
+                    <contract-row ng-repeat="contract in import.defaults.contracts track by $index" index="$index" contract="contract" contracts="contracts" delete="deleteContract(contract)" edit="true"></contract-row>
+                  </div>
+                  <button class="btn btn-complete" ng-click="addContract()">+ Contract</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    Catalogue Groups
+                  </div>
+                </div>
+                <div class="panel-body p-t-15">
+                  <p>This will add the below catalogue groups to each of the ingested works.</p>
+                  <div class="form-group required">
+                    <label>Catalogue Groups</label>
+                    <ui-select multiple ng-model="import.defaults.catalogueGroups" close-on-select="true">
+                      <ui-select-match>{{$item}}</ui-select-match>
+                      <ui-select-choices repeat="group in catalogueGroups | filter:$select.search">
+                        {{group}}
+                      </ui-select-choices>
+                    </ui-select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12" ng-if="import.transferringSystem === 'CWR' || import.transferringSystem === 'Maestro 400 Catalogue Shipment'">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    Ingestion Territory - Leave blank to include All Territories and their IP Chains
+                  </div>
+                </div>
+                <div class="panel-body p-t-15">
+                  <p>Which territory information should we ingest from the CWR file? If unsure, set this to your home territory.</p>
+                  <ui-select ng-model="import.defaults.ingestionTerritory">
+                    <ui-select-match allow-clear="true">
+                      <span ng-bind="$select.selected.name"></span>
+                    </ui-select-match>
+                    <ui-select-choices group-by="groupFind"
+                      repeat="territory.code as territory in simpleCountries | filter: $select.search">
+                      <span class="country" ng-bind="territory.name"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12" ng-if="import.transferringSystem === 'CWR' || import.transferringSystem === 'Maestro 400 Catalogue Shipment'">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    Territories
+                  </div>
+                </div>
+                <div class="panel-body p-t-15">
+                  <p>Which territories will you assert rights to on each of the attached works? This sets the territories against the work, whilst the territories defined in the CWR will assign the specific territories to the IP chains.</p>
+                  <territory-checkboxes model="import.defaults.territories" edit="true" hide-non-cisac="true"></territory-checkboxes>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row m-t-20">
+            <div class="col-xs-12">
+              <a ng-if="import.status != 'Complete'" ng-click="ingest()" class="btn btn-complete pull-right">Ingest</a>
+              <a ng-click="changePage('Mapping')" class="btn btn-default pull-right">Back</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="row catalogue-mapping-wrapper">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <h4>Financial File</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-error" ng-if="salesFile.invalidFields.customAdditionalFile">
+          The Financial File for this Sales File is missing. Please upload it below.
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Financial File <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-apple-sales-files/"></documentation></label>  
+      <input type="file" class="m-t-10" ngf-select ngf-allow-dir="false" ng-model="files[0]">
+    </div>
+  </div>
+</div>

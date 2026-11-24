@@ -1,0 +1,67 @@
+<div id="CUR-fjBANQAP" class="jumbotron" data-pages="parallax">
+  <div id="CUR-cDpTMnjS" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-HrgiXpkv" class="inner">
+      <ul id="CUR-RDVKbPTE" class="breadcrumb">
+        <li id="CUR-gSgczIJY"><a id="CUR-JIcIBIiR" href="/#/accountingPeriods">Accounting Periods</a></li>
+        <li id="CUR-ulssERnu" ng-show="!accountingPeriod._id"><a id="CUR-aKXYhtNg" href="" class="active">Create</a></li>
+        <li id="CUR-DtWAqIeN" ng-show="accountingPeriod._id"><a id="CUR-JwTFMNGV" href="/#/accountingPeriods/{{accountingPeriod._id}}/edit" class="active">{{accountingPeriod.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Main Container -->
+<accounting-period-new
+  ng-if="accountingPeriod.status != 'Processing' && accountingPeriod.status != 'Errored' && (!accountingPeriod.setupStage || accountingPeriod.setupStage == 'Setup')">
+</accounting-period-new>
+<accounting-period-included-sales
+  ng-if="accountingPeriod.status != 'Processing' && accountingPeriod.status != 'Errored' && accountingPeriod.setupStage == 'Included Sales'">
+</accounting-period-included-sales>
+
+<!-- Loading Page -->
+<div id="CUR-lNcvEYVI" class="container-fluid container-fixed-lg" ng-if="accountingPeriod.status == 'Processing'">
+  <div id="CUR-NnYMCbcP" class="row">
+    <div id="CUR-opJZnEGY" class="col-xs-12 col-sm-6 col-sm-offset-3">
+      <div id="CUR-JpmxxsUg" class="panel panel-default text-center">
+        <div id="CUR-qIdAZWaL" class="panel-body p-t-15">
+          <h3 id="CUR-EfoTpVkx">Period is {{accountingPeriod.status}}...</h3>
+
+          <div id="CUR-PYLtgbEQ" class="row">
+            <div id="CUR-UNnvaMgi" class="col-xs-10 col-xs-offset-1 progress-checklist text-left">
+              <ul id="CUR-byuhkTJV">
+                <li id="CUR-EWgUAcMb" ng-repeat="name in processingStatuses track by $index">
+                  <period-processing-status-element name="name" index="$index" current-status="currentStatusIndex"
+                    errored-status="erroredStatusIndex"></period-processing-status-element>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div id="CUR-gIgUtHan" class="row" ng-if="accountingPeriod.calculationStatus == 'Calculating Sales' || accountingPeriod.calculationStatus == 'Creating Statement Files'">
+            <div id="CUR-aQCevrnX" class="col-xs-10 col-xs-offset-1">
+              {{accountingPeriod.completedCatalogueItems}} out of {{totalCatalogueItems}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Error Page -->
+<div id="CUR-WEcfYTTJ" class="container-fluid container-fixed-lg" ng-if="accountingPeriod.status == 'Errored'">
+  <div id="CUR-YeTCwaUt" class="row">
+    <div id="CUR-ZcKyYDke" class="col-xs-12 col-sm-6 col-sm-offset-3">
+      <div id="CUR-cwZTvelm" class="panel panel-default text-center">
+        <div id="CUR-xNqRjpMo" class="panel-body p-t-15">
+          <h3 id="CUR-Ndtdrehq">Period has Errored</h3>
+
+          <div id="CUR-kabgPTGe" class="row">
+            <div id="CUR-wkQXTuld" class="col-xs-10 col-xs-offset-1 progress-checklist text-left">
+              <p>{{accountingPeriod.calculationError}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

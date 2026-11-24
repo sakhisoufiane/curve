@@ -1,0 +1,21 @@
+{
+  "fileSource": {
+    "type": "URL",
+    "url": "https://www.freetxtfilesfordownload.com/hello.txt"
+  },
+  "fileType": {
+    "type": "txt",
+    "startingRow": 1,
+    "startingColumn": 2,
+    "encoding": "UTF-8",
+    "delimiter": ";",
+    "indexSeparated": true
+  },
+  "defaultValues": [
+    {
+      "location": "J2",
+      "field": "Some Field",
+      "dataType": "String"
+    }
+  ]
+}

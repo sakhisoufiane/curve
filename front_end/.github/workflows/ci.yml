@@ -1,0 +1,23 @@
+name: ci
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+          cache: "npm"
+      - run: npm config set '//registry.npmjs.org/:_authToken' "${{secrets.NPM_PUBLISH_TOKEN}}"
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build

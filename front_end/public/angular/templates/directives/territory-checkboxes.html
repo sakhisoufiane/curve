@@ -1,0 +1,170 @@
+<div class="territories">
+  <div ng-if="hideNonCisac && !hideCisacText">
+    This list shows only
+    <a
+      href="https://members.cisac.org/CisacPortal/documentPack20.do?method=detail&id=21"
+      target="_blank"
+      >CISAC approved territories</a
+    >.
+  </div>
+  <div class="row">
+    <div
+      class="col-md-3 col-md-offset-9 col-12 text-right"
+      ng-hide="hideTerritoryGroup"
+    >
+      <div>
+        <select
+          class="form-control"
+          ng-model="territoryGroup"
+          ng-options="item as item.name for item in territoryGroups"
+          ng-change="getTerritoriesFromGroup()"
+          ng-disabled="edit != true"
+        >
+          <option value="" disabled selected>Select Territory Group</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="form-group world-group" ng-hide="hideWorld">
+    <div>
+      <label>
+        <input
+          ng-disabled="edit != true"
+          type="checkbox"
+          ng-model="world"
+          ng-change="selectOrDeselectWorld()"
+        /><b>World</b>
+      </label>
+    </div>
+  </div>
+  <div class="continent">
+    <div class="form-group continent-group">
+      <div>
+        <label>
+          <input
+            ng-disabled="edit != true"
+            type="checkbox"
+            ng-model="continents.africa"
+            ng-change="selectOrDeselectContinent('Africa', continents.africa)"
+          /><b>Africa</b>
+        </label>
+      </div>
+    </div>
+    <div ng-repeat="country in territories.Africa">
+      <div>
+        <label>
+          <input
+            ng-disabled="edit != true"
+            type="checkbox"
+            ng-model="country.selected"
+            ng-change="setContinentAll('africa', territories.Africa)"
+          />{{country.name}}
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="continent">
+    <div class="form-group continent-group">
+      <div>
+        <label>
+          <input
+            ng-disabled="edit != true"
+            type="checkbox"
+            ng-model="continents.americas"
+            ng-change="selectOrDeselectContinent('Americas', continents.americas)"
+          /><b>Americas</b>
+        </label>
+      </div>
+    </div>
+    <div ng-repeat="country in territories.Americas">
+      <div>
+        <label>
+          <input
+            ng-disabled="edit != true"
+            type="checkbox"
+            ng-model="country.selected"
+            ng-change="setContinentAll('americas', territories.Americas)"
+          />{{country.name}}
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="continent">
+    <div class="form-group continent-group">
+      <div>
+        <label>
+          <input
+            ng-disabled="edit != true"
+            type="checkbox"
+            ng-model="continents.asia"
+            ng-change="selectOrDeselectContinent('Asia', continents.asia)"
+          /><b>Asia</b>
+        </label>
+      </div>
+    </div>
+    <div ng-repeat="country in territories.Asia">
+      <div>
+        <label>
+          <input
+            ng-disabled="edit != true"
+            type="checkbox"
+            ng-model="country.selected"
+            ng-change="setContinentAll('asia', territories.Asia)"
+          />{{country.name}}
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="continent">
+    <div class="form-group continent-group">
+      <div>
+        <label>
+          <input
+            ng-disabled="edit != true"
+            type="checkbox"
+            ng-model="continents.europe"
+            ng-change="selectOrDeselectContinent('Europe', continents.europe)"
+          /><b>Europe</b>
+        </label>
+      </div>
+    </div>
+    <div ng-repeat="country in territories.Europe">
+      <div>
+        <label>
+          <input
+            ng-disabled="edit != true"
+            type="checkbox"
+            ng-model="country.selected"
+            ng-change="setContinentAll('europe', territories.Europe)"
+          />{{country.name}}
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="continent">
+    <div class="form-group continent-group">
+      <div>
+        <label>
+          <input
+            ng-disabled="edit != true"
+            type="checkbox"
+            ng-model="continents.oceania"
+            ng-change="selectOrDeselectContinent('Oceania', continents.oceania)"
+          /><b>Oceania</b>
+        </label>
+      </div>
+    </div>
+    <div ng-repeat="country in territories.Oceania">
+      <div>
+        <label>
+          <input
+            ng-disabled="edit != true"
+            type="checkbox"
+            ng-model="country.selected"
+            ng-change="setContinentAll('oceania', territories.Oceania)"
+          />{{country.name}}
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

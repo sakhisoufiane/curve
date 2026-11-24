@@ -1,0 +1,267 @@
+<div id="CUR-YpvOGfBL" class="jumbotron" data-pages="parallax">
+  <div id="CUR-wfkfWyrQ" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-tFynYZvf" class="inner">
+      <ul id="CUR-CNQUmUFl" class="breadcrumb">
+        <li id="CUR-LMTMZmvy"><a id="CUR-ZSOjMzJH" href="/#/costs">Costs</a></li>
+        <li id="CUR-IHkHUuqP" ng-show="!cost._id"><a id="CUR-tBgLifFL" href="" class="active">Create</a></li>
+        <li id="CUR-jsxtnmbe" ng-show="cost._id"><a id="CUR-ntSvkLaa" href="/#/costs/{{cost._id}}/edit" class="active">{{cost.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-NVneXxYB" class="container-fluid container-fixed-lg sm-p-l-5 sm-p-r-5">
+
+  <div id="CUR-LiKzOFgK" ng-if="warningMessages.length > 0" class="alert alert-warning">
+    <p><b>The following warnings have been raised, to ensure you report this cost as expected -</b></p>
+    <ul id="CUR-UWQVQcpI" ng-repeat="message in warningMessages">
+      <li id="CUR-AgsfRQnG">
+        {{message}}
+      </li>
+    </ul>
+  </div>
+
+  <div id="CUR-wUWKZqLG" class="row">
+    <div id="CUR-mxtzQHFD" class="col-xs-12 text-right two-cols-row">
+      <button id="CUR-cpHMoyZc" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" ng-if="!cost.archived && cost._id" ng-show="rights.sales == 'Edit'"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-aTEKMBdg" class="btn btn-info hidden-xs" ng-click="toggleArchived()" ng-if="!cost.archived && cost._id" ng-show="rights.sales == 'Edit'"><i class="fa fa-lock"></i> Archive</button>
+      <button id="CUR-DfkTWCsQ" class="btn btn-info hidden-xs" ng-click="toggleArchived()" ng-if="cost.archived" ng-show="rights.sales == 'Edit'"><i class="fa fa-unlock"></i>
+        Unarchive</button>
+      <button id="CUR-MDvLgQMI" class="btn btn-warning" ng-show="rights.sales == 'Edit'" ng-click="copy()" ng-if="cost._id"><i class="fa fa-copy"></i> Copy</button>
+      <button id="CUR-xMDvxoWP" class="btn btn-complete" ng-click="save()" ng-if="!cost.archived" ng-show="rights.sales == 'Edit'">
+        <i class="fa fa-check"></i> Save
+      </button>
+    </div>
+  </div>
+  <div id="CUR-TMhTkbDn" ng-show="deletionError" class="alert alert-danger">
+    <p>This cost can not be deleted as it is associated with a locked statement:</p>
+    <p id="CUR-TSPMYYrX" ng-repeat="error in deletionError">
+      <a id="CUR-hOKRYvam" ng-if="error.link" href="#/{{error.link}}">{{error.name}}</a>
+      <span id="CUR-CeLzUyzy" ng-if="error.message">{{error.message}}</a>
+    </p>
+  </div>
+  <div id="CUR-IAttZMsm" class="row">
+    <div id="CUR-TYRLquMG" class="col-xs-12 col-sm-6">
+      <div id="CUR-IiDkCnvQ" class="panel panel-default">
+        <div id="CUR-miHXLtGI" class="panel-heading">
+          <div id="CUR-gAgHFXov" class="panel-title">
+            Overview <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-costs/#createacost"></documentation>
+          </div>
+        </div>
+        <div id="CUR-WexOnfvw" class="panel-body p-t-15">
+          <div id="CUR-wWVBeZiI" class="form-group required">
+            <label id="CUR-PKbQAVHq">Name</label>
+            <input id="CUR-fapHAIUM" type="text" class="form-control" ng-model="cost.name" ng-disabled="rights.sales != 'Edit'">
+          </div>
+          <div id="CUR-WjFAgehC" class="form-group required">
+            <label id="CUR-IdjsVIQQ">Amount</label>
+            <input id="CUR-QQbgsijo" type="number" class="form-control" ng-model="cost.amount" ng-disabled="rights.sales != 'Edit'">
+          </div>
+          <div id="CUR-qfNLnisdw" class="form-group required" ng-if="features && features.multicurrency">
+            <label>Currency</label>
+            <ui-select ng-model="cost.currency" ng-disabled="rights.sales != 'Edit'">
+              <ui-select-match allow-clear="false">
+                <span ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="currency as currency in clientCurrencies | orderBy: 'code' | filter: $select.search">
+                <span ng-bind-html="currency"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-qfNLniUg" class="form-group required">
+            <label id="CUR-rQcXsZkB">Date</label>
+            <div id="datepicker-component" class="form-group input-group date">
+              <input id="CUR-hvMRPWrI"
+                type="text"
+                class="form-control"
+                ng-model="cost.date"
+                uib-datepicker-popup="{{dateFormat}}"
+                ng-model-options="{timezone: 'utc'}"
+                is-open="datePopup"
+                ng-click="openDatePopup()"
+                ng-disabled="rights.sales != 'Edit'"
+                readonly>
+              <span id="CUR-cWMfhnuO" class="input-group-addon" ng-click="openDatePopup()">
+                <i class="fa fa-calendar"></i>
+              </span>
+            </div>
+            <div id="CUR-byDkVIRe" class="form-group required">
+              <label id="CUR-igslSkzc">Type</label>
+              <ui-select ng-model="cost.type" ng-disabled="rights.sales != 'Edit'">
+                <ui-select-match>
+                  <span id="CUR-IgOTAyOp" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in costTypes | filter: $select.search">
+                  <span id="CUR-olXevMGv" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-ZBPyVsQy" class="form-group">
+              <label id="CUR-PLwTdZoJ">Territory</label>
+              <ui-select ng-model="cost.territory" ng-disabled="rights.sales != 'Edit'">
+                <ui-select-match>
+                  <span id="CUR-UcUcyYTp" ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices group-by="groupFind" repeat="territory.code as territory in territories | filter: $select.search">
+                  <span id="CUR-PfcOzsJt" class="country" ng-bind="territory.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-JFIPOKeP" class="form-group required">
+              <label id="CUR-DJgZjiNJ">Invoice No.</label>
+              <input id="CUR-vMuHEYmk" type="text" class="form-control" ng-model="cost.invoiceNo" required ng-disabled="rights.sales != 'Edit'">
+            </div>
+            <div id="CUR-TCxYzNqA" class="form-group required">
+              <label id="CUR-eBgkVNhG">Target Period</label>
+              <input id="CUR-jrgAFiXF" type="text" class="form-control" ng-model="cost.targetPeriod" required ng-disabled="rights.sales != 'Edit'">
+            </div>
+            <div id="CUR-PhvzleUq" class="form-group required">
+              <label id="CUR-viFwiPti">Description</label>
+              <input id="CUR-dPyhOWpT" type="text" class="form-control" ng-model="cost.description" required ng-disabled="rights.sales != 'Edit'">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-zHYxbzeU" class="col-xs-12 col-sm-6">
+      <div id="CUR-QJIAWiuR" class="panel panel-default">
+        <div id="CUR-uGolVlIr" class="panel-heading">
+          <div id="CUR-wuFoOJlb" class="panel-title">
+            Files <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-costs/#file"></documentation>
+          </div>
+        </div>
+        <div id="CUR-xePZuldX" class="panel-body" ng-if="!cost._id">
+          <p>Please save the cost before uploading files</p>
+        </div>
+        <div id="CUR-unlgsMtt" class="panel-body p-t-15" ng-if="cost._id">
+          <loading></loading>
+          <div id="CUR-vZTccqQy" class="required">
+            <button id="CUR-EVAmXWAU" type="file" 
+              class="btn btn-complete w-xs-100-p m-xs-l-0" 
+              ngf-select
+              ngf-pattern="'{{validFileTypes.join(',')}}'"
+              accept="{{validFileTypes.join(',')}}"
+              ngf-allow-dir="false"
+              ngf-change="uploadFiles($files)"
+              multiple="multiple"
+              ng-model="file">
+            Select Files</button>
+          </div>
+          <div id="CUR-TsUhTGAW" class="row" ng-if="cost.files.length > 0">
+            <div id="CUR-jjSLYRiF" class="col-xs-12">
+              <div id="CUR-vdjOWqqT" class="table-responsive">
+                <table id="CUR-czRzcEvb" class="table table-hover table-condensed dataTable no-footer">
+                  <thead>
+                  <tr id="CUR-aYFpQLNL">
+                    <th class="col-xs-12 col-sm-12">File Name</th>
+                    <th class="col-xs-12 col-sm-12">&nbsp;</th>
+                  </tr>
+                  </thead>
+                  <tbody id="CUR-vvAMcngK">
+                  <tr id="CUR-feynJjYj" ng-repeat="f in files track by $index">
+                    <td id="CUR-lrglSgUB">
+                      <a id="CUR-bFdrnkfz" href="{{f.publicLink}}" target="_blank">{{f.key.substring(f.key.lastIndexOf('/')+1)}}</a>
+                    </td>
+                    <td id="CUR-oWgZnRFP" class="text-right">
+                      <button id="CUR-dgGFzPrE" class="btn btn-danger m-b-0 p-t-0 p-b-0 p-l-10 p-r-10" data-toggle="modal" data-target="#deleteFileModal" data-file-key="{{f.key}}" ng-click="deleteFileConfirm(f.key)" aria-hidden="false"><i class="fa fa-trash"></i></button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-lxtUFilx" class="panel panel-default">
+        <div id="CUR-OvvRCrKg" class="panel-heading">
+          <div id="CUR-OguTrmtn" class="panel-title">
+            Mapping <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-costs/#costmapping"></documentation>
+          </div>
+        </div>
+        <div id="CUR-owrwVJqc" class="panel-body">
+          <form id="CUR-uTeJQaKa" role="form">
+            <div id="CUR-fFOAReIi" class="form-group">
+              <label id="CUR-uOWIwEZU">Release</label>
+              <release-select-field edit="rights.catalogue === 'Edit'" value="cost.releaseId" allow-clear="true"></release-select-field>
+            </div>
+            <div id="CUR-QykPmzAT" class="form-group required">
+              <label id="CUR-NBdQWgOD">Track</label>
+              <track-select-field edit="rights.catalogue === 'Edit'" value="cost.trackId" allow-clear="true"></track-select-field>
+            </div>
+            <div id="CUR-IWGHhiMO" class="form-group required">
+              <label id="CUR-rWsVnpra">Contract</label>
+              <contract-select-field edit="rights.catalogue === 'Edit'" value="cost.contractId" populated="contract.contract" allow-clear="true"></contract-select-field>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-siMgwfej" class="row">
+    <div id="CUR-ttbmgoWQ" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-YyjRyKJr" ng-show="cost.updatedAt">Last Updated on {{ cost.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-hMJBBpHC" href="javascript:;" ng-if="cost._id" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+<!--<div id="CUR-juGHGusg" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5">
+    <div id="CUR-vKIIyMgS" class="row">
+      <div id="CUR-wvMHpHCO" class="col-sm-12 text-right">
+        <h6>Created By: {{cost.createdBy.email}}</h6>
+        <h6>Last Modified By: {{cost.lastModifiedBy.email}}</h6>
+      </div>
+    </div>
+  </div>-->
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-HuBZRvbX" class="modal-dialog">
+    <div id="CUR-qGvREggM" class="modal-content">
+      <div id="CUR-yEnNtYie" class="modal-header clearfix text-left">
+        <button id="CUR-SfItomYO" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-FWSXjCNJ">Delete Cost</h5>
+      </div>
+      <div id="CUR-DbpqfDSA" class="modal-body">
+        <div id="CUR-OjMOLPzl" class="row">
+          <div id="CUR-oPSpkFeQ" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this cost? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-wnsgrTuB" class="row">
+          <div id="CUR-xPORPlpK" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-LzuTQEol" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-zqfkAkIc" type="button" class="btn btn-danger m-t-5" ng-click="delete()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade stick-up" id="deleteFileModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-VfcWfmDt" class="modal-dialog">
+    <div id="CUR-QAuCbJJS" class="modal-content">
+      <div id="CUR-RjxqULBG" class="modal-header clearfix text-left">
+        <button id="CUR-gekUBnLG" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-zUxkfVxF">Delete File</h5>
+      </div>
+      <div id="CUR-ADeEeqMy" class="modal-body">
+        <div id="CUR-OxqVMtxO" class="row">
+          <div id="CUR-UVVjaBeL" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this file? It cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-xBaQfBpH" class="row">
+          <div id="CUR-ocGyvrAu" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-jUgtJphG" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-wuMYyjTv" type="button" class="btn btn-danger m-t-5" ng-click="deleteFile()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<model-history data="cost.modelHistory"></model-history>

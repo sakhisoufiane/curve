@@ -1,0 +1,630 @@
+openapi: 3.1.0
+info:
+  title: Delivery Partners API
+  version: 1.10.0
+paths:
+  /deliveryPartners:
+    get:
+      tags:
+        - Delivery Partners
+      summary: Retrieve all delivery partners
+      description: Returns a list of all delivery partners. Requires read access to catalogue.
+      responses:
+        '200':
+          description: Successfully retrieved delivery partners
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deliveryPartners:
+                    type: array
+                    items:
+                      type: object
+                      $ref: '#/components/schemas/DeliveryPartner'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: number
+                        example: 1
+                      totalPages:
+                        type: number
+                        example: 5
+                      totalCount:
+                        type: number
+                        example: 100
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+    post:
+      tags:
+        - Delivery Partners
+      summary: Create a new delivery partner
+      description: Creates a new delivery partner. Requires write access to catalogue.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryPartnerInput'
+      responses:
+        '200':
+          description: Successfully created delivery partner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryPartner'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unfortunately we couldn't complete your request. Please try again, or contact the support team.
+  /deliveryPartners/list:
+    get:
+      tags:
+        - Delivery Partners
+      summary: Retrieve a simplified list of delivery partners
+      description: Returns a simplified list of delivery partners. Requires read access to catalogue.
+      responses:
+        '200':
+          description: Successfully retrieved delivery partners list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/components/schemas/DeliveryPartner'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+  /deliveryPartners/{id}:
+    get:
+      tags:
+        - Delivery Partners
+      summary: Retrieve a specific delivery partner
+      description: Returns details for a specific delivery partner by ID. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery Partner ID
+      responses:
+        '200':
+          description: Successfully retrieved delivery partner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryPartner'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: Delivery Partner not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find DeliveryPartner with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+    put:
+      tags:
+        - Delivery Partners
+      summary: Update a delivery partner
+      description: Updates a delivery partner's details. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery Partner ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryPartnerInput'
+      responses:
+        '200':
+          description: Successfully updated delivery partner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryPartner'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: Delivery Partner not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find DeliveryPartner with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unfortunately we couldn't complete your request. Please try again, or contact the support team.
+    delete:
+      tags:
+        - Delivery Partners
+      summary: Delete a delivery partner
+      description: Deletes a delivery partner. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery Partner ID
+      responses:
+        '200':
+          description: Successfully deleted delivery partner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryPartner'
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: Delivery Partner not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find DeliveryPartner with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+  /deliveryPartners/{id}/history:
+    get:
+      tags:
+        - Delivery Partners
+      summary: Retrieve history for a delivery partner
+      description: Returns the modification history for a specific delivery partner. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery Partner ID
+      responses:
+        '200':
+          description: Successfully retrieved delivery partner history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelHistory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: date-time
+                        clientId:
+                          type: string
+                        author:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            email:
+                              type: string
+                        ops:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              op:
+                                type: string
+                                example: replace
+                              path:
+                                type: string
+                                example: /name
+                              value:
+                                type: string
+                                example: New Delivery Partner Name
+                                nullable: true
+                              originalValue:
+                                type: string
+                                example: Old Delivery Partner Name
+                                nullable: true
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: Delivery Partner not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find DeliveryPartner with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal error, please try again
+  /deliveryPartners/{id}/ftp_key_file:
+    post:
+      tags:
+        - Delivery Partners
+      summary: Upload FTP key file for a delivery partner
+      description: Uploads an FTP key file for a delivery partner. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery Partner ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: FTP key file to upload
+      responses:
+        '200':
+          description: Successfully uploaded FTP key file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: File upload done
+                  deliveryPartner:
+                    $ref: '#/components/schemas/DeliveryPartner'
+        '400':
+          description: Bad request, missing file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Requires a file to be uploaded
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: Delivery Partner not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find Delivery Partner with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unfortunately we couldn't complete your request. Please try again, or contact the support team.
+    delete:
+      tags:
+        - Delivery Partners
+      summary: Delete FTP key file for a delivery partner
+      description: Deletes the FTP key file for a delivery partner. Requires write access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Delivery Partner ID
+      responses:
+        '200':
+          description: Successfully deleted FTP key file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: File delete done
+                  deletedKey:
+                    type: string
+        '403':
+          description: Forbidden, the user does not have sufficient rights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Forbidden
+        '404':
+          description: Delivery Partner not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not find Delivery Partner with ID 123456789012
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unfortunately we couldn't complete your request. Please try again, or contact the support team.
+components:
+  schemas:
+    DeliveryPartner:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+          required: true
+        territory:
+          type: string
+        receivingParty:
+          type: string
+        splitElection:
+          type: boolean
+        splitElectionPRO:
+          type: string
+        ftpHost:
+          type: string
+        ftpPort:
+          type: string
+        ftpUsername:
+          type: string
+        ftpPassword:
+          type: string
+        ftpRootDir:
+          type: string
+        ftpFileKey:
+          type: string
+          description: The name of the FTP key file, if applicable
+        notificationEmail:
+          type: string
+          format: email
+        type:
+          type: string
+          enum:
+            - FTP
+            - SFTP
+            - FTPS
+            - Email
+            - Export Only
+          required: true
+        insertionTerritory: 
+          type: array
+          items:
+            type: string
+        insertion:
+          type: object
+          properties:
+            publisherId:
+              type: string
+            category:
+              type: string
+        cwrVersion:
+          type: string
+          enum:
+            - 2.1
+            - 2.2
+        subPartners:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    DeliveryPartnerInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          required: true
+        territory:
+          type: string
+        receivingParty:
+          type: string
+        splitElection:
+          type: boolean
+        splitElectionPRO:
+          type: string
+        ftpHost:
+          type: string
+        ftpPort:
+          type: string
+        ftpUsername:
+          type: string
+        ftpPassword:
+          type: string
+        ftpRootDir:
+          type: string
+        notificationEmail:
+          type: string
+          format: email
+        type:
+          type: string
+          enum:
+            - FTP
+            - SFTP
+            - FTPS
+            - Email
+            - Export Only
+          required: true
+        insertionTerritory:
+          type: array
+          items:
+            type: string
+        insertion:
+          type: object
+          properties:
+            publisherId:
+              type: string
+            category:
+              type: string
+        cwrVersion:
+          type: string
+          enum:
+            - 2.1
+            - 2.2
+        subPartners:
+          type: array
+          items:
+            type: string

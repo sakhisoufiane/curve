@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row mechanical-license-row mechanical-license-row-flex">
+            <div
+                ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-4', false: 'form-group col-xs-6 col-sm-4 col-md-4' }[showCapOverrideField == true]">
+                <label ng-if="!index" class="block">Composer <i class="fa fa-question-circle" tooltips
+                        tooltip-class="wider"
+                        tooltip-template="The composer field is for reference, but is not required to be filled in. You can just enter the contract to the right, which manages the calculation and payment of the mechanical."></i></label>
+                <composer-select-field edit="edit && singleEditmode === 'editing'" set-controlled="onSetComposer"
+                    value="license.composerId" populated="license.composer">
+                </composer-select-field>
+            </div>
+            <div
+                ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-4', false: 'form-group col-xs-6 col-sm-4 col-md-4' }[showCapOverrideField == true]">
+                <label ng-if="!index" class="block">Publisher <i class="fa fa-question-circle" tooltips
+                        tooltip-class="wider"
+                        tooltip-template="The publisher field is for reference, but is not required to be filled in. You can just enter the contract to the right, which manages the calculation and payment of the mechanical."></i></label>
+                <publisher-select-field edit="edit && singleEditmode === 'editing'" set-controlled="onSetPublisher"
+                    value="license.publisherId" populated="license.publisher">
+                </publisher-select-field>
+            </div>
+            <div
+                ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-4', false: 'form-group col-xs-6 col-sm-4 col-md-4' }[showCapOverrideField == true]">
+                <label ng-if="!index" class="block">Mechanical Contract</label>
+                <contract-select-field edit="edit && singleEditmode === 'editing'" type="'Mechanical'"
+                    value="license.contractId" edit="edit" populated="license.contract">
+                </contract-select-field>
+            </div>
+            <div
+                ng-class="{ true: 'form-group col-xs-3 col-sm-2 col-md-2', false: 'form-group col-xs-3 col-sm-1 col-md-1' }[showCapOverrideField == true]">
+                <label ng-if="!index" class="block">Cont. <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Used with the Controlled Composition Clause function to identify which tracks are controlled"></i></label>
+                <input style="position: absolute; bottom: 22px; left: 26px;" ng-if="edit && singleEditmode === 'editing'" type="checkbox" value="1" ng-model="license.controlled">
+                <read-only-field ng-if="!edit || singleEditmode != 'editing'" parent-field="license" field="'controlled'">
+                </read-only-field>
+            </div>
+            <div
+                ng-class="{ true: 'form-group col-xs-6 col-sm-5 col-md-2', false: 'form-group col-xs-6 col-sm-4 col-md-1' }[showCapOverrideField == true]">
+                <label ng-if="!index" class="block">License #</label>
+                <input ng-if="edit && singleEditmode === 'editing'" type="text" class="form-control"
+                    ng-model="license.licenseNo">
+                <read-only-field ng-if="!edit || singleEditmode != 'editing'" parent-field="license"
+                    field="'licenseNo'"></read-only-field>
+            </div>
+            <div
+                ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-2', false: 'form-group col-xs-6 col-sm-4 col-md-1' }[showCapOverrideField == true]">
+                <label ng-if="!index" class="block">Rate % <i class="fa fa-question-circle" tooltips
+                        tooltip-class="wider"
+                        tooltip-template="What rate should be paid through to the mechanical license? The license will be paid based on a combination of this rate, the publisher's share, and the rate stated within the mechanical license"></i></label>
+                <input ng-if="edit && singleEditmode === 'editing'" type="text" class="form-control"
+                    ng-model="license.rate">
+                <read-only-field ng-if="!edit || singleEditmode != 'editing'" parent-field="license" field="'rate'">
+                </read-only-field>
+            </div>
+            <div
+                ng-class="{ true: 'form-group col-xs-6 col-sm-4 col-md-2', false: 'form-group col-xs-6 col-sm-4 col-md-1' }[showCapOverrideField == true]">
+                <label ng-if="!index" class="block">Share % <i class="fa fa-question-circle" tooltips
+                        tooltip-class="wider"
+                        tooltip-template="What is the publisher's share for this track?"></i></label>
+                <input ng-if="edit && singleEditmode === 'editing'" type="text" class="form-control"
+                    ng-model="license.share">
+                <read-only-field ng-if="!edit || singleEditmode != 'editing'" parent-field="license" field="'share'">
+                </read-only-field>
+            </div>
+            <div
+                ng-class="{ true: 'form-group col-xs-6 col-sm-5 col-md-2', false: 'form-group col-xs-6 col-sm-4 col-md-1' }[showCapOverrideField == true]">
+                <label ng-if="!index" class="block">Override 
+                    <i class="fa fa-question-circle" tooltips
+                        tooltip-class="wider"
+                        tooltip-template="Track Cap Override - A track cap reduces the total mechanical amount of the release. It applies a multiplier equal to “Track Cap / Release Track Count” to the Stat Rate. Use this Track Cap Override field if you wish to apply a Cap to this contract other than the general Track Cap specified on this release."></i></label>
+                <input ng-if="edit && singleEditmode === 'editing'" type="text" class="form-control"
+                    ng-model="license.trackCapOverride">
+                <read-only-field ng-if="!edit || singleEditmode != 'editing'" parent-field="license" field="'trackCapOverride'">
+                </read-only-field>
+            </div>
+            <div
+                ng-class="{ true: 'form-group col-xs-12 col-sm-6 col-md-2 action-btn pos-r', false: 'form-group col-xs-12 col-sm-4 col-md-2 action-btn pos-r' }[showCapOverrideField == true]">
+                <div class="row" ng-if="!index">
+                    <button
+                        ng-if="showEditButton"
+                        class="btn row-button col-6 sm-p-l-0 sm-p-r-0 m-l-0 w-100-p-s pos-r h-35"
+                        ng-click="toggleEditLicense()"
+                        ng-class="{'editing':'btn-complete', 'readOnly':'btn-primary'}[singleEditmode]">
+                        <i class="fa" ng-class="{'editing':'fa-check', 'readOnly':'fa-pencil'}[singleEditmode]"
+                            ng-style="singleEditmode === 'editing' && {'font-size':'12px'}"></i>
+                    </button>
+                    <button ng-if="edit && singleEditmode === 'editing'"
+                        class="btn btn-danger row-button col-6 sm-p-l-0 sm-p-r-0 m-l-0 w-100-p-s pos-r h-35"
+                        ng-click="delete({ license: license })"><i class="fa fa-trash"></i></button>
+                </div>
+                <div class="row" ng-if="index">
+                    <button 
+                        ng-if="showEditButton"
+                        class="btn col-6 sm-p-l-0 sm-p-r-0 m-l-0 w-100-p-s pos-r h-35"
+                        ng-click="toggleEditLicense()"
+                        ng-class="{'editing':'btn-complete', 'readOnly':'btn-primary'}[singleEditmode]">
+                        <i class="fa" ng-class="{'editing':'fa-check', 'readOnly':'fa-pencil'}[singleEditmode]"
+                            ng-style="singleEditmode === 'editing' && {'font-size':'12px'}"></i>
+                    </button>
+                    <button class="btn btn-danger col-6 sm-p-l-0 sm-p-r-0 m-l-0 w-100-p-s pos-r h-35"
+                        ng-if="edit && singleEditmode === 'editing'" ng-click="delete({ license: license })"><i
+                            class="fa fa-trash"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

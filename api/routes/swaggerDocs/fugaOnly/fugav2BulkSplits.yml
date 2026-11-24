@@ -1,0 +1,273 @@
+openapi: 3.0.0
+paths:
+  /fuga/v2/bulkSplitsExport:
+    get:
+      tags:
+        - "Fuga v2 - Bulk Splits"
+      summary: Export tracks to CSV
+      description: >-
+        Initiates a bulk export of tracks to CSV format. The export runs asynchronously
+        and returns a bulk job ID that can be used to track progress. Requires read access to catalogue.
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: string
+          description: Optional title for the export job
+        - in: query
+          name: fugaUserEmail
+          schema:
+            type: string
+          description: Optional email stored as fugaUserEmail field in bulk splits job record
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search term to filter tracks
+        - in: query
+          name: tags
+          schema:
+            type: string
+          description: Filter tracks by tag
+        - in: query
+          name: excludeTags
+          schema:
+            type: string
+          description: Exclude tracks with this tag
+      responses:
+        '200':
+          description: Export job started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkSplitsExportResponse'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/bulkSplitsImport:
+    post:
+      tags:
+        - "Fuga v2 - Bulk Splits"
+      summary: Import tracks from CSV
+      description: >-
+        Initiates a bulk import of tracks from a CSV file. The import runs asynchronously
+        and returns a bulk job ID that can be used to track progress. Requires write access to catalogue.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: CSV file containing track data to import
+      responses:
+        '200':
+          description: Import job started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkSplitsImportResponse'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/bulkSplits/{id}:
+    get:
+      tags:
+        - "Fuga v2 - Bulk Splits"
+      summary: Retrieve a specific bulk job
+      description: >-
+        Returns details for a specific bulk splits job by ID. Use this to check
+        the status and results of an export or import operation. Requires read access to catalogue.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Bulk job ID
+      responses:
+        '200':
+          description: Successfully retrieved bulk job
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkSplitsJob'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/bulkSplits:
+    get:
+      tags:
+        - "Fuga v2 - Bulk Splits"
+      summary: List bulk jobs
+      description: >-
+        Returns a paginated list of bulk splits jobs (exports and imports).
+        Requires read access to catalogue.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: createdAfter
+          schema:
+            type: string
+            format: date
+          description: Filter jobs created after this date (YYYY-MM-DD)
+        - in: query
+          name: createdBefore
+          schema:
+            type: string
+            format: date
+          description: Filter jobs created before this date (YYYY-MM-DD)
+      responses:
+        '200':
+          description: Successfully retrieved bulk jobs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bulkSplits:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BulkSplitsJob'
+                  meta:
+                    $ref: '#/components/schemas/FugaPaginationMeta'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+components:
+  schemas:
+    BulkSplitsExportResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Processing 150 tracks."
+        bulkSplitsId:
+          type: string
+          description: ID of the bulk job for tracking progress
+          example: "507f1f77bcf86cd799439011"
+        totalCount:
+          type: integer
+          description: Total number of tracks being exported
+          example: 150
+
+    BulkSplitsImportResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Processing import file: tracks_export.csv"
+        bulkSplitsId:
+          type: string
+          description: ID of the bulk job for tracking progress
+          example: "507f1f77bcf86cd799439011"
+        fileName:
+          type: string
+          description: Name of the uploaded file
+          example: "tracks_export.csv"
+
+    BulkSplitsJob:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the bulk job
+          example: "507f1f77bcf86cd799439011"
+        name:
+          type: string
+          description: Name/title of the bulk job
+          example: "Splits export 2026-01-15T10:30:00.000Z"
+        clientId:
+          type: string
+          description: Organisation ID
+        type:
+          type: string
+          enum:
+            - export
+            - import
+          description: Type of bulk operation
+        status:
+          type: string
+          enum:
+            - Pending
+            - In Progress
+            - Complete
+            - Errored
+          description: Current status of the job
+        count:
+          type: integer
+          description: Total number of tracks processed
+          example: 150
+        updatedCount:
+          type: integer
+          description: Number of tracks successfully updated
+          example: 148
+        file:
+          type: string
+          description: Public URL to download the result file (export) or processed file (import)
+          example: "https://s3.amazonaws.com/bucket/file.csv"
+        errorFile:
+          type: string
+          description: Public URL to download the error report file
+          example: "https://s3.amazonaws.com/bucket/errors.csv"
+        errorMessage:
+          type: string
+          description: Error message if the job failed
+        errors:
+          type: array
+          items:
+            type: object
+          description: Array of individual errors encountered during processing
+        filter:
+          type: object
+          description: Query parameters used to filter tracks (for exports)
+        fugaUserEmail:
+          type: string
+          description: Email address for notification
+        updatedBy:
+          type: string
+          description: User ID who initiated the job
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the job was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the job was last updated

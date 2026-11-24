@@ -1,0 +1,403 @@
+<div id="CUR-WdkEHtEe" class="jumbotron" data-pages="parallax">
+  <div id="CUR-DuubNFLM" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-IZTXLXjc" class="inner">
+      <ul id="CUR-pTOHYkTU" class="breadcrumb">
+        <li id="CUR-APMxylHa"><a id="CUR-cdtrWsda" href="/#/paymentGroups">Payment Groups</a></li>
+        <li id="CUR-CorObJJv" ng-show="!paymentGroup._id"><a id="CUR-WhYoWHdo" href="" class="active">Create</a></li>
+        <li id="CUR-EWqncVYU" ng-show="paymentGroup._id"><a id="CUR-CFowxAnO" href="/#/paymentGroups/{{paymentGroup._id}}/edit"
+            class="active">{{paymentGroup.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-bTLPjTOT" class="container container-fixed-lg">
+  <div id="CUR-kvbVtTqg" class="row">
+    <div id="CUR-KAFfCwkt" class="col-xs-12 text-right header-btn-group">
+      <div id="CUR-dWljIYjK" class="btn-group  dropdown-default" ng-show="paymentGroup._id && rights.periods == 'Edit'">
+        <a id="CUR-KVQGDekL" class="btn btn-success dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false"><i
+            class="fa fa-credit-card"></i>
+          &nbsp;Pay <span id="CUR-TwpGnMtx" class="caret"></span>
+        </a>
+        <ul id="CUR-pvRpDWjX" class="dropdown-menu w-xs-100-p">
+          <li id="CUR-ygMmjRfx">
+            <a id="CUR-zoUrelqv" style="cursor: pointer;" data-toggle="modal" data-target="#payAll" >All</a>
+          </li>
+          <li id="CUR-mYDGDfVh">
+            <a id="CUR-zoUrelqv" style="cursor: pointer;" data-toggle="modal" data-target="#paySelected" >Selected</a>
+          </li>
+        </ul>
+      </div>
+      <button id="CUR-cwYxrxYN" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
+        ng-show="paymentGroup._id && rights.periods == 'Edit'"><i class="fa fa-trash"></i> Delete</button>
+      <button id="CUR-LzsfBxoh" class="btn btn-complete" ng-click="save()" ng-show="rights.periods == 'Edit'"><i class="fa fa-check"></i>
+        Save</button>
+    </div>
+  </div>
+
+  <!-- Headline Data -->
+  <div id="CUR-TQBOdBtv" class="row lg-m-t-50">
+    <div id="CUR-uUMLDsmv" class="col-xs-12">
+      <div id="CUR-uvrmobxc" ng-if="currencyMismatch" class="col-xs-12 alert alert-danger" role="alert">
+        <i class="fa fa-warning m-r-10"></i>  <b>Please be aware that the home currency on your Curve account doesn't match the one on your payment provider account. </b>
+      </div>
+    </div>
+    <div id="CUR-ICkQpoHg" class="col-sm-3 col-xs-12">
+      <div id="CUR-oatdcisi" class="panel panel-default height-100 bg-success">
+        <div id="CUR-QmBtnbiS" class="panel-heading">
+          <div id="CUR-NsTQnlJl" class="panel-title text-white">
+            Total Payments >
+          </div>
+        </div>
+        <div id="CUR-hAiiDLDw" class="panel-body bg-transparent">
+          <h3 id="CUR-rbmQzofw" class="text-white no-margin"><span id="CUR-LvXuGSIY" class="semi-bold">{{currencySymbol}}{{paymentGroup.totalPayments |
+              number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-XSwNyzhd" class="col-sm-3 col-xs-12">
+      <div id="CUR-dBlWYZLP" class="panel panel-default height-100 bg-primary">
+        <div id="CUR-MCUbVuRl" class="panel-heading">
+          <div id="CUR-HdqZmLVW" class="panel-title text-white">
+            Total Paid >
+          </div>
+        </div>
+        <div id="CUR-jNGRZJrh" class="panel-body bg-transparent">
+          <h3 id="CUR-yJqZiVgG" class="text-white no-margin"><span id="CUR-vujmUfax" class="semi-bold">{{currencySymbol}}{{paymentGroup.totalPaid | number:
+              2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-ulXrgkBV" class="col-sm-3 col-xs-12">
+      <div id="CUR-dIlowSnB" class="panel panel-default height-100 bg-info-light">
+        <div id="CUR-JPksChFH" class="panel-heading">
+          <div id="CUR-OOwyvmfd" class="panel-title text-white">
+            Total Remaining >
+          </div>
+        </div>
+        <div id="CUR-PFBPewXq" class="panel-body bg-transparent">
+          <h3 id="CUR-sDenDgjO" class="text-white no-margin"><span id="CUR-sLcheURM" class="semi-bold">{{currencySymbol}}{{paymentGroup.totalRemaining |
+              number: 2}}</span></h3>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-lbnDrRFB" class="col-sm-3 col-xs-12">
+      <div id="CUR-kcWcqDnv" class="panel panel-default height-100 bg-success-green">
+        <div id="CUR-ypJgRATf" class="panel-heading">
+          <div id="CUR-APrFOjsq" class="panel-title text-white" style="overflow: visible !important;">
+            <span id="CUR-mMjlYIDE" ng-if="!balanceError">Total Available ></span>
+            <span id="CUR-kKUdBtrV" ng-if="balanceError">Total Available <i class="fa fa-question-circle m-l-10" tooltips tooltip-class="wider"
+              tooltip-template="{{balanceError}}"></i></span>
+          </div>
+        </div>
+        <div id="CUR-PRHtwsBv" class="panel-body bg-transparent">
+          <md-progress-circular ng-if="gettingBalance" md-diameter="15"></md-progress-circular>
+          <h3 id="CUR-ddSNetqQ" ng-if="!gettingBalance && !balanceError" class="text-white no-margin"><span id="CUR-RsndhwXE" 
+              class="semi-bold">{{currencySymbol}}{{balance |
+              number: 2}}</span></h3>
+          <h3 id="CUR-kaJjoGqc" ng-if="!gettingBalance && balanceError" class="text-white no-margin">
+            <span id="CUR-LGCsbgiT" class="semi-bold">N/A</span>
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Payment Group Overview -->
+  <div id="CUR-AbWcfmdo" class="row">
+    <div id="CUR-iRBckxXp" class="col-xs-12 col-sm-6">
+      <div id="CUR-pwBqYZuu" class="panel panel-default">
+        <div id="CUR-fzDnxWyU" class="panel-heading">
+          <div id="CUR-EnfXLjHD" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-TrEZVQEp" class="panel-body p-t-15">
+          <div id="CUR-FJwTsAfk" class="form-group required">
+            <label id="CUR-XBVbaFCZ">Name</label>
+            <input id="CUR-eAKxeLbd" type="text" class="form-control" ng-model="paymentGroup.name">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="CUR-LXpnnkMj" ng-show="paymentGroup.totalPaymentsWithWarnings" class="alert alert-warning">
+    <p><b>{{paymentGroup.totalPaymentsWithWarnings}} Payment(s) in this group have issues that may affect their recipients or the amounts paid out</b></p>
+    <p>
+      <button id="CUR-oAGsasJC" class="btn btn-warning m-t-20" ng-click="showPaymentsWithIssues()">Show Payments With Issues</button>
+    </p>
+  </div>
+
+  <!-- Payments Container -->
+  <div id="CUR-xdxyELOk" class="row">
+    <div id="CUR-wQorRhrY" class="col-xs-12">
+      <div id="CUR-XpayNiXL" class="panel panel-default">
+        <div id="CUR-PnZElpFo" class="panel-heading">
+          <div id="CUR-oraOGUGG" class="panel-title">
+            Payments
+          </div>
+        </div>
+        <div id="CUR-zfHqbwZr" class="panel-body">
+          <div id="CUR-xktIbvav" class="col-xs-12 text-right header-btn-group">
+            <button id="CUR-flushPaymentStatus" class="btn btn-primary hidden-xs" ng-show="rights.periods == 'Edit'" ng-click="flushPaymentStatus()"><i
+              class="fa fa-upload"></i>&nbsp;Flush <i class="fa fa-question-circle" tooltips tooltip-class="wider-with-wrap" tooltip-template="Simply revalidates all Payments in the Payment Group, updating Issues and Statuses according to any changes made"></i></button>
+              <div id="CUR-dWljIYjK" class="btn-group dropdown-default" ng-show="rights.periods == 'Edit'">
+                <a id="CUR-KVQGDekL" class="btn btn-default dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false">
+                  <i class="fa fa-envelope"></i>
+                  &nbsp;Mark Payment as... <span id="CUR-TwpGnMtx" class="caret"></span>
+                </a>
+                <ul id="CUR-pvRpDWjX" class="dropdown-menu w-xs-100-p">
+                  <li id="CUR-ygMmjRfx">
+                    <a id="CUR-pending" style="cursor: pointer;" data-toggle="modal" data-target="#markStatusModal" ng-click="setMarkPaymentAsModalData('Pending')">Pending</a>
+                  </li>
+                  <li id="CUR-mYDGDfVh">
+                    <a id="CUR-paidOffline" style="cursor: pointer;" data-toggle="modal" data-target="#markStatusModal" ng-click="setMarkPaymentAsModalData('Paid Offline')">Paid Offline</a>
+                  </li>
+                </ul>
+              </div>                         
+            <button id="CUR-pOlaKAnO" class="btn btn-default hidden-xs" ng-show="rights.periods == 'Edit'" ng-click="export()"><i
+                class="fa fa-upload"></i>&nbsp;Export</button>
+            <button id="CUR-PYMJVOAZ" class="btn btn-default hidden-xs" ng-show="rights.periods == 'Edit'" data-toggle="modal"
+              data-target="#importModal"><i class="fa fa-download"></i>&nbsp;Import</button>
+            <button id="CUR-oAGWCsJC" class="btn btn-danger" data-toggle="modal" data-target="#removePaymentsModal"
+              ng-show="rights.periods == 'Edit'"><i class="fa fa-trash"></i> Delete</button>
+            <a id="CUR-sovaMLmn" href="#/payments/new?paymentGroupId={{paymentGroup._id}}" class="btn btn-complete"
+              ng-show="rights.periods == 'Edit'"><i class="fa fa-plus"></i>&nbsp;Create</a>
+          </div>
+
+          <div id="CUR-xktIsasv" class="col-xs-12">
+            <div class="row text-right">
+              <div id="CUR-zEtWARqQ" class="form-group col-sm-offset-9 col-sm-3">
+                <label id="CUR-HmYQPCzE">Showing</label>
+                <ui-select class="full-width" ng-model="paymentsFilter.showPayments">
+                  <ui-select-match>
+                    <span id="CUR-LowuLMkV" ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item.value as item in paymentsStatusFilter | filter: $select.search">
+                    <span id="CUR-bFrxoBBk" ng-bind="item.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+          </div>
+
+          <div id="CUR-hnprmGdr" class="col-sm-12">
+            <h5 id="CUR-yKWQPYzp" class="pull-right">Total: {{totalPayments? totalPayments : 0}}</h5>
+          </div>
+          <div id="CUR-SKuNhlhJ" class="table">
+            <table id="CUR-YWmLkOFZ" class="table table-hover dataTable no-footer custom-responsive"
+              ng-class="{'table-selectable': selectable}">
+              <thead>
+                <tr id="CUR-McqILDtO">
+                  <th class="table-checkbox hidden-xs">
+                    <input id="CUR-NCpyUcfp" type="checkbox" class="select-all" ng-click="selectAll(payments)">
+                  </th>
+                  <th ng-click="getSortedData('payeeId', paymentsFilter.orderDir)" ng-class="whatClassIsIt('payeeId')">Payee</th>
+                  <th ng-click="getSortedData('name', paymentsFilter.orderDir)" ng-class="whatClassIsIt('name')">Name</th>
+                  <th ng-click="getSortedData('currency', paymentsFilter.orderDir)" ng-class="whatClassIsIt('currency')">Currency</th>
+                  <th ng-click="getSortedData('amount', paymentsFilter.orderDir)" ng-class="whatClassIsIt('amount')">Amount</th>
+                  <th ng-click="getSortedData('status', paymentsFilter.orderDir)" ng-class="whatClassIsIt('status')">Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="CUR-BAKorZom">
+                <tr id="CUR-pzaoHbne" payment-table-row ng-repeat="payment in payments" payment="payment" group="paymentGroup._id"
+                  edit="rights.periods == 'Edit'"></tr>
+              </tbody>
+            </table>
+            <div id="CUR-uwMIUQwp" class="col-sm-12">
+              <div id="CUR-QjVeoVga" class="pull-right">
+                <span id="CUR-eKzACihz" class="inline-block">
+                  <div ng-if="!isShowingAllPayments">Showing 100 Per Page |</div>
+                  <div ng-if="isShowingAllPayments">Showing 500 Per Page</div>
+                </span>
+                <a id="CUR-JrtywuKD" class="p-l-3" ng-if="!isShowingAllPayments" ng-click="showAllPayments()">Show 500</a>
+              </div>
+            </div>
+            <div id="CUR-NEMBjhJA" class="row">
+              <div id="CUR-sTDROFgV" class="col-xs-12 text-center">
+                <pagination id="CUR-fTmBCFag" pages="paymentsPages" total="totalPaymentsPages" current="currentPaymentsPage"
+                  change-page="changePaymentsPage(page)"></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-EZyIunlQ" class="row">
+    <div id="CUR-AZNOAUHH" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-fPQWWyCG" ng-show="paymentGroup.updatedAt">Last Updated on {{ paymentGroup.updatedAt | date : dateFormat : 'UTC' }}.
+    </div>
+  </div>
+
+</div>
+
+<div class="modal fade stick-up" id="paySelected" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-ZNGPludss" class="modal-dialog">
+    <div id="CUR-ymuUreddC" class="modal-content">
+      <div id="CUR-IzPeggdzd" class="modal-header clearfix text-left">
+        <button id="CUR-vCkewlZJh" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+      </div>
+      <div id="CUR-WVfplldJ" class="modal-body">
+        <div id="CUR-tGYjBddD" class="row">
+          <div id="CUR-fadvXNRy" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to make the selected payments?</p>
+            <div id="CUR-LXpnvfsdMj" ng-show="paymentGroup.totalPaymentsWithWarnings" class="alert alert-warning">
+              <p><b>Payments in this group have issues that may affect their recipients or the amounts paid out</b></p>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-SdsrOqOVJt" class="row">
+          <div id="CUR-KgVWuvBawe" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-nlfIBewwFge" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-kcQIXvUeffd" type="button" class="btn btn-success m-t-5" ng-click="paySelected()"><i
+                class="fa fa-check"></i>&nbsp;Pay</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="payAll" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-ZNdsdGPluhW" class="modal-dialog">
+    <div id="CUR-ymudddsUOVhC" class="modal-content">
+      <div id="CUR-IzPeIdfsdCzd" class="modal-header clearfix text-left">
+        <button id="CUR-vCQnddspZJh" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+      </div>
+      <div id="CUR-WVfpdRxdsdJ" class="modal-body">
+        <div id="CUR-tGYjBhdMdss" class="row">
+          <div id="CUR-fadvXNRgffy" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to make all the payments?</p>
+            <div id="CUR-LXpnnkMgffj" ng-show="paymentGroup.totalPaymentsWithWarnings" class="alert alert-warning">
+              <p><b>Payments in this group have issues that may affect their recipients or the amounts paid out</b></p>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-SrOqOVJfddt" class="row">
+          <div id="CUR-KgVWuvBfdfa" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-nlfIBhjFge" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-kcQIXvUjhd" type="button" class="btn btn-success m-t-5" ng-click="payAll()"><i
+                class="fa fa-check"></i>&nbsp;Pay</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-ZNGPluhW" class="modal-dialog">
+    <div id="CUR-ymuUOVhC" class="modal-content">
+      <div id="CUR-IzPeICzd" class="modal-header clearfix text-left">
+        <button id="CUR-vCQnpZJh" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-bKnlCVHy">Delete Payment Group</h5>
+      </div>
+      <div id="CUR-WVfpdRxJ" class="modal-body">
+        <div id="CUR-tGYjBhdM" class="row">
+          <div id="CUR-fadvXNRy" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this payment group? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-SrOqOVJt" class="row">
+          <div id="CUR-KgVWuvBa" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-nlfIBFge" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-kcQIXvUd" type="button" class="btn btn-danger m-t-5" ng-click="delete()"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="removePaymentsModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-EnpMxVqd" class="modal-dialog">
+    <div id="CUR-LSmtFgQV" class="modal-content">
+      <div id="CUR-Kixgauqo" class="modal-header clearfix text-left">
+        <button id="CUR-cTrikPhB" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-MtLGfnwu">Delete Payments</h5>
+      </div>
+      <div id="CUR-SYUGTumD" class="modal-body">
+        <div id="CUR-nklzncaE" class="row">
+          <div id="CUR-VmRWIvia" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected payments? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-jdaCCcvv" class="row">
+          <div id="CUR-kFuqEsdw" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-DkcdTsYj" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-OSFxsxNc" type="button" class="btn btn-danger m-t-5" ng-click="removePayments()"><i
+                class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="markStatusModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-TSauIIJKkf" class="modal-dialog">
+    <div id="CUR-PRBBITRIkReW" class="modal-content">
+      <div id="CUR-sgpYZUYZCLl" class="modal-header clearfix text-left">
+        <button id="CUR-SEub5HJbjib" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="modal-title">Mark Payments as <span>{{markPaymentAsModalData.status}}</span></h5>
+      </div>
+      <div id="CUR-cIkjtxBs" class="modal-body">
+        <div id="CUR-tGYjBhdM" class="row">
+          <div id="CUR-fadvXNRy" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to mark <strong>{{markPaymentAsModalData.count}}</strong> payments as <strong>{{markPaymentAsModalData.status}}</strong>?</p>
+          </div>
+        </div>
+        <div id="CUR-SrOqOVJt" class="row">
+          <div id="CUR-KgVWuvBa" class="col-xs-12 m-t-20 text-right">
+            <button type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-warning m-t-5" ng-click="markPayments()" data-dismiss="modal" ng-disabled="markPaymentAsModalData.count === 0">
+              <i class="fa fa-check"></i>&nbsp;Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade stick-up" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-TSauIIkf" class="modal-dialog">
+    <div id="CUR-PRBIkReW" class="modal-content">
+      <div id="CUR-sgpYZCLl" class="modal-header clearfix text-left">
+        <button id="CUR-SEubbjib" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-bHkCrvoh">Import Payments</h5>
+      </div>
+      <div id="CUR-cUperxBs" class="modal-body">
+        <div id="CUR-GjwzNnmT" class="row">
+          <div id="CUR-uLOtipjo" class="col-xs-12 m-t-20">
+            <form id="CUR-kidwDnLL">
+              <div id="CUR-zYzLPlsE" class="form-group">
+                <label id="CUR-pQRgxNdZ" for="email">File</label>
+                <input id="CUR-KnlyYqgW" type="file" ng-model="importFile" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-JypXUItY" class="row">
+          <div id="CUR-ioIMnSbS" class="col-xs-12 m-t-20 text-right">
+            <a id="CUR-nxqEeGPn" class="btn btn-success m-t-5" ng-click="downloadTemplate()">Download Template</a>
+            <button id="CUR-yMviesaX" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-zTajwWLA" type="button" class="btn btn-complete m-t-5" ng-click="import()"><i
+                class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

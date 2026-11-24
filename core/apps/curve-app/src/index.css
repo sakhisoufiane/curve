@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import 'tailwindcss';
+@import '@curveroyaltysystems/react-ui-library/dist/index.css';
+
+:root {
+  color-scheme: light;
+  --page-bg: hsl(220 14% 96%);
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sidebar theme — light by default, dark values in .dark for future dark mode */
+:root {
+  --sidebar: hsl(220 14% 97%);
+  --sidebar-foreground: hsl(222 47% 13%);
+  --sidebar-primary: hsl(195 99% 41%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(220 14% 93%);
+  --sidebar-accent-foreground: hsl(222 47% 13%);
+  --sidebar-border: hsl(220 13% 91%);
+  --sidebar-ring: hsl(195 99% 41%);
+}
+
+.dark {
+  --sidebar-foreground: hsl(220 10% 85%);
+  --sidebar-primary: hsl(195 99% 41%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent-foreground: hsl(0 0% 100%);
+  --sidebar-border: hsl(221 16% 20%);
+  --sidebar-ring: hsl(195 99% 41%);
+  --color-background: hsl(220deg 6.13% 9%);
+  --sidebar: hsl(220deg 7.01% 6.31%);
+  --sidebar-accent: hsl(210, 3%, 11%);
+}
+
+@utility min-h-svh {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+}
+
+button,
+a,
+[role='button'],
+input[type='submit'],
+input[type='button'],
+input[type='reset'],
+input[type='checkbox'],
+input[type='radio'],
+select,
+summary,
+label[for] {
+  cursor: pointer;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}

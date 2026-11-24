@@ -1,0 +1,17 @@
+<td class="v-align-middle hidden-xs"><input id="period-select-{{index}}" type="checkbox" class='select-unit' ng-model="period.selected"></td>
+<td class="v-align-middle">
+	<a id="period-{{index}}" ng-if="!noLinks && period.status === 'Setup'" href="#/periods/{{ period._id }}/edit" ng-bind-html="period.name"></a>
+	<a ng-if="!noLinks && period.status !== 'Setup'" id="period-{{index}}" href="#/periods/{{ period._id }}/complete" ng-bind-html="period.name"></a>
+	<i ng-if="period.locked" class="fa fa-lock text-danger m-l-10"></i>
+</td>
+<td class="v-align-middle hidden-xs">{{ period.year }}</td>
+<td class="v-align-middle hidden-xs">{{ period.accountingPeriod }}</td>
+<td class="v-align-middle hidden-xs">{{ period.grossAmount | number: 2 }}</td>
+<td class="v-align-middle hidden-xs" ng-if="clientType != 'Publisher'">{{ period.grossCosts | number: 2 }}</td>
+<td class="v-align-middle hidden-xs">{{ period.createdAt | date : dateFormat : 'UTC' }}</td>
+<td class="v-align-middle">
+	<span ng-if="period.status === 'Processing'" class="label label-warning">{{ period.status }}</span>
+	<span ng-if="period.status === 'Complete'" class="label label-success">{{ period.status }}</span>
+	<span ng-if="period.status === 'Setup'" class="label label-info">{{ period.status }}</span>
+	<span ng-if="period.status === 'Deleting' || period.status === 'Errored'" class="label label-danger">{{ period.status }}</span>
+</td>

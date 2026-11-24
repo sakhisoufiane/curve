@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  build:
+    name: "Build, Lint & Test"
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+          cache: "npm"
+      - run: npm install -g npm@11.10.0
+      - run: npm config set '//registry.npmjs.org/:_authToken' "${{secrets.NPM_PUBLISH_TOKEN}}"
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint
+      - run: npm run test
+        env:
+          BQ_private_key: ${{ secrets.BQ_DEV_PRIVATE_KEY }}
+          BQ_project_id: ${{ secrets.BQ_DEV_PROJECT_ID }}
+          BQ_client_email: ${{ secrets.BQ_DEV_CLIENT_EMAIL }}

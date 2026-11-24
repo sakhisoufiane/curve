@@ -1,0 +1,11 @@
+[
+  { "field": "Territory", "type":"String" },
+  { "field": "Channel", "type":"String" },
+  { "field": "Net Amount", "type": "Number" },
+  { "field": "Enabled", "type": "Boolean" },
+  { "field": "SaleDate", "type": "Date", "dateFormat": "DD-MMM-YYYY" },
+  { "field": "Money", "type": "Number Comma Separated" },
+  { "field": "Two DP", "type": "Number 2 Decimal Places" },
+  { "field": "Five DP", "type": "Number 5 Decimal Places" },
+  { "field": "Territory2", "type": "String", "characters": 5 }
+]

@@ -1,0 +1,363 @@
+openapi: 3.0.3
+info:
+  title: Import Partners API
+  version: 1.0.0
+  description: API for managing Import Partners
+paths:
+  /importPartners:
+    get:
+      tags:
+        - Import Partners
+      summary: Retrieve import partners
+      description: Returns a list of import partners with selected fields (_id, clientId, name, transferringSystem, notes, defaults, setMainIdentifier, ingestionTerritory, createdAt). Access control is handled by the controller.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: orderDir
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - in: query
+          name: transferringSystem
+          schema:
+            type: string
+          description: Filter by transferring system
+        - in: query
+          name: text
+          schema:
+            type: string
+          description: Search by name or ID (supports both text search in names and exact ObjectId matching)
+      responses:
+        200:
+          description: Successfully retrieved import partners
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  importPartners:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ImportPartner'
+                  meta:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      total:
+                        type: integer
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags:
+        - Import Partners
+      summary: Create an import partner
+      description: Creates a new import partner. Access control is handled by the controller.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportPartnerInput'
+      responses:
+        201:
+          description: Successfully created import partner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportPartner'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /importPartners/{id}:
+    get:
+      tags:
+        - Import Partners
+      summary: Retrieve a specific import partner
+      description: Returns details for a specific import partner by ID. Access control is handled by the controller.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import partner ID
+      responses:
+        200:
+          description: Successfully retrieved import partner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportPartner'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+    put:
+      tags:
+        - Import Partners
+      summary: Update an import partner
+      description: Updates an import partner by ID. Access control is handled by the controller.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import partner ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportPartnerInput'
+      responses:
+        200:
+          description: Successfully updated import partner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportPartner'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags:
+        - Import Partners
+      summary: Delete an import partner
+      description: Deletes an import partner by ID. Access control is handled by the controller.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Import partner ID
+      responses:
+        200:
+          description: Successfully deleted import partner
+          content:
+            application/json:
+              schema:
+                type: object
+        400:
+          description: Bad Request - Import partner cannot be deleted as it has been used on imports
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Import Partner can not be deleted as it has been used on Imports
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+components:
+  schemas:
+    ImportPartner:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the import partner
+        clientId:
+          type: string
+          description: Client ID associated with the import partner
+        name:
+          type: string
+          description: Name of the import partner
+        transferringSystem:
+          type: string
+          description: Transferring system
+        notes:
+          type: string
+          description: Notes
+        mappings:
+          type: object
+          properties:
+            territories: {}
+            distributionChannels: {}
+            configurations: {}
+            priceCategories: {}
+            societies: {}
+            capacities: {}
+            publishingRates: {}
+        defaults:
+          type: object
+          properties:
+            territoryGroupId:
+              type: string
+              description: Territory group ID
+            territories:
+              type: array
+              items: {}
+              description: List of territories
+            claimingParty:
+              type: object
+              properties:
+                publisherId:
+                  type: string
+                  description: Publisher ID
+                contractType:
+                  type: string
+                  description: Contract type
+            setMainIdentifier:
+              type: boolean
+              description: Set main identifier
+            setPublisherInterestedParty:
+              type: boolean
+              description: Set publisher interested party
+            setComposerInterestedParty:
+              type: boolean
+              description: Set composer interested party
+            ingestionTerritory:
+              type: string
+              description: Ingestion territory
+            contracts:
+              type: array
+              items: {}
+              description: List of contracts
+            catalogueGroups:
+              type: array
+              items: {}
+              description: List of catalogue groups
+        setMainIdentifier:
+          type: boolean
+          description: Set main identifier flag
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the import partner was last updated
+    ImportPartnerInput:
+      type: object
+      required:
+        - name
+        - transferringSystem
+        - notes
+        - mappings
+        - defaults
+      properties:
+        name:
+          type: string
+          description: Name of the import partner
+        transferringSystem:
+          type: string
+          description: Transferring system
+        notes:
+          type: string
+          description: Notes
+        mappings:
+          type: object
+          properties:
+            territories: {}
+            distributionChannels: {}
+            configurations: {}
+            priceCategories: {}
+            societies: {}
+            capacities: {}
+            publishingRates: {}
+        defaults:
+          type: object
+          properties:
+            territoryGroupId:
+              type: string
+              description: Territory group ID
+            territories:
+              type: array
+              items: {}
+              description: List of territories
+            claimingParty:
+              type: object
+              properties:
+                publisherId:
+                  type: string
+                  description: Publisher ID
+                contractType:
+                  type: string
+                  description: Contract type
+            setMainIdentifier:
+              type: boolean
+              description: Set main identifier
+            setPublisherInterestedParty:
+              type: boolean
+              description: Set publisher interested party
+            setComposerInterestedParty:
+              type: boolean
+              description: Set composer interested party
+            ingestionTerritory:
+              type: string
+              description: Ingestion territory
+            contracts:
+              type: array
+              items: {}
+              description: List of contracts
+            catalogueGroups:
+              type: array
+              items: {}
+              description: List of catalogue groups
+  responses:
+    Forbidden:
+      description: Forbidden, the user does not have sufficient rights
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Forbidden
+    NotFound:
+      description: Import partner not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Import partner not found
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Internal error, please try again

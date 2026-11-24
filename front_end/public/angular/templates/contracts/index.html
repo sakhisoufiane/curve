@@ -1,0 +1,378 @@
+<div id="CUR-ouaEfwHP" class="jumbotron" data-pages="parallax">
+  <div id="CUR-gBYhaAVQ" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-ixyuTuKT" class="inner">
+      <ul id="CUR-bwUxKmwg" class="breadcrumb">
+        <li id="CUR-tmaceBZE">
+          <a id="CUR-YoDOhOeZ" ng-if="contractType !== 'Mechanical'" href="/#/contracts?contractType=Artist" class="active">Contracts</a>
+          <a id="CUR-nAjCXYYG" ng-if="contractType === 'Mechanical'" href="/#/contracts?contractType=Mechanical" class="active">Mechanical Contracts</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-hgXZltem" class="container-fluid container-fixed-lg">
+  <!-- Search and Buttons -->
+  <div id="CUR-nmwZHedp" class="row m-b-20">
+    <div id="CUR-XyAaQbLL" class="col-sm-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-2">
+      <form id="CUR-awifuMUc" class="sm-p-l-15 sm-p-r-15" ng-submit="search()">
+        <div id="CUR-hHZasbzc" class="input-group transparent">
+          <input id="CUR-rmJHDCfY" type="text" class="form-control" placeholder="Search" ng-model="filter.text">
+          <span id="CUR-cvqKuYKK" class="input-group-addon pointer" ng-click="search()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-CYbznNDB" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-6 col-md-offset-0 text-right">
+      <div id="CUR-SXzrbcfz" class="sm-p-l-15 sm-p-r-15">
+        <div id="CUR-GZSTNaiy" class="btn-group  dropdown-default" ng-show="rights.contracts == 'Edit'">
+          <a id="CUR-IPEEOupo" class="btn btn-danger dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-trash"></i>&nbsp;Delete <span id="CUR-sAqywDNK" class="caret"></span>
+          </a>
+          <ul id="CUR-LAjUfeTC" class="dropdown-menu w-xs-100-p">
+            <li id="CUR-WyZbXMfR">
+              <a id="CUR-DQFudFGo" href="javascript:void(0)" data-toggle="modal" data-target="#deleteModal">Selected</a>
+            </li>
+            <li id="CUR-VVehXLNF">
+              <a id="CUR-qyHsBxNq" href="javascript:void(0)" data-toggle="modal" data-target="#deleteBulkModal">Bulk</a>
+            </li>
+            <li id="CUR-VVehXLNF">
+              <a id="CUR-qyHsBxNq" href="javascript:void(0)" data-toggle="modal" data-target="#deleteTransactionsModal">Transactions</a>
+            </li>
+          </ul>
+        </div>
+        <a id="CUR-FMQScUeE" href="/#/contracts/new?contractType={{contractType}}" ng-show="rights.contracts == 'Edit' && !demoMode">
+          <button id="CUR-UDpJJUhA" class="btn btn-complete w-xs-100-p m-xs-l-0"><i class="fa fa-plus"></i>&nbsp;Create</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-PXzdzEGA" class="row m-b-20">
+    <div id="CUR-kbzPECII" class="col-sm-12 col-md-12 text-right">
+      <div id="CUR-UqhQPqsz" class="sm-p-l-15 sm-p-r-15">
+        <button id="CUR-GqETKmnj" class="btn btn-default hidden-xs" ng-click="export()"><i class="fa fa-upload"></i>&nbsp;Export</button>
+        <button id="CUR-xqVjxuMZ" class="btn btn-default hidden-xs" data-toggle="modal" data-target="#importModal" ng-show="rights.contracts == 'Edit'"><i class="fa fa-download"></i>&nbsp;Import Contracts</button>
+        <button id="CUR-SOZjjcnO" class="btn btn-default hidden-xs" data-toggle="modal" data-target="#importTransactionModal" ng-show="rights.contracts == 'Edit'"><i class="fa fa-download"></i>&nbsp;Import Transactions</button>
+        <button id="CUR-VmJCQpXn" class="btn btn-default hidden-xs" ng-click="exportTransactions()"><i class="fa fa-upload"></i>&nbsp;Export Transactions</button>
+      </div>
+    </div>
+  </div>  
+  <div id="CUR-wOmRfNUJ" ng-show="deletionError" class="alert alert-danger">
+    <p>You can't delete the following contract(s), as they are in use:</strong></p>
+    <div id="CUR-PQLHKbDp" class="m-t-10" ng-repeat="error in deletionError">
+      <a id="CUR-lXxzYLjz" href="/#/contracts/{{error._id}}/edit">{{error.contract}}</a>
+    </div>
+  </div>
+  <div id="CUR-szcWUGeC" class="row">
+    <div id="CUR-UBJcRsgF" class="form-group col-sm-2">
+      <label id="CUR-JnbARxvG">Complete</label>
+      <ui-select class="full-width" ng-model="filter.valid">
+        <ui-select-match allow-clear="true">
+          <span id="CUR-EqTpujMy" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item.value as item in validFilterValues | filter: $select.search">
+          <span id="CUR-WgAygZXB" ng-bind="item.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="contract-company-search-div" class="form-group col-sm-2">
+      <label id="contract-company-search-label">Company</label>
+      <ui-select id="contract-company-search-select" multiple ng-model="filter.companyIds" close-on-select="true">
+        <ui-select-match id="contract-company-search-select-match">
+          <span id="contract-company-search-span-select-match-1" style="vertical-align:middle;">{{$item.name}}</span>
+          <span id="contract-company-search-span-select-match-2" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item._id as item in companies | filter:$select.search"
+          refresh="searchCompanies($select)" refresh-delay="500">
+          <div id="contract-company-search-choices-div">
+            <div id="contract-company-search-choices-div-div" class="clear">
+              <div id="contract-company-search-choices-div-div-div" ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="contract-contractCategories-search-div" class="form-group col-sm-2">
+      <label id="contract-contractCategories-search-label">Category</label>
+      <ui-select id="contract-contractCategories-search-select" multiple ng-model="filter.contractCategories" close-on-select="true">
+        <ui-select-match id="contract-contractCategories-search-select-match">{{$item}}</ui-select-match>
+        <ui-select-choices repeat="category in contractCategories | filter:$select.search">
+          {{category}}
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div id="CUR-status-filter-row" class="row">
+      <div id="CUR-status-filter-form-group" class="form-group col-sm-2">
+      <label id="CUR-status-filter-label">Status</label>
+      <ui-select id="CUR-status-filter-ui-select" class="full-width" ng-model="filter.status">
+        <ui-select-match id="CUR-status-filter-ui-select-match" allow-clear="true">
+        <span id="CUR-status-filter-span" ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices id="CUR-status-filter-ui-select-choices" repeat="item.value as item in statusFilterValues | filter: $select.search">
+        <span id="CUR-status-filter-choice-span" ng-bind="item.name"></span>
+        </ui-select-choices>
+      </ui-select>
+      </div>
+    <div id="contract-contractCategories-expires-after-div" class="form-group col-sm-2">
+      <label id="contract-contractCategories-expires-after-label">Ends After</label>
+      <div id="datepicker-component" class="form-group input-group date">
+        <input id="CUR-jeIskNWR" type="text" class="form-control" ng-model="filter.expiresAfter" uib-datepicker-popup="{{dateFormat}}"
+          ng-model-options="{timezone: 'utc'}" is-open="createdAfterPopup" ng-click="openCreatedAfterPopup()">
+        <span id="CUR-PaosElwZ" class="input-group-addon" ng-click="openCreatedAfterPopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>    
+    <div id="contract-contractCategories-expires-before-div" class="form-group col-sm-2">
+      <label id="contract-contractCategories-expires-before-label">Ends Before</label>
+      <div id="datepicker-component" class="form-group input-group date">
+        <input id="CUR-JwuiGTil" type="text" class="form-control" ng-model="filter.expiresBefore" uib-datepicker-popup="{{dateFormat}}"
+          ng-model-options="{timezone: 'utc'}" is-open="createdBeforePopup" ng-click="openCreatedBeforePopup()">
+        <span id="CUR-RPaolstn" class="input-group-addon" ng-click="openCreatedBeforePopup()">
+          <i class="fa fa-calendar"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-WmTVOBvP" class="row">
+    <div id="CUR-XLrdAtHd" class="col-sm-12 text-center">
+      <button id="CUR-uGIsUwPG" class="btn btn-complete" ng-click="search()"><i class="fa fa-search"></i> Filter</button>
+    </div>
+  </div>
+  <div id="CUR-aLKebbqR" class="col-sm-12">
+    <h5 id="CUR-lVywEzGZ" class="pull-right">Total: {{total? total : 0}}</h5>
+  </div>
+  <div id="CUR-TzodsLgp" class="row">
+    <div id="CUR-sNyeKYWa" class="col-xs-12">
+      <div id="CUR-NdGPhLEq" class="panel panel-default">
+        <div id="CUR-WiefkIiA" class="panel-heading">
+          <div id="CUR-gEuGkPVD" class="panel-title">
+            Contracts <documentation link="http://guide.curveroyaltysystems.com/article/contracts-overview/"></documentation>
+          </div>
+        </div>
+        <div id="CUR-JkYoRQsE" class="panel-body">
+          <table id="CUR-PCzfTWfk" class="table table-hover table-condensed dataTable no-footer">
+            <thead>
+              <tr id="CUR-FmLOyUsD">
+                <th class="table-checkbox hidden-xs">
+                  <input id="CUR-yjgnVbsQ" type="checkbox" class="select-all" ng-click="selectAllContracts()" ng-checked="selectAllChecked" ng-show="rights.contracts == 'Edit'">
+                </th>
+                <th ng-click="getSortedData('name', orderDir)" ng-class="whatClassIsIt('name')">Name</th>
+                <th ng-click="getSortedData('type', orderDir)" ng-class="whatClassIsIt('type')">Type</th>
+                <th style="text-align: center;">Status</th>
+                <th>Categories</th>
+                <th ng-click="getSortedData('createdAt', orderDir)" ng-class="whatClassIsIt('createdAt')">Created</th>
+                <th>Valid</th>
+              </tr>
+            </thead>
+            <tbody id="CUR-EcVRXuaF">
+              <tr contract-table-row ng-repeat="contract in contracts" index="{{$index}}" contract="contract" edit="rights.contracts == 'Edit'" show-details="true"></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-qSCmbKNS" class="col-sm-12">
+      <div id="CUR-qMTgIhlr" class="pull-right">
+        <span id="CUR-kJnQehmj" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page  |</span>
+        <span id="CUR-aSHwBaeP" class="inline-block" ng-if="isShowingAll">Showing {{filter.limit}} Per Page</span>
+        <a id="CUR-aqJLAuLp" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+      </div>
+    </div>
+  <div id="CUR-eUeLmwEK" class="row">
+    <div id="CUR-yQmDgGDb" class="col-xs-12 text-center">
+      <pagination id="CUR-yeagEkJL" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-iKmfPDCp" class="modal-dialog">
+    <div id="CUR-KrSFYgXA" class="modal-content">
+      <div id="CUR-uULMlCKz" class="modal-header clearfix text-left">
+        <button id="CUR-mwhvGVPu" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-eSZvXINs">Delete Contracts</h5>
+      </div>
+      <div id="CUR-isXJtoOZ" class="modal-body">
+        <div id="CUR-ROLwNtDB" class="row">
+          <div id="CUR-AsXfHjpD" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete the selected contracts?  This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-HqTMBaXI" class="row">
+          <div id="CUR-ZLDhNVlb" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-xGbdiBjz" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-TGtlAOyD" type="button" class="btn btn-danger m-t-5" ng-click="delete('selected')"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteBulkModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-icuMVRYa" class="modal-dialog">
+    <div id="CUR-fHDFBpca" class="modal-content">
+      <div id="CUR-tHdnUVJp" class="modal-header clearfix text-left">
+        <button id="CUR-XxkTychT" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-GFzKtcKb">Delete Contracts</h5>
+      </div>
+      <div id="CUR-BPSubRxh" class="modal-body">
+        <div id="CUR-DkzbRUMd" class="row">
+          <div id="CUR-OSqRLHYz" class="col-xs-12 m-t-20">
+            <p>
+              Paste the contract IDs below to bulk delete. You can get these IDs from the first column of the export.
+              Ensure that there is one ID per line, and be sure you want to delete these contracts, as this cannot be undone.
+            </p>
+          </div>
+        </div>
+        <div id="CUR-CtKJEaEQ" class="row">
+          <div id="CUR-RSwANXyb" class="col-xs-12 m-t-20">
+            <form id="CUR-MWAOkuBu">
+              <div id="CUR-ejfecCWg" class="form-group">
+                <label id="CUR-sQzjDZwk">Contracts IDs</label>
+                <textarea class="form-control standard-textarea" ng-model="bulkDeleteIds"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-jtfOAxki" class="row">
+          <div id="CUR-RWyoYZTI" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-pISZoqrM" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-vRbamSUu" type="button" class="btn btn-danger m-t-5" ng-click="delete('bulk')"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteTransactionsModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-icuMVRYa" class="modal-dialog">
+    <div id="CUR-fHDFBpca" class="modal-content">
+      <div id="CUR-tHdnUVJp" class="modal-header clearfix text-left">
+        <button id="CUR-XxkTychT" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-GFzKtcKb">Delete Transactions</h5>
+      </div>
+      <div id="CUR-BPSubRxh" class="modal-body">
+        <div id="CUR-DkzbRUMd" class="row">
+          <div id="CUR-OSqRLHYz" class="col-xs-12 m-t-20">
+            <p>
+              Paste the Transaction IDs below to bulk delete. You can get these IDs from the first column of the export.
+              Ensure that there is one ID per line, and be sure you want to delete these transactions, as this cannot be undone.
+            </p>
+          </div>
+        </div>
+        <div id="CUR-CtKJEaEQ" class="row">
+          <div id="CUR-RSwANXyb" class="col-xs-12 m-t-20">
+            <form id="CUR-MWAOkuBu">
+              <div id="CUR-ejfecCWg" class="form-group">
+                <label id="CUR-sQzjDZwk">Transaction IDs</label>
+                <textarea class="form-control standard-textarea" ng-model="bulkDeleteTransactions" placeholder="Ensure one Transaction ID per line"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-jtfOAxki" class="row">
+          <div id="CUR-RWyoYZTI" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-pISZoqrM" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-vRbamSUu" type="button" class="btn btn-danger m-t-5" ng-disabled="!bulkDeleteTransactions" ng-click="deleteTransactions()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade stick-up" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-KDrsdkoL" class="modal-dialog">
+    <div id="CUR-KrYKnqPI" class="modal-content">
+      <div id="CUR-kiJPoSfX" class="modal-header clearfix text-left">
+        <button id="CUR-lttMOmKZ" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-nsBCNPRO">Import Contracts</h5>
+      </div>
+      <div id="CUR-mviUIiCU" class="modal-body">
+        <div id="CUR-TzbIjNjv" class="row">
+          <div id="CUR-lGRoZeuL" class="col-xs-12 m-t-20">
+            <form id="CUR-ezmYAYyS">
+              <div id="CUR-JBBBxsDN" class="form-group">
+                <label id="CUR-AggWMzOv">File</label>
+                <input id="CUR-cWwZoemV" type="file" ng-model="importFile" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-CBnElLNG" class="row">
+          <div id="CUR-NWLwPXfs" class="col-xs-12 m-t-20">
+            <form id="CUR-XcqqDvWa">
+              <div id="CUR-BpWxCGYd" class="form-group">
+                <input type="checkbox" ng-model="overwriteBlanks" id="overwriteblanks">
+                <label id="CUR-bVUURgGt" for="overwriteblanks">Overwrite Blank Values <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Blank values in the template will overwrite and delete data on Curve when this box is checked"></i></label>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-HenIsdcm" class="row" ng-if="importErrors">
+          <div id="CUR-RdfSKoup" class="col-sm-12">
+            <ul id="CUR-qSeJTTIw">
+              <li id="CUR-TxDzFgyA" ng-repeat="error in importErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-iPlZHPRv" class="row">
+          <div id="CUR-ETkxWjeT" class="col-xs-12 m-t-20 text-right">
+            <a id="CUR-gAebidWo" class="btn btn-success m-t-5" ng-click="downloadContractTemplate()">Download Template</a>
+            <button id="CUR-CRXtzZiQ" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-PfMsRKsg" type="button" class="btn btn-complete m-t-5" ng-click="import()"><i class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="importTransactionModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-RgrugoxB" class="modal-dialog">
+    <div id="CUR-uSgbkjWP" class="modal-content">
+      <div id="CUR-dpAvlcUa" class="modal-header clearfix text-left">
+        <button id="CUR-KquftJsl" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-FBRhtKAs">Import Transactions</h5>
+      </div>
+      <div id="CUR-MHMCCeBU" class="modal-body">
+        <div id="CUR-wScEcshI" class="row">
+          <div id="CUR-KmCZICYJ" class="col-xs-12 m-t-20">
+            <form id="CUR-PuaLFbMb">
+              <div id="CUR-OjMkYmBC" class="form-group">
+                <label id="CUR-xTCPWSJk" for="email">File</label>
+                <input id="CUR-AbkmNRUZ" type="file" ng-model="transactionFile" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-TkUFoorX" class="row" ng-if="importErrors">
+          <div id="CUR-xevgGsBR" class="col-sm-12">
+            <ul id="CUR-SjMQZFlL">
+              <li id="CUR-pAVEFfgD" ng-repeat="error in importErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-pvKsxLUN" class="row">
+          <div id="CUR-pJUqgCyu" class="col-xs-12 m-t-20 text-right">
+            <a id="CUR-ekYbqjXZ" class="btn btn-success m-t-5" ng-click="downloadTransactionTemplate()">Download Template</a>
+            <button id="CUR-SYioqaLp" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-XfNnTwCi" type="button" class="btn btn-complete m-t-5" ng-click="importTransactions()"><i class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

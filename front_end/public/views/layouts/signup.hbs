@@ -1,0 +1,125 @@
+<script>
+  // Google Captcha Login Form
+    var captchaElement = 'captcha-ele';
+    var onloadCaptchCb = function () {
+      grecaptcha.render(captchaElement, {
+        'sitekey' : '{{siteKey}}'
+      });
+    };
+</script>
+
+<div id="CUR-aUmYmvIZ" class="row">
+  <div id="CUR-cBPqwjvk" class="col-xs-12 text-center">
+    <img src="/assets/img/curvetyp2x.png" alt="logo" class="logo">
+  </div>
+</div>
+<div id="CUR-LHOgKwPi" class="row">
+  <div id="CUR-TMnfWBdq" class="col-xs-12">
+    <div id="CUR-cltEbvlC" class="wording">
+      <p>Sign up for Curve Lite to start your free 14 day trial</p>
+    </div>
+
+    <div id="CUR-SMloTTvI" class="col-xs-12">
+      <div id="notification" style="margin-top: 20px"></div>
+      <form method="POST" id="register-form" class="p-t-15" role="form">
+        <div id="CUR-nuKHEiGw" class="form-group">
+          <label id="CUR-XhpxlDkY">Company Name</label>
+          <input id="CUR-NfnHkhlz" type="text" name="clientName" placeholder="Company Name" class="form-control">
+          <div id="clientNameError"></div>
+        </div>
+        <div id="CUR-IGhZVRdd" class="form-group">
+          <label id="CUR-HahrjJtj">Type</label>
+          <select name="clientType" id="clientType" class="form-control">
+            {{#if clientType}}<option value="{{clientType}}" hidden="hidden" selected="selected">{{clientType}}</option>{{/if}}
+            <option value="Label">Label</option>
+            <option value="Publisher">Publisher</option>
+            <option value="Distributor">Distributor</option>
+          </select>
+          <div id="clientTypeError"></div>
+        </div>
+        <div id="CUR-WxvmKMCO" class="form-group hidden">
+          <label id="CUR-eEVdSwtz">Level</label>
+          <select name="clientBilling" id="clientBilling" class="form-control">
+            {{#if type}}<option value="{{type}}" hidden="hidden" selected="selected">{{type}}</option>{{/if}}
+            <option value="Lite">Lite</option>
+            <option value="Professional">Professional</option>
+          </select>
+          <div id="clientBillingError"></div>
+        </div>
+        <div id="CUR-fPINGRqy" class="form-group">
+          <label id="CUR-yIRybEDv">Your Email</label>
+          <input id="CUR-GnWqYlQV" type="text" name="email" placeholder="Email" class="form-control">
+          <div id="clientEmailError"></div>
+        </div>
+        <div id="CUR-AZyRQCXg" class="form-group">
+          <label id="CUR-sUjZBbYY">Password</label>
+          <input type="password" name="password" id="password" placeholder="Password" class="form-control">
+          <div id="pass-error">
+            <span id="CUR-iyrjfCjr">Your password must have: </span>
+            <span id="pass-error1" class="block">12 or more characters</span>
+            <span id="pass-error2" class="block">At least one lowercase letter</span>
+            <span id="pass-error3" class="block">At least one Uppercase letter</span>
+            <span id="pass-error4" class="block">At least one number</span>
+            <span id="pass-error5" class="block">At least one symbol</span>
+          </div>
+          <div id="clientPasswordError"></div>
+        </div>
+        <div id="CUR-jUeFSlSZ" class="form-group">
+          <label id="CUR-OhxFzSXx">Confirm password</label>
+          <input type="password" name="confirmPassword" id="confirm" placeholder="Confirm password" class="form-control">
+          <span id="confirm-error" class="text-error"></span>
+          <div id="clientConfirmPasswordError"></div>
+        </div>
+        <div class="form-group">
+          <input type="checkbox" id="marketingPermissions" value="1" ng-model="marketingPermissions">
+          <label>I would like to receive ongoing marketing and training related to Curve</label>
+        </div>
+        <div id="CUR-VuQarbwc" class="row">
+          <div id="CUR-GyfqFdzC" class="col-md-12">
+            <div id="captcha-ele"></div>
+          </div>
+        </div>
+        <div id="CUR-pbXbPJjY" class="row">
+          <div id="CUR-fXuUSSRP" class="col-md-6 col-md-offset-6 text-right sm-text-center">
+            <a id="CUR-JNKgmxyF" href="/login" class="text-info small">Already have an account?</a>
+          </div>
+        </div>
+        <button id="submit" class="btn btn-complete m-t-10 w-xs-100-p m-xs-l-0" type="submit">Complete Sign Up</button>
+      </form>
+      <div id="CUR-HPteKUqE" class="row m-t-20">
+        <div id="CUR-UrniSgpJ" class="col-xs-12 text-center">
+          <p>
+            By signing up, you agree to our <a id="CUR-ekVIKUop" href="https://www.curveroyaltysystems.com/ts-and-cs"
+              target="_blank">Terms of Use</a><br />
+            and our <a id="CUR-TuMMiFrt" href="https://www.curveroyaltysystems.com/privacy-policy" target="_blank">Privacy
+              Policy</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script
+  type="text/javascript">!function (e, t, n) { function a() { var e = t.getElementsByTagName("script")[0], n = t.createElement("script"); n.type = "text/javascript", n.async = !0, n.src = "https://beacon-v2.helpscout.net", e.parentNode.insertBefore(n, e) } if (e.Beacon = n = function (t, n, a) { e.Beacon.readyQueue.push({ method: t, options: n, data: a }) }, n.readyQueue = [], "complete" === t.readyState) return a(); e.attachEvent ? e.attachEvent("onload", a) : e.addEventListener("load", a, !1) }(window, document, window.Beacon || function () { });</script>
+<script type="text/javascript">window.Beacon('init', '090a922a-0be0-4014-bee5-d588d4045341')</script>
+
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCaptchCb&render=explicit" async defer></script>
+
+
+<script>
+  
+  {{#if favicon}}
+    var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = "{{{favicon}}}";
+    document.getElementsByTagName('head')[0].appendChild(link);
+  {{/if}}
+  {{#if pageTitle}}
+    document.title = "{{pageTitle}}"
+  {{else}}
+    document.title = "Curve"
+  {{/if}}
+</script>

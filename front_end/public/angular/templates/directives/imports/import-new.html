@@ -1,0 +1,86 @@
+<div class="container-fluid container-fixed-lg">
+    <div class="row">
+      <div class="col-xs-12 col-md-10 col-md-offset-1">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="row m-b-20">
+              <div class="col-xs-12">
+                <ul class="breadcrumb wizard-breadcrumb">
+                  <li><a class="active">Setup</a></li>
+                  <li>Files</li>
+                  <li>Mapping</li>
+                  <li>Defaults</li>
+                  <li>Complete</li>
+                  <!--<li>Validation</li>-->
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="alert alert-danger" role="alert" ng-if="setupErrors.length > 0">
+                  <strong>Period Setup Errors:</strong><br/>
+                  <ul>
+                    <li ng-repeat="error in setupErrors">{{ error }}</li>
+                  </ul>
+                </div>
+                <div class="form-group">
+                  <label>Name</label>
+                  <input type="text" class="form-control" ng-model="import.name">
+                  <label class="error" ng-if="setupErrors.includes('Period is required to have a name')">Name is required</label>
+                </div>
+                <div class="form-group">
+                  <label>From System</label>
+                  <ui-select ng-model="import.transferringSystem">
+                    <ui-select-match allow-clear="true">
+                      <span ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item in ([ 'Maestro 400 Catalogue Shipment', 'Counterpoint Recordings', 'Counterpoint Publishing', 'Linked Publishing', 'SR1 Publishing'] | filter: $select.search)">
+                      <span ng-bind="item"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                  <label class="error" ng-if="setupErrors.includes('Import is required to have an From System')">From System is required</label>
+                </div>
+                <div class="form-group" ng-if="import.transferringSystem === 'CWR' || import.transferringSystem === 'Catalogue Shipment' || import.transferringSystem === 'Maestro 400 Catalogue Shipment'">
+                  <label>Transferring Party <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Use to set the identifiers from the file against the transferring party"></i></label>
+                  <input type="text" class="form-control" ng-model="import.transferringParty">
+                </div>
+              </div>
+            </div>
+            <div class="row m-t-20">
+              <div class="col-xs-12">
+                <a ng-click="validateSetup()" class="btn btn-complete pull-right w-xs-100-p">Next</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="modal fade stick-up" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-UBvkVmxy" class="modal-dialog">
+    <div id="CUR-UaUjNBvm" class="modal-content">
+      <div id="CUR-PWFfRgbp" class="modal-header clearfix text-left">
+        <button id="CUR-QNtfkHNV" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-gshhogAq">Significant Update To Works</h5>
+      </div>
+      <div id="CUR-yzODynLn" class="modal-body">
+        <div id="CUR-CxnjLNEa" class="row">
+          <div id="CUR-MiiELBJV" class="col-xs-12 m-t-20">
+            <p>
+              If this import file contains Works that already exist in Curve which contain any changes to Title, Territory or IP Chain, this Import will trigger re-delivery of those Works if you have active Delivery Schedules set up
+            </p>
+            <div id="CUR-Dnuarutg" class="row">
+              <div id="CUR-yKHMDSmqG" class="col-xs-12 m-t-20 text-right">
+                <button id="CUR-TTMjtheP" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="CUR-ICUTeSoj" type="button" class="btn btn-confirm" ng-click="postValidateSetup(true)">OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  

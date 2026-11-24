@@ -1,0 +1,36 @@
+name: Merge Pipeline
+
+on:
+  pull_request:
+    branches: ["develop", "main"]
+    types: [closed]
+
+jobs:
+  Publish:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.CURVE_GITHUB_ACTIONS_USER_TOKEN }}
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.NPM_CSL_TOKEN }}
+
+      - name: Bump Version
+        uses: ./.github/actions/bump-version
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{secrets.CURVE_GITHUB_ACTIONS_USER_TOKEN}}
+          branch: ${{ github.ref }}
+
+      - name: Publish
+        uses: ./.github/actions/publish
+        with:
+          token: ${{secrets.NPM_CSL_TOKEN}}

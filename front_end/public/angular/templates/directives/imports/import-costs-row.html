@@ -1,0 +1,33 @@
+<div class="row xs-border-bottom-dashed sm-m-b-15">
+    <div class="form-group col-xs-4 col-md-4">
+      <label ng-class="{'visible-xs': index}">Territory</label>
+      <ui-select ng-model="cost.territory">
+        <ui-select-match>
+            <span ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices group-by="groupFind" repeat="country.code as country in countries | filter: $select.search">
+            <span class="country" ng-bind="country.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div class="form-group col-xs-4 col-md-4">
+      <label ng-class="{'visible-xs': index}">Type</label>
+      <ui-select ng-model="cost.type">
+        <ui-select-match>
+          <span ng-bind="$select.selected"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in costTypes | filter: $select.search">
+          <span ng-bind="item"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div class="form-group col-xs-4 col-md-3">
+      <label ng-class="{'visible-xs': index}">Rate %</label>
+      <input type="text" class="form-control" ng-model="cost.rate">
+    </div>
+    <div class="form-group col-xs-12 col-md-1 two-cols-row">
+      <button class="btn btn-danger row-button m-xs-t-0" ng-click="delete({ cost: cost })" ng-if="!index"><i class="fa fa-trash"></i></button>
+      <button class="btn btn-danger" ng-click="delete({ cost: cost })" ng-if="index"><i class="fa fa-trash"></i></button>
+    </div>
+  </div>
+  

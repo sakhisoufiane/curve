@@ -1,0 +1,124 @@
+<div class="row contract-row-layout ip-chain-row" ng-if="item.type === 'Publisher'">
+  <div class="form-group required col-xs-1">
+    <div ng-class="index > 0 ? 'elbow subsequent' : 'elbow'">
+    </div>
+  </div>
+  <div class="form-group col-xs-2">
+    <label>Publisher</label>
+    <publisher-select-field edit="edit" set-controlled="setControlled" on-change="onChange" value="item.publisherId"
+      populated="item.publisher">
+    </publisher-select-field>
+  </div>
+  <div class="form-group col-xs-2">
+    <label>Category</label>
+    <select class="form-control" ng-if="edit" ng-model="item.contractType"
+      ng-options="item as item for item in ['Admin', 'Sub Publisher', 'Original Publisher', 'Acquirer', 'Income Participant']"></select>
+    <read-only-field ng-if="!edit" parent-field="item" field="'contractType'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-1 ip-chain-checkbox-col">
+    <label tooltips tooltip-template="Controlled">Cont.</label>
+    <input ng-disabled="!edit" type="checkbox" class="ip-chain-checkbox" ng-click="onChange()"
+      ng-model="item.controlled">
+  </div>
+  <div class="form-group col-xs-1">
+    <label tooltips tooltip-template="Owned Mechanical">Own Mech.</label>
+    <input type="number" step="any" string-to-number class="form-control sm-p-l-5 sm-p-r-5" ng-model="item.mechanicalOwnership"
+    ng-if="edit" ng-keyup="roundPercentages($event)">
+    <read-only-field ng-if="!edit" parent-field="item" field="'mechanicalOwnership'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-1">
+    <label tooltips tooltip-template="Owned Performance">Own Perf.</label>
+    <input type="number" step="any" string-to-number ng-blur="onChange()" class="form-control sm-p-l-5 sm-p-r-5"
+      ng-model="item.performanceOwnership" ng-if="edit" ng-keyup="roundPercentages($event)">
+    <read-only-field ng-if="!edit" parent-field="item" field="'performanceOwnership'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-1">
+    <label tooltips tooltip-template="Collected Mechanical">Col. Mech.</label>
+    <input type="number" step="any" string-to-number class="form-control sm-p-l-5 sm-p-r-5" ng-model="item.mechanicalCollection"
+      ng-if="edit" ng-keyup="roundPercentages($event)">
+    <read-only-field ng-if="!edit" parent-field="item" field="'mechanicalCollection'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-1">
+    <label tooltips tooltip-template="Collected Performance">Col. Perf.</label>
+    <input type="number" step="any" string-to-number class="form-control sm-p-l-5 sm-p-r-5" ng-model="item.performanceCollection"
+      ng-if="edit" ng-keyup="roundPercentages($event)">
+    <read-only-field ng-if="!edit" parent-field="item" field="'performanceCollection'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-2 action-btn">
+    <button ng-show="edit && !hasChildPublisher && !hasChildComposer" class="btn btn-sm btn-primary row-button sm-p-l-0 sm-p-r-0 m-l-0"
+      ng-click="addChild(item, 'Publisher')" tooltips tooltip-template="Add Publisher">+ Pub</button>
+    <button ng-show="edit" class="btn btn-sm btn-primary row-button sm-p-l-0 sm-p-r-0 m-l-0"
+      ng-click="addChild(item, 'Composer')" tooltips tooltip-template="Add Composer">+ Comp</button>
+    <button ng-show="edit && !(!hasChildPublisher && !hasChildComposer)" class="btn btn-sm btn-warning row-button sm-p-l-0 sm-p-r-0 m-l-0"
+      ng-click="insertPublisher()" tooltips tooltip-template="Insert Publisher">&lt; Pub</button>
+    <div class="btn-group row-button dropdown-default" ng-show="edit">
+      <a class="btn btn-danger dropdown-toggle w-xs-100-p p-r-16" data-toggle="dropdown" aria-expanded="false">
+        <i class="fa fa-trash"></i></span>
+      </a>
+      <ul class="dropdown-menu w-xs-100-p">
+        <li>
+          <a href="javascript:void(0)" ng-click="delete(parent, item)">Full Chain</a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" ng-click="delete(parent, item, true)">Publisher Only</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <child-ip-chain class="col-xs-12" ng-repeat="child in item.children" edit="edit" item="child" on-change="onChange"
+    composers="composers" publishers="publishers" parent="item" index="$index"></child-ip-chain>
+</div>
+
+<div class="row contract-row-layout ip-chain-row" ng-if="item.type === 'Composer'">
+  <div class="form-group required col-xs-1">
+    <div ng-class="index > 0 ? 'elbow subsequent' : 'elbow'">
+    </div>
+  </div>
+  <div class="form-group col-xs-2">
+    <label>Composer</label>
+    <composer-select-field edit="edit" set-controlled="setControlled" on-change="onChange" value="item.composerId"
+      populated="item.composer">
+    </composer-select-field>
+  </div>
+  <div class="form-group col-xs-2">
+    <label>Category</label>
+    <select class="form-control" ng-if="edit" ng-model="item.contractType"
+      ng-options="item as item for item in ['Lyrics and Music', 'Lyrics', 'Music', 'Arranger', 'Sub Arranger', 'Adapter', 'Sub Author', 'Translator']"></select>
+    <read-only-field ng-if="!edit" parent-field="item" field="'contractType'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-1 ip-chain-checkbox-col">
+    <label tooltips tooltip-template="Controlled">Cont.</label>
+    <input ng-disabled="!edit" type="checkbox" class="ip-chain-checkbox" ng-click="onChange()"
+      ng-model="item.controlled">
+  </div>
+  <div class="form-group col-xs-1">
+    <label tooltips tooltip-template="Owned Mechanical">Own Mech.</label>
+    <input type="number" step="any" string-to-number class="form-control sm-p-l-5 sm-p-r-5" ng-model="item.mechanicalOwnership"
+      ng-if="edit" ng-keyup="roundPercentages($event)">
+    <read-only-field ng-if="!edit" parent-field="item" field="'mechanicalOwnership'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-1">
+    <label tooltips tooltip-template="Owned Performance">Own Perf.</label>
+    <input type="number" step="any" string-to-number ng-blur="onChange()" class="form-control sm-p-l-5 sm-p-r-5"
+      ng-model="item.performanceOwnership" ng-if="edit" ng-keyup="roundPercentages($event)">
+    <read-only-field ng-if="!edit" parent-field="item" field="'performanceOwnership'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-1">
+    <label tooltips tooltip-template="Collected Mechanical">Col. Mech.</label>
+    <input type="number" step="any" string-to-number class="form-control sm-p-l-5 sm-p-r-5" ng-model="item.mechanicalCollection"
+      ng-if="edit" ng-keyup="roundPercentages($event)">
+    <read-only-field ng-if="!edit" parent-field="item" field="'mechanicalCollection'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-1">
+    <label tooltips tooltip-template="Collected Performance">Col. Perf.</label>
+    <input type="number" step="any" string-to-number class="form-control sm-p-l-5 sm-p-r-5" ng-model="item.performanceCollection"
+      ng-if="edit" ng-keyup="roundPercentages($event)">
+    <read-only-field ng-if="!edit" parent-field="item" field="'performanceCollection'"></read-only-field>
+  </div>
+  <div class="form-group col-xs-2 action-btn">
+    <button ng-show="edit" class="btn btn-danger row-button sm-p-l-0 sm-p-r-0 m-l-0" ng-click="delete(parent, item)"><i
+        class="fa fa-trash"></i></button>
+  </div>
+  <child-ip-chain class="col-xs-12" ng-repeat="child in item.children" edit="edit" on-change="onChange" item="child"
+    composers="composers" publishers="publishers" parent="item" index="$index"></child-ip-chain>
+</div>

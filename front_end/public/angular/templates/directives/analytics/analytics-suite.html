@@ -1,0 +1,145 @@
+<div class="alert alert-info" ng-if="analyticsInfo">
+  <p>{{analyticsInfo}}</p>
+</div>
+<div style="outline: none;" class="panel panel-default filtersMarker" data-ng-if="showGraphs && analytics" data-ng-click="showFilters('open')"><!--data-ng-show="!filtersOpen"-->
+  <div class="panel-heading p-b-15">
+    <div class="panel-title">
+      Filter
+    </div>
+    <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': filtersOpen, 'glyphicon-chevron-right': !filtersOpen}"></i>
+  </div>
+</div>
+<div id="analyticsFiltersUIToggle">
+  <div class="row">
+    <div data-ng-class="{ 'col-xs-12' : !comparisonFilters, 'col-xs-6': comparisonFilters }">
+      <analytics-filter-block
+        dataset="table"
+        data-ng-repeat="filterBlock in filters.filterblocks"
+        first="$first"
+        block-title="'Filter'"
+        filter-block="filterBlock"
+        block-identifier="'filter'+$index"
+        filters="filters"
+        base-filter="analyticsConfig.baseFilter"
+        showing-comparison="!!comparisonFilters"
+        field-options="fieldOptions"
+        client-type="clientType"
+        delete="deleteSalesRow(sale)"
+        show-filters="showFilters"
+        filters-open="filtersOpen"
+        search-contracts="searchContracts"
+        contracts="contracts"
+        companies="companies"
+        search-companies="searchCompanies"
+        contract-categories="contractCategories"
+        periods="periods"
+        search-periods="searchPeriods"
+        sales-files= "salesFiles"
+        search-sales-files="searchSalesFiles"
+        cat-types="catTypes"
+        channels="channels"
+        configs="configs"
+        territories="territories"
+        catalogue-groups="catalogueGroups"
+        prices="prices"
+        search-releases="searchReleases"
+        release-string="releaseString"
+        releases="releases"
+        search-tracks="searchTracks"
+        track-string="trackString"
+        tracks="tracks"
+        search-works="searchWorks"
+        works="works"
+        sources="sources"
+        report-type="reportType"
+        target-periods="targetPeriods"
+        foreign-ids="foreignIds"></analytics-filter-block>
+      <div class="row hidden-xs" data-ng-if="!hideOr">
+        <div class="col-xs-12">
+          <button class="btn btn-sm btn-complete w-xs-100-p m-xs-l-0 m-l-0 m-b-20" data-ng-click="addFilterBlock(filters)"><i class="fa fa-plus-circle"></i> OR</button>
+          <span data-ng-if="!comparisonFilters && !ignoreComparison" class="hidden-xs">
+              <button class="btn btn-sm btn-success w-xs-100-p m-xs-l-0 m-b-20" data-ng-click="addComparisonFilter()"><i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Comparison</button>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6" data-ng-if="comparisonFilters" class="hidden-xs">
+      <analytics-filter-block
+        dataset="table"
+        data-ng-repeat="filterBlock in comparisonFilters.filterblocks"
+        first="$first"
+        block-title="'Comparison'"
+        filter-block="filterBlock"
+        block-identifier="'comparison'+$index"
+        filters="comparisonFilters"
+        base-filter="analyticsConfig.baseFilter"
+        showing-comparison="!!comparisonFilters"
+        field-options="fieldOptions"
+        client-type="clientType"
+        delete="deleteSalesRow(sale)"
+        search-contracts="searchContracts"
+        contracts="contracts"
+        companies="companies"
+        search-companies="searchCompanies"
+        contract-categories="contractCategories"
+        periods="periods"
+        search-periods="searchPeriods"
+        sales-files= "salesFiles"
+        search-sales-files="searchSalesFiles"
+        cat-types="catTypes"
+        channels="channels"
+        configs="configs"
+        territories="territories"
+        catalogue-groups="catalogueGroups"
+        prices="prices"
+        search-releases="searchReleases"
+        release-string="releaseString"
+        releases="releases"
+        search-tracks="searchTracks"
+        track-string="trackString"
+        tracks="tracks"
+        search-works="searchWorks"
+        works="works"
+        sources="sources"
+        target-periods="targetPeriods"
+        foreign-ids="foreignIds"></analytics-filter-block>
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-complete w-xs-100-p m-xs-l-0 m-l-0 m-b-20" data-ng-click="addFilterBlock(comparisonFilters)"><i class="fa fa-plus-circle"></i> OR</button>
+          <button class="btn btn-danger w-xs-100-p m-xs-l-0 m-b-20" data-ng-click="removeComparisonFilter()"><i class="fa fa-minus-circle"></i>&nbsp;&nbsp;Comparison</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div data-ng-if="showGraphs">
+    <div class="row">
+      <div class="col-xs-12">
+        <analytics-graph-selection graph-options="graphOptions"></analytics-graph-selection>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <button class="btn btn-complete btn-analytics-go w-xs-100-p m-xs-l-0 m-l-0 m-b-20 sm-m-t-10" data-ng-click="getAnalyticsData()"><i class="fa fa-search"></i>&nbsp;&nbsp;Go</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Main Analytics -->
+<div data-ng-if="showGraphs">
+  <div class="row">
+    <div class="col-xs-12">
+      <analytics-graphs
+        showing-comparison="!!comparisonFilters"
+        analysis-data="analytics"
+        comparison-data="comparisonAnalytics"
+        filters="filters"
+        comparison-filters="comparisonFilters"
+        get-analytics-data="getAnalyticsData"
+        field-options="fieldOptions"
+        releases="releases"
+        tracks="tracks"
+        works="works"
+        load-current-catalogue="loadCurrentCatalogue"></analytics-graphs>
+    </div>
+  </div>
+</div>

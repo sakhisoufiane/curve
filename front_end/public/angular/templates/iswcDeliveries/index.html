@@ -1,0 +1,287 @@
+<div id="CUR-HVbgjWTk" class="jumbotron" data-pages="parallax">
+  <div id="CUR-psXYxoUc" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-fACEHMWY" class="inner">
+      <ul id="CUR-iqqDesRN" class="breadcrumb">
+        <li id="CUR-PAzWlQWt">
+          <a id="CUR-kMGXuzKl" href="/#/iswcDeliveries" class="active">ISWC</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div id="CUR-hvzycFCz" class="container-fluid container-fixed-lg">
+  <div id="CUR-YsAJyjgL" class="row">
+    <div id="CUR-zDElBfdwfd" class="panel panel-transparent hidden-xs">
+      <ul id="CUR-gGyfvJsa" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-gddTOFPg" ng-class="activeTab == 'iswcDeliveries' ? 'active' : ''" 
+          ng-click="setTab('iswcDeliveries')">
+          <a id="CUR-AdiLhKcj" data-toggle="tab" aria-expanded="true">
+            <span id="CUR-NMCxAefJ">ISWC Deliveries</span>
+          </a>
+        </li>
+        <li id="CUR-rERxlLVR" ng-class="activeTab == 'iswcAcknowledgements' ? 'active' : ''"
+          ng-click="setTab('iswcAcknowledgements')">
+          <a id="CUR-wTPMPqdd" data-toggle="tab" aria-expanded="false">
+            <span id="CUR-OAikxanx">ISWC Acknowledgements</span>
+          </a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-gtyTvCZu" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-dhaTtorn" ng-show="activeTab === 'iswcDeliveries'" ng-include="'iswc-deliveries-tab.html'"></div>
+        <div id="CUR-FZfiODNA" ng-show="activeTab === 'iswcAcknowledgements'" ng-include="'iswc-acknowledgements-tab.html'">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="iswc-deliveries-tab.html">
+  <div id="CUR-rjwXBeIh" class="jumbotron" data-pages="parallax">
+    <div id="CUR-MxjYnTwU" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+      <div id="CUR-lOHnVoEj" class="inner">
+      </div>
+    </div>
+  </div>
+  <div id="CUR-sKxpWEvf" class="row">
+    <div id="CUR-PogQjqmF" class="col-xs-6 col-md-4 col-lg-4 text-left">
+      <form id="CUR-NkxduFHN" class="sm-p-l-15 sm-p-r-15" ng-submit="loadIswcDeliveries()">
+        <div id="CUR-tBAKBgTn" class="input-group transparent">
+          <input id="CUR-wwlvTpLw" type="text" class="form-control" placeholder="Search" ng-model="iswcDeliveriesFilter.text">
+          <span id="CUR-MuaKNIDT" class="input-group-addon pointer" ng-click="loadIswcDeliveries()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-JeFuRSTU" class="col-xs-6 col-md-4 col-md-offset-4 text-right">
+      <div id="CUR-sxUtkqpN" class="sm-p-l-15 sm-p-r-15">
+        <button id="CUR-oPrvcegF" class="btn btn-danger w-xs-100-p m-xs-l-0" data-toggle="modal" data-target="#deleteModalIswcDeliveries"
+          ng-show="rights.catalogue == 'Edit'">
+          <i class="fa fa-trash"></i>&nbsp;Delete</button>
+        <a id="CUR-RQMHPLdF" href="/#/iswcDeliveries/new" ng-show="rights.catalogue == 'Edit' && !demoMode">
+          <button id="CUR-CeTzCIuS" class="btn btn-complete w-xs-100-p m-xs-l-0">
+            <i class="fa fa-plus"></i>&nbsp;Create</button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-xyyfKbMz" class="col-sm-12">
+    <h5 id="CUR-dVmqRPtj" class="pull-right">Total: {{iswcDeliveriesFilter.total || 0}}</h5>
+  </div>
+  <div id="CUR-HMBLaijR" class="row">
+  <div id="CUR-pZiNsTPH" class="col-xs-12 text-left">
+    <div id="CUR-TbmuNoTr" class="panel panel-default">
+      <div id="CUR-KeMtCrpo" class="panel-heading">
+        <div id="CUR-LBMhuRvD" class="panel-title">
+          ISWC Deliveries
+        </div>
+      </div>
+      <div id="CUR-PgfGVsqR" class="panel-body">
+        <responsive-table headers="iswcDeliveryHeaders" data="iswcDeliveries" selectable="true" order-by="filter.orderBy"
+          sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+      </div>
+    </div>
+    </div>
+    <div id="CUR-hVVxDwrK" class="col-sm-12">
+      <div id="CUR-vrQtQLXb" class="pull-right">
+        <span id="CUR-VrOLuUnF" class="inline-block" ng-if="!iswcDeliveriesFilter.isShowingAll">Showing 25 Per Page |</span>
+        <span id="CUR-IvYDsxzJ" class="inline-block" ng-if="iswcDeliveriesFilter.isShowingAll">Showing 500 Per Page</span>
+        <a id="CUR-LsSGMGvF" class="p-l-5" ng-if="!iswcDeliveriesFilter.isShowingAll" ng-click="iswcDeliveriesShowAll()">Show 500</a>
+      </div>
+    </div>
+    <div id="CUR-nmgltRUz" class="row">
+      <div id="CUR-ZOdKLkew" class="col-xs-12 text-center">
+        <pagination id="CUR-OElSPfVT" pages="iswcDeliveriesFilter.pages" total="iswcDeliveriesFilter.totalPages" current="iswcDeliveriesFilter.currentPage" change-page="iswcDeliveriesChangePage(page)"></pagination>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="iswc-acknowledgements-tab.html">
+  <div id="CUR-evpwDSPo" class="jumbotron" data-pages="parallax">
+    <div id="CUR-SHwXOllZ" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+      <div id="CUR-Lshwqxtm" class="inner">
+      </div>
+    </div>
+  </div>
+  <div id="CUR-AbMOTwWR" class="row">
+    <div id="CUR-TjYePsko" class="col-xs-6 col-md-4 col-lg-4 text-left">
+      <form id="CUR-PaJGkvVS" class="sm-p-l-15 sm-p-r-15" ng-submit="iswcAcknowledgementsChangePage()">
+        <div id="CUR-PMuYPebu" class="input-group transparent">
+          <input id="CUR-lrMzlYvr" type="text" class="form-control" placeholder="Search" ng-model="iswcAcknowledgementsFilter.text">
+          <span id="CUR-DAvnVmYN" class="input-group-addon pointer" ng-click="iswcAcknowledgementsChangePage()">
+            <i class="pg-search"></i>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div id="CUR-NkbZeArM" class="col-xs-6 col-md-4 col-md-offset-4 text-right">
+      <div id="CUR-OdlxMeUr" class="sm-p-l-15 sm-p-r-15">
+        <button id="CUR-GnKxlhqj" class="btn btn-danger w-xs-100-p m-xs-l-0" data-toggle="modal" data-target="#deleteModalIswcAcknowledgements"
+          ng-show="rights.catalogue == 'Edit'">
+          <i class="fa fa-trash"></i>&nbsp;Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="CUR-RvnWxPBR" class="row">
+    <div id="acknowledgement-filter-type-col" class="col-sm-4">
+      <div id="acknowledgement-filter-type-form" class="form-group">
+        <label id="acknowledgement-filter-type-form-label">Type</label>
+        <ui-select ng-model="iswcAcknowledgementsFilter.outputFormat" ng-disabled="edit">
+          <ui-select-match allow-clear="true">
+            <span id="acknowledgement-filter-type-form-select" ng-bind="$select.selected"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item in (['ISWC Resolution (IRS)','ISWC Allocation (IAS)'] | filter: $select.search)">
+            <span id="acknowledgement-filter-type-form-item" ng-bind="item"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div id="acknowledgement-filter-partner-col" class="col-sm-4">
+      <div id="CUR-cEIOFgOG" class="form-group required">
+        <label id="CUR-gNlOYxRx">Partner</label>
+        <ui-select ng-model="iswcAcknowledgementsFilter.deliveryPartnerId" ng-disabled="rights.catalogue != 'Edit'">
+          <ui-select-match allow-clear="true">
+            <span id="CUR-hCTGOhQC" ng-bind="$select.selected.name"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item._id as item in deliveryPartners | filter: $select.search track by $index">
+            <span id="CUR-cURvLjII" ng-bind="item.name"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+  </div>
+
+  <div id="CUR-nToSvzHT" class="row">
+    <div id="CUR-iswcDelivery-statuses-tab-div-row-4" class="row" ng-if="clientType == 'Publisher'">
+      <div style="display: flex; align-items: center; justify-content: center; margin-top: 25px;">
+        <button id="CUR-iyWFicxO" class="btn btn-complete" ng-click="loadIswcAcknowledgements()">
+          <i class="fa fa-filter"></i>
+          Filter
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-ISpKMvsX" class="col-sm-12">
+    <h5 id="CUR-dVmqRPtj" class="pull-right">Total: {{iswcAcknowledgementsFilter.total || 0}}</h5>
+  </div>
+  <div id="CUR-EeYKyDLx" class="row">
+  <div id="CUR-zuKcRpzM" class="col-xs-12 text-left">
+    <div id="CUR-ShuqeOUm" class="panel panel-default">
+      <div id="CUR-FacULEjm" class="panel-heading">
+        <div id="CUR-gxFQTXPX" class="panel-title">
+          ISWC Acknowledgements
+        </div>
+      </div>
+      <div id="CUR-IITqagaC" class="panel-body">
+        <div id="CUR-iswc-ack-table-wrapper" class="table-responsive">
+          <table id="CUR-iswc-ack-table" class="table table-hover dataTable no-footer" ng-class="{'table-selectable': selectable}">
+            <thead>
+              <tr id="CUR-iswc-ack-table-thead-tr">
+                <th class="table-checkbox">
+                  <input id="CUR-iswc-ack-table-checkbox-all" type="checkbox" class="select-all" ng-click="selectAllIswcAcknowledgements()" ng-checked="selectAllIswcAckChecked" ng-show="rights.catalogue == 'Edit'">
+                </th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Partner</th>
+                <th>Iswc In</th>
+                <th>Iswc Missing</th>
+                <th>Ingestion</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody id="CUR-iswc-ack-table-tbody">
+              <tr id="CUR-iswc-ack-table-tbody-tr" ng-repeat="iswcAcknowledgement in iswcAcknowledgements">
+                <td id="CUR-iswc-ack-table-tbody-checkbox" class="v-align-middle hidden-xs"><input type="checkbox" ng-model="iswcAcknowledgement.selected"></td>
+                <td id="CUR-iswc-ack-table-tbody-filename"><a href="/#/iswcAcknowledgements/{{iswcAcknowledgement._id}}/edit">{{iswcAcknowledgement.fileName}}</a></td>
+                <td id="CUR-iswc-ack-table-tbody-outputformat">{{iswcAcknowledgement.outputFormat}}</td>
+                <td id="CUR-iswc-ack-table-tbody-deliverypartner"><a href="/#/deliverySettings/deliveryPartners/{{iswcAcknowledgement.deliveryPartnerId}}/edit">{{iswcAcknowledgement.deliveryPartnerName}}</a></td>
+                <td id="CUR-iswc-ack-table-tbody-iswcin">
+                  <div class="successCircle" ng-style="iswcAcknowledgement.iswcIn > 100 ? {'width': '25px', 'height': '25px'} : {}">{{iswcAcknowledgement.iswcIn}}</div>
+                </td>
+                <td id="CUR-iswc-ack-table-tbody-iswcmissing">
+                  <div class="dangerCircle" ng-style="iswcAcknowledgement.iswcMissing > 100 ? {'width': '25px', 'height': '25px'} : {}">{{iswcAcknowledgement.iswcMissing}}</div>
+                </td>
+                <td id="CUR-iswc-ack-table-tbody-ingestion">
+                  <span id="CUR-iswc-ack-table-tbody-ingestion-ingested" ng-if="!iswcAcknowledgement.errors.length" class="label label-sm label-green">Ingested</span>
+                  <span id="CUR-iswc-ack-table-tbody-ingestion-errored" ng-if="iswcAcknowledgement.errors.length" class="label label-sm label-danger" tooltips tooltip-side="left" tooltip-template="Errored<br/><br/>{{iswcAcknowledgement.errors.join('<br/><br/>')}}">Errored</span>
+                </td>
+                <td id="CUR-iswc-ack-table-tbody-createdat">{{ iswcAcknowledgement.createdAt | date : 'MMM d, yyyy' : 'UTC' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div id="CUR-rMUcwxRp" class="col-sm-12">
+      <div id="CUR-kYGJgACj" class="pull-right">
+        <span id="CUR-ohRiqDSv" class="inline-block" ng-if="!iswcAcknowledgementsFilter.isShowingAll">Showing 25 Per Page |</span>
+        <span id="CUR-PtczAeIK" class="inline-block" ng-if="iswcAcknowledgementsFilter.isShowingAll">Showing 500 Per Page</span>
+        <a id="CUR-OQDCoOjv" class="p-l-5" ng-if="!iswcAcknowledgementsFilter.isShowingAll" ng-click="iswcAcknowledgementsShowAll()">Show 500</a>
+      </div>
+    </div>
+    <div id="CUR-BoKZzmNR" class="row">
+      <div id="CUR-zOKhdSKO" class="col-xs-12 text-center">
+        <pagination id="CUR-JgVOtKzd" pages="iswcAcknowledgementsFilter.pages" total="iswcAcknowledgementsFilter.totalPages" current="iswcAcknowledgementsFilter.currentPage" change-page="iswcAcknowledgementsChangePage(page)"></pagination>
+      </div>
+    </div>
+  </div>
+</script>
+
+<div class="modal fade stick-up" id="deleteModalIswcDeliveries" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-mGpDUHEk" class="modal-dialog">
+    <div id="CUR-oMUKutkD" class="modal-content">
+      <div id="CUR-njCsmdIy" class="modal-header clearfix text-left">
+        <button id="CUR-ETMPKXDu" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-LnFLjvwY">Delete ISWC Deliveries</h5>
+      </div>
+      <div id="CUR-mBCsoLDu" class="modal-body">
+        <div id="CUR-qEQmGrbe" class="row">
+          <div id="CUR-qidftdrQ" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete selected ISWC deliveries? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-IQiLEkiW" class="row">
+          <div id="CUR-ywzKmDIp" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-qkFpgnTK" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-XqECkXsC" type="button" class="btn btn-danger m-t-5" ng-click="deleteIswcDeliveries()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="deleteModalIswcAcknowledgements" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-ZGgdgEuJ" class="modal-dialog">
+    <div id="CUR-lTTalLRH" class="modal-content">
+      <div id="CUR-UjZpfrkA" class="modal-header clearfix text-left">
+        <button id="CUR-QDUdoTLN" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-BwoAoTYK">Delete ISWC Acknowledgements</h5>
+      </div>
+      <div id="CUR-XcYHSVVy" class="modal-body">
+        <div id="CUR-BcSXUBDY" class="row">
+          <div id="CUR-AVcjsURI" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete selected ISWC acknowledgements? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-FTyqIsev" class="row">
+          <div id="CUR-BqjDybLC" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-aFSNAQGG" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-wTscsryC" type="button" class="btn btn-danger m-t-5" ng-click="deleteIswcAcknowledgements()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

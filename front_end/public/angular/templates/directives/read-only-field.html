@@ -1,0 +1,6 @@
+<div ng-style="!hasData && {'height': '30px'}">
+    <p ng-if="hasData" tooltips tooltip-class="wider" tooltip-template="{{parentField[field]}}"
+        tooltip-hidden="{{(parentField[field].length < 25) ? 'true':'false'}}" class="readOnlyTypeAhead">
+        {{parentField[field]}}
+    </p>
+</div>

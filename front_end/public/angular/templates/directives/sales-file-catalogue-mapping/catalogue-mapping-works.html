@@ -1,0 +1,130 @@
+<div class="row catalogue-mapping-wrapper">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <h4>Works</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-info">
+          <p>Below are all Work Identifiers that did not get matched to your catalogue.</p>
+          <p>Match the values on the right using the dropdowns on the left.</p>
+          <p>These will all be remembered and saved as aliases on the Work for future mapping.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" ng-show="salesFile.invalidFields.worksWarning.message && salesFile.invalidFields.works.length > 0">
+      <div class="col-xs-12">
+        <div class="alert alert-warning">
+          <i class="fa fa-exclamation-triangle" style="font-size: 20px; margin: 10px 0;"></i>
+          <p>{{salesFile.invalidFields.worksWarning.message}}</p>
+          <a href="{{salesFile.invalidFields.worksWarning.url}}">Unmapped Page</a>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="alert alert-success" ng-if="salesFile.invalidFields.works.length === 0">All done! All works have been created.</div>
+
+    
+    <div class="text-right">
+      <div class="btn-group dropdown-default">
+        <a id="bulk-create-works" class="btn btn-complete dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false">
+          <i class="fa fa-plus"></i>&nbsp;Bulk Create <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu w-xs-100-p">
+          <li>
+            <a id="bulk-create-works-selected" class="pointer" data-toggle="modal" data-target="#createWorksModal">Selected</a>
+          </li>
+          <li>
+            <a id="bulk-create-works-all" class="pointer" data-toggle="modal" data-target="#createWorksAllModal">All</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div id="CUR-clxnsXmw">
+      <table id="CUR-CBKKdtHR" class="table table-condensed dataTable no-footer sales-table sales-table-with-checkbox minimal-padding unmapped-works-table">
+        <thead>
+          <tr id="CUR-EkZPQKgp">
+            <th class="table-checkbox hidden-xs"><input id="select-all-works" type="checkbox" ng-checked="selectAllWorksChecked" ng-click="selectAllWorks()"></th>
+            <th>Search</th>
+            <th><span style="margin-left: 15px;">Title</span></th>
+            <th>Source</th>
+            <th>Parties</th>
+            <th>Codes</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="CUR-rtsmvjLb">
+          <tr ng-repeat="work in salesFile.invalidFields.works | limitTo: 25: workMappingIndex">
+            <td class="v-align-middle hidden-xs">
+              <input id="work-select-{{$index}}" type="checkbox" ng-model="work.selected">
+            </td>
+            <td class="v-align-middle hidden-xs" style="width: 20%;">
+              <work-select-field allow-clear="true" value="mappedWorks[$index + workMappingIndex]" edit="rights.catalogue === 'Edit'"></work-select-field>
+            </td>
+            <td style="width: 35%;">
+              <div style="flex-wrap: wrap; margin-left: 15px; margin-right: 15px;">
+                {{work.title}}
+              </div>
+            </td>
+            <td style="width: 15%;">{{work.source}}</td>
+            <td style="width: 15%;" >
+              <div style="display: flex; flex-wrap: wrap; margin-right: 15px;">
+                {{work.party1}}{{work.party1 ? ',' : ''}}
+                {{work.party2}}{{work.party2 ? ',' : ''}}
+                {{work.party3}}
+              </div>
+            </td>
+            <td style="width: 20%; margin-right: 15px;">
+              <div ng-if="work.identifier" style="display: flex; align-items: center;">
+                <p style="color: rgba(44,44,44,.35); font-weight: 600; font-size: 12px!important; margin: 0px;">ID</p>
+                <div style="margin: 4px;"></div>
+                <p style="font-size: 12px!important; text-align: center; margin: 0px;">{{work.identifier}}</p>
+              </div>
+              <div ng-if="work.iswc" style="display: flex; align-items: center;">
+                <p style="color: rgba(44,44,44,.35); font-weight: 600; font-size: 12px!important; margin: 0px;">ISWC</p>
+                <div style="margin: 4px;"></div>
+                <p style="font-size: 12px!important; text-align: center; margin: 0px">{{work.iswc}}</p>
+              </div>
+              <div ng-if="work.tunecode" style="display: flex; align-items: center;">
+                <p style="color: rgba(44,44,44,.35); font-weight: 600; font-size: 12px!important; margin: 0px;">TUNE</p>
+                <div style="margin: 4px;"></div>
+                <p style="font-size: 12px!important; text-align: center; margin: 0px;">{{work.tunecode}}</p>
+              </div>
+              <div ng-if="work.songcode" style="display: flex; align-items: center;">
+                <p style="color: rgba(44,44,44,.35); font-weight: 600; font-size: 12px!important; margin: 0px;">SONG</p>
+                <div style="margin: 4px;"></div>
+                <p style="font-size: 12px!important; text-align: center; margin: 0px;">{{work.songcode}}</p>
+              </div>
+            </td>
+            <td style="width: 25%;">
+              <i class="fa fa-check text-success" ng-if="work.complete"></i>
+            </td>
+            <td class="w-20">
+              <button id="create-work-{{index}}" class="btn btn-complete" ng-click="createWork(work, 'unmapped')">+ Create</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="row m-b-20" ng-if="salesFile.invalidFields.works && salesFile.invalidFields.works.length > 25">
+        <div class="col-xs-4">
+          Showing {{workMappingIndex + 1}} to {{lowestValue(workMappingIndex + 25, salesFile.invalidFields.works.length)}} of {{salesFile.invalidFields.works.length}}
+        </div>
+        <div class="col-xs-4 text-center">
+          <div class="btn-group">
+            <button ng-disabled="!(workMappingIndex > 0)" type="button" class="btn btn-default" ng-click="minusFromIndex('workMappingIndex', 25)"><</button>
+            <button ng-disabled="!(salesFile.invalidFields.works.length > workMappingIndex + 25)" type="button" class="btn btn-default" ng-click="addToIndex('workMappingIndex', 25)">></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

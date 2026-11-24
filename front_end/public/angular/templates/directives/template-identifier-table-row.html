@@ -1,0 +1,7 @@
+<td class="v-align-middle">
+  <a ng-if="identifier.salesFileId" href="#/sales/{{ identifier.salesFileId }}/edit" title="{{identifier.salesFileName}}" ng-bind-html="identifier.salesFileName"></a>
+  <span ng-if="!identifier.salesFileId">From File Uploaded Directly to Template</span>
+</td>
+<td class="v-align-middle width-70 hidden-xs">
+  <button class="btn btn-danger pull-right" ng-click="delete({ identifier: identifier })"><i class="fa fa-trash"></i></button>
+</td>

@@ -1,0 +1,49 @@
+<div class="row" ng-if="index == 0">
+  <div class="form-group col-xs-5">
+    <label>Client</label>
+  </div>
+  <div class="form-group col-xs-5">
+    <label>Cat Group</label>
+  </div>
+  <div class="form-group col-xs-2">
+  </div>
+</div>
+<div class="row">
+  <div class="form-group col-xs-5">
+    <ui-select ng-model="client.clientId">
+      <ui-select-match allow-clear="true">
+        <span ng-bind="$select.selected.name"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="item._id as item in (clients | filter: $select.search)">
+        <span ng-bind="item.name"></span>
+      </ui-select-choices>
+    </ui-select>
+  </div>
+  <div class="form-group col-xs-5">
+    <ui-select ng-model="client.catalogueGroup">
+      <ui-select-match allow-clear="true">
+        <span ng-bind="$select.selected"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="catalogueGroup in (originalClient.catalogueGroups | filter: $select.search)">
+        <span ng-bind="catalogueGroup"></span>
+      </ui-select-choices>
+    </ui-select>
+  </div>
+  <div class="form-group col-xs-2">
+    <button class="btn btn-danger" ng-click="delete({ client: client })"><i class="fa fa-trash"></i></button>
+  </div>
+  <div class="panel-body p-t-15">
+    <div class="form-group">
+      <label><strong>Include:</strong></label>
+    </div>
+    <div class="form-group checkbox-group">
+      <div class="form-group ">
+        <label><input type="checkbox" ng-model="client.transferPayees"> Payees</label>
+        <label><input type="checkbox" ng-model="client.transferPublishers"> Publishers</label>
+        <label><input type="checkbox" ng-model="client.transferComposers"> Composers</label>
+        <label><input type="checkbox" ng-model="client.transferWorks"> Works</label>
+        <label><input type="checkbox" ng-model="client.transferTracks"> Tracks</label>
+        <label><input type="checkbox" ng-model="client.transferReleases"> Releases</label>
+      </div>
+    </div>
+  </div>

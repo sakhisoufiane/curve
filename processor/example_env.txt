@@ -1,0 +1,54 @@
+### APP ###
+applicationToken="DrLmNC2q9t"
+apiUrl="http://localhost:8081"
+frontEndUrl="http://localhost:8082"
+
+### SENDGRID ###
+sendgridKey="*****"
+### ENVIRONMENT ###
+logGroupName="Dev"
+logStreamName="Processor"
+environmentName="Development"
+
+### S3 ### REGION
+S3_region="eu-west-1"
+### S3 ### DEV ENV KEYS
+S3_access_key="*****"
+S3_secret_key="*****"
+S3_bucket="curve-royalties-staging-new"
+
+### MONGO ### LOCAL
+DB_PROTOCOL="mongodb://"
+DB_URL="localhost:27017"
+DB_NAME="curve-production"
+DB_USER="root"
+DB_PASS="root"
+DB_OPTS=""
+
+### MONGO ### STAGING
+DB_PROTOCOL="mongodb+srv://"
+DB_URL="curvestaging.xseuw.mongodb.net"
+DB_NAME="curve-production"
+DB_USER="*****"
+DB_PASS="*****"
+DB_OPTS="retryWrites=true&w=majority"
+
+### ENCRYPTION KEYS ###
+MASTER_ENCRYPTION_KEY="*****"
+
+### BIG QUERY ###
+BQ_project_id="*****"
+BQ_client_email="*****"
+BQ_private_key="*****"
+
+### Buckets for exporting data from BigQuery ###
+GCS_CUSTOM_REPORT_EXPORT=curve-custom-reports-staging
+GCS_OUTPUT_SALES_EXPORT=output-sales-exports-staging
+GCS_UNREPORTED_SALES_EXPORT=unreportsales-report-output-staging
+GCS_JOINED_PERIOD_EXPORT=period_joined_input_data_staging
+GCS_ALL_SALES_CSV_EXPORT=all-period-sales-export-staging
+
+### Platform integration ###
+SALES_INGESTION_INPUTS_BUCKET=curve-sales-ingestion-inputs-development
+SALES_INGESTION_OUTPUTS_BUCKET=curve-sales-ingestion-outputs-development
+PLATFORM_GCS_PROJECT_ID=curve-development

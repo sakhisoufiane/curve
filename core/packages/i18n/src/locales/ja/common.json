@@ -1,0 +1,19 @@
+{
+  "loggedInAs": "{{name}} としてログイン中",
+  "notifications": "通知",
+  "noNotifications": "通知はありません",
+  "clearAll": "すべてクリア",
+  "markAllAsRead": "すべて既読にする",
+  "darkMode": "ダークモード",
+  "signOut": "サインアウト",
+  "language": "言語",
+  "search": "検索",
+  "launchTour": "ツアーを開始",
+  "totalRevenue": "総収益",
+  "totalCosts": "総コスト",
+  "incompleteLines": "未完成行",
+  "recentContracts": "最近の契約",
+  "recentSales": "最近の売上",
+  "revenueOverTime": "収益の推移",
+  "revenueOverTimeDesc": "このグラフは、クライアントの収益の推移を示しています。"
+}

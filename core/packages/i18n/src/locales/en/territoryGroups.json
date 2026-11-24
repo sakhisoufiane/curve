@@ -1,0 +1,51 @@
+{
+  "title": "Territory Groups",
+  "description": "Manage reusable sets of territories for use across the app",
+  "searchPlaceholder": "Search by name",
+  "entityName": "Territory Group",
+  "entityNamePlural": "Territory Groups",
+  "entityNameLower": "territory group",
+  "entityNameLowerPlural": "territory groups",
+  "deleteSelected": "Delete Selected",
+  "emptyState": {
+    "title": "No territory groups yet",
+    "description": "Create a territory group to reuse sets of territories across your works and contracts."
+  },
+  "noResults": "No territory groups match your search.",
+  "columns": {
+    "name": "Name",
+    "territories": "Territories",
+    "createdAt": "Created"
+  },
+  "deleteDialog": {
+    "description": "\"{{name}}\" will be permanently deleted. This action cannot be undone."
+  },
+  "deleteToast": "Territory group deleted",
+  "edit": {
+    "newGroup": "New Territory Group",
+    "createdToast": "Territory group created",
+    "savedToast": "Territory group saved",
+    "menu": {
+      "delete": "Delete"
+    },
+    "overview": {
+      "sections": {
+        "details": {
+          "title": "Details",
+          "description": "Name and identification for this territory group."
+        },
+        "territories": {
+          "title": "Territories",
+          "description": "Select the territories included in this group."
+        }
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "e.g. European Union, APAC",
+          "required": "Name is required"
+        }
+      }
+    }
+  }
+}

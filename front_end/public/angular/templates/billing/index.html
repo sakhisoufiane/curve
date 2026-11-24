@@ -1,0 +1,318 @@
+<div id="CUR-wsTMmmNz" class="jumbotron" data-pages="parallax">
+  <div id="CUR-UhgxIbZY" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-TJaJMfeI" class="inner">
+      <ul id="CUR-WLiyrTUC" class="breadcrumb">
+        <li id="CUR-xJhbBKsO"><a id="CUR-bvxKYtvf" href="/#/billing">Billing</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-BOhwuyzj" class="container-fluid container-fixed-lg">
+  <div id="CUR-ewzZlCMt" class="row" ng-if="!requiresAdminChanges">
+    <div id="CUR-BRjNBJER" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-12 col-md-offset-0">
+      <div id="CUR-gQkqZbIs" class="sm-p-l-15 sm-p-r-15 text-right">
+        <button id="CUR-ZwSCBeZP" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="saveSettings()"><i class="fa fa-check"></i>
+          Save</button>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-trGrkNlM" class="row" ng-if="lockedForNonPayment() && !client.cancelledSubscription && !requiresAdminChanges">
+    <div id="CUR-BAIEYwiw" class="col-12 alert alert-danger text-center" role="alert" ng-if="client.billing && client.billing.lastPaymentDate">
+      <p>
+        <b>
+          Your card has expired or we have failed to take payment from your card. Please update the details below to reinstate your account.
+        </b>
+      </p>
+    </div>
+    <div id="CUR-UMuktlyG" class="col-12 alert alert-danger text-center" role="alert" ng-if="!client.billing || !client.billing.lastPaymentDate">
+      <p>
+        <b>
+          Your free trial of Curve has ended. In order to continue using the service, you will need to enter your payment details below.
+        </b>
+      </p>
+      <p id="CUR-WIjQrdgu" class="p-t-20 p-b-10">
+      <b>
+          Should you want to talk to someone in sales, please reach out to us at hello@curveroyaltysystems.com
+        </b>
+      </p>
+    </div>
+  </div>
+  <div id="KTDsiCdp" class="row" ng-if="requiresAdminChanges">
+    <div id="MYNcMmlY" class="col-12 alert alert-danger text-center" role="alert">
+      <p>
+        <b>
+          In order to continue using the service, the admin of this client must resume the subscription or update the payment details.
+        </b>
+      </p>
+    </div>
+  </div>
+  <div id="CUR-KTDsiCSY" class="row" ng-if="!requiresAdminChanges">
+    <div id="CUR-OUsAUUHv" class="panel panel-transparent hidden-xs">
+      <ul id="CUR-MYNcMmUo" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-EbmaaMxb" class="active" ng-click="setTab('overview')">
+          <a id="CUR-CmYARdvL" data-toggle="tab" aria-expanded="true"><span id="CUR-xkmXQCGz">Overview</span></a>
+        </li>
+        <li id="CUR-vvwUbHPi" ng-click="setTab('invoices')">
+          <a id="CUR-CjrQjKnO" data-toggle="tab" aria-expanded="false"><span id="CUR-uZpFVQGD">Invoices</span></a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-ZmHZZhoJ" class="tab-content" ng-if="!showAccordions">
+        <form id="CUR-hCsfCuPw" name="form" role="form" novalidate>
+          <div id="CUR-LimmHhvY" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+          <div id="CUR-pJTXtIdR" ng-show="activeTab === 'invoices'" ng-include="'invoices-tab.html'"></div>
+        </form>
+      </div>
+    </div>
+    <div id="CUR-VHjQjkwN" class="col-xs-12 visible-xs p-l-20 p-r-20" ng-if="showAccordions">
+      <uib-accordion close-others="true"
+        ng-init="status1.open = true; status2.open = false; status3.open = false; status4.open = false; status5.open = false;">
+        <form id="CUR-DyvIMAPl" name="form" role="form" novalidate>
+          <div id="CUR-FObiXJKU" uib-accordion-group class="panel-default" is-open="status1.open">
+            <uib-accordion-heading>
+              Overview <i class="pull-right glyphicon"
+                ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+            </uib-accordion-heading>
+            <div id="CUR-WohPXrBf" ng-include="'overview-tab.html'"></div>
+          </div>
+          <div id="CUR-QXAdPswq" uib-accordion-group class="panel-default" is-open="status2.open">
+            <uib-accordion-heading>
+              Invoices <i class="pull-right glyphicon"
+                ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+            </uib-accordion-heading>
+            <div id="CUR-KZCijFVl" ng-include="'invoices-tab.html'"></div>
+          </div>
+        </form>
+      </uib-accordion>
+    </div>
+  </div>
+</div>
+<script type="text/ng-template" id="overview-tab.html">
+    <!-- user is logged in as a client -->
+<div id="CUR-dzoPxBiT" ng-if="userRole === 'client'" class="row">
+  <div id="CUR-DaKTWJZp" class="col-xs-12 col-sm-6">
+    <div id="CUR-dvLOLXQk">
+      <div id="CUR-tYJVdDIl" class="panel panel-default">
+        <div id="CUR-HpSFgcjR" class="panel-heading">
+          <div id="CUR-nsrvFVMb" class="panel-title">
+            Billing Info
+          </div>
+        </div>
+        <div id="CUR-OiUmnoGk" class="panel-body p-t-15">
+          <div id="CUR-BeYPDeik" class="form-group required">
+            <label id="CUR-OToyzLNj">Name</label>
+            <input id="CUR-cWYDUAXc" type="text" class="form-control" ng-model="client.billing.companyName"
+              ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-MhInBRiy" class="form-group">
+            <label id="CUR-adxwzIyd">Address 1</label>
+            <input id="CUR-dOstxxdp" type="text" class="form-control" ng-model="client.billing.address1"
+              ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-eoDNoagr" class="form-group">
+            <label id="CUR-qaaAnVUy">Address 2</label>
+            <input id="CUR-mHlrwXlR" type="text" class="form-control" ng-model="client.billing.address2"
+              ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-ePExBRKo" class="form-group">
+            <label id="CUR-LWPWGGhc">City</label>
+            <input id="CUR-UJvbEKBy" type="text" class="form-control" ng-model="client.billing.city"
+              ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-UxdAnkDO" class="form-group">
+            <label id="CUR-McKTiykQ">Postcode/Zip code</label>
+            <input id="CUR-HoQqLffQ" type="text" class="form-control" ng-model="client.billing.postcode"
+              ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-spUpZHSY" class="form-group">
+            <label id="CUR-TqZMExAC">Country</label>
+            <ui-select ng-model="client.billing.country" ng-disabled="rights.contracts != 'Edit'">
+              <ui-select-match>
+                <span id="CUR-QrEZiKCI" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="country.code as country in countries | filter: $select.search">
+                <span id="CUR-ZWBBeEZy" class="country" ng-bind="country.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-LvWShZHf" class="form-group">
+            <label id="CUR-GDZDnJzI">Vat No</label>
+            <input id="CUR-GgRlQjts" type="text" class="form-control" ng-model="client.billing.vatNo"
+              ng-disabled="rights.contracts != 'Edit'">
+          </div>
+          <div id="CUR-KwDyQAWf" class="form-group">
+            <label id="CUR-eMsFhhLi">Billing Currency</label>
+            <select class="form-control" ng-model="client.billing.currency"
+              ng-options="item as item for item in ['GBP', 'USD', 'EUR']" ng-change="getClientUsage()"></select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-pgnKMCaS" class="col-xs-12 col-sm-6">
+    <div id="CUR-JfeQmrDA" class="panel panel-default" ng-if="internal">
+      <div id="CUR-qTOKqxfJ" class="panel-heading">
+        <div id="CUR-ISIHPVWJ" class="panel-title">
+          Billing Type
+        </div>
+      </div>
+      <div id="CUR-sdZKcbWk" class="panel-body p-t-15">
+        <div id="CUR-xdHXruLG" class="form-group">
+          <label id="CUR-XKzfaAmV">Billing Type</label>
+          <select class="form-control" ng-model="client.billing.billingType"
+            ng-options="item as item for item in ['Invoice', 'Card']"></select>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-wnyPsazx" class="panel panel-default" ng-show="client.billing && client.billing.billingType === 'Card' && client_secret && !client.cancelledSubscription">
+      <div id="CUR-GxffCSNK" class="panel-heading">
+        <div id="CUR-PDxZrdssd" class="panel-title">
+          Your Usage
+        </div>
+      </div>
+      <div id="CUR-gmkldsasi" class="panel-body p-t-15">
+        <div id="CUR-iyBGwsdsqw" ng-if="usage">
+          <p>
+            You are using <b>{{usage.contracts}}</b> of <b>{{usage.nextTier.contracts}}</b> contracts. <br>
+            You are using <b>{{usage.catalogue}}</b> of <b>{{usage.nextTier.catalogue}}</b> catalogue items. <br>
+            You are currently paying <b>{{client.billing.currency ? currencyMapping[client.billing.currency] : currencyMapping['GBP']}}{{usage.amount + usage.vat}}</b>/Month.
+          </p>
+          <p>The next tier will cost <b>{{client.billing.currency ? currencyMapping[client.billing.currency] : currencyMapping['GBP']}}{{ usage.nextTier.nextAmount + usage.nextTier.nextTierVat }}</b>/Month.</p>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-wnyPuLzx" class="panel panel-default" ng-show="client.billing && client.billing.billingType === 'Card' && client_secret && !client.cancelledSubscription">
+      <div id="CUR-GxkYCSNK" class="panel-heading">
+        <div id="CUR-PDxZrPpd" class="panel-title">
+          Card Details
+        </div>
+      </div>
+      <div id="CUR-gmkldLui" class="panel-body p-t-15">
+        <p id="CUR-iyBGwsIB" ng-if="usage && !lockedForNonPayment()">You will be charged <b>{{client.billing.currency ?
+            currencyMapping[client.billing.currency] :
+            currencyMapping['GBP']}}{{usage.amount + usage.vat}}</b> on <b>{{usage.nextBillingDate | date}}</b>.</p>
+        <p id="CUR-KjBVFjrt" ng-if="usage && lockedForNonPayment()">A payment of <b>{{client.billing.currency ?
+            currencyMapping[client.billing.currency] :
+            currencyMapping['GBP']}}{{usage.amount + usage.vat}}</b> is <b>overdue</b>.</p>
+        <div id="CUR-oaeVSvIF" class="form-group m-t-20">
+          <label id="CUR-RIcwpuWv">Billing Card:</label>
+          <div id="CUR-mjxPTXjC" ng-if="payment_method" class="m-t-10 m-b-20">
+            <i class="fa fa-credit-card"></i>
+            <b>{{payment_method.brand}}</b> ending with <b>{{payment_method.last4}}</b> expiring on
+            <b>{{payment_method.exp_month}}/{{payment_method.exp_year}}</b>
+          </div>
+          <div id="CUR-YlFuttUf" ng-if="!payment_method" class="m-t-10 m-b-20">
+            No card has been associated with this client yet.
+          </div>
+          <label id="CUR-QVoiPfgo" class="m-t-10 m-b-20">Add a new Card:</label>
+          <div id="card-element"></div>
+          <div id="CUR-WNVHStrM" class="row">
+            <div id="CUR-cciVRtEc" class="col-12 text-center">
+              <button id="card-button" class="btn btn-success m-t-20" ng-click="saveCard()"><i class="fa fa-plus"></i>
+                Add Card</button>
+              <button id="CUR-onjkNhIs" class="btn btn-primary m-t-20" ng-click="chargeClient()" ng-if="lockedForNonPayment()"><i
+                  class="fa fa-retweet"></i>
+                Retry Payment</button>
+            </div>
+          </div>
+          <div id="CUR-NFDeCJuN" ng-if="stripeError" class="alert alert-danger m-t-20">
+            <b>{{stripeError}}</b>
+          </div>
+          <div id="CUR-cHsmguOe" ng-if="stripeSuccess" class="alert alert-success m-t-20">
+            <b>{{stripeSuccess}}</b>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-IZdSujfZ" class="panel panel-default">
+      <div id="CUR-lMZNHMBu" class="panel-heading">
+        <div id="CUR-DHeZaVtA" class="panel-title">
+          <span ng-if="!client.cancelledSubscription">Cancel Subscription</span>
+          <span ng-if="client.cancelledSubscription">Subscription Cancelled</span>
+        </div>
+      </div>
+      <div id="CUR-nBXhMilj" class="panel-body p-t-15 text-center">
+        <div id="CUR-nfHvQWOr" class="col-xs-12 m-t-20" ng-if="client.cancelledSubscription">
+          <p>Your subscription has been cancelled and your access to Curve 
+            <span id="CUR-zeEUGZLA" ng-if="!lockedForNonPayment()">will be restricted on <b>{{usage.nextBillingDate | date}}</b>.</span>
+            <span id="CUR-LMrHiocA" ng-if="lockedForNonPayment()">has been restricted.</span>
+          </p>
+          <p>We will remove all of your data from the system on <b>{{getCancelSubscriptionDate() | date}}.</b></p>
+          <p ng-if="user.adminType === 'Admin'">Should you wish to
+            continue before that date, you can just restart your subscription by clicking the 'Resume Subscription'
+            button below. After that date, we
+            will no longer hold any of your data.</p>
+        </div>
+        <button id="CUR-mXARTuyy" class="btn btn-danger m-t-20" data-toggle="modal" data-target="#cancelSubscriptionModal" ng-if="!client.cancelledSubscription"><i class="fa fa-times"></i> Cancel Subscription</button>
+        <button id="CUR-WlHQYYeU" class="btn btn-success m-t-20" ng-if="client.cancelledSubscription && user.adminType === 'Admin'" ng-click="resumeSubscription()"><i class="fa fa-check"></i> Resume Subscription</button>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+<script type="text/ng-template" id="invoices-tab.html">
+  <div id="CUR-ontGfDhE" ng-if="userRole === 'client'">
+        <!-- user is logged in as a client -->
+        <div id="CUR-oHaOXUzG" class="row">
+          <div id="CUR-mRHOoAtM" class="col-sm-12">
+            <h5 id="CUR-pdbDzUmx" class="pull-right">Total: {{total? total : 0}}</h5>
+          </div>
+        </div>
+        <div id="CUR-DObdOFNW" class="row">
+            <div id="CUR-RGIXncOe" class="col-xs-12 col-sm-12">
+                <div id="CUR-QaZHDnRc" class="panel panel-default">
+                    <div id="CUR-psIUHQWQ" class="panel-heading">
+                        <div id="CUR-ktkNVVDK" class="panel-title">
+                            Invoices
+                        </div>
+                    </div>
+                    <div id="CUR-WnPDSycK" class="panel-body">
+                      <responsive-table headers="headers" data="invoices" sort-changed="getSortedData(orderBy, orderDir)"></responsive-table>
+                    </div>
+                </div>
+            </div>
+            <div id="CUR-vMMslkiM" class="col-sm-12">
+              <div id="CUR-immnOqsK" class="pull-right">
+                <span id="CUR-AmsiMdsC" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page |</span>
+                <a id="CUR-ZMtscKCg" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+              </div>
+            </div>
+            <div id="CUR-lQWbVZEd" ng-if="!isShowingAll" class="row">
+              <div id="CUR-GdpmRWtJ" class="col-xs-12 text-center">
+                <pagination id="CUR-ecKRvCOv" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+              </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<div class="modal fade stick-up" id="cancelSubscriptionModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-oIhQFFfD" class="modal-dialog">
+    <div id="CUR-ZTZsLMjx" class="modal-content">
+      <div id="CUR-XRTESiGD" class="modal-header clearfix text-left">
+        <button id="CUR-HgrPvWCl" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-DzEIKrIZ">Are You Sure?</h5>
+      </div>
+      <div id="CUR-UwLmYhvP" class="modal-body">
+        <div id="CUR-XVyNgJVb" class="row">
+          <div id="CUR-fTHeAVZh" class="col-xs-12 m-t-20">
+            <p>This will cancel your subscription, and access to Curve will be restricted on <b>{{usage.nextBillingDate
+                | date}}</b>.</p>
+            <p>We will remove all of your data from the system on <b>{{getCancelSubscriptionDate() | date}}.</b></p>
+            <p>Should you wish to
+              continue before that date, you can just restart your subscription in the billing area. After that date, we
+              will no longer hold any of your data.</p>
+          </div>
+        </div>
+        <div id="CUR-KILJOwir" class="row">
+          <div id="CUR-kyNuJdRT" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-GxSueaNR" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-IlhPhdZV" type="button" class="btn btn-danger m-t-5" ng-click="cancelSubscription()">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

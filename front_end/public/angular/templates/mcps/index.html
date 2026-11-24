@@ -1,0 +1,412 @@
+<div id="CUR-TjYQEXCB" class="jumbotron" data-pages="parallax">
+  <div id="CUR-zQXqLnPw" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-bwRTtBZT" class="inner">
+      <ul id="CUR-nCgGiBAw" class="breadcrumb">
+        <li id="CUR-bXmIkisE"><a id="CUR-rUOsKHZG" href="/#/mcps">MCPS Settings</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="CUR-TOBfDFEN" class="container-fluid container-fixed-lg">
+  <div id="CUR-KRldojlr" class="row">
+    <div id="CUR-WRAiyvcy" class="col-sm-12 col-md-6 col-md-offset-1 col-lg-12 col-md-offset-0">
+      <div id="CUR-KXgQPkaW" class="sm-p-l-15 sm-p-r-15 text-right">
+        <button id="CUR-mrZVDbEZ" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="save()"><i class="fa fa-check"></i> Save</button>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-FyJtbzOW" class="row">
+    <div id="CUR-ZTGexcMm" class="panel panel-transparent hidden-xs">
+      <ul id="CUR-wHeKgrol" class="nav nav-tabs" data-init-reponsive-tabs="dropdownfx">
+        <li id="CUR-HwaTjqpd" class="active" ng-click="setTab('overview')">
+          <a id="CUR-ygnJnvnG" data-toggle="tab" aria-expanded="true"><span id="CUR-VmExIHEW">Overview</span></a>
+        </li>
+        <li id="CUR-cRzZBLBu" ng-click="setTab('retentions')">
+          <a id="CUR-vfixWcyP" data-toggle="tab" aria-expanded="false"><span id="CUR-MYeqzopF">Retentions</span></a>
+        </li>
+        <li id="CUR-buiGpICZ" ng-click="setTab('negatives')">
+          <a id="CUR-PtEbHgoL" data-toggle="tab" aria-expanded="false"><span id="CUR-sflBqQaK">Previous Negatives</span></a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-Iljpcrsu" class="tab-content" ng-if="!showAccordions">
+        <div id="CUR-HZEVYfJW" ng-show="activeTab === 'overview'" ng-include="'overview-tab.html'"></div>
+        <div id="CUR-eXAZpHXQ" ng-show="activeTab === 'retentions'" ng-include="'retentions-tab.html'"></div>
+        <div id="CUR-STmcFlzf" ng-show="activeTab === 'negatives'" ng-include="'negatives-tab.html'"></div>
+      </div>
+    </div>
+    <div id="CUR-eSTKFTls" class="col-xs-12 visible-xs p-l-20 p-r-20" ng-if="showAccordions">
+      <uib-accordion close-others="true" ng-init="status1.open = true; status2.open = false; status3.open = false; status4.open = false; status5.open = false;">
+        <div id="CUR-FUHSquyZ" uib-accordion-group class="panel-default" is-open="status1.open">
+          <uib-accordion-heading>Overview <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-XuJTyILi" ng-include="'overview-tab.html'"></div>
+        </div>
+        <div id="CUR-FeHlLLRn" uib-accordion-group class="panel-default" is-open="status2.open">
+          <uib-accordion-heading>Configuration <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-BdZdmQuT" ng-include="'retentions-tab.html'"></div>
+        </div>
+        <div id="CUR-ZhSfEMso" uib-accordion-group class="panel-default" is-open="status3.open">
+          <uib-accordion-heading>Statement Design <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"></i>
+          </uib-accordion-heading>
+          <div id="CUR-zoICXLwT" ng-include="'negatives-tab.html'"></div>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="importRetentionsModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-CCYDoRFu" class="modal-dialog">
+    <div id="CUR-QQwdOnYO" class="modal-content">
+      <div id="CUR-vOzhpYjH" class="modal-header clearfix text-left">
+        <button id="CUR-xDzuGXtV" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-aOkChkzn">Import Retentions</h5>
+      </div>
+      <div id="CUR-MdVVxyyH" class="modal-body">
+        <div id="CUR-Mgouspxh" class="row">
+          <div id="CUR-zbCUCeoE" class="col-xs-12 m-t-20">
+            <form id="CUR-hMOcFAHf">
+              <div id="CUR-kkhBpEBY" class="form-group">
+                <label id="CUR-BEgsQbVn" for="email">File</label>
+                <input id="CUR-WWPocpAQ" type="file" ng-model="importRetentionsFile" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-EiNDOHeT" class="row" ng-if="importRetentionsErrors">
+          <div id="CUR-zfArMzYg" class="col-sm-12">
+            <ul id="CUR-ahfmJcAx">
+              <li id="CUR-fkzUtcdl" ng-repeat="error in importRetentionsErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-nhHwuTHP" class="row">
+          <div id="CUR-VDsUCwCl" class="col-xs-12 m-t-20 text-right">
+            <a id="CUR-KyttlmCq" class="btn btn-success m-t-5" ng-click="downloadRetentionsTemplate()">Download Template</a>
+            <button id="CUR-owCvbpER" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-GoWPdmdn" type="button" class="btn btn-complete m-t-5" ng-click="importRetentions()"><i class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="importNegativesModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-FiDAJPxI" class="modal-dialog">
+    <div id="CUR-LxGzOmFM" class="modal-content">
+      <div id="CUR-kOKOfYcS" class="modal-header clearfix text-left">
+        <button id="CUR-fEVvSswx" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-gpAMtxsd">Import Negatives</h5>
+      </div>
+      <div id="CUR-FbAKbCjf" class="modal-body">
+        <div id="CUR-HLriuWgF" class="row">
+          <div id="CUR-TKnXGfvP" class="col-xs-12 m-t-20">
+            <form id="CUR-uLgupMki">
+              <div id="CUR-aZDkXhGj" class="form-group">
+                <label id="CUR-EpphreSg" for="email">File</label>
+                <input id="CUR-izeRInex" type="file" ng-model="importNegativesFile" ngf-select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="CUR-khyjJIyS" class="row" ng-if="importNegativesErrors">
+          <div id="CUR-ZIMGGanz" class="col-sm-12">
+            <ul id="CUR-LtbFjGHE">
+              <li id="CUR-XkkGPVdG" ng-repeat="error in importNegativesErrors track by $index">{{ error }}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="CUR-aDTUToKY" class="row">
+          <div id="CUR-cXKHejEN" class="col-xs-12 m-t-20 text-right">
+            <a id="CUR-pyKVSALl" class="btn btn-success m-t-5" ng-click="downloadNegativesTemplate()">Download Template</a>
+            <button id="CUR-CYHKUTKp" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-VDSIeHIg" type="button" class="btn btn-complete m-t-5" ng-click="importNegatives()"><i class="fa fa-download"></i>&nbsp;Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/ng-template" id="overview-tab.html">
+  <div id="CUR-micaCEUI" class="row">
+    <div id="CUR-pQNPjerw" class="col-xs-12 col-sm-6">
+      <div id="CUR-HcETvDFP" class="panel panel-default">
+        <div id="CUR-VUCNMjOX" class="panel-heading">
+          <div id="CUR-TiEnlGry" class="panel-title">
+            Overview <documentation link="http://guide.curveroyaltysystems.com/article/settings/#mcps-config"></documentation>
+          </div>
+        </div>
+        <div id="CUR-WNouXzgP" class="panel-body p-t-15">
+          <div id="CUR-LJtZaQvf" class="form-group required">
+            <label id="CUR-ihGXgqHH">Company MCPS ID</label>
+            <input id="CUR-IohkVuSh" type="text" class="form-control" ng-model="client.mcpsId" ng-disabled="rights.periods != 'Edit'">
+          </div>
+          <div id="CUR-orppnPBm" class="form-group">
+            <label id="CUR-kQVnAURE">Exclude Catalogue Groups</label>
+            <ui-select multiple ng-model="client.mcpsExcludedCatGroups" close-on-select="true">
+              <ui-select-match>{{$item}}</ui-select-match>
+              <ui-select-choices repeat="group in catalogueGroups | filter:$select.search">
+                {{group}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-FNQyLeQO" class="form-group">
+            <label id="CUR-fyzYBGeG">International Basis <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="How should your international price be worked out, from the standard PPD against the release, or using gross or net amounts from the sales data?"></i></label>
+            <ui-select ng-model="client.mcpsInternationalBasis" ng-disabled="rights.contracts != 'Edit'">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-VFXYxhEK" ng-bind="$select.selected"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item in ['PPD', 'Gross Amount', 'Net Amount'] | filter: $select.search">
+                <span id="CUR-wHyRSmXB" ng-bind="item"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-GltBMMSk" class="form-group required">
+            <label id="CUR-ePfUmDjb">Minimum Per Unit Rate <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Use this to filter out any adjustments that appear as sales from your distributor. For instance, setting at a rate of 2, will remove anything that has a net amount per unit of less than 2."></i></label>
+            <input id="CUR-KuYAJxCt" type="text" class="form-control" ng-model="client.mcpsMinPerUnitRate" ng-disabled="rights.periods != 'Edit'">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-fhrwCpAF" class="row">
+    <div id="CUR-XJELKNFU" class="col-xs-12">
+      <div id="CUR-qulMYkoc" class="panel panel-default sm-m-b-5">
+        <div id="CUR-XgHrARya" class="panel-heading">
+          <div id="CUR-BficsyQW" class="panel-title">
+            Sales to Target
+          </div>
+        </div>
+        <div id="CUR-LhqHpyCk" class="panel-body p-t-15">
+          <contract-sales-row edit="rights.periods == 'Edit'" ng-repeat="sale in client.mcpsTargets | limitTo: 10: salesStartIndex track by $index" cat-types="catTypes" catalogue-groups="catalogueGroups" sale="sale" countries="countries" channels="distributionChannels" configurations="configurations" price-categories="priceCategories" sales-types="salesTypes" sources="sources" index="$index" delete="deleteSalesRow(sale)" client-type="clientType" filter-only="true"></contract-sales-row>
+          <div id="CUR-FlNmHUWb" class="row" ng-if="client.mcpsTargets.length > 10">
+            <div id="CUR-VNvpjftA" class="col-xs-4">
+              Showing {{salesStartIndex + 1}} to {{lowestValue(salesStartIndex + 10, client.mcpsTargets.length)}} of {{client.mcpsTargets.length}}
+            </div>
+            <div id="CUR-WMtfUPaX" class="col-xs-4 center">
+              <div id="CUR-tVhuAvIW" class="btn-group">
+                <button id="CUR-ocUqsaWo" type="button" class="btn btn-default" ng-disabled="salesStartIndex == 0" ng-click="minusFromIndex('salesStartIndex', 10)"><</button>
+                <button id="CUR-vMeKMtap" type="button" class="btn btn-default" ng-disabled="numberOfPagesLeft(client.mcpsTargets, salesStartIndex)" ng-click="addToIndex('salesStartIndex', 10)">></button>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <button id="CUR-MPlBhnjE" ng-show="rights.periods == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addSalesRow()" ng-if="clientType != 'Publisher'">+ Target</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-bDYkRDtG" class="row">
+    <div id="CUR-KFTBVDTN" class="col-xs-12">
+      <div id="CUR-ACPqgAWP" class="panel panel-default sm-m-b-5">
+        <div id="CUR-YPFHkWkt" class="panel-heading">
+          <div id="CUR-nouspahC" class="panel-title">
+            Returns
+          </div>
+        </div>
+        <div id="CUR-PfkYjViQ" class="panel-body p-t-15">
+          <div id="CUR-MaIbkEDk" class="form-group">
+            <input id="CUR-ekuSnVuI" type="checkbox" value="1" ng-model="client.mcpsReturnsNegativeSales">
+            <label id="CUR-HUnjGovC">Returns are Negative Sales</label>
+          </div>
+          <contract-sales-row ng-if="!client.mcpsReturnsNegativeSales" edit="rights.periods == 'Edit'" ng-repeat="sale in client.mcpsReturnsTargets | limitTo: 10: returnsStartIndex track by $index" cat-types="catTypes" catalogue-groups="catalogueGroups" sale="sale" countries="countries" channels="distributionChannels" configurations="configurations" price-categories="priceCategories" sales-types="salesTypes" sources="sources" index="$index" delete="deleteReturnsRow(sale)" client-type="clientType" filter-only="true"></contract-sales-row>
+          <div id="CUR-EYecHVzw" class="row" ng-if="client.mcpsReturnsTargets.length > 10">
+            <div id="CUR-NOFglSmm" class="col-xs-4">
+              Showing {{returnsStartIndex + 1}} to {{lowestValue(returnsStartIndex + 10, client.mcpsReturnsTargets.length)}} of {{client.mcpsReturnsTargets.length}}
+            </div>
+            <div id="CUR-sLtycEND" class="col-xs-4 center">
+              <div id="CUR-xVcJotwZ" class="btn-group">
+                <button id="CUR-qbtltTJB" type="button" class="btn btn-default" ng-disabled="returnsStartIndex == 0" ng-click="minusFromIndex('returnsStartIndex', 10)"><</button>
+                <button id="CUR-dfzoxTlA" type="button" class="btn btn-default" ng-disabled="numberOfPagesLeft(client.mcpsReturnsTargets, returnsStartIndex)" ng-click="addToIndex('returnsStartIndex', 10)">></button>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <button id="CUR-kcTnTntr" ng-show="rights.periods == 'Edit' && !client.mcpsReturnsNegativeSales" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addReturnsRow()">+ Returns</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-GphWvuoJ" class="row">
+    <div id="CUR-XekaUlxj" class="col-xs-12">
+      <div id="CUR-OYDrrbUG" class="panel panel-default sm-m-b-5">
+        <div id="CUR-mvDhpMAF" class="panel-heading">
+          <div id="CUR-EVHUHNNk" class="panel-title">
+            Free Goods
+          </div>
+        </div>
+        <div id="CUR-AnZrtxbM" class="panel-body p-t-15">
+          <contract-sales-row edit="rights.periods == 'Edit'" ng-repeat="sale in client.mcpsFreeGoodsTargets | limitTo: 10: freeGoodsStartIndex track by $index" cat-types="catTypes" catalogue-groups="catalogueGroups" sale="sale" countries="countries" channels="distributionChannels" configurations="configurations" price-categories="priceCategories" sales-types="salesTypes" sources="sources" index="$index" delete="deleteFreeGoodsRow(sale)" client-type="clientType" filter-only="true"></contract-sales-row>
+          <div id="CUR-kbZiMZyW" class="row" ng-if="client.mcpsFreeGoodsTargets.length > 10">
+            <div id="CUR-aFbBeFZV" class="col-xs-4">
+              Showing {{freeGoodsStartIndex + 1}} to {{lowestValue(freeGoodsStartIndex + 10, client.mcpsFreeGoodsTargets.length)}} of {{client.mcpsFreeGoodsTargets.length}}
+            </div>
+            <div id="CUR-HgBFdSCm" class="col-xs-4 center">
+              <div id="CUR-CZIjjDcl" class="btn-group">
+                <button id="CUR-TDdsOQLu" type="button" class="btn btn-default" ng-disabled="freeGoodsStartIndex == 0" ng-click="minusFromIndex('freeGoodsStartIndex', 10)"><</button>
+                <button id="CUR-snzGaQKX" type="button" class="btn btn-default" ng-disabled="numberOfPagesLeft(client.mcpsFreeGoodsTargets, freeGoodsStartIndex)" ng-click="addToIndex('freeGoodsStartIndex', 10)">></button>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <button id="CUR-VCcCtxNY" ng-show="rights.periods == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addFreeGoodsRow()">+ Free Goods</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-DJDDSmjh" class="row">
+    <div id="CUR-FkfCzhXN" class="col-xs-12">
+      <div id="CUR-AcGwSzwE" class="panel panel-default sm-m-b-5">
+        <div id="CUR-VxHtmIWw" class="panel-heading">
+          <div id="CUR-uxkKfKrz" class="panel-title">
+            Consignment
+          </div>
+        </div>
+        <div id="CUR-LUWdgeLs" class="panel-body p-t-15">
+          <contract-sales-row edit="rights.periods == 'Edit'" ng-repeat="sale in client.mcpsConsignmentTargets | limitTo: 10: freeGoodsStartIndex track by $index" cat-types="catTypes" catalogue-groups="catalogueGroups" sale="sale" countries="countries" channels="distributionChannels" configurations="configurations" price-categories="priceCategories" sales-types="salesTypes" sources="sources" index="$index" delete="deleteConsignmentRow(sale)" client-type="clientType" filter-only="true"></contract-sales-row>
+          <div id="CUR-aDpQIQKe" class="row" ng-if="client.mcpsConsignmentTargets.length > 10">
+            <div id="CUR-TWFACZXl" class="col-xs-4">
+              Showing {{consignmentStartIndex + 1}} to {{lowestValue(consignmentStartIndex + 10, client.mcpsConsignmentTargets.length)}} of {{client.mcpsConsignmentTargets.length}}
+            </div>
+            <div id="CUR-JvbgFynJ" class="col-xs-4 center">
+              <div id="CUR-JrFKBqdc" class="btn-group">
+                <button id="CUR-AzZzCtgI" type="button" class="btn btn-default" ng-disabled="consignmentStartIndex == 0" ng-click="minusFromIndex('consignmentStartIndex', 10)"><</button>
+                <button id="CUR-yTGnaODq" type="button" class="btn btn-default" ng-disabled="numberOfPagesLeft(client.mcpsConsignmentTargets, consignmentStartIndex)" ng-click="addToIndex('consignmentStartIndex', 10)">></button>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <button id="CUR-aKhFHgfc" ng-show="rights.periods == 'Edit'" class="btn btn-complete w-xs-100-p m-xs-l-0" ng-click="addConsignmentRow()">+ Consignment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="retentions-tab.html">
+  <div id="CUR-zIPUApOL" class="tab-inner-content">
+    <div id="CUR-jOuuYoBl" class="row">
+      <div id="CUR-YtyItNBQ" class="col-xs-12">
+        <div id="CUR-CLfRmbko" class="panel panel-default">
+          <div id="CUR-ofCNqfEh" class="panel-heading">
+            <div id="CUR-JnVYBmjO" class="panel-title">
+              Retentions
+            </div>
+          </div>
+          <div id="CUR-RMkbfjQD" class="panel-body">
+            <div id="CUR-iQqXabgM" class="row">
+              <div id="CUR-cAvolspg" class="col-xs-12 text-right two-cols-row">
+                <button id="CUR-BCWWECtX" class="btn btn-default hidden-xs" ng-click="exportRetentions()"><i class="fa fa-upload"></i>&nbsp;Export</button>
+                <button id="CUR-zDOyphyz" class="btn btn-default hidden-xs" data-toggle="modal" data-target="#importRetentionsModal" ng-show="rights.periods == 'Edit'"><i class="fa fa-download"></i>&nbsp;Import</button>
+                <a id="CUR-FZnBHZZg" href="/#/mcpsRetentions/new" ng-show="rights.periods == 'Edit'" class="btn btn-complete"><i class="fa fa-plus"></i>&nbsp;Create</a>
+              </div>
+            </div>
+            <div id="CUR-bkAsUFhP" class="col-sm-12">
+              <h5 id="CUR-dGXdwUCT" class="pull-right">Total: {{retentionTotal ? retentionTotal : 0}}</h5>
+            </div>
+            <div id="CUR-XJZvEfFC" class="row">
+              <div id="CUR-syjfKZre" class="col-xs-12">
+                <div id="CUR-NviRKBYw" class="table-responsive">
+                  <table id="CUR-zMOkipMU" class="table table-hover table-condensed dataTable no-footer">
+                    <thead>
+                    <tr id="CUR-cayWklCE">
+                      <th ng-click="getSortedRetentionData('releaseId', orderDir)" ng-class="whatRetentionClassIsIt('releaseId')">Release</th>
+                      <th ng-click="getSortedRetentionData('territory', orderDir)" ng-class="whatRetentionClassIsIt('territory')">Territory</th>
+                      <th ng-click="getSortedRetentionData('year', orderDir)" ng-class="whatRetentionClassIsIt('year')">Year</th>
+                      <th ng-click="getSortedRetentionData('accountingPeriod', orderDir)" ng-class="whatRetentionClassIsIt('accountingPeriod')">Period</th>
+                      <th ng-click="getSortedRetentionData('retention', orderDir)" ng-class="whatRetentionClassIsIt('retention')">Retention</th>
+                      <th ng-click="getSortedRetentionData('tvRetention', orderDir)" ng-class="whatRetentionClassIsIt('tvRetention')">TV Retentions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="CUR-zDngqLZN">
+                    <tr id="CUR-WXDEqGKF" ng-repeat="retention in retentions">
+                      <td id="CUR-VNbMWLxm"><a id="CUR-GfDTRKGJ" href="/#/mcpsRetentions/{{retention._id}}/edit">{{retention.releaseTitle}} - {{retention.releaseCatNo}}</a></td>
+                      <td id="CUR-dKNAXXjX">{{retention.territory}}</td>
+                      <td id="CUR-lLeRURRn">{{retention.year}}</td>
+                      <td id="CUR-MbSxdUqg">{{retention.accountingPeriod}}</td>
+                      <td id="CUR-ctWyLyXS">{{retention.retention}}</td>
+                      <td id="CUR-OPFXdEaK">{{retention.tvRetention}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div id="CUR-ZhLJveuI" ng-if="!isShowingAll" class="row">
+              <div id="CUR-gbOPRJat" class="col-xs-12 text-center">
+                <pagination id="CUR-VNdmdKKR" pages="retentionPages" total="totalRetentionPages" current="currentRetentionPage" change-page="changeRetentionPage(page)"></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="negatives-tab.html">
+  <div id="CUR-pmMOGyEd" class="tab-inner-content">
+    <div id="CUR-WPNBVzpQ" class="row">
+      <div id="CUR-oaRuulbZ" class="col-xs-12">
+        <div id="CUR-CdqJvmVs" class="panel panel-default">
+          <div id="CUR-qOIQtVkh" class="panel-heading">
+            <div id="CUR-THDdJQrw" class="panel-title">
+              Negatives
+            </div>
+          </div>
+          <div id="CUR-tmUfQOeq" class="panel-body">
+            <div id="CUR-YXPlSleC" class="row">
+              <div id="CUR-VEQlLRXv" class="col-xs-12 text-right two-cols-row">
+                <button id="CUR-rdroOXAz" class="btn btn-default hidden-xs" ng-click="exportNegatives()"><i class="fa fa-upload"></i>&nbsp;Export</button>
+                <button id="CUR-LGOOVLLL" class="btn btn-default hidden-xs" data-toggle="modal" data-target="#importNegativesModal" ng-show="rights.periods == 'Edit'"><i class="fa fa-download"></i>&nbsp;Import</button>
+                <a id="CUR-dkqpOOzc" href="/#/mcpsNegatives/new" ng-show="rights.periods == 'Edit'" class="btn btn-complete"><i class="fa fa-plus"></i>&nbsp;Create</a>
+              </div>
+            </div>
+            <div id="CUR-lAiwgmIG" class="col-sm-12">
+              <h5 id="CUR-aNgFyrXC" class="pull-right">Total: {{negativeTotal ? negativeTotal : 0}}</h5>
+            </div>
+            <div id="CUR-QTNoFhfg" class="row">
+              <div id="CUR-TJhBpEQj" class="col-xs-12">
+                <div id="CUR-KQhqVBkN" class="table-responsive">
+                  <table id="CUR-lsSjZLjb" class="table table-hover table-condensed dataTable no-footer">
+                    <thead>
+                    <tr id="CUR-JYsrkQut">
+                      <th ng-click="getSortedNegativeData('releaseId', orderDir)" ng-class="whatNegativeClassIsIt('releaseId')">Release</th>
+                      <th ng-click="getSortedNegativeData('territory', orderDir)" ng-class="whatNegativeClassIsIt('territory')">Territory</th>
+                      <th ng-click="getSortedNegativeData('year', orderDir)" ng-class="whatNegativeClassIsIt('year')">Year</th>
+                      <th ng-click="getSortedNegativeData('accountingPeriod', orderDir)" ng-class="whatNegativeClassIsIt('accountingPeriod')">Period</th>
+                      <th ng-click="getSortedNegativeData('retention', orderDir)" ng-class="whatNegativeClassIsIt('value')">Value</th>
+                    </tr>
+                    </thead>
+                    <tbody id="CUR-MvGsJWzh">
+                    <tr id="CUR-QtaGEiUw" ng-repeat="negative in negatives">
+                      <td id="CUR-AZoypLOM"><a id="CUR-Wpncrptj" href="/#/mcpsNegatives/{{negative._id}}/edit">{{negative.releaseTitle}} - {{negative.releaseCatNo}}</a></td>
+                      <td id="CUR-cveBWgdS">{{negative.territory}}</td>
+                      <td id="CUR-pzJAoWOj">{{negative.year}}</td>
+                      <td id="CUR-VTmselvf">{{negative.accountingPeriod}}</td>
+                      <td id="CUR-GgOSJzSW">{{negative.value}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div id="CUR-WBrIZVUM" ng-if="!isShowingAll" class="row">
+              <div id="CUR-GtDGZipb" class="col-xs-12 text-center">
+                <pagination id="CUR-lgWcfCvJ" pages="negativePages" total="totalNegativePages" current="currentNegativePage" change-page="changeNegativePage(page)"></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

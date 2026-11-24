@@ -1,0 +1,279 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="row" ng-if="displayData.channels && displayData.channels.rawData.length > 0">
+      <div class="col-xs-12">
+        <div class="panel panel-default sm-m-b-5">
+          <div class="panel-heading">
+            <div class="panel-title">
+              Channels
+            </div>
+          </div>
+          <div class="panel-body sm-p-l-5 sm-p-r-5">
+            <div class="row">
+              <div class="col-xs-12 col-sm-7 sm-m-b-5">
+                <canvas id="doughnut" class="chart chart-doughnut" chart-data="displayData.channels.data" chart-labels="displayData.channels.labels" chart-options="displayData.pieOptions"></canvas>
+              </div>
+              <div class="col-xs-12 col-sm-5">
+                <div class="table-responsive">
+                  <table class="table table-hover table-condensed dataTable no-footer">
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th class="text-right">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="line in displayData.channels.rawData">
+                        <td>{{line.type}}</td>
+                        <td class="text-right">{{line.value | number: 2}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12">
+    <div class="row" ng-if="displayData.configurations && displayData.configurations.rawData.length > 0">
+      <div class="col-xs-12">
+        <div class="panel panel-default sm-m-b-5">
+          <div class="panel-heading">
+            <div class="panel-title">
+              Configurations
+            </div>
+          </div>
+          <div class="panel-body sm-p-l-5 sm-p-r-5">
+            <div class="row">
+              <div class="col-xs-12 col-sm-4">
+                <div class="table-responsive">
+                  <table class="table table-hover table-condensed dataTable no-footer">
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th class="text-right">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="line in displayData.configurations.rawData">
+                        <td>{{line.type}}</td>
+                        <td class="text-right">{{line.value | number: 2}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-8">
+                <canvas id="doughnut" class="chart chart-doughnut" chart-data="displayData.configurations.data" chart-labels="displayData.configurations.labels" chart-options="displayData.pieOptions"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12">
+    <div class="row" ng-if="displayData.territories && displayData.territories.rawData.length > 0">
+      <div class="col-xs-12">
+        <div class="panel panel-default sm-m-b-5">
+          <div class="panel-heading">
+            <div class="panel-title">
+              Territories
+            </div>
+          </div>
+          <div class="panel-body sm-p-l-5 sm-p-r-5">
+            <div class="row">
+              <div class="col-xs-12">
+                <canvas id="bar" class="chart chart-bar" chart-data="displayData.territories.data" chart-labels="displayData.territories.labels"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12">
+    <div class="row" ng-if="displayData.sources && displayData.sources.rawData.length > 0">
+      <div class="col-xs-12">
+        <div class="panel panel-default sm-m-b-5">
+          <div class="panel-heading">
+            <div class="panel-title">
+              Sources
+            </div>
+          </div>
+          <div class="panel-body sm-p-l-5 sm-p-r-5">
+            <div class="row">
+              <div class="col-xs-12">
+                <canvas id="bar" class="chart chart-bar" chart-data="displayData.sources.data" chart-labels="displayData.sources.labels"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12">
+    <div class="row" ng-if="displayData.subSources && displayData.subSources.rawData.length > 0">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              Sub Sources
+            </div>
+          </div>
+          <div class="panel-body sm-p-l-5 sm-p-r-5">
+            <div class="row">
+              <div class="col-xs-12">
+                <canvas id="bar" class="chart chart-bar" chart-data="displayData.subSources.data" chart-labels="displayData.subSources.labels"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12">
+    <div class="row" ng-if="displayData.costs && displayData.costs.rawData.length > 0">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              Costs
+            </div>
+          </div>
+          <div class="panel-body sm-p-l-5 sm-p-r-5">
+            <div class="row">
+              <div class="col-xs-12 col-sm-7">
+                <canvas id="doughnut" class="chart chart-doughnut" chart-data="displayData.costs.data" chart-labels="displayData.costs.labels" chart-options="displayData.pieOptions"></canvas>
+              </div>
+              <div class="col-xs-12 col-sm-5">
+                <div class="table-responsive">
+                  <table class="table table-hover table-condensed dataTable no-footer">
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th class="text-right">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="line in displayData.costs.rawData">
+                        <td>{{line.type}}</td>
+                        <td class="text-right">{{line.value | number: 2}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-lg-6" ng-if="displayData.releases && displayData.releases.length > 0">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              Top Releases
+            </div>
+          </div>
+          <div class="panel-body sm-p-l-5 sm-p-r-5 max-height-400">
+            <div class="table-responsive">
+              <table class="table table-hover dataTable no-footer allow-overflow">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th class="hidden-xs">Cat No</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="row in displayData.releases">
+                    <td class="v-align-middle">{{row.title}}</td>
+                    <td class="v-align-middle hidden-xs">{{row.type}}</td>
+                    <td class="v-align-middle">{{row.value | number: 2}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-lg-6" ng-if="displayData.tracks && displayData.tracks.length > 0">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              Top Tracks
+            </div>
+          </div>
+          <div class="panel-body sm-p-l-5 sm-p-r-5 max-height-400">
+            <table class="table table-hover dataTable no-footer allow-overflow">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th class="hidden-xs">ISRC</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="row in displayData.tracks">
+                  <td class="v-align-middle">{{row.title}}</td>
+                  <td class="v-align-middle hidden-xs">{{row.type}}</td>
+                  <td class="v-align-middle">{{row.value | number: 2}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-lg-6" ng-if="displayData.works && displayData.works.length > 0">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              Top Works
+            </div>
+          </div>
+          <div class="panel-body sm-p-l-5 sm-p-r-5 max-height-400">
+            <table class="table table-hover dataTable no-footer">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th class="hidden-xs">Identifier</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="row in displayData.works">
+                  <td class="v-align-middle">{{row.title}}</td>
+                  <td class="v-align-middle hidden-xs">{{row.type}}</td>
+                  <td class="v-align-middle">{{row.value | number: 2}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

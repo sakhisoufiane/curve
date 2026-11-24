@@ -1,0 +1,529 @@
+<div id="CUR-fHvPUswi" class="jumbotron" data-pages="parallax">
+  <div
+    id="CUR-iAbiDIGb"
+    class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20"
+  >
+    <div id="CUR-VFGNqKDB" class="inner">
+      <ul id="CUR-oJJVGpOj" class="breadcrumb">
+        <li id="CUR-SfHJPmxn">
+          <a id="CUR-dTRGxUzt" href="/#/integration">Integrations &amp; FTP</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-CofgKTph" class="container-fluid container-fixed-lg">
+  <div id="CUR-oEfEBrxl" class="row">
+    <div id="CUR-FxsqkpId" class="panel panel-transparent hidden-xs">
+      <ul
+        id="CUR-iwLsBKUj"
+        class="nav nav-tabs"
+        data-init-reponsive-tabs="dropdownfx"
+      >
+        <!-- change active class -->
+        <!-- The Parent Id in this condition is for Fuga Split Clients, we need to expose certain fields temporarily whilst Fuga Splits is being implemented -->
+        <li
+          id="tab-option-fugaSync"
+          ng-if="(userRole === 'client' && clientType === 'Label' && fuga.fugaOrgId || features.showFugaSyncExtras) || internalUser"
+          ng-click="setTab('fugaSync')"
+        >
+          <a id="CUR-GQzAZodR" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-LlNigXup">Fuga Sync</span></a
+          >
+        </li>
+        <li
+          id="tab-option-catalogue"
+          class="active"
+          ng-if="userRole === 'client'"
+          ng-click="setTab('catalogue')"
+        >
+          <a id="CUR-jlJLTHGS" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-vJFKEvGy">Catalogue FTP</span></a
+          >
+        </li>
+        <li
+          id="tab-option-sales"
+          ng-if="userRole === 'client'"
+          ng-click="setTab('sales')"
+        >
+          <a id="CUR-USguvCoi" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-cEqRrhNi">Sales FTP</span></a
+          >
+        </li>
+        <li
+          id="CUR-ftpintegration-li-ack-tab"
+          ng-if="userRole === 'client' && clientType !== 'Label'"
+          ng-click="setTab('ack')"
+        >
+          <a
+            id="CUR-ftpintegration-li-a-ack-tab"
+            data-toggle="tab"
+            aria-expanded="false"
+            ><span id="CUR-ftpintegration-li-a-span-ack-tab"
+              >Acknowledgement FTP</span
+            ></a
+          >
+        </li>
+        <li
+          id="tab-option-iswc"
+          ng-if="userRole === 'client' && (features.iswcDeliveries || internalUser)"
+          ng-click="setTab('iswc')"
+        >
+          <a id="CUR-USguvCoi" data-toggle="tab" aria-expanded="false"
+            ><span id="CUR-ftpintegration-li-a-span-ack-tab">ISWC FTP</span></a
+          >
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div id="CUR-LjimWhuY" class="tab-content" ng-if="!showAccordions">
+        <div
+          id="CUR-igtzqYVF"
+          ng-show="activeTab === 'fugaSync'"
+          ng-include="'fugaSync-tab.html'"
+        ></div>
+        <div
+          id="CUR-lNYzMemx"
+          ng-show="activeTab === 'sales'"
+          ng-include="'sales-ftp-tab.html'"
+        ></div>
+        <div
+          id="CUR-lpBRnFBW"
+          ng-show="activeTab === 'catalogue'"
+          ng-include="'catalogue-ftp-tab.html'"
+        ></div>
+        <div
+          id="CUR-ftpintegration-div-ack-activetab"
+          ng-show="activeTab === 'ack'"
+          ng-include="'ack-ftp-tab.html'"
+        ></div>
+        <div
+          id="CUR-lpBRnFBW"
+          ng-show="activeTab === 'iswc'"
+          ng-include="'iswc-ftp-tab.html'"
+        ></div>
+      </div>
+    </div>
+    <div
+      id="CUR-QJJSUKAE"
+      class="col-xs-12 visible-xs p-l-20 p-r-20"
+      ng-if="showAccordions"
+    >
+      <uib-accordion close-others="true" ng-init="status1.open = true;">
+        <div
+          id="CUR-IUduAsns"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status1.open"
+        >
+          <uib-accordion-heading>
+            Fuga Sync<i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status1.open, 'glyphicon-chevron-right': !status1.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-TblRJdnW" ng-include="'fugaSync-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-RYteYDHe"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status2.open"
+        >
+          <uib-accordion-heading>
+            Sales FTP
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-INkSSELR" ng-include="'sales-ftp-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-ErClRNdc"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status3.open"
+        >
+          <uib-accordion-heading>
+            Catalogue FTP
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status3.open, 'glyphicon-chevron-right': !status3.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div id="CUR-wIVplpIA" ng-include="'catalogue-ftp-tab.html'"></div>
+        </div>
+        <div
+          id="CUR-ftpintegration-div-ack-accordion"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status4.open"
+        >
+          <uib-accordion-heading>
+            Acknowledgement FTP
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status4.open, 'glyphicon-chevron-right': !status4.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div
+            id="CUR-ftpintegration-div-div-ack-accordion"
+            ng-include="'ack-ftp-tab.html'"
+          ></div>
+        </div>
+        <div
+          id="CUR-ftp-iswc-div-wrapper"
+          uib-accordion-group
+          class="panel-default"
+          is-open="status5.open"
+        >
+          <uib-accordion-heading>
+            ISWC FTP
+            <i
+              class="pull-right glyphicon"
+              ng-class="{'glyphicon-chevron-down': status5.open, 'glyphicon-chevron-right': !status5.open}"
+            ></i>
+          </uib-accordion-heading>
+          <div
+            id="CUR-ftp-iswc-div-wrapper-accordion"
+            ng-include="'iswc-ftp-tab.html'"
+          ></div>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+</div>
+<script type="text/ng-template" id="sales-ftp-tab.html">
+  <div id="CUR-fhVjKoBv" ng-if="userRole === 'client'">
+      <div id="CUR-CVbWWoWL" class="row">
+          <div id="CUR-lWxsqlkz" class="col-xs-12">
+              <div id="CUR-iZDOAnVP" class="panel panel-default">
+                  <div id="CUR-ecRoZEmm" class="panel-heading" style="display: flex; justify-content: space-between;">
+                      <div id="CUR-GNqZnvOs" class="panel-title">Sales Ingestion FTP Details</div>
+                      <button id="sales-ftp-tab-save-button" class="btn btn-complete" ng-click="saveSettings()"><i class="fa fa-check"></i> Save</button>
+                  </div>
+                  <div id="CUR-QYyvQFaH" class="panel-body">
+                      <p>Once initialised, FTP servers marked as 'Active' will be scanned frequently for new sales data files. New files found will be
+                      automatically ingested to Curve, and will be available as new sales files within the Sales Files area.</p>
+                      <ftp-sales-ingest-row
+                        ng-repeat="server in client.salesFtpIngestions track by $index"
+                        server="server"
+                        index="$index"
+                        client-admin-user="clientAdminUser"
+                        verify-ftp="verifyFtp(server)"
+                        delete="deleteFtpIngestRow(server, 'salesFtpIngestions')"
+                      >
+                      </ftp-sales-ingest-row>
+                      <br>
+                      <button id="CUR-KvAQMFeX" class="btn btn-complete w-xs-100-p m-l-0" ng-click="addFtpIngestRow('salesFtpIngestions')">+ FTP server</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+    <!-- user is logged in as a client -->
+</script>
+<script type="text/ng-template" id="ack-ftp-tab.html">
+  <div id="CUR-ftpintegration-div-ack-template" ng-if="userRole === 'client'">
+      <div id="CUR-ftpintegration-div-row-ack-template" class="row">
+          <div id="CUR-ftpintegration-div-row-col-ack-template" class="col-xs-12">
+              <div id="CUR-ftpintegration-div-row-col-panel-ack-template" class="panel panel-default">
+                  <div id="CUR-ftpintegration-div-row-col-panel-heading-ack-template" class="panel-heading" style="display: flex; justify-content: space-between;">
+                      <div id="CUR-ftpintegration-div-row-col-panel-heading-title-ack-template" class="panel-title">Acknowledgement Ingestion FTP Details</div>
+                      <button id="ack-ftp-tab-save-button" class="btn btn-complete" ng-click="saveSettings()"><i class="fa fa-check"></i> Save</button>
+                  </div>
+                  <div id="CUR-ftpintegration-div-row-col-panel-body-ack-template" class="panel-body">
+                      <p>Once initialised, FTP servers marked as 'Active' will be scanned frequently for new acknowledgement data files. New files found will be
+                      automatically ingested to Curve, and will be available as new acknowledgement files within the Acknowledgement Files area.</p>
+                      <ftp-ack-ingest-row
+                        ng-repeat="server in client.ackFtpIngestions track by $index"
+                        server="server"
+                        index="$index"
+                        client-admin-user="clientAdminUser"
+                        verify-ftp="verifyFtp(server)"
+                        upload-file="uploadFile(server, importFile)"
+                        delete="deleteFtpIngestRow(server, 'ackFtpIngestions')">
+                      </ftp-ack-ingest-row>
+                      <br>
+                      <button id="CUR-ftpintegration-div-row-col-panel-body-button-ack-template" class="btn btn-complete w-xs-100-p m-l-0" ng-click="addFtpIngestRow('ackFtpIngestions')">+ FTP server</button>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</script>
+<script type="text/ng-template" id="catalogue-ftp-tab.html">
+  <div id="CUR-aAPqZKkV" class="row">
+    <div id="CUR-lwzOyvJS" class="col-xs-12">
+      <div id="CUR-CSWbuzav" class="panel panel-default">
+        <div id="CUR-vVqjXjkB" class="panel-heading" style="display: flex; justify-content: space-between;">
+          <div id="CUR-UxJxZZLj" class="panel-title">Catalogue Ingestion FTP Details</div>
+            <button id="CUR-vcgLaXTk" class="btn btn-complete" ng-click="saveSettings()"><i class="fa fa-check"></i> Save</button>
+          </div>
+        <div id="CUR-onaWNuvr" class="panel-body p-t-15 p-b-0">
+          <div id="CUR-lkvILphe" class="row">
+            <div id="CUR-dxaIYYOG" class="col-sm-6">
+              <div id="CUR-WKkCUewf" class="form-group" ng-if="features.distributorFeedDdex">
+                <label id="CUR-uIAJOwefw">DDEX Ingestion Client ID <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Use this field if you receive your deliveries from a distributor where they only deliver via a single feed rather than separately for each client. Only fill this in if you know the ID for your client."></i></label>
+                <input id="CUR-soVawfeww" type="text" class="form-control" ng-model="client.ddexIngestionClientId" ng-disabled="rights.catalogue != 'Edit'">
+              </div>
+
+              <div id="CUR-ftpConnectionType" class="form-group">
+                <label>Type <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="SFTP offers secure data transfer and is recommended when available."></i></label>
+                <ui-select ng-model="client.ftpProtocol">
+                    <ui-select-match allow-clear="false">
+                        <span ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="protocol as protocol in ['FTP', 'SFTP'] | filter: $select.search">
+                        <span ng-bind="protocol"></span>
+                    </ui-select-choices>
+                </ui-select>
+              </div>
+
+              <div id="CUR-rpCazicp" class="form-group">
+                <label id="CUR-RhBmRmXq">Host <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Typically this will begin with 'ftp.' and should not contain 'http://'.<br /><br />Once initialised this can not be changed.<br /><br />Note: Port number should be included in the Port field, not on the host."></i></label>
+                <input id="CUR-jDaHNxBE" type="text" class="form-control" ng-model="client.ftpHost" ng-disabled="rights.catalogue != 'Edit'">
+              </div>
+              <div id="CUR-catalogue-port" class="form-group">
+                <label id="CUR-catalogue-port-label">Port <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Provide the Port for the FTP server, if not provided the default will be 22 for SFTP or 21 for all other types"></i></label>
+                <input id="CUR-catalogue-port-input" type="number" class="form-control" ng-model="client.ftpPort" ng-disabled="rights.catalogue != 'Edit'">
+              </div>
+              <div id="CUR-rXIUcFDr" class="form-group">
+                <label id="CUR-SqyFyEWp">Username</label>
+                <input id="CUR-KHKfMhfL" type="text" class="form-control" ng-model="client.ftpUsername" ng-disabled="rights.catalogue != 'Edit'">
+              </div>
+              <div id="CUR-authentication-type" class="form-group" ng-if="client.ftpProtocol == 'SFTP'">
+                <label id="CUR-auth-type-label">Authentication Type</label>
+                <ui-select ng-model="client.ftpAuthenticationType" ng-disabled="rights.catalogue != 'Edit'" ng-init="client.ftpAuthenticationType = client.ftpAuthenticationType || 'Password'">
+                  <ui-select-match allow-clear="false">
+                    <span ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in ['Password', 'Key File'] | filter: $select.search">
+                    <span ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div id="CUR-VTGfLuqg" class="form-group m-b-25" ng-if="clientAdminUser && (client.ftpAuthenticationType == 'Password' || client.ftpProtocol != 'SFTP')">
+                <label id="CUR-ItYJvLLn">Password</label>
+                <input id="CUR-pPdrgWSb" type="password" class="form-control" ng-model="client.ftpPassword" ng-disabled="rights.catalogue != 'Edit'">
+              </div>
+              <div id="CUR-key-file-upload" class="form-group m-b-35" ng-if="client.ftpProtocol == 'SFTP' && client.ftpAuthenticationType == 'Key File'">
+                <label id="CUR-key-file-label">Key File <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Key File authentication requires a private key or PEM file and does not support PPK files. If required a PPK file can be converted to a PEM file, please contact support for further information"></i></label>
+                <div ng-if="!!client.ftpFileKey" style="margin-bottom: 10px;">Key file uploaded</div>
+                <div ng-if="!client._id" style="margin-bottom: 10px;">Please save before uploading key file</div>
+                <input id="CUR-key-file-input" ng-if="client._id" type="file" ng-model="client.importFile" ngf-select aria-invalid="false" ng-change="uploadCatalogueKeyFile(client, client.importFile)" ngf-max-size="2MB" ngf-allow-dir="false">
+              </div>
+            </div>
+            <div id="CUR-AaNZJMJJ" class="col-sm-6">
+              <div id="CUR-WKkCUwxp" class="form-group">
+                <label id="CUR-uIAJOeiC">Root Directory <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Where should the system look for files once connected. Leave blank for server root.<br /><br />Directory should begin with a ‘/' and NOT end with a '/’.<br /><br />Once initialised this can not be changed."></i></label>
+                <input id="CUR-soVawaDq" type="text" class="form-control" ng-model="client.ftpRootDir" ng-disabled="rights.catalogue != 'Edit'">
+              </div>
+              <div id="CUR-CbUOtOry" class="form-group">
+                <label id="CUR-ISSaHsvs">Default Distribution Channel</label>
+                <input id="CUR-ybOpFrZy" type="text" class="form-control" ng-model="client.ftpImportDefaultDistributionChannel" ng-disabled="rights.catalogue != 'Edit'">
+              </div>
+              <div id="CUR-CbUOtOry" class="form-group">
+                <label id="CUR-ISSaHsvs">Ingest Other IDS on import <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Use these options to handle other IDs such as Dolby Atmos"></i></label>
+                <select class="form-control" ng-model="client.howToIngestOtherIdsOnImport">
+                  <option value=""> Never</option>
+                  <option value="Create new track">Create new track</option>
+                  <option value="Create new alias">Create new alias</option>
+                </select>
+              </div>
+              <div id="CUR-sQIErdwe" class="form-group m-t-15">
+                <input id="CUR-anCnKidwfw" type="checkbox" value="1" ng-model="client.ftpNoDdexBatches">
+                <label id="CUR-kCidaFDW">DDEX No Batches <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Is your delivery partner delivering with no batches, and just individual deliveries? Only check if you have been told to, generally your delivery partner will deliver in batches."></i></label>
+              </div>
+              <div id="CUR-LIfPXMWs" class="form-group">
+                <input id="CUR-epxgtBlm" type="checkbox" value="1" ng-model="client.ddexDoNotUpdateExistingLabel">
+                <label id="CUR-lZIAunKb">DDEX - when an ISRC already exists in Curve, do not update the Label value <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Checking this box will prevent Label values on Tracks being updated for redelivered ISRCs (for example, when a compilation is delivered containing Track(s) that already exist in Curve)."></i></label>
+              </div>
+              <div id="CUR-sQIErXrX" class="form-group m-t-15">
+                <input id="CUR-anCnKiff" type="checkbox" value="1" ng-model="client.matchContractOnImport">
+                <label id="CUR-kCidaEmn">Match Contracts on Import</label>
+              </div>
+              <div id="CUR-xCfiEZNw" class="form-group">
+                <input id="CUR-nPOUQURP" type="checkbox" value="1" ng-model="client.setDefaultReleaseIdOnImport">
+                <label id="CUR-lmlARceJ">Set Default Release ID on Import</label>
+              </div>
+              <div id="CUR-bmlVNqOf" class="form-group">
+                <input id="CUR-ccNyyzOQ" type="checkbox" value="1" ng-model="client.ingestForeignIds">
+                <label id="CUR-EDecPiWM">Ingest Foreign IDs from Delivery</label>
+              </div>
+              <div id="CUR-LIfPXMWs" class="form-group">
+                <input id="CUR-epxgtBlm" type="checkbox" value="1" ng-model="client.useBarcodeAsCatNoOnImport">
+                <label id="CUR-lZIAunKb">Set Cat No From Barcode on Import</label>
+              </div>
+            </div>
+          </div>
+          <button
+            id="CUR-div-panel-body-verify-connection-btn"
+            class="btn btn-confirm"
+            style="margin-left: 0;"
+            ng-click="verifyFtpClient(client)"
+          >Verify connection</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="fugaSync-tab.html">
+  <div id="CUR-UTsSgirO" class="row">
+    <div id="CUR-rTNkZgPi" class="col-xs-12">
+      <div id="CUR-UMrCYrbt" class="panel panel-default">
+        <div id="CUR-wzCyOdoB" class="panel-heading" style="display: flex; justify-content: space-between;">
+          <div id="CUR-vSbPUNMa" class="panel-title">Configuration</div>
+          <div ng-if="internalUser || features.showFugaSyncExtras" style="display: flex; justify-content: flex-end;">
+            <div style="width: 500px; display: flex; justify-content: space-between;">
+              <button id="CUR-CORplrVa" class="btn btn-confirm" ng-click="syncFugaCatalogue()"><i class="fa fa-plus"></i> Sync Catalogue</button>
+              <button id="CUR-hTLWBKnJ" class="btn btn-sync" ng-click="syncFugaStatements()"><i class="fa fa-plus"></i> Sync Statements</button>
+              <button id="CUR-AOekSRIG" class="btn btn-complete" ng-click="saveFugaSettings()"><i class="fa fa-check"></i> Save</button>
+            </div>
+          </div>
+          <div ng-if="!internalUser && !features.showFugaSyncExtras" style="display: flex; justify-content: flex-end;">
+            <button id="CUR-xalzeFaH" class="btn btn-complete" ng-click="saveFugaSettings()"><i class="fa fa-check"></i> Save</button>
+          </div>
+        </div>
+        <div id="CUR-zdUIzTGd" class="panel-body p-t-0 p-b-0" >
+          <div class="col-md-offset-6" ng-if="internalUser || features.showFugaSyncExtras" style="display: flex; justify-content: flex-end;">
+            <div id="CUR-vIPatDbp" class="form-group" style="width: 500px;">
+                <label id="CUR-UIEVPFUF" style="width: 150px; margin-left: 4px;">Last: {{(fuga.fugaLastSync | date) || 'None'}}</label>
+                <label id="CUR-yPcDsYJe" style="width: 150px; margin-left: 47px;">Last: None</label>
+            </div>
+          </div>
+          <div id="CUR-dbcWdoGY" ng-if="!internalUser && !features.showFugaSyncExtras" class="col-sm-6 col-md-offset-6">
+            <div id="CUR-nRxSknHx" class="form-group">
+              <label id="CUR-ZUdLpBlS">Last Synced: {{fuga.fugaLastSync | date}}</label>
+            </div>
+          </div>
+          <div id="CUR-iUUwmFkp" class="row">
+            <div id="CUR-dzlsjgLd" class="col-md-6">
+              <div id="CUR-SpxZGbzX" class="form-group">
+                <label id="CUR-tFdRxcwE">Organisation ID</label>
+                  <input id="CUR-VvBcZxAt" type="text" class="form-control" ng-if="!internalUser && !features.showFugaSyncExtras" ng-model="fuga.fugaOrgId" readonly>
+                  <input id="CUR-OpPFZlgF" type="text" class="form-control" ng-if="internalUser || features.showFugaSyncExtras" ng-model="fuga.fugaOrgId">
+              </div>
+              <div id="CUR-IjAuNNez" class="form-group">
+                <label id="CUR-AnejSklq">Fuga Client Name</label>
+                  <input id="CUR-UiJnshZa" type="text" class="form-control" ng-if="internalUser || features.showFugaSyncExtras" ng-model="fuga.fugaClientName">
+              </div>
+              <form id="CUR-YPurtNel">
+                <div ng-if="internalUser || features.showFugaSyncExtras" id="CUR-FRPQsIDb" class="form-group m-t-15">
+                  <input id="fugaAutoSyncEnabled" type="checkbox" ng-model="fuga.fugaAutoSyncEnabled" >
+                  <label id="CUR-KuJQgvYQ" for="fugaAutoSyncEnabled">Enable Auto Sync</label>
+                </div>
+                <div ng-if="internalUser || features.showFugaSyncExtras" id="CUR-FRPQs2342" class="form-group m-t-15">
+                  <input id="fugaAutoSyncEnabled" type="checkbox" ng-model="fuga.fugaAutoIngestSales" >
+                  <label id="CUR-KuJ2342vYQ" for="fugaAutoIngestSales">For FUGA Splits Only - Enable RASA Statements Pickup</label>
+                </div>
+                <div id="CUR-UjAnskZl" class="form-group">
+                  <label id="CUR-PoOqAshz">Fuga Client Type</label>
+                  <ui-select ng-model="fuga.fugaClientType" ng-if="internalUser || features.showFugaSyncExtras">
+                    <ui-select-match>
+                        <span id="CUR-JzSusea" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="clientType in fugaClientTypes | filter: $select.search">
+                        <span id="CUR-KxKnsoEW" ng-bind="clientType"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+                <div id="CUR-PxjvaleM" class="form-group">
+                  <label id="CUR-EjSOIRvD">Default Distribution Channel</label>
+                  <input id="CUR-KlbwhqjB" type="text" class="form-control" ng-model="fuga.defaultDistributionChannel">
+                </div>
+                <div id="CUR-fPHzIySk" class="form-group m-t-15">
+                  <input id="fugaMatchContractsOnImport" type="checkbox" ng-model="fuga.matchContractsOnImport">
+                  <label id="CUR-rbAHxeQt" for="fugaMatchContractsOnImport">Match Contracts on Import</label>
+                </div>
+                <div id="CUR-tBDfbiqB" class="form-group">
+                  <input id="fugaSetDefaultReleaseIdOnImport" type="checkbox" ng-model="fuga.setDefaultReleaseIdOnImport">
+                  <label id="CUR-xgBFbhWE" for="fugaSetDefaultReleaseIdOnImport">Set Default Release ID on Import</label>
+                </div>
+                <div id="CUR-UkuWAjFl" class="form-group">
+                  <input id="fugaIngestForeignIdsFromDelivery" type="checkbox" ng-model="fuga.ingestForeignIdsFromDelivery">
+                  <label id="CUR-aKaoCNvf" for="fugaIngestForeignIdsFromDelivery">Ingest Foreign IDs from Delivery</label>
+                </div>
+                <div id="CUR-AWLpAqLd" class="form-group">
+                  <input id="fugaSetCatNoFromBarcodeOnImport" type="checkbox" ng-model="fuga.setCatNoFromBarcodeOnImport">
+                  <label id="CUR-OofcmXYK" for="fugaSetCatNoFromBarcodeOnImport">Set Cat No From Barcode on Import</label>
+                </div>
+              </form>
+            </div>
+            <div id="CUR-fgwUkQnC" class="col-sm-6 m-t-25 m-b-50">
+              <div id="CUR-div-panel-body-fg-email" class="form-group required" style="border: 1px solid rgba(0,0,0,.07); padding: 10px;">
+                <label id="CUR-div-panel-body-fg-lbl-email">User Notifications</label>
+                <p ng-if="!internalUser && !features.showFugaSyncExtras">Add up to 3 users below to receive a notification when syncs are complete.</p>
+                <p ng-if="internalUser || features.showFugaSyncExtras">Add up to 10 users below to receive a notification when syncs are complete.</p>
+                <div id="CUR-HEgriReu"  ng-repeat="email in fuga.fugaNotifyEmails" class="row">
+                  <div class="col-xs-6">
+                    <input type="text" class="form-control" ng-model="email.email">
+                  </div>
+                  <div class="col-xs-6">
+                    <button id="CUR-oYdQXHLs" class="btn btn-danger sm-p-l-0 sm-p-r-0 m-l-0" ng-click="removeFugaNotificationEmail(email.id)">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                <button
+                  id="CUR-div-panel-body-fg-email-form-delete-add-btn"
+                  class="btn btn-complete"
+                  style="margin-left: 0px"
+                  ng-show="rights.catalogue == 'Edit'"
+                  ng-click="addFugaNotificationEmail()"
+                  ng-disabled="fuga.fugaNotifyEmails.length >= 3"
+                  ng-if="!internalUser && !features.showFugaSyncExtras"
+                ><i class="fa fa-plus"></i> User</button>
+                <button
+                  id="CUR-div-panel-body-fg-email-form-delete-add-btn"
+                  class="btn btn-complete"
+                  style="margin-left: 0px"
+                  ng-show="rights.catalogue == 'Edit'"
+                  ng-click="addFugaNotificationEmail()"
+                  ng-disabled="fuga.fugaNotifyEmails.length >= 10"
+                  ng-if="internalUser || features.showFugaSyncExtras"
+                ><i class="fa fa-plus"></i> User</button>
+              </div>
+              <div id="CUR-div-panel-body-fg-notifications" class="form-group required" style="border: 1px solid rgba(0,0,0,.07); padding: 10px;" ng-if="internalUser || features.showFugaSyncExtras">
+                <label id="CUR-div-panel-body-fg-lbl-notifications">Statement Notifications</label>
+                <p>Add email addresses below, separated by commas to receive a notification when their Statements are complete.</p>
+                <div id="CUR-div-form-group-notifications" class="form-group">
+                  <input id="CUR-form-input-notifications" type="text" class="form-control" ng-model="fuga.statementNotifications">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/ng-template" id="iswc-ftp-tab.html">
+  <div id="CUR-ftpintegration-div-iswc-template" ng-if="userRole === 'client'">
+      <div id="CUR-ftpintegration-div-row-iswc-template" class="row">
+          <div id="CUR-ftpintegration-div-row-col-iswc-template" class="col-xs-12">
+              <div id="CUR-ftpintegration-div-row-col-panel-iswc-template" class="panel panel-default">
+                  <div id="CUR-ftpintegration-div-row-col-panel-heading-iswc-template" class="panel-heading" style="display: flex; justify-content: space-between;">
+                      <div id="CUR-ftpintegration-div-row-col-panel-heading-title-iswc-template" class="panel-title">Acknowledgement Ingestion FTP Details</div>
+                      <button id="iswc-ftp-tab-save-button" class="btn btn-complete" ng-click="saveSettings()"><i class="fa fa-check"></i> Save</button>
+                  </div>
+                  <div id="CUR-ftpintegration-div-row-col-panel-body-iswc-template" class="panel-body">
+                      <ftp-iswc-ingest-row
+                        ng-repeat="server in client.iswcFtpIngestions track by $index"
+                        server="server"
+                        verify-ftp="verifyFtp(server)"
+                        index="$index"
+                        client-admin-user="clientAdminUser"
+                        delete="deleteFtpIngestRow(server, 'iswcFtpIngestions')">
+                      </ftp-iswc-ingest-row>
+                      <br>
+                      <button id="CUR-ftpintegration-div-row-col-panel-body-button-ack-template" class="btn btn-complete w-xs-100-p m-l-0" ng-click="addFtpIngestRow('iswcFtpIngestions')">+ FTP server</button>
+                  </div>
+              </div>
+          </div>
+       </div>
+    </div>
+  </div>
+</script>

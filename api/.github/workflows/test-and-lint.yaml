@@ -1,0 +1,271 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  Lint:
+    runs-on: codebuild-${{ vars.AWS_RUNNER_NAME }}-${{ github.run_id }}-${{ github.run_attempt }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0"
+          cache: "npm"
+
+      - name: Install npm
+        uses: ./.github/actions/install-npm
+
+      - name: Configure NPM Authentication
+        env:
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_TOKEN" > ~/.npmrc
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Linting
+        run: npm run lint
+
+  Jest-Unit-Tests:
+    runs-on: codebuild-${{ vars.AWS_RUNNER_NAME }}-${{ github.run_id }}-${{ github.run_attempt }}
+    needs: Lint
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0"
+          cache: "npm"
+
+      - name: Install npm
+        uses: ./.github/actions/install-npm
+
+      - name: Configure NPM Authentication
+        env:
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_TOKEN" > ~/.npmrc
+
+      - name: Install Dependencies
+        run: npm ci --build_from_source
+
+      - name: Login to Docker Hub
+        env:
+          DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+        run: echo "$DOCKER_HUB_TOKEN" | docker login --username arjundoelcurve --password-stdin
+
+      - name: Configure Jest memory and workers
+        id: jest-config
+        run: |
+          # --- Tuning parameters ---
+
+          # Minimum old-space heap (MB) to allocate per Jest worker via --max-old-space-size.
+          # Note: this only caps V8's old generation heap. Total process RSS will be higher —
+          # typically 20-40% more — once you account for new space, code space, stack, and
+          # native/Buffer allocations. Treat this as a guide, not a hard memory cap.
+          # No worker will ever be given less than this, even if the maths would suggest otherwise.
+          # Raised from 1024 - once NODE_OPTIONS actually reached workers (see integration job),
+          # this job's same 1024 floor produced ~1.1GB/worker and OOM'd. Matching the integration
+          # job's floor here too rather than assuming unit tests need less.
+          MIN_WORKER_MEMORY_MB=3072
+
+          # Percentage of total system RAM to budget for Node processes.
+          # The remainder is left for Docker (testcontainers), the OS, and other overhead.
+          # e.g. 50 means Node gets half the machine; lower this if Docker containers are being OOM-killed.
+          # Because --max-old-space-size understates true RSS, keeping this conservative is wise.
+          MEMORY_HEADROOM_PERCENT=50
+
+          # Optional: pin the worker count instead of deriving it dynamically.
+          # Leave empty to let the script calculate it from memory and CPU constraints.
+          # Useful for debugging or when the runner specs are known and stable.
+          MAX_WORKERS_OVERRIDE=
+
+          # --- Derived values (do not edit) ---
+
+          # Total RAM on this runner in MB
+          TOTAL_MEM_MB=$(free -m | awk '/^Mem:/{print $2}')
+
+          # Number of logical CPUs — Jest defaults to (nproc - 1) workers, so this is our CPU ceiling
+          NUM_CPUS=$(nproc)
+
+          # How many MB are available for all Node processes combined
+          AVAILABLE_MB=$(( TOTAL_MEM_MB * MEMORY_HEADROOM_PERCENT / 100 ))
+
+          if [ -n "$MAX_WORKERS_OVERRIDE" ]; then
+            MAX_WORKERS=$MAX_WORKERS_OVERRIDE
+          else
+            # How many workers fit within the memory budget at the minimum per-worker old-space size
+            WORKERS_BY_MEM=$(( AVAILABLE_MB / MIN_WORKER_MEMORY_MB ))
+
+            # How many workers the CPU count supports (reserve one core for the Jest main process)
+            WORKERS_BY_CPU=$(( NUM_CPUS - 1 ))
+
+            # Final worker count is whichever constraint is tighter, floored at 1
+            MAX_WORKERS=$(( WORKERS_BY_MEM < WORKERS_BY_CPU ? WORKERS_BY_MEM : WORKERS_BY_CPU ))
+            if [ "$MAX_WORKERS" -lt 1 ]; then MAX_WORKERS=1; fi
+          fi
+
+          # Give each worker an equal share of the available budget for its old-space limit,
+          # floored at MIN_WORKER_MEMORY_MB. Remember actual RSS per worker will exceed this.
+          PER_WORKER_MB=$(( AVAILABLE_MB / MAX_WORKERS ))
+          if [ "$PER_WORKER_MB" -lt "$MIN_WORKER_MEMORY_MB" ]; then PER_WORKER_MB=$MIN_WORKER_MEMORY_MB; fi
+
+          echo "per_worker_mb=${PER_WORKER_MB}" >> $GITHUB_OUTPUT
+          echo "max_workers=${MAX_WORKERS}" >> $GITHUB_OUTPUT
+
+      - name: Run Jest Unit Tests
+        env:
+          NODE_OPTIONS: --max-old-space-size=${{ steps.jest-config.outputs.per_worker_mb }}
+          JEST_MAX_WORKERS: ${{ steps.jest-config.outputs.max_workers }}
+        run: npm run test:jest:unit
+
+  Jest-Integration-Tests:
+    runs-on: codebuild-${{ vars.AWS_RUNNER_NAME }}-${{ github.run_id }}-${{ github.run_attempt }}
+    needs: Lint
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0"
+          cache: "npm"
+
+      - name: Install npm
+        uses: ./.github/actions/install-npm
+
+      - name: Configure NPM Authentication
+        env:
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_TOKEN" > ~/.npmrc
+
+      - name: Install Dependencies
+        run: npm ci --build_from_source
+
+      - name: Login to Docker Hub
+        env:
+          DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+        run: echo "$DOCKER_HUB_TOKEN" | docker login --username arjundoelcurve --password-stdin
+
+      - name: Configure Jest memory and workers
+        id: jest-config
+        run: |
+          # --- Tuning parameters ---
+
+          # Minimum old-space heap (MB) to allocate per Jest worker via --max-old-space-size.
+          # Note: this only caps V8's old generation heap. Total process RSS will be higher —
+          # typically 20-40% more — once you account for new space, code space, stack, and
+          # native/Buffer allocations. Treat this as a guide, not a hard memory cap.
+          # No worker will ever be given less than this, even if the maths would suggest otherwise.
+          # Raised from 1024 after CI OOMs showed integration workers legitimately need multiple
+          # GB (require-cache/module-graph growth across ~78 integration suites, some individual
+          # suites peaking above 1GB on their own) — 1024 was starving workers, not just tight.
+          MIN_WORKER_MEMORY_MB=3072
+
+          # Percentage of total system RAM to budget for Node processes.
+          # The remainder is left for Docker (testcontainers), the OS, and other overhead.
+          # e.g. 50 means Node gets half the machine; lower this if Docker containers are being OOM-killed.
+          # Because --max-old-space-size understates true RSS, keeping this conservative is wise.
+          MEMORY_HEADROOM_PERCENT=50
+
+          # Optional: pin the worker count instead of deriving it dynamically.
+          # Leave empty to let the script calculate it from memory and CPU constraints.
+          # Useful for debugging or when the runner specs are known and stable.
+          # Previously pinned to 4, which starved each worker of memory on smaller runners
+          # (observed ~1.1GB/worker on one run vs ~1.9GB on another, same pinned count) —
+          # deriving it dynamically lets worker count flex down instead, so each worker keeps
+          # a safe memory floor regardless of runner size.
+          MAX_WORKERS_OVERRIDE=
+
+          # --- Derived values (do not edit) ---
+
+          # Total RAM on this runner in MB
+          TOTAL_MEM_MB=$(free -m | awk '/^Mem:/{print $2}')
+
+          # Number of logical CPUs — Jest defaults to (nproc - 1) workers, so this is our CPU ceiling
+          NUM_CPUS=$(nproc)
+
+          # How many MB are available for all Node processes combined
+          AVAILABLE_MB=$(( TOTAL_MEM_MB * MEMORY_HEADROOM_PERCENT / 100 ))
+
+          if [ -n "$MAX_WORKERS_OVERRIDE" ]; then
+            MAX_WORKERS=$MAX_WORKERS_OVERRIDE
+          else
+            # How many workers fit within the memory budget at the minimum per-worker old-space size
+            WORKERS_BY_MEM=$(( AVAILABLE_MB / MIN_WORKER_MEMORY_MB ))
+
+            # How many workers the CPU count supports (reserve one core for the Jest main process)
+            WORKERS_BY_CPU=$(( NUM_CPUS - 1 ))
+
+            # Final worker count is whichever constraint is tighter, floored at 1
+            MAX_WORKERS=$(( WORKERS_BY_MEM < WORKERS_BY_CPU ? WORKERS_BY_MEM : WORKERS_BY_CPU ))
+            if [ "$MAX_WORKERS" -lt 1 ]; then MAX_WORKERS=1; fi
+          fi
+
+          # Give each worker an equal share of the available budget for its old-space limit,
+          # floored at MIN_WORKER_MEMORY_MB. Remember actual RSS per worker will exceed this.
+          PER_WORKER_MB=$(( AVAILABLE_MB / MAX_WORKERS ))
+          if [ "$PER_WORKER_MB" -lt "$MIN_WORKER_MEMORY_MB" ]; then PER_WORKER_MB=$MIN_WORKER_MEMORY_MB; fi
+
+          echo "per_worker_mb=${PER_WORKER_MB}" >> $GITHUB_OUTPUT
+          echo "max_workers=${MAX_WORKERS}" >> $GITHUB_OUTPUT
+
+      - name: Run Jest Integration Tests
+        env:
+          NODE_OPTIONS: --max-old-space-size=${{ steps.jest-config.outputs.per_worker_mb }}
+          JEST_MAX_WORKERS: ${{ steps.jest-config.outputs.max_workers }}
+        run: npm run test:jest:int:ci
+
+  Mocha-Tests:
+    runs-on: codebuild-${{ vars.AWS_RUNNER_NAME }}-${{ github.run_id }}-${{ github.run_attempt }}
+    needs: Lint
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0"
+          cache: "npm"
+
+      - name: Install npm
+        uses: ./.github/actions/install-npm
+
+      - name: Configure NPM Authentication
+        env:
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_TOKEN" > ~/.npmrc
+
+      - name: Install Dependencies
+        run: npm ci --build_from_source
+
+      - name: Login to Docker Hub
+        env:
+          DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+        run: echo "$DOCKER_HUB_TOKEN" | docker login --username arjundoelcurve --password-stdin
+
+      - name: Pull MongoDB Docker Image
+        run: docker pull mongo:8.0.11
+
+      - name: Start MongoDB Container
+        run: docker run -d -p 27017:27017 --name mongodb mongo:8.0.11
+
+      - name: Wait for MongoDB to be Ready
+        run: sleep 5
+
+      - name: Run Mocha Tests
+        run: npm run test:mocha

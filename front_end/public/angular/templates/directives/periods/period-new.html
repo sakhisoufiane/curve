@@ -1,0 +1,180 @@
+<div class="container-fluid container-fixed-lg">
+  <div class="row">
+    <div class="col-xs-12 col-md-10 col-md-offset-1">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row m-b-20">
+            <div class="col-xs-12">
+              <ul class="breadcrumb wizard-breadcrumb">
+                <li><a class="active">Setup</a></li>
+                <li ng-if="clientType !== 'Publisher'">Included Sales</li>
+                <li ng-if="clientType === 'Publisher'">Included Income</li>
+                <li ng-if="period.contractType !== 'MCPS' && features.suspense && clientType !== 'Publisher'">Included Resolved Sales</li>
+                <li ng-if="period.contractType !== 'MCPS' && features.suspense && clientType === 'Publisher'">Included Resolved Income</li>
+                <li ng-if="period.contractType !== 'MCPS' && period.contractType !== 'Mechanical' && clientType !== 'Publisher'">Included Costs</li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="alert alert-danger" role="alert" ng-if="setupErrors.length > 0">
+                <strong>Period Setup Errors:</strong><br/>
+                <ul>
+                  <li ng-repeat="error in setupErrors">{{ error }}</li>
+                </ul>
+              </div>
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" ng-model="period.name">
+                <label class="error" ng-if="setupErrors.includes('Period is required to have a name')">Name is required</label>
+              </div>
+              <!-- DMP SPECIFIC CHANGE -->
+              <div class="form-group" ng-if="isDMP">
+                <label>
+                  DMP Extract Date
+                  <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Date when DMP data was extracted. e.g 2025-11-02"></i>
+                </label>
+                <input type="text" class="form-control" ng-model="dmpData.extractDate">
+              </div>
+              
+              <div class="form-group" ng-if="isDMP">
+                <label>
+                  DMP royalty data folder
+                  <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Folder containing the DMP royalty data. e.g quarterly_90_days"></i>
+                </label>
+                <input type="text" class="form-control" ng-model="dmpData.periodType">
+              </div>
+              
+              <div class="form-group" ng-if="isDMP">
+                <label>
+                  Ingestion Type
+                  <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Choose whether the ingestion is full(all data types) or partial(reingestion, we only need transactions and sales)."></i>
+                </label>
+                <select class="form-control" ng-model="dmpData.ingestionType">
+                  <option value="full">Full</option>
+                  <option value="partial">Partial</option>
+                  <option value="update">Update</option>
+                </select>
+              </div>
+
+              <div class="form-group" ng-if="isDMP">
+                <div ng-if="dmpData && dmpData.ingestionType === 'update'">
+                  <label>
+                    Contract Foreign Ids
+                    <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Enter comma-separated strings relevant to DMP operations."></i>
+                  </label>
+                  <input type="text" class="form-control" ng-model="dmpData.foreignContractIds">
+                </div>
+              </div>
+              
+
+              <div class="form-group" ng-if="clientType !== 'Publisher'">
+                <label>Period Type <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Is this period for your normal artist contracts, for your mechanical licenses, or for specific society mechanicals?"></i></label>
+                <ui-select ng-model="period.contractType">
+                  <ui-select-match allow-clear="true">
+                    <span ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in (contractTypes | filter: $select.search)">
+                    <span ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div class="form-group">
+                <label>Accounting Period Type</label>
+                <ui-select ng-model="period.accountingPeriodType">
+                  <ui-select-match allow-clear="true">
+                    <span ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in (accountingPeriodTypes | filter: $select.search)">
+                    <span ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+                <label class="error" ng-if="setupErrors.includes('Period is required to have an accounting period type')">Accounting Period Type is required</label>
+              </div>
+              <div class="form-group">
+                <label>Year</label>
+                <ui-select ng-model="period.year">
+                  <ui-select-match allow-clear="true">
+                    <span ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in (years | filter: $select.search)">
+                    <span ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+                <label class="error" ng-if="setupErrors.includes('Period is required to have a year')">Year is required</label>
+              </div>
+              <div class="form-group">
+                <label>Accounting Period</label>
+                <ui-select ng-model="period.accountingPeriod" ng-if="isDefaultAccountingPeriod">
+                  <ui-select-match allow-clear="true">
+                    <span ng-bind="$select.selected"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="item in (accountingPeriods | filter: $select.search)">
+                    <span ng-bind="item"></span>
+                  </ui-select-choices>
+                </ui-select>
+                <input type="text" class="form-control" ng-model="period.accountingPeriod" ng-if="!isDefaultAccountingPeriod">
+                <label class="error" ng-if="setupErrors.includes('Period is required to have an accounting period')">Accounting Period is required</label>
+              </div>
+              <div class="form-group required">
+                <label>Start Date <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The starting date of the period, eg. 1st January for H1"></i></label>
+                <div id="datepicker-component" class="form-group input-group date">
+                  <input type="text" class="form-control" ng-model="period.startDate" ng-model-options="{timezone: 'utc'}" uib-datepicker-popup="{{dateFormat}}" is-open="startDatePopup" ng-click="openStartDatePopup()">
+                  <span class="input-group-addon" ng-click="openStartDatePopup()">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                </div>
+                <label class="error" ng-if="setupErrors.includes('Period is required to have a start date')">Start Date is required</label>
+              </div>
+              <div class="form-group required">
+                <label>End Date <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The closing date of the period, eg. 30th June for H1"></i></label>
+                <div id="datepicker-component" class="form-group input-group date">
+                  <input type="text" class="form-control" ng-model="period.endDate" ng-model-options="{timezone: 'utc'}" uib-datepicker-popup="{{dateFormat}}" is-open="endDatePopup" ng-click="openEndDatePopup()">
+                  <span class="input-group-addon" ng-click="openEndDatePopup()">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                </div>
+                <label class="error" ng-if="setupErrors.includes('Period is required to have an end date')">End Date is required</label>
+              </div>
+              <div class="form-group required">
+                <label>Accounting Date <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The date that will show on statements"></i></label>
+                <div id="datepicker-component" class="form-group input-group date">
+                  <input type="text" class="form-control" ng-model="period.accountingDate" ng-model-options="{timezone: 'utc'}" uib-datepicker-popup="{{dateFormat}}" is-open="accountingDatePopup" ng-click="openAccountingDatePopup()">
+                  <span class="input-group-addon" ng-click="openAccountingDatePopup()">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                </div>
+                <label class="error" ng-if="setupErrors.includes('Period is required to have an accounting date')">Accounting Date is required</label>
+              </div>
+              <div class="form-group required">
+                <label>E-mail for Statements <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="The e-mail that will be shown on PDF statements. Updating the e-mail here will overwrite the current value in Settings > Statement Design."></i></label>
+                <input type="text" class="form-control" ng-model="emailForStatements.value">
+                <label class="error" ng-if="setupErrors.includes('Period is required to have an e-mail for statements')">E-mail for Statements is required</label>
+              </div>
+              <hr ng-if="clientType !== 'Publisher' && period.contractType !== 'Mechanical' && period.contractType !== 'MCPS'" />
+              <div class="form-group" ng-if="features && features.multicurrency">
+                <label>Exchange Rates</label>
+                <p>Use the multiple exchange rates for converting your home currency into other currencies for your multicurrency contracts. These exchange rates will only be used if you haven't defined your exchange rates as part of your sales upload</p>
+                <div ng-show="loadingExchangeRates">
+                  Loading Exchange Rates...
+                </div>
+                <div ng-show="!loadingExchangeRates" class="form-group m-t-20">
+                  <exchange-rate-row ng-repeat="exchangeRate in period.currencyExchangeRates track by $index" exchange-rate="exchangeRate" include-home="true" delete="deleteExchangeRate(exchangeRate)" index="$index" client-currencies="clientCurrencies"></exchange-rate-row>
+                  <div class="row exchange-rate-button">
+                    <button class="btn btn-complete" ng-click="addExchangeRate()">+ Add</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row m-t-20">
+            <div class="col-xs-12">
+              <a ng-click="validateSetup()" class="btn btn-complete pull-right w-xs-100-p">Next</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

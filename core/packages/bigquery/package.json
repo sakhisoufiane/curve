@@ -1,0 +1,46 @@
+{
+  "name": "@curveroyaltysystems/bigquery",
+  "version": "0.0.5",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "rimraf dist && tsc",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "lint": "eslint \"src/**/*.[ts|js]*\"",
+    "lint:quiet": "eslint \"src/**/*.[ts|js]*\" --quiet",
+    "test": "jest --runInBand --no-cache",
+    "test:unit": "jest --testMatch='<rootDir>/src/**/*.unit.test.{ts,js}' --runInBand --no-cache",
+    "test:int": "jest --testMatch='<rootDir>/src/**/*.integration.test.{ts,js}' --runInBand --no-cache",
+    "test:coverage": "jest --coverage",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@curveroyaltysystems/curve-env-var-resolver": "*",
+    "@curveroyaltysystems/logger": "*",
+    "@google-cloud/bigquery": "7.9.4",
+    "@google-cloud/storage": "7.19.0",
+    "avsc": "5.7.9",
+    "cockatiel": "3.2.1"
+  },
+  "devDependencies": {
+    "@curveroyaltysystems/eslint-config": "*",
+    "@curveroyaltysystems/prettier-config": "*",
+    "@curveroyaltysystems/typescript-config": "*",
+    "@curveroyaltysystems/test-config": "*",
+    "@types/node": "22.19.17",
+    "node-sql-parser": "5.4.0",
+    "rimraf": "3.0.2"
+  },
+  "prettier": "@curveroyaltysystems/prettier-config",
+  "jest": {
+    "preset": "@curveroyaltysystems/test-config"
+  }
+}

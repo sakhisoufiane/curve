@@ -1,0 +1,56 @@
+name: PR Pipeline
+
+on:
+  pull_request:
+    branches: ["develop", "main"]
+
+concurrency:
+  group: pr-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.NPM_CSL_TOKEN }}
+
+      - name: Lint
+        run: npm run lint
+
+  Test:
+    needs: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.NPM_CSL_TOKEN }}
+
+      - name: Test
+        run: npm run test
+
+  Coverage:
+    needs: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.NPM_CSL_TOKEN }}
+
+      - name: Coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          annotations: none

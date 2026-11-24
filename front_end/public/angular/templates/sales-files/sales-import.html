@@ -1,0 +1,560 @@
+<div id="CUR-LfWFvbzs" class="jumbotron" data-pages="parallax">
+  <div id="CUR-qQHuwuqz" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-TPQzKlVL" class="inner">
+      <ul id="CUR-yhMJVirs" class="breadcrumb">
+        <li id="CUR-AvImCcfF"><a id="CUR-jaZYNwyQ" href="/#/sales">Sales</a></li>
+        <li id="CUR-hynCvzsz" ng-show="!salesFile._id"><a id="CUR-pAVfKjru" href="/#/sales/import" class="active">Import</a></li>
+        <li id="CUR-gHcmTrGw" ng-show="salesFile._id"><a id="CUR-LNNAXFtL" href="/#/sales/{{salesFile._id}}/edit" class="active">{{salesFile.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Main Container -->
+<div id="CUR-UAyNfovt" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5" ng-if="salesFile.status == 'Setup' || salesFile.status == 'Errored'">
+  <div id="CUR-plIXKOvL" class="row">
+    <div id="CUR-jHUMolkx" class="col-xs-12 col-sm-6">
+      <h3 id="CUR-ZduIeLzF" style="display: flex; align-items: center;">
+        {{salesFile.name}}
+        <span id="CUR-vyQbGIam" ng-if="salesFile.status == 'Errored'" style="margin-left: 10px; margin-top: 2px;" class="label label-danger">Errored</span>
+        <span id="CUR-vyQbGIam" ng-if="salesFile.duplicateSalesFileId || salesFile.duplicateSalesFileId === 'No ID Found'" style="margin-left: 10px; margin-top: 2px;" class="label label-info">Duplicate</span>
+      </h3>
+      <a ng-if="salesFile.duplicateSalesFileId && salesFile.duplicateSalesFileId !== 'No ID Found'" href="#/sales/{{ salesFile.duplicateSalesFileId }}/ingestion_complete"><p>Link to Duplicate Sales File</p></a>
+      <h5 id="CUR-eewVRuGf">{{salesFile.salesAccountName}} : {{salesFile.salesTemplateName}}</h5>
+    </div>
+    <div id="CUR-TSUcMWyd" class="col-xs-12 col-sm-6 text-right two-cols-row">
+      <a id="CUR-VmgZigIR" target="_blank" href="{{salesFile.publicLink}}" ng-if="salesFile.publicLink" class="btn btn-default hidden-xs" ng-show="rights.sales == 'Edit'"><i class="fa fa-download"></i> Download</a>
+      <button id="CUR-dYQCkJmQ" class="btn btn-danger m-xs-l-0 sm-p-r-0 sm-p-l-0 sm-m-r-5" data-toggle="modal" data-target="#deleteModal" ng-show="rights.sales == 'Edit'"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-VcrTkCcj" class="btn btn-complete hidden-xs" ng-click="save()" ng-show="!salesFile.duplicateSalesFileId && rights.sales == 'Edit'"><i class="fa fa-check"></i> Save</button>
+      <a id="CUR-EmTEbTXJ" class="btn btn-primary hidden-xs" ng-show="(salesImport || salesFile._id) && rights.sales == 'Edit'" ng-click="ingest()"><i class="fa fa-download"></i>&nbsp;Ingest</a>
+      <div id="CUR-XNdAPjvh" class="btn-group dropdown-default visible-xs"> <a id="CUR-hvZeRzTF" class="btn dropdown-toggle w-xs-100-p" data-toggle="dropdown" aria-expanded="false"> Download <span id="CUR-jvnVIqKu" class="caret"></span> </a>
+        <ul id="CUR-GsYLjGQx" class="dropdown-menu w-xs-100-p">
+          <li id="CUR-dubEUTOm" ng-if="salesFile.publicLink">
+            <a id="CUR-ipWkkZuH" target="_blank" href="{{salesFile.publicLink}}"><i class="fa fa-download"></i> Download</a>
+          </li>
+          <li id="CUR-PMcVjtEC">
+            <a id="CUR-FonHAePv" href="javascript:void(0)" ng-click="save()"><i class="fa fa-check"></i> Save</a>
+          </li>
+          <li id="CUR-NjbSDRtW" ng-show="salesImport || salesFile._id">
+            <a id="CUR-opOYoyzp" href="javascript:void(0)" ng-click="ingest()"><i class="fa fa-download"></i>&nbsp;Ingest</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-nCQbfIJh" class="row" ng-if="salesFile.error">
+    <div id="CUR-BnFZcqHu" class="col-xs-12">
+      <div id="CUR-lTXbdqDH" class="alert alert-danger" role="alert">
+        <strong>Error: </strong>{{salesFile.error}}
+      </div>
+    </div>
+  </div>
+  <div id="CUR-Bbuithrm" ng-show="salesImport || salesFile._id">
+    <div id="CUR-cEFFTECK" ng-class="salesFile.error ? 'row' : 'row m-t-40'">
+      <div id="CUR-BtgESURi" class="col-xs-12 col-md-6">
+        <div id="CUR-gDKjQmvP" class="panel panel-default">
+          <div id="CUR-OFTBEmeX" class="panel-heading">
+            <div id="CUR-TGGIQwav" class="panel-title">
+              Setup <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-sales/#preingestion"></documentation>
+            </div>
+          </div>
+          <div id="CUR-BQWcEYOA" class="panel-body p-t-15">
+            <div id="CUR-HQOhWOFG" class="form-group">
+              <label id="CUR-NbuTrJiy">Name</label>
+              <input id="CUR-uOyLTZEv" type="text" class="form-control" ng-model="salesFile.name" ng-disabled="rights.sales != 'Edit'">
+            </div>
+            <div id="CUR-ahWyyWvV" class="form-group">
+              <label id="CUR-SnJSGeCb">Invoice No</label>
+              <input id="CUR-DfHwJycS" type="text" class="form-control" ng-model="salesFile.invoiceNo" ng-disabled="rights.sales != 'Edit'">
+            </div>
+            <div id="CUR-mKknaCLW" class="form-group">
+              <label id="CUR-cmENHYqN">Target Period</label>
+              <input id="CUR-rxaiIdQm" type="text" class="form-control" ng-model="salesFile.targetPeriod" ng-disabled="rights.sales != 'Edit'">
+            </div>
+            <div id="CUR-KJldjsl" class="form-group">
+              <label id="CUR-AlkSoiT" ng-if="clientType">
+                {{ clientType === 'Publisher' ? 'Income File Foreign ID' : 'Sales File Foreign ID' }}
+                </label>
+              <input id="CUR-Lkldklnm" type="text" class="form-control" ng-model="salesFile.foreignId" ng-disabled="rights.sales != 'Edit'">
+            </div>
+            <div id="CUR-xLFJnqDQ" class="form-group">
+              <label id="CUR-RIHouuxC">Source</label>
+              <ui-select class="full-width" ng-model="salesFile.salesAccountName" ng-disabled="rights.sales != 'Edit'">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-rVHBCbEM" ng-bind="$select.selected.source"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item.source as item in sources | orderBy: 'source' | filter: $select.search">
+                  <span id="CUR-VsGFxrjI" ng-bind="item.source"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div id="CUR-rxkHzbME" class="form-group">
+              <label id="CUR-diqgbIVE">Template</label>
+              <ui-select class="full-width" ng-model="salesFile.salesTemplateName" on-select="onSelectedTemplate($item)" ng-disabled="rights.sales != 'Edit'">
+                <ui-select-match allow-clear="true">
+                  <span id="CUR-mojzqWdp" ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item.name as item in templates | orderBy: 'name' | filter: { name: $select.search, source: salesFile.salesAccountName}">
+                  <span id="CUR-DiZazIty" ng-bind="item.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-CAMekXHm" class="panel panel-default" ng-if="clientType != 'Publisher'">
+          <div id="CUR-OzbzJFqY" class="panel-heading">
+            <div id="CUR-znzbAAln" class="panel-title">
+              Catalogue Overwrite Sales
+            </div>
+          </div>
+          <div id="CUR-IsFuxjax" class="panel-body">
+            <div id="CUR-WyZnqned" class="row m-b-20">
+              <div id="CUR-FCuphEiU" class="col-xs-12">
+                <p>The overwriting with catalogue values configurations allow you to overwrite the values taken from the sales files with the ones set for the catalogue item.  For instance, if you want to set the format for physical products from the mapped release.</p>
+              </div>
+            </div>
+            <div id="CUR-NxksVFGP" class="form-group">
+              <input id="CUR-PSGUFfnX" type="checkbox" value="1" ng-model="salesFile.overwriteFields.overwriteDistributionChannelWithCatalogue" ng-disabled="rights.sales != 'Edit'">
+              <label id="CUR-xuRcIKcD">Overwrite Distribution Channel</label>
+            </div>
+            <div id="CUR-zaCXYzUU" class="form-group">
+              <input id="CUR-GGBAXCmW" type="checkbox" value="1" ng-model="salesFile.overwriteFields.overwriteConfigWithCatalogue" ng-disabled="rights.sales != 'Edit'">
+              <label id="CUR-xDEEIYFQ">Overwrite Configuration</label>
+            </div>
+            <div id="CUR-ddhGBrFk" class="form-group">
+              <input id="CUR-vDtmMvaG" type="checkbox" value="1" ng-model="salesFile.overwriteFields.overwritePriceCategoryWithCatalogue" ng-disabled="rights.sales != 'Edit'">
+              <label id="CUR-eqZPHPQI">Overwrite Price Category</label>
+            </div>
+            <div id="CUR-qARMdanS" class="form-group">
+              <input id="CUR-bUMrPmqo" type="checkbox" value="1" ng-model="salesFile.overwriteFields.overwriteTrackPriceCategoryWithCatalogue"
+                ng-disabled="rights.sales != 'Edit'">
+              <label id="CUR-uzTaUqcd">Overwrite Track Price Category</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-vVImFtPP" class="col-xs-12 col-md-6">
+        <div id="CUR-GozMlUsz" class="panel panel-default">
+          <div id="CUR-dFhRvaLU" class="panel-heading">
+            <div id="CUR-LVPcWDKC" class="panel-title">
+              Required Fields
+            </div>
+          </div>
+          <div id="CUR-eBdVWDyo" class="panel-body p-t-15">
+            <div id="CUR-KaDHcFCW" class="form-group">
+              <i class="fa fa-check text-success" ng-if="includesTerritory"></i>
+              <i class="fa fa-times text-danger" ng-if="!includesTerritory"></i>
+              <label id="CUR-KivBMFFf">Territory</label>
+            </div>
+            <div id="CUR-yQBDOvZl" class="form-group">
+              <i class="fa fa-check text-success" ng-if="includesDistributionChannel"></i>
+              <i class="fa fa-times text-danger" ng-if="!includesDistributionChannel"></i>
+              <label id="CUR-KHrhzLLy">Distribution Channel</label>
+            </div>
+            <div id="CUR-IqPQnrJE" class="form-group">
+              <i class="fa fa-check text-success" ng-if="includesConfiguration"></i>
+              <i class="fa fa-times text-danger" ng-if="!includesConfiguration"></i>
+              <label id="CUR-WOJzDaXi">Configuration</label>
+            </div>
+            <div id="CUR-fgOJOrDi" class="form-group">
+              <i class="fa fa-check text-success" ng-if="includesSource"></i>
+              <i class="fa fa-times text-danger" ng-if="!includesSource"></i>
+              <label id="CUR-KdNjgNYD">Source</label>
+            </div>
+            <div id="CUR-MyhTIiTg" class="form-group">
+              <i class="fa fa-check text-success" ng-if="includesCurrency"></i>
+              <i class="fa fa-times text-danger" ng-if="!includesCurrency"></i>
+              <label id="CUR-pBtFyxIV">Currency</label>
+            </div>
+            <div id="CUR-yAcIzjDG" class="form-group">
+              <i class="fa fa-check text-success" ng-if="includesUnits"></i>
+              <i class="fa fa-times text-danger" ng-if="!includesUnits"></i>
+              <label id="CUR-wrrYVCfx">Units</label>
+            </div>
+            <div id="CUR-gQmnFjLt" class="form-group">
+              <i class="fa fa-check text-success" ng-if="includesNetAmount"></i>
+              <i class="fa fa-times text-danger" ng-if="!includesNetAmount"></i>
+              <label id="CUR-RCyfUFAb">Net Amount</label>
+            </div>
+            <div id="CUR-utAOwUPU" class="form-group">
+              <i class="fa fa-check text-success" ng-if="includesSaleDate"></i>
+              <i class="fa fa-times text-danger" ng-if="!includesSaleDate"></i>
+              <label id="CUR-PfLJTtxr">Sale Date</label>
+            </div>
+            <div id="CUR-qqhvuysv" class="form-group">
+              <i class="fa fa-check text-success" ng-if="includesTransactionDate"></i>
+              <i class="fa fa-times text-danger" ng-if="!includesTransactionDate"></i>
+              <label id="CUR-WdKPBmju">Transaction Date</label>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-jjHFyDNZ" class="panel panel-default">
+          <div id="CUR-QGLZRGDQ" class="panel-heading">
+            <div id="CUR-uwzQWxow" class="panel-title">
+              Target Cells
+            </div>
+          </div>
+          <div id="CUR-emGvIjkg" class="panel-body">
+            <p>Use this configuration to tell the system where to load specific values from in the file, such as when an Exchange Rate or Pro Rata Amount is determined in a specific cell. Select your field from the left, and define the cell using the letter-numbering coding, as defined in Excel, eg. B3</p>
+            <div id="CUR-NwDPMjRS" class="form-group m-t-20">
+              <target-cell-row edit="rights.sales == 'Edit'" ng-repeat="targetCell in salesFile.overwriteFieldTargetCells track by $index"
+                target-cell="targetCell" target-cell-fields="targetCellFields" target-cell-types="targetCellTypes" index="$index" delete="deleteTargetCell(targetCell)">
+              </target-cell-row>
+              <div id="CUR-kDiFZBUi" class="row">
+                <div id="CUR-JOMGBQxo" class="form-group col-sm-12">
+                  <button id="CUR-FWiIhoDC" class="btn btn-complete w-xs-100-p" ng-show="rights.sales == 'Edit'" ng-click="addTargetCell()">+ Target Cell</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-LZowlcqA" class="panel panel-default">
+          <div id="CUR-sRFiOVeC" class="panel-heading">
+            <div id="CUR-OGTRhpvR" class="panel-title">
+              Exchange Rates
+            </div>
+          </div>
+          <div id="CUR-hsMqYgTt" class="panel-body p-t-15">
+            <p>Use the multiple exchange rates for converting multiple currencies into your home currency, or to convert currencies into your multi currency options.</p>
+            <div id="CUR-NAmxrBvq" class="form-group m-t-20">
+              <exchange-rate-row sales="true" ng-repeat="exchangeRate in salesFile.exchangeRates track by $index" exchange-rate="exchangeRate" delete="deleteExchangeRate(exchangeRate)" index="$index" client-currencies="clientCurrencies"></exchange-rate-row>
+              <div id="CUR-VhZjgvum" class="row exchange-rate-button">
+                <button id="CUR-zzjGHDxI" class="btn btn-complete" ng-click="addExchangeRate()">+ Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-OcbszmiN" class="col-xs-12 col-md-12 col-sm-12">
+        <div id="CUR-iDdwnoQJ" class="panel panel-default">
+          <div id="CUR-lROmyRSk" class="panel-heading">
+            <div id="CUR-CwMQOlqZ" class="panel-title reset-overflow">
+              Defaults <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="These default values only update fields that are not present in the sales data"></i>
+            </div>
+          </div>
+          <div id="CUR-CsmzMMmU" class="panel-body p-t-15">
+            <div id="CUR-UBUIjgJh" class="row">
+              <div id="CUR-CMfjGmUd" class="col-xs-12 col-sm-3">
+                <div id="CUR-BYjmcSpj" class="form-group">
+                  <label id="CUR-ISKzCNLq">Source</label>
+                  <input id="CUR-DXbBREUy" type="text" class="form-control" ng-model="salesFile.overwriteFields.source" ng-disabled="rights.sales != 'Edit'">
+                </div>
+              </div>
+              <div id="CUR-rfxPUeGh" class="col-xs-12 col-sm-3">
+                <div id="CUR-anqeyfYM" class="form-group">
+                  <label id="CUR-ZKnDhYRY">Channel</label>
+                  <ui-select ng-model="salesFile.overwriteFields.originalDistributionChannel" ng-disabled="rights.sales != 'Edit'">
+                    <ui-select-match allow-clear="true">
+                      <span id="CUR-GFmcWnDI" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item in distributionChannels | orderBy:'item' | filter: $select.search track by $index">
+                      <span id="CUR-wvVOOVMM" ng-bind="item"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-fWVALtau" class="col-xs-12 col-sm-3">
+                <div id="CUR-QwSvhZQY" class="form-group">
+                  <label id="CUR-ReYDcJUo">Currency</label>
+                  <ui-select ng-model="salesFile.overwriteFields.originalCurrency" ng-disabled="rights.sales != 'Edit'">
+                    <ui-select-match allow-clear="true">
+                      <span id="CUR-cJYtOdgd" ng-bind="$select.selected.code"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="currency.code as currency in currencies | orderBy: 'code' | filter: $select.search track by $index">
+                      <span id="CUR-ExOKAMis" ng-bind-html="currency.code"></span>
+                      <span id="CUR-cFNGkOFF"> &nbsp; - &nbsp; </span>
+                      <span id="CUR-gzoVwKXu" ng-bind-html="currency.name"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-pyjGdeid" class="col-xs-12 col-sm-3">
+                <div id="CUR-eKewWXSW" class="form-group">
+                  <label id="CUR-bHcKdkKG">Sale Date</label>
+                  <div id="datepicker-component" class="form-group input-group date">
+                    <input id="CUR-KHfjFRGn" type="text" class="form-control" ng-model="salesFile.overwriteFields.saleDate" uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}" is-open="saleDatePopup" ng-click="openSaleDatePopup()" ng-disabled="rights.sales != 'Edit'">
+                    <span id="CUR-UGqgCyXY" class="input-group-addon" ng-click="openSaleDatePopup()">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                  </div>
+                </div>
+              </div>
+              <div id="CUR-qcMkDhqn" class="col-xs-12 col-sm-3">
+                <div id="CUR-UvDvQaMb" class="form-group">
+                  <label id="CUR-uyeJMcFZ">Sub Source</label>
+                  <input id="CUR-QIdpODOJ" type="text" class="form-control" ng-model="salesFile.overwriteFields.subSource" ng-disabled="rights.sales != 'Edit'">
+                </div>
+              </div>
+              <div id="CUR-csjbEbGK" class="col-xs-12 col-sm-3">
+                <div id="CUR-qVFiEDUb" class="form-group">
+                  <label id="CUR-qRgXVESt">Configuration</label>
+                  <ui-select ng-model="salesFile.overwriteFields.originalConfiguration" ng-disabled="rights.sales != 'Edit'">
+                    <ui-select-match allow-clear="true">
+                      <span id="CUR-bEsbMGQj" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item in configurations | orderBy:'item' | filter: $select.search track by $index">
+                      <span id="CUR-cGatVEnv" ng-bind="item"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-CaHOwsix" class="col-xs-12 col-sm-3">
+                <div id="CUR-xQcadgDa" class="form-group">
+                  <label id="CUR-hPpnkSAh">Territory</label>
+                  <ui-select ng-model="salesFile.overwriteFields.originalTerritory" ng-disabled="rights.sales != 'Edit'">
+                    <ui-select-match allow-clear="true">
+                      <span id="CUR-OXIlyeod" ng-bind="$select.selected.name"></span>
+                    </ui-select-match>
+                    <ui-select-choices group-by="groupFind" repeat="territory.code as territory in territories | filter: $select.search track by $index">
+                      <span id="CUR-eJQVHNOM" class="country" ng-bind="territory.name"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-divQtvpY" class="col-xs-12 col-sm-3">
+                <div id="CUR-GBqAxwhQ" class="form-group">
+                  <label id="CUR-fjhXpEYM">Transaction Date</label>
+                  <div id="datepicker-component" class="form-group input-group date">
+                    <input id="CUR-wULtKFYs" type="text" class="form-control" ng-model="salesFile.overwriteFields.transactionDate" uib-datepicker-popup="{{dateFormat}}" ng-model-options="{timezone: 'utc'}" is-open="transactionDatePopup" ng-click="openTransactionDatePopup()" ng-disabled="rights.sales != 'Edit'">
+                    <span id="CUR-SZLdTZUl" class="input-group-addon" ng-click="openTransactionDatePopup()">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                  </div>
+                </div>
+              </div>
+              <div id="CUR-MtJPRxTh" class="col-xs-12 col-sm-3">
+              </div>
+              <div id="CUR-OzZoHZBs" class="col-xs-12 col-sm-3" ng-if="clientType != 'Publisher'">
+                <div id="CUR-zXZVJLIk" class="form-group">
+                  <label id="CUR-JQiVLOTZ">Price Category</label>
+                  <ui-select ng-model="salesFile.overwriteFields.originalPriceCategory" ng-disabled="rights.sales != 'Edit'">
+                    <ui-select-match allow-clear="true">
+                      <span id="CUR-HzqDvNxX" ng-bind="$select.selected"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="item  in priceCategories | orderBy:'item' | filter: $select.search track by $index">
+                      <span id="CUR-MObZyjRw" ng-bind="item"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div id="CUR-yAdKaBFu" class="col-xs-12 col-sm-3">
+                <div id="CUR-opNJqsCQ" class="form-group">
+                  <label id="CUR-vSGNpjyC">Pro Rata Amount</label>
+                  <input id="CUR-stuSFkmk" type="number" class="form-control" ng-model="salesFile.proRataAmount" ng-disabled="rights.sales != 'Edit'">
+                </div>
+              </div>
+              <div id="CUR-kkNkriUp" class="col-xs-12 col-sm-3">
+                <div id="CUR-bLpBkEJc" class="form-group">
+                  <label id="CUR-TruquxpL">Multiplier</label>
+                  <input id="CUR-eBcDkKdy" type="number" class="form-control" ng-model="salesFile.overwriteFields.multiplier" ng-disabled="rights.sales != 'Edit'">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-HzHfjEvM" class="row" ng-show="!salesFile.duplicateSalesFileId">
+      <div id="CUR-kSlbNInQ" class="col-xs-12 col-md-12 col-sm-12">
+        <div id="CUR-vDbCtXQG" class="panel panel-default">
+          <div id="CUR-jQSDtAKU" class="panel-heading">
+            <div id="CUR-OWtyUYVM" class="panel-title">
+              Example lines
+            </div>
+          </div>
+          <div id="CUR-oOXwwFXw" class="panel-body p-t-15" style="overflow-x:auto;">
+            <table id="CUR-zRmvtlSZ" class="table table-hover table-condensed dataTable no-footer sales-table sales-table-with-checkbox">
+              <thead>
+              <tr id="CUR-ldeOjwRv" ng-repeat="row in exampleTableHeaders track by $index">
+                <th ng-repeat="column in row track by $index">
+                  {{column | salesColumnName}}
+                </th>
+              </tr>
+              </thead>
+              <tbody id="CUR-xeYfvEDg">
+              <tr id="CUR-nJMrZjpc" ng-repeat="row in exampleTableBody track by $index">
+                <td id="CUR-edMpTjTb" ng-repeat="column in row track by $index">
+                  {{column}}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-xdAowjpS" class="row">
+    <div id="CUR-zQOnLmYF" class="col-xs-12 text-center model-history-link">
+      <span id="CUR-FWsqehHn" ng-show="salesFile.updatedAt">Last Updated on {{ salesFile.updatedAt | date : dateFormat : 'UTC' }}.</span> <a id="CUR-qHmxDslw" href="javascript:;" ng-click="modelHistory()" ng-show="rights.contracts == 'Edit'">See Full History</a>
+    </div>
+  </div>
+</div>
+
+<!-- Unrecognised -->
+<div id="CUR-IazEHNNO" class="container-fluid container-fixed-lg" ng-if="salesFile.status == 'Unrecognised'">
+  <div id="CUR-oTuLjLkp" class="row">
+    <div id="CUR-mVmrrScn" class="col-xs-12 col-sm-6 col-sm-offset-3">
+      <div id="CUR-FGRGGuoy" ng-if="!originalObj.salesTemplateId" class="panel panel-default">
+        <div id="CUR-fikkyvkm" class="panel-heading">
+          <div id="CUR-bZykPOsh" class="panel-title">Match sales file to template</div>
+        </div>
+        <div id="CUR-fuXOAawl" class="panel-body p-t-15">
+          <div id="CUR-OTNJIAXr" class="alert alert-info">
+            <p>Unfortunately we haven't managed to match your template automatically, either to one of your templates, or one from our library.</p>
+            <p>Select the template below or create one from this file. Once you've identified the template, we will automatically match files of this type in the future.</p>
+          </div>
+          <div id="CUR-PmTogZMa" class="form-group">
+            <label id="CUR-joTSMzMo">File</label>
+            <p>{{salesFile.name}}</p>
+          </div>
+          <div id="CUR-eAEGfenj" class="alert alert-danger" role="alert" ng-if="setupErrorsIngest.length > 0">
+            <strong>Errors:</strong><br/>
+            <ul id="CUR-hPEWAoqL">
+              <li id="CUR-AcZiIIdn" ng-repeat="error in setupErrorsIngest">{{ error }}</li>
+            </ul>
+          </div>
+          <div id="CUR-ofzpgvcj" class="form-group">
+            <label id="CUR-hAeDONYJ">Source</label>
+            <ui-select class="full-width" ng-model="salesFile.salesAccountName">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-XSweFoEi" ng-bind="$select.selected.source"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item.source as item in sources | orderBy: 'source' | filter: $select.search">
+                <span id="CUR-ESQtHUqX" ng-bind="item.source"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div id="CUR-ndxJvzYk" class="form-group">
+            <label id="CUR-krmDtmlP">Template</label>
+            <ui-select class="full-width" ng-model="salesFile.salesTemplateName" on-select="onSelectedTemplate($item)">
+              <ui-select-match allow-clear="true">
+                <span id="CUR-ZliTMfcq" ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item.name as item in templates | orderBy: 'name' | filter: { name: $select.search, source: salesFile.salesAccountName}">
+                <span id="CUR-jKXEGmXe" ng-bind="item.name"></span>
+              </ui-select-choices>
+            </ui-select>
+            <label id="CUR-vnVnvpfm" class="error" ng-if="setupErrorsIngest.includes('Sales File is required to have a template')">Template is required</label>
+          </div>
+          <div id="CUR-vqCRYUEv" class="form-group m-t-20" ng-if="['Apple Music', 'iTunes', 'iTunes Match', 'Beats', 'Apple DJ', 'Facebook'].includes(selectedTemplate.fileType)">
+            <label id="CUR-srXEbpWK">Financial File <documentation link="http://guide.curveroyaltysystems.com/article/sales-uploading-apple-sales-files/"></documentation></label>
+            <input id="CUR-LihRDbbq" type="file" class="m-t-10" ngf-select ngf-allow-dir="false" ng-model="files[0]">
+            <label id="CUR-MDOqKWdH" class="error" ng-if="setupErrorsIngest.includes('Finance File is required for Apple Sales Files')">Financial File is required</label>
+          </div>
+
+          <div id="CUR-EOhSwMoq" class="form-group text-right m-t-20">
+            <button id="CUR-ixqbilJT" class="btn btn-default hidden-xs m-r-10" data-toggle="modal" data-target="#createModal">Create Template</button>
+            <button id="CUR-nmfIBAuO" class="btn btn-complete hidden-xs" ng-click="ingest()"><i class="fa fa-check"></i> Save and Ingest</button>
+          </div>
+        </div>
+      </div>
+      <div id="CUR-yjxPFsle" ng-if="originalObj.salesTemplateId" class="panel panel-default">
+        <div id="CUR-SNaeKLbR" class="panel-heading">
+          <div id="CUR-bNEtSteM" class="panel-title">Template set up</div>
+        </div>
+        <div id="CUR-QssrjZPQ" class="panel-body p-t-15">
+          <div id="CUR-mLPCioFn" class="form-group">
+            <p>A template has been set up for this sales file already.</p>
+            <p>You can continue to edit the template or ingest the sales file.</p>
+          </div>
+          <div id="CUR-RqxMNjDy" class="form-group text-right m-t-20">
+            <button id="CUR-gZvncUoB" class="btn btn-default hidden-xs m-r-10" ng-click="editTemplate()">Edit Template</button>
+            <button id="CUR-CqNilFAm" class="btn btn-primary hidden-xs" ng-click="ingest()"><i class="fa fa-download"></i> Ingest</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Loading Page -->
+<div id="CUR-mAIjnQuA" class="container-fluid container-fixed-lg" ng-if="salesFile.status == 'Waiting' || salesFile.status == 'Ingesting' || salesFile.status == 'Revalidating'">
+  <div id="CUR-qkxhejqU" class="row">
+    <div id="CUR-OeiwzqJX" class="col-xs-12 col-sm-6 col-sm-offset-3">
+      <div id="CUR-fVGmlauJ" class="panel panel-default text-center">
+        <div id="CUR-rWJKaTWv" class="panel-body p-t-15">
+          <h3 id="CUR-VUEiUQTF" ng-if="salesFile.status == 'Waiting'">File is waiting to be processed...</h3>
+          <h3 id="CUR-zzMqQuuo" ng-if="salesFile.status == 'Ingesting'">File is being ingested...</h3>
+          <h3 id="CUR-uUvFHLKb" ng-if="salesFile.status == 'Revalidating'">File is being revalidated...</h3>
+          <div id="CUR-PkPSUnCi" class="loading-spinner">
+            <md-progress-circular md-diameter="95"></md-progress-circular>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modals -->
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-KVbkwWxM" class="modal-dialog">
+    <div id="CUR-SnluOnOy" class="modal-content">
+      <div id="CUR-RsqNbqxJ" class="modal-header clearfix text-left">
+        <button id="CUR-QilhmYcr" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-wbKHLAlx">Delete Sales File</h5>
+      </div>
+      <div id="CUR-ZDCmlNhr" class="modal-body">
+        <div id="CUR-qNhiQXwF" class="row">
+          <div id="CUR-suSGiIHb" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this sales file? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-DHktUYkr" class="row">
+          <div id="CUR-WfKiYByb" class="col-xs-12 m-t-20 text-right two-cols-row">
+            <button id="CUR-dFvuatLN" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-alQhgDPu" type="button" class="btn btn-danger m-t-5" ng-click="delete()"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="createModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-ZEUvClUa" class="modal-dialog">
+    <div id="CUR-BOjEABbI" class="modal-content">
+      <div id="CUR-jwIcfooy" class="modal-header clearfix text-left">
+        <button id="CUR-zMnPuocu" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i></button>
+        <h5 id="CUR-HgiwNiOK">Create Template</h5>
+      </div>
+      <div id="CUR-tXBvKmJj" class="modal-body">
+        <div id="CUR-XZQbHsFP" class="row">
+          <div id="CUR-reIFeIem" class="col-xs-12 m-t-20">
+            <div id="CUR-MFEuwGUs" class="form-group">
+              <label id="CUR-MUPwgjZE">Template Name</label>
+              <input id="CUR-vhcKlHzG" type="text" class="form-control" ng-model="salesTemplate.name">
+              <label id="CUR-wmmPYKpV" class="error" ng-if="setupErrors.includes('name')">Name is required</label>
+            </div>
+            <div id="CUR-rpHWTvlf" class="form-group">
+              <label id="CUR-BMAcCNpZ">Source <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Who is the file from? This will group your templates together"></i></label>
+              <input id="CUR-ZGWhGYKY" type="text" class="form-control" ng-model="salesTemplate.source" ng-disabled="rights.sales != 'Edit'">
+              <label id="CUR-CaqJqVDM" class="error" ng-if="setupErrors.includes('source')">Source is required</label>
+            </div>
+            <div id="CUR-SXfXldsH" class="form-group">
+              <label id="CUR-gfeunZhm">Tab Number</label>
+              <input id="CUR-lkrFGCoI" type="number" class="form-control" ng-model="salesTemplate.tab" ng-disabled="rights.sales != 'Edit'">
+              <label id="CUR-HrkVqVLF" class="error" ng-if="setupErrors.includes('tab')">Tab is required</label>
+            </div>
+            <div id="CUR-IRbjxTJy" class="form-group">
+              <label id="CUR-CDxiTskw">Header Row <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Which row contains the heading data?"></i></label>
+              <input id="CUR-FXvTwMZo" type="number" class="form-control" ng-model="salesTemplate.headerRow" ng-disabled="rights.sales != 'Edit'">
+              <label id="CUR-ygkCEKAL" class="error" ng-if="setupErrors.includes('headerRow')">Header Row is required</label>
+            </div>
+            <div id="CUR-exPAUMQf" class="form-group">
+              <label id="CUR-NNxAcGmI">Starting Row <i class="fa fa-question-circle" tooltips tooltip-class="wider" tooltip-template="Which row does the data start from?"></i></label>
+              <input id="CUR-BTfwWJwS" type="number" class="form-control" ng-model="salesTemplate.startingLine" ng-disabled="rights.sales != 'Edit'">
+              <label id="CUR-XYQoiMoA" class="error" ng-if="setupErrors.includes('startingLine')">Starting Row is required</label>
+            </div>
+          </div>
+        </div>
+        <div id="CUR-RggrhYFD" class="row">
+          <div id="CUR-CQxTfneE" class="col-xs-12 m-t-20 text-right two-cols-row">
+            <button id="CUR-RdGvpvnc" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-qJdYIWhP" class="btn btn-complete hidden-xs" ng-click="createTemplate()"><i class="fa fa-check"></i> Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<model-history data="salesFile.modelHistory"></model-history>

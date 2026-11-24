@@ -1,0 +1,297 @@
+<div id="CUR-dzIvfqPk" class="jumbotron" data-pages="parallax">
+  <div id="CUR-YWYZrwBT" class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div id="CUR-mKEqshdb" class="inner">
+      <ul id="CUR-IuTsgkib" class="breadcrumb">
+        <li id="CUR-CTrGYvbo">
+          <a id="CUR-gLQnwKnG" href="/#/cwrAcknowledgements">Acknowledgements</a>
+        </li>
+        <li id="CUR-USTBUCyI" ng-show="!cwrAcknowledgement._id">
+          <a id="CUR-SIXaQjxw" href="" class="active">Create</a>
+        </li>
+        <li id="CUR-ttRzzqqI" ng-show="cwrAcknowledgement._id">
+          <a id="CUR-ZbLHpffr" href="/#/cwrDeliveries/{{cwrAcknowledgement._id}}/edit" class="active">{{cwrAcknowledgement.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="CUR-epKreZcA" class="container-fluid container-fixed-lg sm-p-r-5 sm-p-l-5" ng-if="cwrAcknowledgement.status !== 'Queued' && cwrAcknowledgement.status !== 'In Progress'">
+  <div id="CUR-vZHalNLJ" class="row">
+    <div id="CUR-ack-name-div" class="col-xs-12 col-sm-6">
+      <h3 id="CUR-ack-name">
+        <span id="CUR-ack-name-status-complete" ng-if="cwrAcknowledgement.status === 'Complete'" class="label label-green">Complete</span>
+        <span id="CUR-ack-name-status-errored" ng-if="cwrAcknowledgement.status === 'Errored'" class="label label-danger">Errored</span>
+        <span id="CUR-ack-name-status-errored" ng-if="cwrAcknowledgement.status === 'Pending'" class="label label-grey">Pending</span>
+      </h3>
+    </div>
+    <div id="CUR-eUHGWyim" class="col-xs-12 col-sm-6 text-right two-cols-row">
+      <button id="CUR-delete-btn" ng-if="cwrAcknowledgement._id && !cwrAcknowledgement.publicLink" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" ng-show="rights.catalogue == 'Edit'"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+      <button id="CUR-reingest-btn" class="btn btn-complete" ng-show="rights.catalogue === 'Edit'" ng-click="reingestCwrAcknowledgement()" ng-if="cwrAcknowledgement.status === 'Errored'"><i class="fa fa-refresh"></i> Reingest</button>
+      <button id="CUR-archive-btn" class="btn btn-warning" ng-show="rights.catalogue == 'Edit'" ng-click="toggleArchived()" ng-if="!cwrAcknowledgement.archived"><i class="fa fa-lock"></i> Archive</button>
+      <button id="CUR-unarchive-btn" class="btn btn-warning" ng-show="rights.catalogue == 'Edit'" ng-click="toggleArchived()" ng-if="cwrAcknowledgement.archived"><i class="fa fa-unlock"></i> Unarchive</button>
+      <button id="CUR-save-btn" class="btn btn-complete" ng-click="save()" ng-show="rights.catalogue == 'Edit'"><i class="fa fa-check"></i> Save</button>
+    </div>
+  </div>
+  <div id="CUR-OLrkIxXP" class="row">
+    <div class="col-xs-12">
+      <div id="CUR-FfoLgyXp" ng-if="cwrAcknowledgement.status === 'Errored'" class="alert alert-danger">
+        <p ng-if="!cwrAcknowledgement.ingestionError">This file has errors - please check it and try uploading it again</p>
+        <p ng-if="cwrAcknowledgement.ingestionError">{{cwrAcknowledgement.ingestionError}}</p>
+      </div>
+    </div>
+    
+    <div id="CUR-DBTgTPLe" class="col-xs-12 col-sm-6">
+      <div id="CUR-JxZpODMw" class="panel panel-default">
+        <div id="CUR-ynIvZapl" class="panel-heading">
+          <div id="CUR-rSNejlNB" class="panel-title">
+            Overview
+          </div>
+        </div>
+        <div id="CUR-wemhFgmQ" class="panel-body p-t-15">
+          <div id="CUR-jKsVARSg" class="form-group required">
+            <label id="CUR-oVZywBCW">Name</label>
+            <input id="CUR-vIgHnQrF" type="text" class="form-control" ng-model="cwrAcknowledgement.name" ng-disabled="rights.catalogue != 'Edit'">
+          </div>
+          <div id="CUR-IPPDgcvu" class="form-group">
+            <label id="CUR-wJglrmmz">Delivery Partner</label>
+            <input
+              id="CUR-IPPDgcvu"
+              type="text"
+              class="form-control"
+              ng-model="cwrAcknowledgement.deliveryPartnerId"
+              placeholder="Type to search..."
+              ng-disabled="rights.catalogue !== 'Edit' || cwrAcknowledgement.status === 'Complete' || (!cwrAcknowledgement.deliveryPartnerId && cwrAcknowledgement.ingestionError.includes('Please create a Delivery Partner for this PRO'))"
+              uib-typeahead="partner._id as partner.name for partner in deliveryPartners | filter:$viewValue"
+              typeahead-min-length="0"
+              typeahead-on-select="onDeliveryPartnerSelected($item)"/>
+          </div>
+          <div id="CUR-BUJclWbt" ng-if="!cwrAcknowledgement.cwrDeliveryId && cwrAcknowledgement.deliveryPartnerId">
+            <button id="CUR-GnzVURpF" class="btn btn-success-green" style="margin-left: 0px; margin-top: 15px; padding-left: 10px; padding-right: 10px;" data-toggle="modal" data-target="#linkDeliveryModal">
+              <i class="fa fa-plus"></i>
+              Link Delivery
+            </button>
+          </div>
+          <div id="CUR-NFaJrCVn" ng-if="cwrAcknowledgement.cwrDeliveryId" class="form-group">
+            <label id="CUR-RhnPbqVT">Delivery</label>
+            <div id="CUR-hyeGpEwW">
+              <a ng-href="#/deliveries/{{cwrAcknowledgement.cwrDeliveryId}}/edit">{{cwrAcknowledgement.linkedDeliveryName}} {{cwrAcknowledgement.linkedDeliveryDate ? '- Delivered:' : ''}} {{cwrAcknowledgement.linkedDeliveryDate | date : dateFormat : 'UTC'}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-RjEdjQEF" class="col-xs-12 col-md-6">
+      <div id="CUR-LkmuSAGM" class="panel panel-default">
+        <div id="CUR-qsQNtWyK" class="panel-heading">
+          <div id="CUR-WZBDNOqQ" class="panel-title">
+            Acknowledgement File
+          </div>
+        </div>
+        <div id="CUR-LXVOYkcd" class="panel-body p-t-15">
+          <a id="CUR-oFRaCRTP" href="{{cwrAcknowledgement.publicLink}}" target="_blank">{{cwrAcknowledgement.publicLink.substring(cwrAcknowledgement.publicLink.lastIndexOf('/')+1).split('?')[0]}}</a>
+          <div id="CUR-GuCFiwMy" class="form-group required" ng-if="!cwrAcknowledgement.publicLink">
+            <input id="fileUploadField" type="file" ngf-select="selectFile($file)" ngf-allow-dir="false" ng-disabled="rights.sales != 'Edit'">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-if="cwrAcknowledgement.status === 'Complete'" id="CUR-status-div" class="col-xs-12 col-md-6">
+      <div id="CUR-status-div-panel-default" class="panel panel-default">
+        <div id="CUR-status-div-panel-heading" class="panel-heading">
+          <div id="CUR-CUR-status-div-panel-title" class="panel-title">
+            Status
+          </div>
+        </div>
+        <div id="CUR-status-div-panel-body" class="panel-body p-t-15">
+          <div id="CUR-status-div-panel-body-ackContainer-accepted" class="ackContainer">
+            <div id="CUR-status-div-panel-body-accepted-txt" class="ackContainer-text-column all-caps">Accepted</div>
+            <div id="CUR-status-div-panel-body-accepted-circle" class="ackContainer-circle-column">
+              <div id="CUR-status-div-panel-body-accepted-total" class="successCircle" ng-style="cwrAcknowledgement.acceptedTotal > 100 ? {'width': '25px', 'height': '25px'} : {}">{{formatNumber(cwrAcknowledgement.acceptedTotal)}}</div>
+            </div>
+          </div>
+          <div id="CUR-status-div-panel-body-ackContainer-rejected" class="ackContainer">
+            <div id="CUR-status-div-panel-body-rejected-txt" class="ackContainer-text-column all-caps">Rejected</div>
+            <div id="CUR-status-div-panel-body-rejected-circle" class="ackContainer-circle-column">
+              <div id="CUR-status-div-panel-body-rejected-total" class="dangerCircle" ng-style="cwrAcknowledgement.rejectedTotal > 100 ? {'width': '25px', 'height': '25px'} : {}">{{formatNumber(cwrAcknowledgement.rejectedTotal)}}</div>
+            </div>
+          </div>
+          <div id="CUR-status-div-panel-body-ackContainer-other" class="ackContainer">
+            <div id="CUR-status-div-panel-body-other-txt" class="ackContainer-text-column all-caps">Other</div>
+            <div id="CUR-status-div-panel-body-other-circle" class="ackContainer-circle-column">
+              <div id="CUR-status-div-panel-body-other-total" class="disabledCircle" ng-style="cwrAcknowledgement.otherTotal > 100 ? {'width': '25px', 'height': '25px'} : {}">{{formatNumber(cwrAcknowledgement.otherTotal)}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="CUR-UzcOEKRP" class="row">
+    <div id="CUR-fhNJQgrn" class="col-sm-12">
+      <h5 id="CUR-wVjTfuyR" class="pull-right">Total: {{total? total : 0}}</h5>
+    </div>
+    <div id="CUR-MyLRpKyJ" class="col-xs-12">
+      <div id="CUR-anVjukNZ" class="panel panel-default">
+        <div id="CUR-YniQxxRq" class="panel-heading">
+          <div id="CUR-mwxJhObT" class="panel-title">
+            Works
+          </div>
+        </div>
+        <div id="CUR-uMSvbFFi" class="panel-body">
+          <div id="CUR-yXCAuPQV" class="row">
+            <div id="CUR-XfILoQre" class="col-xs-9 text-right">
+              <button id="CUR-fZlSftvD" class="btn btn-complete" ng-if="cwrAcknowledgement.containsRejected" ng-click="redeliverWorks()"><i class="fa fa-upload"></i> Redeliver Rejected</button>
+              <button id="CUR-HEgEpEnf" class="btn btn-default" ng-click="export()"><i class="fa fa-download"></i> Export</button>
+            </div>
+            <div id="CUR-CvdQxmrn" class="col-xs-3">
+              <ui-select ng-model="worksPagination.status" on-select="onSelectedStatus($item)"">
+                <ui-select-match>
+                  <span id="CUR-NpMtWhAd" ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in ['All', 'Accepted', 'Rejected', 'No Participation', 'Duplicate']">
+                  <span id="CUR-MxAlWFEg" ng-bind="item"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <table id="CUR-JSUQSUXz" class="table table-hover dataTable no-footer" ng-class="{'table-selectable': selectable}">
+            <thead>
+                <tr id="CUR-egUNuCer">
+                  <th ng-click="getSortedData('title')" ng-class="whatClassIsIt('title')">Title</th>
+                  <th ng-click="getSortedData('composers')" ng-class="whatClassIsIt('composers')">Composers</th>
+                  <th ng-click="getSortedData('main identifier')" ng-class="whatClassIsIt('main identifier')">Main Identifier</th>
+                  <th ng-click="getSortedData('returned id')" ng-class="whatClassIsIt('returned id')">Returned ID</th>
+                  <th ng-click="getSortedData('iswc')" ng-class="whatClassIsIt('iswc')">ISWC</th>
+                  <th style="cursor: default;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="CUR-qJynfDoQ" ng-if="v1">
+                <tr id="CUR-YIBCyhsK" ng-repeat="work in associatedWorks">
+                  <td id="CUR-JdlHBtLm"><a id="CUR-hwVoMUQP" href="/#/works/{{work._id}}/edit">{{work.title}}</a></td>
+                  <td id="CUR-RFNwhhAi">{{work.composer}}</td>
+                  <td id="CUR-NSnuZuXS">{{work.identifier}}</td>
+                  <td id="CUR-PwmlKqah">{{work.partnerId}}</td>
+                  <td id="CUR-idLYdBEn">{{work.iswc}}</td>
+                  <td id="CUR-DmTaKvkK">
+                    <span id="CUR-vfRjhjsf" class="label label-sm label-success" ng-if="['Accepted', 'Registration Accepted', 'Transaction Accepted', 'Registration Accepted with Changes'].includes(work.status)">Accepted</span>
+                    <span id="CUR-eyFJfEdi" class="label label-sm label-danger" ng-if="['Rejected', 'Claim Rejected', 'Conflict'].includes(work.status)" tooltips tooltip-side="bottom" tooltip-class="wider" tooltip-template="Errored<br/><br/>{{work.messages.join('<br/><br/>')}}">Rejected</span>
+                    <span id="CUR-NtLWBYBg" class="label label-sm label-warning" ng-if="['Duplicate'].includes(work.status)" tooltips tooltip-side="bottom" tooltip-template="This transaction matches another transaction previously received from the same submitter">Duplicate</span>
+                    <span id="CUR-DxEBNtic" class="label label-sm label-default" ng-if="['No Participation'].includes(work.status)" tooltips tooltip-side="bottom" tooltip-template="The receiving society has no interest in the work, and therefore may not have edited the work fully e.g. if BMI received a work that contained only ASCAP interested parties (or vice versa)">No Participation</span>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody id="CUR-qJynfDoQ" ng-if="!v1">
+                <tr id="CUR-YIBCyhsK" ng-repeat="work in associatedWorks">
+                  <td id="CUR-JdlHBtLm"><a id="CUR-hwVoMUQP" href="/#/works/{{work.workId._id}}/edit">{{work.workId.title}}</a></td>
+                  <td id="CUR-RFNwhhAi">{{work.workId.composer}}</td>
+                  <td id="CUR-NSnuZuXS">{{work.workId.identifier}}</td>
+                  <td id="CUR-PwmlKqah">{{work.log[0].partnerId}}</td>
+                  <td id="CUR-idLYdBEn">{{work.log[0].iswc}}</td>
+                  <td id="CUR-DmTaKvkK">
+                    <span id="CUR-vfRjhjsf" class="label label-sm label-success" ng-if="['Accepted', 'Registration Accepted', 'Transaction Accepted', 'Registration Accepted with Changes'].includes(work.log[0].status)">Accepted</span>
+                    <span id="CUR-eyFJfEdi" class="label label-sm label-danger" ng-if="['Rejected', 'Claim Rejected', 'Conflict'].includes(work.log[0].status)" tooltips tooltip-side="bottom" tooltip-class="wider" tooltip-template="Errored<br/><br/>{{work.log[0].messages.join('<br/><br/>')}}">Rejected</span>
+                    <span id="CUR-NtLWBYBg" class="label label-sm label-warning" ng-if="['Duplicate'].includes(work.log[0].status)" tooltips tooltip-side="bottom" tooltip-template="This transaction matches another transaction previously received from the same submitter">Duplicate</span>
+                    <span id="CUR-DxEBNtic" class="label label-sm label-default" ng-if="['No Participation'].includes(work.log[0].status)" tooltips tooltip-side="bottom" tooltip-template="The receiving society has no interest in the work, and therefore may not have edited the work fully e.g. if BMI received a work that contained only ASCAP interested parties (or vice versa)">No Participation</span>
+                  </td>
+                </tr>
+              </tbody>
+          </table>
+          <div id="CUR-BZueGnhh" class="row">
+            <div id="CUR-aplqPpuB" class="col-xs-12 text-center">
+              <pagination id="CUR-siFtnwIq" pages="pages" total="totalPages" current="currentPage" change-page="changePage(page)"></pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CUR-kSASPZzb" class="col-sm-12">
+      <div id="CUR-MsmGiVFT" class="pull-right">
+        <span id="CUR-GaoVlXLE" class="inline-block" ng-if="!isShowingAll">Showing 25 Per Page  |</span>
+        <span id="CUR-WRzvqCJF" class="inline-block" ng-if="isShowingAll">Showing {{worksPagination.limit}} Per Page</span>
+        <a id="CUR-opJIYHZn" class="p-l-5" ng-if="!isShowingAll" ng-click="showAll()">Show 500</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Loading Page -->
+<div id="CUR-loading-container" class="container-fluid container-fixed-lg" ng-if="cwrAcknowledgement.status == 'Queued' || cwrAcknowledgement.status == 'In Progress'">
+  <div id="CUR-loading-container-row" class="row">
+    <div id="CUR-loading-container-col" class="col-xs-12 col-sm-6 col-sm-offset-3">
+      <div id="CUR-loading-container-panel" class="panel panel-default text-center">
+        <div id="CUR-loading-container-panel-body" class="panel-body p-t-15">
+          <h3 id="CUR-loading-container-waiting" ng-if="cwrAcknowledgement.status == 'Queued'">File is waiting to be processed...</h3>
+          <h3 id="CUR-loading-container-ingesting" ng-if="cwrAcknowledgement.status == 'In Progress'">File is being ingested...</h3>
+          <div id="CUR-loading-container-spinner" class="loading-spinner">
+            <md-progress-circular md-diameter="95"></md-progress-circular>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade stick-up" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-MynZypkF" class="modal-dialog">
+    <div id="CUR-IVGVsGzj" class="modal-content">
+      <div id="CUR-pNXQByHT" class="modal-header clearfix text-left">
+        <button id="CUR-pxlJJWaP" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-RaVbHXvs">Delete Acknowledgement</h5>
+      </div>
+      <div id="CUR-UntRDvux" class="modal-body">
+        <div id="CUR-CrRzvegd" class="row">
+          <div id="CUR-GPOkxzPG" class="col-xs-12 m-t-20">
+            <p>Are you sure you want to delete this acknowledgement? This cannot be undone.</p>
+          </div>
+        </div>
+        <div id="CUR-gTUpIukE" class="row">
+          <div id="CUR-MXhHpGDR" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-ketfvlak" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-XCzFVcky" type="button" class="btn btn-danger m-t-5" ng-click="delete()">
+              <i class="fa fa-trash"></i>&nbsp;Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade stick-up" id="linkDeliveryModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="CUR-ogMiyYtQ" class="modal-dialog">
+    <div id="CUR-DWIXPedQ" class="modal-content">
+      <div id="CUR-dCtzbBRk" class="modal-header clearfix text-left">
+        <button id="CUR-ixLfSEfd" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="pg-close fs-14"></i>
+        </button>
+        <h5 id="CUR-kmWoBBbz">Link Delivery</h5>
+      </div>
+      <div id="CUR-SXTgchih" class="modal-body">
+        <div id="CUR-oTkjAfPJ" class="row">
+          <div class="col-xs-12 m-t-20">
+            <ui-select class="full-width" ng-model="cwrAcknowledgement.cwrDeliveryId" close-on-select="true">
+              <ui-select-match allow-clear="true">
+                <span ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="item._id as item in deliveries | filter:$select.search"
+                refresh="searchDeliveries($select)" refresh-delay="500">
+                <div id="CUR-grsdhERE">
+                  <div id="CUR-grsdhERA" class="clear">
+                    <div id="CUR-grsdhERB" ng-bind-html="item.name | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div id="CUR-tInqeBuw" class="row">
+          <div id="CUR-ZRULWJLO" class="col-xs-12 m-t-20 text-right">
+            <button id="CUR-ZncrwGTr" type="button" class="btn btn-default m-t-5" data-dismiss="modal">Cancel</button>
+            <button id="CUR-JzEhlqwI" type="button" class="btn btn-success-green m-t-5" ng-click="saveLinkedDelivery()">
+              <i class="fa fa-plus"></i>&nbsp;Link Delivery</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<model-history data="delivery.modelHistory"></model-history>

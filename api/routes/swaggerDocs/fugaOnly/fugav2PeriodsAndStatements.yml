@@ -1,0 +1,500 @@
+openapi: 3.0.0
+paths:
+  /fuga/v2/periods:
+    get:
+      tags:
+        - "Fuga v2 - Periods"
+      summary: Retrieve periods
+      description: Returns a paginated list of periods. Requires read access to periods.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+      responses:
+        '200':
+          description: Successfully retrieved periods
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  periods:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FugaPeriod'
+                  meta:
+                    $ref: '#/components/schemas/FugaPaginationMeta'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/periods/{id}:
+    get:
+      tags:
+        - "Fuga v2 - Periods"
+      summary: Retrieve a specific period
+      description: Returns details for a specific period by ID. Requires read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+      responses:
+        '200':
+          description: Successfully retrieved period
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FugaPeriod'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+    put:
+      tags:
+        - "Fuga v2 - Periods"
+      summary: Update a period
+      description: Updates a period's blocked status by ID. Requires write access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                blockedStatus:
+                  type: boolean
+                message:
+                  type: string
+      responses:
+        '200':
+          description: Successfully updated period
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FugaPeriod'
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/periods/{id}/statements:
+    get:
+      tags:
+        - "Fuga v2 - Periods"
+      summary: Retrieve statements for a period
+      description: Returns a paginated list of statements for a specific period. Requires read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+      responses:
+        '200':
+          description: Successfully retrieved statements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FugaStatement'
+                  meta:
+                    $ref: '#/components/schemas/FugaPaginationMeta'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/periods/{id}/publish_all_statements:
+    post:
+      tags:
+        - "Fuga v2 - Periods"
+      summary: Publish all statements for a period
+      description: Publishes all statements for a specific period. Requires read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+      responses:
+        '200':
+          description: Successfully published all statements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Statements have all been published and sent to payees."
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/periods/{id}/email_all_statements:
+    post:
+      tags:
+        - "Fuga v2 - Periods"
+      summary: Email all statements for a period
+      description: Emails all statements for a specific period. Requires read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailAddresses:
+                  type: array
+                  items:
+                    type: string
+                  description: Email addresses to send statements to
+      responses:
+        '200':
+          description: Successfully emailed all statements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "The statements will be sent to you shortly."
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/periods/{id}/email_summary:
+    post:
+      tags:
+        - "Fuga v2 - Periods"
+      summary: Email period summary
+      description: Emails a summary for a specific period. Requires read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Period ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailAddresses:
+                  type: array
+                  items:
+                    type: string
+                  description: Email addresses to send summary to
+      responses:
+        '200':
+          description: Successfully emailed summary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "The file will be sent to you shortly."
+        '400':
+          $ref: '#/components/responses/FugaBadRequest'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/client/statements:
+    get:
+      tags:
+        - "Fuga v2 - Statements"
+      summary: Retrieve client statements
+      description: Returns a paginated list of client statements. Requires read access to periods.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 25
+          description: Number of items per page
+      responses:
+        '200':
+          description: Successfully retrieved statements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FugaStatement'
+                  meta:
+                    $ref: '#/components/schemas/FugaPaginationMeta'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+  /fuga/v2/client/statements/{id}:
+    get:
+      tags:
+        - "Fuga v2 - Statements"
+      summary: Retrieve a specific client statement
+      description: Returns details for a specific client statement by ID. Requires read access to periods.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Statement ID
+      responses:
+        '200':
+          description: Successfully retrieved statement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FugaStatement'
+        '403':
+          $ref: '#/components/responses/FugaForbidden'
+        '404':
+          $ref: '#/components/responses/FugaNotFound'
+        '500':
+          $ref: '#/components/responses/FugaInternalError'
+
+components:
+  schemas:
+    FugaPeriod:
+      type: object
+      properties:
+        _id:
+          type: string
+        clientId:
+          type: string
+        name:
+          type: string
+        setupStage:
+          type: string
+        year:
+          type: integer
+        accountingPeriod:
+          type: string
+        accountingPeriodType:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        accountingDate:
+          type: string
+          format: date
+        status:
+          type: string
+        contractType:
+          type: string
+        runNo:
+          type: integer
+        locked:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        calculationStatus:
+          type: string
+        grossAmount:
+          type: number
+        grossCosts:
+          type: number
+        netAmount:
+          type: number
+        netCosts:
+          type: number
+        totalContractsForCalculation:
+          type: integer
+        processEndTime:
+          type: string
+          format: date-time
+        fuga:
+          type: string
+
+    FugaStatement:
+      type: object
+      properties:
+        sendings:
+          type: object
+        locked:
+          type: boolean
+        _id:
+          type: string
+        clientId:
+          type: string
+        periodId:
+          type: string
+        contractId:
+          type: string
+        payeeName:
+          type: string
+        name:
+          type: string
+        date:
+          type: string
+          format: date-time
+        year:
+          type: integer
+        accountingPeriod:
+          type: string
+        periodType:
+          type: string
+        status:
+          type: string
+        salesFilesIds:
+          type: array
+          items:
+            type: string
+        costIds:
+          type: array
+          items:
+            type: string
+        releaseIds:
+          type: array
+          items:
+            type: string
+        trackIds:
+          type: array
+          items:
+            type: string
+        workIds:
+          type: array
+          items:
+            type: string
+        openingBalance:
+          type: number
+        units:
+          type: number
+        grossAmount:
+          type: number
+        netAmount:
+          type: number
+        grossCosts:
+          type: number
+        netCosts:
+          type: number
+        reservesWithheld:
+          type: number
+        reservesReleased:
+          type: number
+        netOutput:
+          type: number
+        closingBalance:
+          type: number
+        lines:
+          type: integer
+        invalidLines:
+          type: integer
+        profitShareRate:
+          type: number
+        profitShareNetAmount:
+          type: number
+        currency:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        contractType:
+          type: string
+        pdf:
+          type: string
+        statementOfAccount:
+          type: string
+        salesCsv:
+          type: string
+        costsCsv:
+          type: string
+        allFilesZip:
+          type: string
+        salesCsvPublicLink:
+          type: string
+        costsCsvPublicLink:
+          type: string
+        pdfPublicLink:
+          type: string
+        statementOfAccountPublicLink:
+          type: string
+        allFilesZipPublicLink:
+          type: string
